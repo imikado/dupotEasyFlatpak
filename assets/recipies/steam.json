@@ -1,6 +1,7 @@
 {
     "title":"Steam",
     "description":"Package to play steam",
+    "flatpak":"com.valvesoftware.Steam",
     "hooks":[
         {
             "type":"selectDirectory",
