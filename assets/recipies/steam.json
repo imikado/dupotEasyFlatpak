@@ -1,0 +1,10 @@
+{
+    "title":"Steam",
+    "description":"Package to play steam",
+    "hooks":[
+        {
+            "type":"selectDirectory",
+            "label":"Selectionnez repertoire de jeu"
+        }
+    ]
+}
