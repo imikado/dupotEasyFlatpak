@@ -34,9 +34,12 @@ class _AppList extends State<AppList> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text("Recettes disponibles"),
+        title: Text(
+          "Applications disponibles",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Colors.blueGrey,
       ),
       body: Column(
           children: applicationList.map((e) {

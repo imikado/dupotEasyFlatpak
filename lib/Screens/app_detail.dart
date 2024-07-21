@@ -31,23 +31,45 @@ class _AppDetail extends State<AppDetail> {
     final args =
         ModalRoute.of(context)!.settings.arguments as AppDetailArguments;
 
+    const navTextColor = Colors.white;
+
+    const TextStyle navTextStyle = TextStyle(color: navTextColor);
+
     if (!loaded) {
       getData(context, args.app);
     }
     return Scaffold(
         backgroundColor: Colors.grey[200],
         appBar: AppBar(
-          title: Text("Recette: " + args.app),
-          centerTitle: true,
-          backgroundColor: Colors.amberAccent,
+          title: Text(
+            "Application: " + args.app,
+            style: navTextStyle,
+          ),
+          backgroundColor: Colors.blueGrey,
           actions: [
             TextButton.icon(
               onPressed: () {
                 Navigator.pushNamed(context, '/home');
               },
-              icon: const Icon(Icons.home),
-              label: const Text('Apps'),
+              icon: const Icon(
+                Icons.home,
+                color: navTextColor,
+              ),
+              label: const Text(
+                'Applications',
+                style: navTextStyle,
+              ),
             ),
+            TextButton.icon(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.settings,
+                  color: navTextColor,
+                ),
+                label: const Text(
+                  'Settings',
+                  style: navTextStyle,
+                ))
           ],
         ),
         body: Column(children: [
