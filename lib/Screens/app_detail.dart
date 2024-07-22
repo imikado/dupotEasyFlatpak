@@ -19,6 +19,7 @@ class _AppDetail extends State<AppDetail> {
   Application application = Application("loading", "loading", "");
   bool loaded = false;
   String flatpakOutput = "test";
+  bool installing = false;
 
   void getData(BuildContext context, app) async {
     Application newApp = await getApplication(context, app);
@@ -29,12 +30,17 @@ class _AppDetail extends State<AppDetail> {
   }
 
   void install(Application application) {
-    Process.run('flatpak', ['install', application.flatpak]).then((result) {
+    setState(() {
+      installing = true;
+    });
+
+    Process.run('flatpak', ['install', '-y', application.flatpak])
+        .then((result) {
       stdout.write(result.stdout);
       stderr.write(result.stderr);
 
       setState(() {
-        flatpakOutput = result.stdout.toString();
+        flatpakOutput = result.stdout.toString() + "\n Installation terminée";
       });
     });
   }
@@ -94,13 +100,37 @@ class _AppDetail extends State<AppDetail> {
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Text("mon app:" + application.title),
         Text("Description:" + application.description),
-        TextButton.icon(
-          onPressed: () {
-            install(application);
-          },
-          label: Text("Intaller"),
-          icon: const Icon(Icons.install_desktop),
-        ),
+        Visibility(
+            visible: !installing,
+            child: TextButton.icon(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Annuler')),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  install(application);
+                                },
+                                child: const Text('Confirmer')),
+                          ],
+                          title: const Text("Confirmation"),
+                          contentPadding: const EdgeInsets.all(20.0),
+                          content:
+                              const Text('Confirmez-vous l\'installation  '),
+                        ));
+
+                //install(application);
+              },
+              label: Text("Intaller"),
+              icon: const Icon(Icons.install_desktop),
+            )),
         RichText(
           overflow: TextOverflow.clip,
           text: TextSpan(
