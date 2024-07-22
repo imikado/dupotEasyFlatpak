@@ -18,8 +18,9 @@ class AppDetail extends StatefulWidget {
 class _AppDetail extends State<AppDetail> {
   Application application = Application("loading", "loading", "");
   bool loaded = false;
-  String flatpakOutput = "test";
+  String flatpakOutput = "";
   bool installing = false;
+  bool installationFinished = false;
   bool alreadyInstalled = false;
 
   void getData(BuildContext context, app) async {
@@ -60,6 +61,7 @@ class _AppDetail extends State<AppDetail> {
       setState(() {
         flatpakOutput = result.stdout.toString() + "\n Installation terminée";
         installing = false;
+        installationFinished = true;
       });
     });
   }
@@ -122,15 +124,19 @@ class _AppDetail extends State<AppDetail> {
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Text("mon app:" + application.title),
         Text("Description:" + application.description),
-        Visibility(visible: installing, child: CircularProgressIndicator()),
+        Visibility(
+            visible: installing,
+            child: CircularProgressIndicator(
+              semanticsLabel: 'Installation...',
+            )),
         Visibility(
             visible: alreadyInstalled,
             child: const Text(
-              'Déjà installé',
+              'Déjà installée',
               style: strongTextStyle,
             )),
         Visibility(
-            visible: !installing && !alreadyInstalled,
+            visible: !installing && !alreadyInstalled && !installationFinished,
             child: TextButton.icon(
               onPressed: () {
                 showDialog(
@@ -160,16 +166,18 @@ class _AppDetail extends State<AppDetail> {
               label: Text("Intaller"),
               icon: const Icon(Icons.install_desktop),
             )),
-        RichText(
-          overflow: TextOverflow.clip,
-          text: TextSpan(
-            text: 'Output ',
-            style: outputTextStyle,
-            children: <TextSpan>[
-              TextSpan(text: flatpakOutput),
-            ],
-          ),
-        ),
+        Visibility(
+            visible: installationFinished,
+            child: RichText(
+              overflow: TextOverflow.clip,
+              text: TextSpan(
+                text: 'Output ',
+                style: outputTextStyle,
+                children: <TextSpan>[
+                  TextSpan(text: flatpakOutput),
+                ],
+              ),
+            )),
       ])),
     );
   }
