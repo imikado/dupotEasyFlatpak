@@ -20,12 +20,30 @@ class _AppDetail extends State<AppDetail> {
   bool loaded = false;
   String flatpakOutput = "test";
   bool installing = false;
+  bool alreadyInstalled = false;
 
   void getData(BuildContext context, app) async {
     Application newApp = await getApplication(context, app);
+    checkAlreadyInstalled(newApp);
     setState(() {
       application = newApp;
       loaded = true;
+    });
+  }
+
+  void checkAlreadyInstalled(Application applicationToCheck) {
+    Process.run('flatpak', ['info', applicationToCheck.flatpak]).then((result) {
+      stdout.write(result.stdout);
+
+      var isAlreadyInstalled = false;
+
+      if (result.stdout.toString().length > 2) {
+        isAlreadyInstalled = true;
+      }
+
+      setState(() {
+        alreadyInstalled = isAlreadyInstalled;
+      });
     });
   }
 
@@ -41,6 +59,7 @@ class _AppDetail extends State<AppDetail> {
 
       setState(() {
         flatpakOutput = result.stdout.toString() + "\n Installation terminée";
+        installing = false;
       });
     });
   }
@@ -56,6 +75,9 @@ class _AppDetail extends State<AppDetail> {
 
     const TextStyle outputTextStyle =
         TextStyle(color: Colors.blueGrey, fontSize: 14.0);
+
+    const TextStyle strongTextStyle =
+        TextStyle(color: Colors.blueGrey, fontSize: 24.0);
 
     if (!loaded) {
       getData(context, args.app);
@@ -100,8 +122,15 @@ class _AppDetail extends State<AppDetail> {
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Text("mon app:" + application.title),
         Text("Description:" + application.description),
+        Visibility(visible: installing, child: CircularProgressIndicator()),
         Visibility(
-            visible: !installing,
+            visible: alreadyInstalled,
+            child: const Text(
+              'Déjà installé',
+              style: strongTextStyle,
+            )),
+        Visibility(
+            visible: !installing && !alreadyInstalled,
             child: TextButton.icon(
               onPressed: () {
                 showDialog(
@@ -160,8 +189,10 @@ Future<Application> getApplication(context, app) async {
   print(applicaitonRecipieString);
 
   Map jsonApp = json.decode(applicaitonRecipieString);
-  return Application(
-      jsonApp['title'], jsonApp['description'], jsonApp['flatpak']);
+  Application applicationLoaded =
+      Application(jsonApp['title'], jsonApp['description'], jsonApp['flatpak']);
+
+  return applicationLoaded;
 }
 
 class Application {
