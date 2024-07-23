@@ -6,9 +6,7 @@
     "flatpakPermissionToOverrideList":[
         {
             "label":"Veuilez selectionner le repertoire contenant vos jeux steam",
-            "type":"filesystem",
-            "default_value":"xdg-run/app/com.discordapp.Discord:create;xdg-pictures:ro;xdg-music:ro;"
-
+            "type":"filesystem"
         }
     ]
  

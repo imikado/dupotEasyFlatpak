@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:dupot_easy_flatpak/Components/app_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import '../Models/application_factory.dart';
 
 class AppList extends StatefulWidget {
   const AppList({super.key});
@@ -22,7 +21,8 @@ class _AppList extends State<AppList> {
   }
 
   void getData() async {
-    List<String> newAppList = await getApplicationList();
+    List<String> newAppList =
+        await ApplicationFactory.getApplicationList(context);
 
     setState(() {
       applicationList = newAppList;
@@ -34,7 +34,7 @@ class _AppList extends State<AppList> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Applications disponibles",
           style: TextStyle(color: Colors.white),
         ),
@@ -48,15 +48,6 @@ class _AppList extends State<AppList> {
         );
       }).toList()),
     );
-  }
-
-  Future<List<String>> getApplicationList() async {
-    String recipiesString =
-        await DefaultAssetBundle.of(context).loadString("assets/recipies.json");
-    print(recipiesString);
-    List<String> recipieList = List<String>.from(json.decode(recipiesString));
-    print(recipieList);
-    return recipieList;
   }
 }
 

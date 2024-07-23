@@ -1,8 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+
+import '../Models/application.dart';
+import '../Models/application_factory.dart';
+import '../Models/permission.dart';
 
 class AppDetail extends StatefulWidget {
   const AppDetail({
@@ -11,7 +14,6 @@ class AppDetail extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _AppDetail();
   }
 }
@@ -27,7 +29,7 @@ class _AppDetail extends State<AppDetail> {
   List<List<String>> processList = [[]];
 
   void getData(BuildContext context, app) async {
-    Application newApp = await getApplication(context, app);
+    Application newApp = await ApplicationFactory.getApplication(context, app);
     checkAlreadyInstalled(newApp);
     setState(() {
       application = newApp;
@@ -76,7 +78,7 @@ class _AppDetail extends State<AppDetail> {
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        Navigator.pushNamed(context, '/home');
+                        Navigator.popAndPushNamed(context, '/home');
                       },
                       child: const Text('OK')),
                 ],
@@ -104,7 +106,6 @@ class _AppDetail extends State<AppDetail> {
 
     for (Permission permissionLoop in flatpakPermissionList) {
       if (permissionLoop.isFileSystem()) {
-        //browse directory
         String directoryPath = await selectDirectory(permissionLoop.label);
 
         List<String> argList = [
@@ -115,11 +116,7 @@ class _AppDetail extends State<AppDetail> {
 
         argList.add(application.flatpak);
 
-        print('flatpak  ${argList.join(' ')}');
-
         processList.add(argList);
-      } else {
-        print('permission not fileSystem');
       }
     }
   }
@@ -129,9 +126,6 @@ class _AppDetail extends State<AppDetail> {
       Process.run('flatpak', argListLoop).then((result) {
         stdout.write(result.stdout);
         stderr.write(result.stderr);
-
-        //flatpak override --user --filesystem=/path/to/steam-library com.valvesoftware.Steam
-        // xdg-run/app/com.discordapp.Discord:create;xdg-pictures:ro;xdg-music:ro;
       });
     }
   }
@@ -159,14 +153,14 @@ class _AppDetail extends State<AppDetail> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: Text(
-          "Application: " + args.app,
+          "Application: ${args.app}",
           style: navTextStyle,
         ),
         backgroundColor: Colors.blueGrey,
         actions: [
           TextButton.icon(
             onPressed: () {
-              Navigator.pushNamed(context, '/home');
+              Navigator.popAndPushNamed(context, '/home');
             },
             icon: const Icon(
               Icons.home,
@@ -192,11 +186,11 @@ class _AppDetail extends State<AppDetail> {
       body: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Text("mon app:" + application.title),
-        Text("Description:" + application.description),
+        Text("mon app:${application.title}"),
+        Text("Description:${application.description}"),
         Visibility(
             visible: installing,
-            child: CircularProgressIndicator(
+            child: const CircularProgressIndicator(
               semanticsLabel: 'Installation...',
             )),
         Visibility(
@@ -235,7 +229,7 @@ class _AppDetail extends State<AppDetail> {
 
                 //install(application);
               },
-              label: Text("Intaller"),
+              label: const Text("Intaller"),
               icon: const Icon(Icons.install_desktop),
             )),
         Visibility(
@@ -259,79 +253,6 @@ class AppDetailArguments {
   final String app;
 
   AppDetailArguments(
-    String this.app,
+    this.app,
   );
-}
-
-Future<Application> getApplication(context, app) async {
-  String applicaitonRecipieString = await DefaultAssetBundle.of(context)
-      .loadString("assets/recipies/" + app + ".json");
-  print(applicaitonRecipieString);
-
-  Map jsonApp = json.decode(applicaitonRecipieString);
-
-  print(jsonApp['flatpakPermissionToOverrideList']);
-
-  List<dynamic> rawList = jsonApp['flatpakPermissionToOverrideList'];
-
-  List<Map<String, dynamic>> objectList = [];
-  for (Map<String, dynamic> rawLoop in rawList) {
-    objectList.add(rawLoop);
-  }
-
-  Application applicationLoaded = Application(
-      jsonApp['title'], jsonApp['description'], jsonApp['flatpak'], objectList);
-
-  return applicationLoaded;
-}
-
-class Application {
-  final String title;
-  final String description;
-  final String flatpak;
-  List<Permission> flatpakPermissionToOverrideList = [];
-
-  Application(String this.title, String this.description, String this.flatpak,
-      List<Map<String, dynamic>> rawFlatpakPermissionToOverrideList) {
-    //flatpakPermissionToOverrideList=List();
-    //flatpakPermissionToOverrideList=rawFlatpakPermissionToOverrideList;
-
-    for (Map<String, dynamic> rawPermissionLoop
-        in rawFlatpakPermissionToOverrideList) {
-      flatpakPermissionToOverrideList.add(Permission(
-          rawPermissionLoop['type'].toString(),
-          rawPermissionLoop['default_value']!,
-          rawPermissionLoop['label']!));
-    }
-  }
-
-  List<Permission> getFlatpakPermissionToOverrideList() {
-    return flatpakPermissionToOverrideList;
-  }
-}
-
-class Permission {
-  final String type;
-  final String default_value;
-  final String label;
-
-  static const constTypeFileSystem = 'filesystem';
-
-  Permission(String this.type, String this.default_value, this.label);
-
-  bool isFileSystem() {
-    return (type == constTypeFileSystem);
-  }
-
-  String getType() {
-    return type;
-  }
-
-  String getLabel() {
-    return label;
-  }
-
-  String getFlatpakOverrideType() {
-    return '--$type=';
-  }
 }
