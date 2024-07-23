@@ -24,6 +24,8 @@ class _AppDetail extends State<AppDetail> {
   bool installationFinished = false;
   bool alreadyInstalled = false;
 
+  List<List<String>> processList = [[]];
+
   void getData(BuildContext context, app) async {
     Application newApp = await getApplication(context, app);
     checkAlreadyInstalled(newApp);
@@ -62,15 +64,32 @@ class _AppDetail extends State<AppDetail> {
       overrideSetup(application);
 
       setState(() {
-        flatpakOutput = result.stdout.toString() + "\n Installation terminée";
+        flatpakOutput = "${result.stdout}\n Installation terminée";
         installing = false;
         installationFinished = true;
       });
+
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, '/home');
+                      },
+                      child: const Text('OK')),
+                ],
+                title: const Text("Installation avec succès"),
+                contentPadding: const EdgeInsets.all(20.0),
+                content: const Text('Installation avec succès'),
+              ));
     });
   }
 
   Future<String> selectDirectory(String label) async {
-    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+    String? selectedDirectory =
+        await FilePicker.platform.getDirectoryPath(dialogTitle: label);
 
     if (selectedDirectory == null) {
       return "";
@@ -79,7 +98,7 @@ class _AppDetail extends State<AppDetail> {
     return selectedDirectory;
   }
 
-  void overrideSetup(Application application) async {
+  Future<void> loadSetup(Application application) async {
     List<Permission> flatpakPermissionList =
         application.getFlatpakPermissionToOverrideList();
 
@@ -98,16 +117,22 @@ class _AppDetail extends State<AppDetail> {
 
         print('flatpak  ${argList.join(' ')}');
 
-        Process.run('flatpak', argList).then((result) {
-          stdout.write(result.stdout);
-          stderr.write(result.stderr);
-
-          //flatpak override --user --filesystem=/path/to/steam-library com.valvesoftware.Steam
-          // xdg-run/app/com.discordapp.Discord:create;xdg-pictures:ro;xdg-music:ro;
-        });
+        processList.add(argList);
       } else {
         print('permission not fileSystem');
       }
+    }
+  }
+
+  void overrideSetup(Application application) async {
+    for (List<String> argListLoop in processList) {
+      Process.run('flatpak', argListLoop).then((result) {
+        stdout.write(result.stdout);
+        stderr.write(result.stderr);
+
+        //flatpak override --user --filesystem=/path/to/steam-library com.valvesoftware.Steam
+        // xdg-run/app/com.discordapp.Discord:create;xdg-pictures:ro;xdg-music:ro;
+      });
     }
   }
 
@@ -196,7 +221,9 @@ class _AppDetail extends State<AppDetail> {
                             TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
-                                  install(application);
+                                  loadSetup(application).then((result) {
+                                    install(application);
+                                  });
                                 },
                                 child: const Text('Confirmer')),
                           ],
