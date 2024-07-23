@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class AppDetail extends StatefulWidget {
@@ -16,7 +17,7 @@ class AppDetail extends StatefulWidget {
 }
 
 class _AppDetail extends State<AppDetail> {
-  Application application = Application("loading", "loading", "");
+  Application application = Application("loading", "loading", "", []);
   bool loaded = false;
   String flatpakOutput = "";
   bool installing = false;
@@ -58,12 +59,56 @@ class _AppDetail extends State<AppDetail> {
       stdout.write(result.stdout);
       stderr.write(result.stderr);
 
+      overrideSetup(application);
+
       setState(() {
         flatpakOutput = result.stdout.toString() + "\n Installation terminée";
         installing = false;
         installationFinished = true;
       });
     });
+  }
+
+  Future<String> selectDirectory(String label) async {
+    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+    if (selectedDirectory == null) {
+      return "";
+    }
+
+    return selectedDirectory;
+  }
+
+  void overrideSetup(Application application) async {
+    List<Permission> flatpakPermissionList =
+        application.getFlatpakPermissionToOverrideList();
+
+    for (Permission permissionLoop in flatpakPermissionList) {
+      if (permissionLoop.isFileSystem()) {
+        //browse directory
+        String directoryPath = await selectDirectory(permissionLoop.label);
+
+        List<String> argList = [
+          'override',
+          '--user',
+        ];
+        argList.add(permissionLoop.getFlatpakOverrideType() + directoryPath);
+
+        argList.add(application.flatpak);
+
+        print('flatpak  ${argList.join(' ')}');
+
+        Process.run('flatpak', argList).then((result) {
+          stdout.write(result.stdout);
+          stderr.write(result.stderr);
+
+          //flatpak override --user --filesystem=/path/to/steam-library com.valvesoftware.Steam
+          // xdg-run/app/com.discordapp.Discord:create;xdg-pictures:ro;xdg-music:ro;
+        });
+      } else {
+        print('permission not fileSystem');
+      }
+    }
   }
 
   @override
@@ -197,8 +242,18 @@ Future<Application> getApplication(context, app) async {
   print(applicaitonRecipieString);
 
   Map jsonApp = json.decode(applicaitonRecipieString);
-  Application applicationLoaded =
-      Application(jsonApp['title'], jsonApp['description'], jsonApp['flatpak']);
+
+  print(jsonApp['flatpakPermissionToOverrideList']);
+
+  List<dynamic> rawList = jsonApp['flatpakPermissionToOverrideList'];
+
+  List<Map<String, dynamic>> objectList = [];
+  for (Map<String, dynamic> rawLoop in rawList) {
+    objectList.add(rawLoop);
+  }
+
+  Application applicationLoaded = Application(
+      jsonApp['title'], jsonApp['description'], jsonApp['flatpak'], objectList);
 
   return applicationLoaded;
 }
@@ -207,6 +262,49 @@ class Application {
   final String title;
   final String description;
   final String flatpak;
+  List<Permission> flatpakPermissionToOverrideList = [];
 
-  Application(String this.title, String this.description, String this.flatpak);
+  Application(String this.title, String this.description, String this.flatpak,
+      List<Map<String, dynamic>> rawFlatpakPermissionToOverrideList) {
+    //flatpakPermissionToOverrideList=List();
+    //flatpakPermissionToOverrideList=rawFlatpakPermissionToOverrideList;
+
+    for (Map<String, dynamic> rawPermissionLoop
+        in rawFlatpakPermissionToOverrideList) {
+      flatpakPermissionToOverrideList.add(Permission(
+          rawPermissionLoop['type'].toString(),
+          rawPermissionLoop['default_value']!,
+          rawPermissionLoop['label']!));
+    }
+  }
+
+  List<Permission> getFlatpakPermissionToOverrideList() {
+    return flatpakPermissionToOverrideList;
+  }
+}
+
+class Permission {
+  final String type;
+  final String default_value;
+  final String label;
+
+  static const constTypeFileSystem = 'filesystem';
+
+  Permission(String this.type, String this.default_value, this.label);
+
+  bool isFileSystem() {
+    return (type == constTypeFileSystem);
+  }
+
+  String getType() {
+    return type;
+  }
+
+  String getLabel() {
+    return label;
+  }
+
+  String getFlatpakOverrideType() {
+    return '--$type=';
+  }
 }

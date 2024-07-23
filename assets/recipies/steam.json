@@ -2,10 +2,14 @@
     "title":"Steam",
     "description":"Package to play steam",
     "flatpak":"com.valvesoftware.Steam",
-    "hooks":[
+
+    "flatpakPermissionToOverrideList":[
         {
-            "type":"selectDirectory",
-            "label":"Selectionnez repertoire de jeu"
+            "label":"Veuilez selectionner le repertoire contenant vos jeux steam",
+            "type":"filesystem",
+            "default_value":"xdg-run/app/com.discordapp.Discord:create;xdg-pictures:ro;xdg-music:ro;"
+
         }
     ]
+ 
 }
