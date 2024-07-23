@@ -151,6 +151,16 @@ class _AppDetail extends State<AppDetail> {
     const TextStyle contentValueStyle =
         TextStyle(color: Color.fromARGB(255, 85, 77, 77), fontSize: 20.0);
 
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+        backgroundColor: Colors.blueGrey,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14));
+
+    final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
+        backgroundColor: Colors.grey,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14));
+
     if (!loaded) {
       getData(context, args.app);
     }
@@ -192,18 +202,18 @@ class _AppDetail extends State<AppDetail> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Application", style: contentTitleStyle),
+                    const Text("Application", style: contentTitleStyle),
                     Text(application.title, style: contentValueStyle),
-                    SizedBox(height: 20),
-                    Text("Description", style: contentTitleStyle),
+                    const SizedBox(height: 20),
+                    const Text("Description", style: contentTitleStyle),
                     Text(application.description, style: contentValueStyle),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     Visibility(
                         visible: installing,
                         child: const CircularProgressIndicator(
                           semanticsLabel: 'Installation...',
                         )),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Visibility(
                         visible: alreadyInstalled,
                         child: const Text(
@@ -214,18 +224,22 @@ class _AppDetail extends State<AppDetail> {
                         visible: !installing &&
                             !alreadyInstalled &&
                             !installationFinished,
-                        child: TextButton.icon(
+                        child: FilledButton.icon(
+                          style: buttonStyle,
                           onPressed: () {
                             showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
+                                      buttonPadding: const EdgeInsets.all(10),
                                       actions: [
-                                        TextButton(
+                                        FilledButton(
+                                            style: dialogButtonStyle,
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text('Annuler')),
-                                        TextButton(
+                                        FilledButton(
+                                            style: dialogButtonStyle,
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                               loadSetup(application)
@@ -238,8 +252,8 @@ class _AppDetail extends State<AppDetail> {
                                       title: const Text("Confirmation"),
                                       contentPadding:
                                           const EdgeInsets.all(20.0),
-                                      content: const Text(
-                                          'Confirmez-vous l\'installation  '),
+                                      content: Text(
+                                          'Confirmez-vous l\'installation de ${application.title} ?'),
                                     ));
 
                             //install(application);
