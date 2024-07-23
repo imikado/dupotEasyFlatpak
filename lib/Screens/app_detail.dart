@@ -145,20 +145,20 @@ class _AppDetail extends State<AppDetail> {
     const TextStyle strongTextStyle =
         TextStyle(color: Colors.blueGrey, fontSize: 24.0);
 
+    const TextStyle contentTitleStyle =
+        TextStyle(color: Colors.blueGrey, fontSize: 28.0);
+
+    const TextStyle contentValueStyle =
+        TextStyle(color: Color.fromARGB(255, 85, 77, 77), fontSize: 20.0);
+
     if (!loaded) {
       getData(context, args.app);
     }
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(
-          "Application: ${args.app}",
-          style: navTextStyle,
-        ),
-        backgroundColor: Colors.blueGrey,
-        actions: [
-          TextButton.icon(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+          leading: IconButton(
             onPressed: () {
               Navigator.popAndPushNamed(context, '/home');
             },
@@ -166,86 +166,101 @@ class _AppDetail extends State<AppDetail> {
               Icons.home,
               color: navTextColor,
             ),
-            label: const Text(
-              'Applications',
-              style: navTextStyle,
-            ),
           ),
-          TextButton.icon(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.settings,
-                color: navTextColor,
-              ),
-              label: const Text(
-                'Settings',
-                style: navTextStyle,
-              )),
-        ],
-      ),
-      body: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Text("mon app:${application.title}"),
-        Text("Description:${application.description}"),
-        Visibility(
-            visible: installing,
-            child: const CircularProgressIndicator(
-              semanticsLabel: 'Installation...',
-            )),
-        Visibility(
-            visible: alreadyInstalled,
-            child: const Text(
-              'Déjà installée',
-              style: strongTextStyle,
-            )),
-        Visibility(
-            visible: !installing && !alreadyInstalled && !installationFinished,
-            child: TextButton.icon(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          actions: [
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Annuler')),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  loadSetup(application).then((result) {
-                                    install(application);
-                                  });
-                                },
-                                child: const Text('Confirmer')),
-                          ],
-                          title: const Text("Confirmation"),
-                          contentPadding: const EdgeInsets.all(20.0),
-                          content:
-                              const Text('Confirmez-vous l\'installation  '),
-                        ));
+          title: Text(
+            "Application: ${args.app}",
+            style: navTextStyle,
+          ),
+          backgroundColor: Colors.blueGrey,
+          actions: [
+            TextButton.icon(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.settings,
+                  color: navTextColor,
+                ),
+                label: const Text(
+                  'Settings',
+                  style: navTextStyle,
+                )),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(25.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Application", style: contentTitleStyle),
+                    Text(application.title, style: contentValueStyle),
+                    SizedBox(height: 20),
+                    Text("Description", style: contentTitleStyle),
+                    Text(application.description, style: contentValueStyle),
+                    SizedBox(height: 40),
+                    Visibility(
+                        visible: installing,
+                        child: const CircularProgressIndicator(
+                          semanticsLabel: 'Installation...',
+                        )),
+                    SizedBox(height: 20),
+                    Visibility(
+                        visible: alreadyInstalled,
+                        child: const Text(
+                          'Déjà installée',
+                          style: strongTextStyle,
+                        )),
+                    Visibility(
+                        visible: !installing &&
+                            !alreadyInstalled &&
+                            !installationFinished,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('Annuler')),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              loadSetup(application)
+                                                  .then((result) {
+                                                install(application);
+                                              });
+                                            },
+                                            child: const Text('Confirmer')),
+                                      ],
+                                      title: const Text("Confirmation"),
+                                      contentPadding:
+                                          const EdgeInsets.all(20.0),
+                                      content: const Text(
+                                          'Confirmez-vous l\'installation  '),
+                                    ));
 
-                //install(application);
-              },
-              label: const Text("Intaller"),
-              icon: const Icon(Icons.install_desktop),
-            )),
-        Visibility(
-            visible: installationFinished,
-            child: RichText(
-              overflow: TextOverflow.clip,
-              text: TextSpan(
-                text: 'Output ',
-                style: outputTextStyle,
-                children: <TextSpan>[
-                  TextSpan(text: flatpakOutput),
-                ],
-              ),
-            )),
-      ])),
-    );
+                            //install(application);
+                          },
+                          label: const Text("Intaller"),
+                          icon: const Icon(Icons.install_desktop),
+                        )),
+                    Visibility(
+                        visible: installationFinished,
+                        child: RichText(
+                          overflow: TextOverflow.clip,
+                          text: TextSpan(
+                            text: 'Output ',
+                            style: outputTextStyle,
+                            children: <TextSpan>[
+                              TextSpan(text: flatpakOutput),
+                            ],
+                          ),
+                        )),
+                  ])),
+        ));
   }
 }
 
