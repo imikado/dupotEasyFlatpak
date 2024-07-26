@@ -1,11 +1,18 @@
 import 'dart:io';
 
+import 'package:dupot_easy_flatpak/Process/flatpak.dart';
+import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_already_installed.dart';
+import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_installed.dart';
+import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_not_installed.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/application.dart';
 import '../Models/application_factory.dart';
 import '../Models/permission.dart';
+import 'app_detail/app_detail_appbar.dart';
+import 'app_detail/app_detail_arguments.dart';
+import 'app_detail/app_detail_content_installing.dart';
 
 class AppDetail extends StatefulWidget {
   const AppDetail({
@@ -22,9 +29,11 @@ class _AppDetail extends State<AppDetail> {
   Application application = Application("loading", "loading", "", []);
   bool loaded = false;
   String flatpakOutput = "";
-  bool installing = false;
-  bool installationFinished = false;
-  bool alreadyInstalled = false;
+
+  bool displayInstalling = false;
+  bool displayInstallationFinished = false;
+  bool displayAlreadyInstalled = false;
+  bool displayNotInstalled = false;
 
   List<List<String>> processList = [[]];
 
@@ -38,66 +47,58 @@ class _AppDetail extends State<AppDetail> {
   }
 
   void checkAlreadyInstalled(Application applicationToCheck) {
-    Process.run('flatpak', ['info', applicationToCheck.flatpak]).then((result) {
-      stdout.write(result.stdout);
-
-      var isAlreadyInstalled = false;
-
-      if (result.stdout.toString().length > 2) {
-        isAlreadyInstalled = true;
-      }
-
+    Flatpak()
+        .isApplicationAlreadyInstalled(applicationToCheck.flatpak)
+        .then((isAlreadyInstalled) {
       setState(() {
-        alreadyInstalled = isAlreadyInstalled;
+        if (isAlreadyInstalled) {
+          displayAlreadyInstalled = true;
+        } else {
+          displayNotInstalled = true;
+        }
       });
     });
   }
 
-  void install(Application application) {
-    setState(() {
-      installing = true;
-    });
+  @override
+  Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as AppDetailArguments;
 
-    Process.run('flatpak', ['install', '-y', application.flatpak])
-        .then((result) {
-      stdout.write(result.stdout);
-      stderr.write(result.stderr);
-
-      overrideSetup(application);
-
-      setState(() {
-        flatpakOutput = "${result.stdout}\n Installation terminée";
-        installing = false;
-        installationFinished = true;
-      });
-
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.popAndPushNamed(context, '/home');
-                      },
-                      child: const Text('OK')),
-                ],
-                title: const Text("Installation avec succès"),
-                contentPadding: const EdgeInsets.all(20.0),
-                content: const Text('Installation avec succès'),
-              ));
-    });
-  }
-
-  Future<String> selectDirectory(String label) async {
-    String? selectedDirectory =
-        await FilePicker.platform.getDirectoryPath(dialogTitle: label);
-
-    if (selectedDirectory == null) {
-      return "";
+    if (!loaded) {
+      getData(context, args.app);
     }
-
-    return selectedDirectory;
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.grey[200],
+        appBar: AppDetailAppBar(args: args),
+        body: SingleChildScrollView(
+          child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Visibility(
+                        visible: displayAlreadyInstalled,
+                        child: AppDetailContentAlreadyInstalled(
+                            application: application)),
+                    Visibility(
+                        visible: displayInstallationFinished,
+                        child: AppDetailContentInstalled(
+                          application: application,
+                          flatpakOutput: flatpakOutput,
+                        )),
+                    Visibility(
+                        visible: displayInstalling,
+                        child: const AppDetailContentInstalling()),
+                    Visibility(
+                        visible: displayNotInstalled,
+                        child: AppDetailContentNotInstalled(
+                            application: application,
+                            handleLoadSetupThenInstall: loadSetupThenInstall)),
+                  ])),
+        ));
   }
 
   Future<void> loadSetup(Application application) async {
@@ -121,167 +122,54 @@ class _AppDetail extends State<AppDetail> {
     }
   }
 
-  void overrideSetup(Application application) async {
-    for (List<String> argListLoop in processList) {
-      Process.run('flatpak', argListLoop).then((result) {
-        stdout.write(result.stdout);
-        stderr.write(result.stderr);
+  Future<String> selectDirectory(String label) async {
+    String? selectedDirectory =
+        await FilePicker.platform.getDirectoryPath(dialogTitle: label);
+
+    if (selectedDirectory == null) {
+      return "";
+    }
+
+    return selectedDirectory;
+  }
+
+  void loadSetupThenInstall(Application application) {
+    loadSetup(application).then((result) {
+      install(application);
+    });
+  }
+
+  void install(Application application) {
+    setState(() {
+      displayNotInstalled = false;
+
+      displayInstalling = true;
+    });
+
+    Flatpak()
+        .installApplicationThenOverrideList(application.flatpak, processList)
+        .then((stdout) {
+      setState(() {
+        flatpakOutput = "$stdout \n Installation terminée";
+        displayInstalling = false;
+        displayInstallationFinished = true;
       });
-    }
+
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.popAndPushNamed(context, '/home');
+                      },
+                      child: const Text('OK')),
+                ],
+                title: const Text("Installation avec succès"),
+                contentPadding: const EdgeInsets.all(20.0),
+                content: const Text('Installation avec succès'),
+              ));
+    });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as AppDetailArguments;
-
-    const navTextColor = Colors.white;
-
-    const TextStyle navTextStyle = TextStyle(color: navTextColor);
-
-    const TextStyle outputTextStyle =
-        TextStyle(color: Colors.blueGrey, fontSize: 14.0);
-
-    const TextStyle strongTextStyle =
-        TextStyle(color: Colors.blueGrey, fontSize: 24.0);
-
-    const TextStyle contentTitleStyle =
-        TextStyle(color: Colors.blueGrey, fontSize: 28.0);
-
-    const TextStyle contentValueStyle =
-        TextStyle(color: Color.fromARGB(255, 85, 77, 77), fontSize: 20.0);
-
-    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-        backgroundColor: Colors.blueGrey,
-        padding: const EdgeInsets.all(20),
-        textStyle: const TextStyle(fontSize: 14));
-
-    final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
-        backgroundColor: Colors.grey,
-        padding: const EdgeInsets.all(20),
-        textStyle: const TextStyle(fontSize: 14));
-
-    if (!loaded) {
-      getData(context, args.app);
-    }
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.grey[200],
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.popAndPushNamed(context, '/home');
-            },
-            icon: const Icon(
-              Icons.home,
-              color: navTextColor,
-            ),
-          ),
-          title: Text(
-            "Application: ${args.app}",
-            style: navTextStyle,
-          ),
-          backgroundColor: Colors.blueGrey,
-          actions: [
-            TextButton.icon(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.settings,
-                  color: navTextColor,
-                ),
-                label: const Text(
-                  'Settings',
-                  style: navTextStyle,
-                )),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(25.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text("Application", style: contentTitleStyle),
-                    Text(application.title, style: contentValueStyle),
-                    const SizedBox(height: 20),
-                    const Text("Description", style: contentTitleStyle),
-                    Text(application.description, style: contentValueStyle),
-                    const SizedBox(height: 40),
-                    Visibility(
-                        visible: installing,
-                        child: const CircularProgressIndicator(
-                          semanticsLabel: 'Installation...',
-                        )),
-                    const SizedBox(height: 20),
-                    Visibility(
-                        visible: alreadyInstalled,
-                        child: const Text(
-                          'Déjà installée',
-                          style: strongTextStyle,
-                        )),
-                    Visibility(
-                        visible: !installing &&
-                            !alreadyInstalled &&
-                            !installationFinished,
-                        child: FilledButton.icon(
-                          style: buttonStyle,
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                      buttonPadding: const EdgeInsets.all(10),
-                                      actions: [
-                                        FilledButton(
-                                            style: dialogButtonStyle,
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Annuler')),
-                                        FilledButton(
-                                            style: dialogButtonStyle,
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                              loadSetup(application)
-                                                  .then((result) {
-                                                install(application);
-                                              });
-                                            },
-                                            child: const Text('Confirmer')),
-                                      ],
-                                      title: const Text("Confirmation"),
-                                      contentPadding:
-                                          const EdgeInsets.all(20.0),
-                                      content: Text(
-                                          'Confirmez-vous l\'installation de ${application.title} ?'),
-                                    ));
-
-                            //install(application);
-                          },
-                          label: const Text("Intaller"),
-                          icon: const Icon(Icons.install_desktop),
-                        )),
-                    Visibility(
-                        visible: installationFinished,
-                        child: RichText(
-                          overflow: TextOverflow.clip,
-                          text: TextSpan(
-                            text: 'Output ',
-                            style: outputTextStyle,
-                            children: <TextSpan>[
-                              TextSpan(text: flatpakOutput),
-                            ],
-                          ),
-                        )),
-                  ])),
-        ));
-  }
-}
-
-class AppDetailArguments {
-  final String app;
-
-  AppDetailArguments(
-    this.app,
-  );
 }
