@@ -35,6 +35,8 @@ class _AppDetail extends State<AppDetail> {
   bool displayAlreadyInstalled = false;
   bool displayNotInstalled = false;
 
+  String flatpakApplicationInfo = "";
+
   List<List<String>> processList = [[]];
 
   void getData(BuildContext context, app) async {
@@ -49,10 +51,11 @@ class _AppDetail extends State<AppDetail> {
   void checkAlreadyInstalled(Application applicationToCheck) {
     Flatpak()
         .isApplicationAlreadyInstalled(applicationToCheck.flatpak)
-        .then((isAlreadyInstalled) {
+        .then((flatpakApplication) {
       setState(() {
-        if (isAlreadyInstalled) {
+        if (flatpakApplication.isInstalled) {
           displayAlreadyInstalled = true;
+          flatpakApplicationInfo = flatpakApplication.flatpakOutput;
         } else {
           displayNotInstalled = true;
         }
@@ -82,7 +85,8 @@ class _AppDetail extends State<AppDetail> {
                     Visibility(
                         visible: displayAlreadyInstalled,
                         child: AppDetailContentAlreadyInstalled(
-                            application: application)),
+                            application: application,
+                            flatpakInfo: flatpakApplicationInfo)),
                     Visibility(
                         visible: displayInstallationFinished,
                         child: AppDetailContentInstalled(

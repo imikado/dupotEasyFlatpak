@@ -34,6 +34,7 @@ class _AppList extends State<AppList> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        leading: Icon(Icons.apps),
         title: const Text(
           "Applications disponibles",
           style: TextStyle(color: Colors.white),

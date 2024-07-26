@@ -29,6 +29,18 @@ class AppDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.blueGrey,
       actions: [
         TextButton.icon(
+            onPressed: () {
+              Navigator.popAndPushNamed(context, '/home');
+            },
+            icon: const Icon(
+              Icons.apps,
+              color: navTextColor,
+            ),
+            label: const Text(
+              'Applications',
+              style: navTextStyle,
+            )),
+        TextButton.icon(
             onPressed: () {},
             icon: const Icon(
               Icons.settings,

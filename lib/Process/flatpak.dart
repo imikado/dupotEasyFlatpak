@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 class Flatpak {
-  Future<bool> isApplicationAlreadyInstalled(String applicationId) async {
+  Future<FlatpakApplication> isApplicationAlreadyInstalled(
+      String applicationId) async {
     ProcessResult result =
         await Process.run('flatpak', ['info', applicationId]);
 
@@ -14,7 +15,7 @@ class Flatpak {
       isAlreadyInstalled = true;
     }
 
-    return isAlreadyInstalled;
+    return FlatpakApplication(isAlreadyInstalled, result.stdout.toString());
   }
 
   Future<String> installApplicationThenOverrideList(
@@ -31,4 +32,11 @@ class Flatpak {
 
     return result.stdout.toString();
   }
+}
+
+class FlatpakApplication {
+  final bool isInstalled;
+  final String flatpakOutput;
+
+  FlatpakApplication(this.isInstalled, this.flatpakOutput);
 }
