@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Easy flatpak
+Exec=dupot_easy_flatpak
+Type=Application
+Icon=org.dupot.easy_flatpak
+Categories=Utility
