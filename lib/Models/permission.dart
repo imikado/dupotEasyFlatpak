@@ -1,13 +1,19 @@
 class Permission {
   final String type;
   final String label;
+  final String? value;
 
   static const constTypeFileSystem = 'filesystem';
+  static const constTypeFileSystemNoPrompt = 'filesystem_noprompt';
 
-  Permission(String this.type, this.label);
+  Permission(this.type, this.label, [this.value]);
 
   bool isFileSystem() {
     return (type == constTypeFileSystem);
+  }
+
+  bool isFileSystemNoPrompt() {
+    return (type == constTypeFileSystemNoPrompt);
   }
 
   String getType() {
@@ -18,7 +24,19 @@ class Permission {
     return label;
   }
 
+  String? getValue() {
+    return value;
+  }
+
   String getFlatpakOverrideType() {
-    return '--$type=';
+    if (isFileSystemNoPrompt()) {
+      return getFlatpakParameter(constTypeFileSystem);
+    }
+
+    return getFlatpakParameter(type);
+  }
+
+  String getFlatpakParameter(String parameter) {
+    return '--$parameter=';
   }
 }

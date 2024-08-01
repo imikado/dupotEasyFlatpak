@@ -122,6 +122,18 @@ class _AppDetail extends State<AppDetail> {
         argList.add(application.flatpak);
 
         processList.add(argList);
+      } else if (permissionLoop.isFileSystemNoPrompt()) {
+        String directoryPath = 'home';
+
+        List<String> argList = [
+          'override',
+          '--user',
+        ];
+        argList.add(permissionLoop.getFlatpakOverrideType() + directoryPath);
+
+        argList.add(application.flatpak);
+
+        processList.add(argList);
       }
     }
   }

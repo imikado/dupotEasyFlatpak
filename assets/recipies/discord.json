@@ -1,0 +1,14 @@
+{
+    "title":"Discord",
+    "description":"Discord",
+    "flatpak":"com.discordapp.Discord",
+
+    "flatpakPermissionToOverrideList":[
+        {
+            "label":"",
+            "type":"filesystem_noprompt",
+            "value":"home"
+        }
+    ]
+ 
+}

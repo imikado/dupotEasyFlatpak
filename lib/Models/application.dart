@@ -10,8 +10,15 @@ class Application {
       List<Map<String, dynamic>> rawFlatpakPermissionToOverrideList) {
     for (Map<String, dynamic> rawPermissionLoop
         in rawFlatpakPermissionToOverrideList) {
+      String value = "none";
+      if (rawPermissionLoop.containsKey('value')) {
+        value = rawPermissionLoop['value'];
+      }
+
       flatpakPermissionToOverrideList.add(Permission(
-          rawPermissionLoop['type'].toString(), rawPermissionLoop['label']!));
+          rawPermissionLoop['type'].toString(),
+          rawPermissionLoop['label']!,
+          value));
     }
   }
 
