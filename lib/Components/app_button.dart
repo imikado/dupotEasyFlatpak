@@ -18,16 +18,16 @@ class AppButton extends StatelessWidget {
       ),
     );
 
-    const double margin = 35;
+    const double margin = 50;
 
     return Card(
       // clipBehavior is necessary because, without it, the InkWell's animation
       // will extend beyond the rounded edges of the [Card] (see https://github.com/flutter/flutter/issues/109776)
       // This comes with a small performance cost, and you should not set [clipBehavior]
       // unless you need it.
-      margin: EdgeInsets.all(15.0),
 
       clipBehavior: Clip.hardEdge,
+
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
@@ -35,6 +35,8 @@ class AppButton extends StatelessWidget {
               arguments: AppDetailArguments(title));
         },
         child: Container(
+          alignment: Alignment.center,
+          height: 50.0,
           padding: const EdgeInsets.only(
               left: margin, bottom: margin, right: margin, top: margin),
           child: myText,

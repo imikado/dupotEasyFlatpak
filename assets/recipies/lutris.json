@@ -1,0 +1,13 @@
+{
+    "title":"Lutris",
+    "description":"Video game preservation platform.",
+    "flatpak":"net.lutris.Lutris",
+
+    "flatpakPermissionToOverrideList":[
+        {
+            "label":"Veuilez selectionner le repertoire contenant vos jeux",
+            "type":"filesystem"
+        }
+    ]
+ 
+}

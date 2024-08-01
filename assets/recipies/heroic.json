@@ -1,0 +1,13 @@
+{
+    "title":"Heroic Games Launcher",
+    "description":"An Open Source Epic Games, GOG and Amazon Prime Games Launcher.",
+    "flatpak":"com.heroicgameslauncher.hgl",
+
+    "flatpakPermissionToOverrideList":[
+        {
+            "label":"Veuilez selectionner le repertoire contenant vos jeux",
+            "type":"filesystem"
+        }
+    ]
+ 
+}

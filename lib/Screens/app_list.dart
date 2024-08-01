@@ -34,7 +34,7 @@ class _AppList extends State<AppList> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        leading: Icon(Icons.apps),
+        leading: const Icon(Icons.apps),
         title: const Text(
           "Applications disponibles",
           style: TextStyle(color: Colors.white),
@@ -42,12 +42,16 @@ class _AppList extends State<AppList> {
         centerTitle: true,
         backgroundColor: Colors.blueGrey,
       ),
-      body: Column(
+      body: GridView(
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+          primary: false,
+          padding: const EdgeInsets.all(10),
           children: applicationList.map((e) {
-        return AppButton(
-          title: e,
-        );
-      }).toList()),
+            return AppButton(
+              title: e,
+            );
+          }).toList()),
     );
   }
 }

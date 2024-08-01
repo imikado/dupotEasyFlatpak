@@ -1,0 +1,13 @@
+{
+    "title":"Bottles",
+    "description":"Run Windows Software",
+    "flatpak":"com.usebottles.bottles",
+
+    "flatpakPermissionToOverrideList":[
+        {
+            "label":"Veuilez selectionner le repertoire contenant vos jeux",
+            "type":"filesystem"
+        }
+    ]
+ 
+}
