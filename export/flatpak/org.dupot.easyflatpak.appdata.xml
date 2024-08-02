@@ -14,10 +14,17 @@
    <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_01.png</image>
+      </screenshot>
+      <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_02.png</image>
+      </screenshot>
+      <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_03.png</image>
+      </screenshot>
+      <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_04.png</image> 
     </screenshot>
+    </screenshots>
 
     <url type="homepage">https://www.dupot.org/desktop.html</url>
     <url type="vcs-browser">https://github.com/imikado/dupotEasyFlatpak/</url>
