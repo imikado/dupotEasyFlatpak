@@ -4,15 +4,15 @@ import 'package:dupot_easy_flatpak/Screens/loading.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(DupotEasyFlatpak());
 }
 
-class MyApp extends StatefulWidget {
+class DupotEasyFlatpak extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _DupotEasyFlatpakState createState() => _DupotEasyFlatpakState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
