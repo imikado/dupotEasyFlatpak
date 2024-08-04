@@ -2,10 +2,22 @@ import 'dart:async';
 import 'dart:io';
 
 class Flatpak {
+  bool isFlatpak = true;
+
+  String sandboxCommand = 'flatpak-spawn --host flatpak';
+  String command = 'flatpak';
+
+  String getFlatpakCommand() {
+    if (isFlatpak) {
+      return sandboxCommand;
+    }
+    return command;
+  }
+
   Future<FlatpakApplication> isApplicationAlreadyInstalled(
       String applicationId) async {
     ProcessResult result =
-        await Process.run('flatpak', ['info', applicationId]);
+        await Process.run(getFlatpakCommand(), ['info', applicationId]);
 
     stdout.write(result.stdout);
 
@@ -20,14 +32,15 @@ class Flatpak {
 
   Future<String> installApplicationThenOverrideList(
       String applicationId, List<List<String>> subProcessList) async {
-    ProcessResult result =
-        await Process.run('flatpak', ['install', '-y', applicationId]);
+    ProcessResult result = await Process.run(
+        getFlatpakCommand(), ['install', '-y', applicationId]);
 
     stdout.write(result.stdout);
     stderr.write(result.stderr);
 
     for (List<String> argListLoop in subProcessList) {
-      ProcessResult subResult = await Process.run('flatpak', argListLoop);
+      ProcessResult subResult =
+          await Process.run(getFlatpakCommand(), argListLoop);
     }
 
     return result.stdout.toString();
