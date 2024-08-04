@@ -1,0 +1,33 @@
+display_name: Easy flatpak
+package_name: easyflatpak
+
+maintainer:
+  name: Michael Bertocchi
+  email: imikado@gmail.com
+
+priority: optional
+
+section: x11
+
+installed_size: 21336
+
+dependencies:
+  - flatpak
+  - zenity
+
+essential: false
+
+icon: export/deb/512x512.png
+
+postuninstall_scripts:
+  - echo "Sorry to see you go."
+
+keywords:
+  - flatpak
+
+generic_name: Easy flatpak
+
+categories:
+  - Utility
+
+startup_notify: true
