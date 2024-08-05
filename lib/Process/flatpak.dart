@@ -19,6 +19,7 @@ class Flatpak {
       List<String> argumentList = [];
       argumentList.add('--host');
       argumentList.add('flatpak');
+      argumentList.add('--user');
 
       for (String subArgumentLoop in subArgumentList) {
         argumentList.add(subArgumentLoop);
