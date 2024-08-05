@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 class Flatpak {
-  bool isFlatpak = false;
+  bool isFlatpak = true;
 
-  String sandboxCommand = 'flatpak-spawn --host flatpak';
+  String sandboxCommand = 'flatpak-spawn';
   String command = 'flatpak';
 
   String getFlatpakCommand() {
@@ -14,10 +14,24 @@ class Flatpak {
     return command;
   }
 
+  List<String> getFlatpakArgumentList(List<String> subArgumentList) {
+    if (isFlatpak) {
+      List<String> argumentList = [];
+      argumentList.add('--host');
+      argumentList.add('flatpak');
+
+      for (String subArgumentLoop in subArgumentList) {
+        argumentList.add(subArgumentLoop);
+      }
+      return argumentList;
+    }
+    return subArgumentList;
+  }
+
   Future<FlatpakApplication> isApplicationAlreadyInstalled(
       String applicationId) async {
-    ProcessResult result =
-        await Process.run(getFlatpakCommand(), ['info', applicationId]);
+    ProcessResult result = await Process.run(
+        getFlatpakCommand(), getFlatpakArgumentList(['info', applicationId]));
 
     stdout.write(result.stdout);
 
@@ -32,15 +46,15 @@ class Flatpak {
 
   Future<String> installApplicationThenOverrideList(
       String applicationId, List<List<String>> subProcessList) async {
-    ProcessResult result = await Process.run(
-        getFlatpakCommand(), ['install', '-y', applicationId]);
+    ProcessResult result = await Process.run(getFlatpakCommand(),
+        getFlatpakArgumentList(['install', '-y', applicationId]));
 
     stdout.write(result.stdout);
     stderr.write(result.stderr);
 
     for (List<String> argListLoop in subProcessList) {
-      ProcessResult subResult =
-          await Process.run(getFlatpakCommand(), argListLoop);
+      ProcessResult subResult = await Process.run(
+          getFlatpakCommand(), getFlatpakArgumentList(argListLoop));
     }
 
     return result.stdout.toString();
