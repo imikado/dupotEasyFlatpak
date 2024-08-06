@@ -12,10 +12,13 @@
   
    <name>Michael Bertocchi</name>
   </developer>
-  <summary>Permet de simplifier l'installation de certaines applications flatpak</summary>
+  <summary>Simplify installation for some flatpak's application</summary>
   <description>
     <p>
-    Permet via un système de recettes de simplifier l'installation de certaines applications flatpak.
+    Use a recipe system (in json format) to setup easier way to install some flatpak's application. 
+    </p>
+    <p>
+    For example, for Steam, it ask user to choose folder where he stores his games before installation
     </p>
   </description>
 
@@ -40,7 +43,7 @@
     <content_rating type="oars-1.1"/>
     <releases>
 
-        <release date="2024-08-01" version="1.0"/>
+        <release date="2024-08-06" version="0.0.17"/>
     </releases>
 
 </component>
