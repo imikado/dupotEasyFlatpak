@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../Models/application.dart';
@@ -29,7 +30,8 @@ class AppDetailContentAlreadyInstalled extends StatelessWidget {
       const Text("Application", style: contentTitleStyle),
       Text(application.title, style: contentValueStyle),
       const SizedBox(height: 20),
-      const Text("Détails", style: contentTitleStyle),
+      Text(AppLocalizations.of(context).tr('details'),
+          style: contentTitleStyle),
       RichText(
         overflow: TextOverflow.clip,
         textAlign: TextAlign.center,
@@ -41,11 +43,15 @@ class AppDetailContentAlreadyInstalled extends StatelessWidget {
         ),
       ),
       const SizedBox(height: 20),
-      const Card(
+      Card(
           child: SizedBox(
         width: 250,
         height: 80,
-        child: Center(child: Text('Déjà installée', style: strongTextStyle)),
+        child: Center(
+            child: Text(
+                AppLocalizations.of(context)
+                    .tr('installation_already_installed'),
+                style: strongTextStyle)),
       ))
     ]);
   }

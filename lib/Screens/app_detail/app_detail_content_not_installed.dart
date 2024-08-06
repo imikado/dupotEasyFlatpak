@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import '../../Models/application.dart';
 
 typedef ApplicationInstallCallback = void Function(Application application);
@@ -53,24 +54,27 @@ class AppDetailContentNotInstalled extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Annuler')),
+                          child:
+                              Text(AppLocalizations.of(context).tr('cancel'))),
                       FilledButton(
                           style: dialogButtonStyle,
                           onPressed: () {
                             Navigator.of(context).pop();
                             handleLoadSetupThenInstall(application);
                           },
-                          child: const Text('Confirmer')),
+                          child:
+                              Text(AppLocalizations.of(context).tr('confirm'))),
                     ],
-                    title: const Text("Confirmation"),
+                    title: Text(
+                        AppLocalizations.of(context).tr('confirmation_title')),
                     contentPadding: const EdgeInsets.all(20.0),
                     content: Text(
-                        'Confirmez-vous l\'installation de ${application.title} ?'),
+                        '${AppLocalizations.of(context).tr('do_you_confirm_installation_of')} ${application.title} ?'),
                   ));
 
           //install(application);
         },
-        label: const Text("Intaller"),
+        label: Text(AppLocalizations.of(context).tr('install')),
         icon: const Icon(Icons.install_desktop),
       )
     ]);

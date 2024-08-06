@@ -6,7 +6,7 @@ class Application {
   final String flatpak;
   List<Permission> flatpakPermissionToOverrideList = [];
 
-  Application(String this.title, String this.description, String this.flatpak,
+  Application(this.title, this.description, this.flatpak,
       List<Map<String, dynamic>> rawFlatpakPermissionToOverrideList) {
     for (Map<String, dynamic> rawPermissionLoop
         in rawFlatpakPermissionToOverrideList) {

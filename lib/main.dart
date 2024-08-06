@@ -1,6 +1,8 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizationsDelegate.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail.dart';
 import 'package:dupot_easy_flatpak/Screens/app_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const DupotEasyFlatpak());
@@ -18,6 +20,15 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        localizationsDelegates: const [
+          AppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', ''),
+          Locale('fr', ''),
+        ],
         title: 'Easy Flatpak',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

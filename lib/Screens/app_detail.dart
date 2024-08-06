@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Process/flatpak.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_already_installed.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_installed.dart';
@@ -166,7 +165,8 @@ class _AppDetail extends State<AppDetail> {
         .installApplicationThenOverrideList(application.flatpak, processList)
         .then((stdout) {
       setState(() {
-        flatpakOutput = "$stdout \n Installation terminée";
+        flatpakOutput =
+            "$stdout \n ${AppLocalizations.of(context).tr('installation_finished')}";
         displayInstalling = false;
         displayInstallationFinished = true;
       });
@@ -182,9 +182,11 @@ class _AppDetail extends State<AppDetail> {
                       },
                       child: const Text('OK')),
                 ],
-                title: const Text("Installation avec succès"),
+                title: Text(AppLocalizations.of(context)
+                    .tr('installation_successfully')),
                 contentPadding: const EdgeInsets.all(20.0),
-                content: const Text('Installation avec succès'),
+                content: Text(AppLocalizations.of(context)
+                    .tr('installation_successfully')),
               ));
     });
   }

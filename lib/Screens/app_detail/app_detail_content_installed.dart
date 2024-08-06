@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../Models/application.dart';
@@ -32,8 +33,8 @@ class AppDetailContentInstalled extends StatelessWidget {
       const Text("Description", style: contentTitleStyle),
       Text(application.description, style: contentValueStyle),
       const SizedBox(height: 40),
-      const Text(
-        'Déjà installée',
+      Text(
+        AppLocalizations.of(context).tr('installation_already_installed'),
         style: strongTextStyle,
       ),
       RichText(

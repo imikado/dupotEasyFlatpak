@@ -1,4 +1,3 @@
-import 'package:dupot_easy_flatpak/Screens/app_detail.dart';
 import 'package:flutter/material.dart';
 
 import '../Screens/app_detail/app_detail_arguments.dart';
@@ -12,7 +11,7 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var myText = Text(
       title,
-      style: TextStyle(
+      style: const TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 35,
       ),

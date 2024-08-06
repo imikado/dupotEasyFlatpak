@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'application.dart';
 
 class ApplicationFactory {
+  static bool isDebug = false;
+
   static Future<List<String>> getApplicationList(context) async {
     String recipiesString =
         await DefaultAssetBundle.of(context).loadString("assets/recipies.json");
-    print(recipiesString);
     List<String> recipieList = List<String>.from(json.decode(recipiesString));
-    print(recipieList);
+    if (isDebug) {
+      print(recipieList);
+    }
     return recipieList;
   }
 
