@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'app_detail_arguments.dart';
 
@@ -23,7 +24,7 @@ class AppDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       title: Text(
-        "Application: ${args.app}",
+        "${AppLocalizations.of(context).tr('application')}: ${args.app}",
         style: navTextStyle,
       ),
       backgroundColor: Colors.blueGrey,
@@ -36,8 +37,8 @@ class AppDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
               Icons.apps,
               color: navTextColor,
             ),
-            label: const Text(
-              'Applications',
+            label: Text(
+              AppLocalizations.of(context).tr('applications'),
               style: navTextStyle,
             )),
       ],

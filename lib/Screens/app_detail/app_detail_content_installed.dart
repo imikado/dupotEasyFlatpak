@@ -27,10 +27,12 @@ class AppDetailContentInstalled extends StatelessWidget {
         TextStyle(color: Colors.blueGrey, fontSize: 14.0);
 
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      const Text("Application", style: contentTitleStyle),
+      Text(AppLocalizations.of(context).tr('application'),
+          style: contentTitleStyle),
       Text(application.title, style: contentValueStyle),
       const SizedBox(height: 20),
-      const Text("Description", style: contentTitleStyle),
+      Text(AppLocalizations.of(context).tr('description'),
+          style: contentTitleStyle),
       Text(application.description, style: contentValueStyle),
       const SizedBox(height: 40),
       Text(
@@ -40,7 +42,7 @@ class AppDetailContentInstalled extends StatelessWidget {
       RichText(
         overflow: TextOverflow.clip,
         text: TextSpan(
-          text: 'Output ',
+          text: AppLocalizations.of(context).tr('output'),
           style: outputTextStyle,
           children: <TextSpan>[
             TextSpan(text: flatpakOutput),

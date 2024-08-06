@@ -22,7 +22,11 @@ class AppLocalizations {
       'confirm': 'Confirm',
       'confirmation_title': 'Confirmation',
       'do_you_confirm_installation_of': 'Do you confirm installation of ',
-      'install': 'Install'
+      'install': 'Install',
+      'application': 'Application',
+      'applications': 'Applications',
+      'description': 'Decription',
+      'output': 'Output'
     },
     'fr': {
       'loading': 'Chargement',
@@ -36,7 +40,11 @@ class AppLocalizations {
       'confirm': 'Confirmer',
       'confirmation_title': 'Confirmation',
       'do_you_confirm_installation_of': 'Confirmez-vous l \'installation de',
-      'install': 'Installer'
+      'install': 'Installer',
+      'application': 'Application',
+      'applications': 'Applications',
+      'description': 'Decription',
+      'output': 'Sortie'
     },
   };
 

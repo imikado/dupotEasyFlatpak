@@ -35,10 +35,12 @@ class AppDetailContentNotInstalled extends StatelessWidget {
         textStyle: const TextStyle(fontSize: 14));
 
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      const Text("Application", style: contentTitleStyle),
+      Text(AppLocalizations.of(context).tr('application'),
+          style: contentTitleStyle),
       Text(application.title, style: contentValueStyle),
       const SizedBox(height: 20),
-      const Text("Description", style: contentTitleStyle),
+      Text(AppLocalizations.of(context).tr('description'),
+          style: contentTitleStyle),
       Text(application.description, style: contentValueStyle),
       const SizedBox(height: 40),
       FilledButton.icon(

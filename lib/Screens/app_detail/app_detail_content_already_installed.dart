@@ -27,7 +27,8 @@ class AppDetailContentAlreadyInstalled extends StatelessWidget {
         TextStyle(color: Color.fromARGB(255, 85, 77, 77), fontSize: 16.0);
 
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      const Text("Application", style: contentTitleStyle),
+      Text(AppLocalizations.of(context).tr('application'),
+          style: contentTitleStyle),
       Text(application.title, style: contentValueStyle),
       const SizedBox(height: 20),
       Text(AppLocalizations.of(context).tr('details'),
