@@ -1,6 +1,7 @@
 import 'package:dupot_easy_flatpak/Localizations/app_localizationsDelegate.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail.dart';
 import 'package:dupot_easy_flatpak/Screens/app_list.dart';
+import 'package:dupot_easy_flatpak/Screens/new_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -39,6 +40,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
           '/': (context) => const AppList(),
           '/home': (context) => const AppList(),
           '/app': (context) => const AppDetail(),
+          '/add': (context) => const NewApp()
         });
   }
 }

@@ -26,7 +26,14 @@ class AppLocalizations {
       'application': 'Application',
       'applications': 'Applications',
       'description': 'Decription',
-      'output': 'Output'
+      'output': 'Output',
+      'add_new_application': 'Add new application',
+      'add': 'Add',
+      'field_should_not_be_empty': 'Field should be filled',
+      'application_name': 'Application\'s name',
+      'application_json': 'Application\'s json setup recipie',
+      'processing_form': 'Processing',
+      'save': 'Save'
     },
     'fr': {
       'loading': 'Chargement',
@@ -44,7 +51,15 @@ class AppLocalizations {
       'application': 'Application',
       'applications': 'Applications',
       'description': 'Decription',
-      'output': 'Sortie'
+      'output': 'Sortie',
+      'add_new_application': 'Ajouter une application',
+      'add': 'Ajouter',
+      'field_should_not_be_empty': 'Le champ doit être rempli',
+      'application_name': 'Nom de l\'application',
+      'application_json':
+          'Json de paramétrage de la recette pour l\'application',
+      'processing_form': 'Traitement en cours',
+      'save': 'Enregistrer'
     },
   };
 

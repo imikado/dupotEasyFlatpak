@@ -18,9 +18,14 @@ class _AppList extends State<AppList> {
   void initState() {
     super.initState();
 
+    getData();
+  }
+
+  @override
+  void didChangeDependencies() {
     applicationList = [AppLocalizations.of(context).tr("loading")];
 
-    getData();
+    super.didChangeDependencies();
   }
 
   void getData() async {
@@ -34,6 +39,10 @@ class _AppList extends State<AppList> {
 
   @override
   Widget build(BuildContext context) {
+    const Color navTextColor = Colors.white;
+
+    const TextStyle navTextStyle = TextStyle(color: navTextColor);
+
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -44,6 +53,20 @@ class _AppList extends State<AppList> {
         ),
         centerTitle: true,
         backgroundColor: Colors.blueGrey,
+        actions: [
+          TextButton.icon(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/add');
+              },
+              icon: const Icon(
+                Icons.add,
+                color: navTextColor,
+              ),
+              label: Text(
+                AppLocalizations.of(context).tr('add'),
+                style: navTextStyle,
+              )),
+        ],
       ),
       body: GridView(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

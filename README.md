@@ -9,11 +9,17 @@ This application use json files to setup the way to install it.
 These files are stored in assets/recipies folder
 
 ### Create a recipie
+In the application, you can on top right click on Add button
+
+You will have a form to setup application name without space or accent
+
+And bellow the JSON setup
 
 For example create heroic game launcher recipie
 
-Create file assets/recipies/heroic.json
+Application name: heroic
 
+Application json setup recipie
 ```json
 {
   "title": "Heroic Games Launcher",
@@ -28,6 +34,10 @@ Create file assets/recipies/heroic.json
   ]
 }
 ```
+
+The application will create a file in ~Documents/EasyFlatpak/heroic.json
+
+
 
 Title: the application's name
 
