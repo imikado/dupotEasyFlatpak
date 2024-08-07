@@ -83,6 +83,9 @@ class _NewApp extends State<NewApp> {
                         ),
                         const SizedBox(height: 10),
                         TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          minLines: 5, //Normal textInputField will be displayed
+                          maxLines: 20,
                           controller: _applicationJsonController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),

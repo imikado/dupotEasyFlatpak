@@ -35,7 +35,7 @@ Application json setup recipie
 }
 ```
 
-The application will create a file in ~Documents/EasyFlatpak/heroic.json
+The application will create a file in ~/Documents/EasyFlatpak/heroic.json
 
 
 
