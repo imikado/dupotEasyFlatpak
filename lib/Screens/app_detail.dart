@@ -104,13 +104,17 @@ class _AppDetail extends State<AppDetail> {
         ));
   }
 
-  Future<void> loadSetup(Application application) async {
+  Future<bool> loadSetup(Application application) async {
     List<Permission> flatpakPermissionList =
         application.getFlatpakPermissionToOverrideList();
 
     for (Permission permissionLoop in flatpakPermissionList) {
       if (permissionLoop.isFileSystem()) {
         String directoryPath = await selectDirectory(permissionLoop.label);
+
+        if (directoryPath.length < 2) {
+          return false;
+        }
 
         List<String> argList = [
           'override',
@@ -135,6 +139,8 @@ class _AppDetail extends State<AppDetail> {
         processList.add(argList);
       }
     }
+
+    return true;
   }
 
   Future<String> selectDirectory(String label) async {
@@ -158,8 +164,10 @@ class _AppDetail extends State<AppDetail> {
   }
 
   void loadSetupThenInstall(Application application) {
-    loadSetup(application).then((result) {
-      install(application);
+    loadSetup(application).then((isSetupOk) {
+      if (isSetupOk) {
+        install(application);
+      }
     });
   }
 
