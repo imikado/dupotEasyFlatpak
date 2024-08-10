@@ -3,8 +3,8 @@ import 'package:dupot_easy_flatpak/Process/flatpak.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_already_installed.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_installed.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_not_installed.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:prompt_dialog/prompt_dialog.dart';
 
 import '../Models/application.dart';
 import '../Models/application_factory.dart';
@@ -138,8 +138,17 @@ class _AppDetail extends State<AppDetail> {
   }
 
   Future<String> selectDirectory(String label) async {
-    String? selectedDirectory =
-        await FilePicker.platform.getDirectoryPath(dialogTitle: label);
+    String? selectedDirectory = await prompt(context,
+        title: Text(label),
+        isSelectedInitialValue: false,
+        textOK: Text(AppLocalizations.of(context).tr('confirm')),
+        textCancel: Text(AppLocalizations.of(context).tr('cancel')),
+        hintText: label, validator: (String? value) {
+      if (value == null || value.isEmpty) {
+        return AppLocalizations.of(context).tr('field_should_not_be_empty');
+      }
+      return null;
+    });
 
     if (selectedDirectory == null) {
       return "";
