@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
@@ -35,6 +36,10 @@ class ApplicationFactory {
   }
 
   static Future<Application> getApplication(context, app) async {
+    final languageCode = AppLocalizations.of(context).getLanguageCode();
+
+    print('languageCode:$languageCode');
+
     final directory = await getApplicationDocumentsDirectory();
 
     final subDirectory = Directory('${directory.path}/EasyFlatpak');
@@ -53,8 +58,15 @@ class ApplicationFactory {
 
     List<dynamic> rawList = jsonApp['flatpakPermissionToOverrideList'];
 
+    if (jsonApp.containsKey('description_$languageCode')) {
+      jsonApp['description'] = jsonApp['description_$languageCode'];
+    }
+
     List<Map<String, dynamic>> objectList = [];
     for (Map<String, dynamic> rawLoop in rawList) {
+      if (rawLoop.containsKey('label_$languageCode')) {
+        rawLoop['label'] = rawLoop['label_$languageCode'];
+      }
       objectList.add(rawLoop);
     }
 

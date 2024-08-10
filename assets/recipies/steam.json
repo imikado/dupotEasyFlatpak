@@ -1,13 +1,12 @@
 {
-    "title":"Steam",
-    "description":"Package to play steam",
-    "flatpak":"com.valvesoftware.Steam",
-
-    "flatpakPermissionToOverrideList":[
+    "title": "Steam",
+    "description": "Package to play steam",
+    "flatpak": "com.valvesoftware.Steam",
+    "flatpakPermissionToOverrideList": [
         {
-            "label":"Veuilez selectionner le repertoire contenant vos jeux steam",
-            "type":"filesystem"
+            "label": "Indicate directory path where you store your games",
+            "label_fr": "Veuilez indiquer le chemin complet du répertoire contenant vos jeux",
+            "type": "filesystem"
         }
     ]
- 
 }

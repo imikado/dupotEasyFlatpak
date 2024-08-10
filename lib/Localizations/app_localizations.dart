@@ -68,4 +68,8 @@ class AppLocalizations {
   String tr(String key) {
     return _localizedValues[locale.languageCode]![key]!;
   }
+
+  String getLanguageCode() {
+    return locale.languageCode;
+  }
 }

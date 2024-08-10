@@ -24,11 +24,14 @@ Application json setup recipie
 {
   "title": "Heroic Games Launcher",
   "description": "An Open Source Epic Games, GOG and Amazon Prime Games Launcher.",
+  "description_fr": "Lanceur Open Source pour Epic Games, GOG et Amazon Prime Games.",
+  
   "flatpak": "com.heroicgameslauncher.hgl",
 
   "flatpakPermissionToOverrideList": [
     {
-      "label": "Veuilez selectionner le repertoire contenant vos jeux",
+      "label": "Indicate directory path where you store your games",
+      "label_fr": "Veuilez indiquer le chemin complet du répertoire contenant vos jeux",
       "type": "filesystem"
     }
   ]
