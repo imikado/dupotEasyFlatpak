@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 class Flatpak {
-  bool isFlatpak = true;
+  bool isFlatpak = false;
 
   String sandboxCommand = 'flatpak-spawn';
   String command = 'flatpak';

@@ -8,3 +8,18 @@ releases:
           target: deb
           build_args:
             enable-experiment: records
+
+      - name: dupot-easy-flatpak-rpm
+        package:
+          platform: linux
+          target: rpm
+          build_args:
+            enable-experiment: records
+
+      - name: dupot-easy-flatpak-zip
+        package:
+          platform: linux
+          target: zip
+          build_args:
+            enable-experiment: records
+

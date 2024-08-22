@@ -1,0 +1,26 @@
+display_name: Easy flatpak
+icon: export/rpm/512x512.png
+summary: An application to simplify install of some flatpak
+group: Applications/Development Tools
+vendor: Michael Bertocchi
+packager: Michael Bertocchi
+packagerEmail: imikado@gmail.com
+license: LGPLv2.0
+url: https://github.com/imikado/dupotEasyFlatpak
+
+build_arch: x86_64
+
+requires:
+  - flatpak
+  - zenity
+
+keywords:
+  - flatpak
+
+generic_name: Easy flatpak
+
+categories:
+  - Development
+  - Utility
+
+startup_notify: true
