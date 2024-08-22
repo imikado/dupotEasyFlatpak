@@ -21,7 +21,7 @@ class ApplicationFactory {
     final subDirectory = Directory('${directory.path}/EasyFlatpak');
 
     if (await subDirectory.exists()) {
-      var fileList = await subDirectory.listSync();
+      var fileList = subDirectory.listSync();
       for (var fileLoop in fileList) {
         recipieList.add(
             path.basename(fileLoop.path).toString().replaceAll('.json', ''));

@@ -69,7 +69,7 @@ class _NewApp extends State<NewApp> {
                         TextFormField(
                           controller: _applicationNameController,
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                             hintText: AppLocalizations.of(context)
                                 .tr("application_name"),
                           ),
@@ -88,7 +88,7 @@ class _NewApp extends State<NewApp> {
                           maxLines: 20,
                           controller: _applicationJsonController,
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                             hintText: AppLocalizations.of(context)
                                 .tr("application_json"),
                           ),

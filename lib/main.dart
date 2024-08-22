@@ -1,4 +1,4 @@
-import 'package:dupot_easy_flatpak/Localizations/app_localizationsDelegate.dart';
+import 'package:dupot_easy_flatpak/Localizations/app_localizations_delegate.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail.dart';
 import 'package:dupot_easy_flatpak/Screens/app_list.dart';
 import 'package:dupot_easy_flatpak/Screens/new_app.dart';
