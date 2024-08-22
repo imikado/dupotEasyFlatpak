@@ -44,41 +44,39 @@ class _AppList extends State<AppList> {
     const TextStyle navTextStyle = TextStyle(color: navTextColor);
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        leading: const Icon(Icons.apps),
-        title: Text(
-          AppLocalizations.of(context).tr("applications_available"),
-          style: const TextStyle(color: Colors.white),
+        backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+          leading: const Icon(Icons.apps),
+          title: Text(
+            AppLocalizations.of(context).tr("applications_available"),
+            style: const TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.blueGrey,
+          actions: [
+            TextButton.icon(
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, '/add');
+                },
+                icon: const Icon(
+                  Icons.add,
+                  color: navTextColor,
+                ),
+                label: Text(
+                  AppLocalizations.of(context).tr('add'),
+                  style: navTextStyle,
+                )),
+          ],
         ),
-        centerTitle: true,
-        backgroundColor: Colors.blueGrey,
-        actions: [
-          TextButton.icon(
-              onPressed: () {
-                Navigator.popAndPushNamed(context, '/add');
-              },
-              icon: const Icon(
-                Icons.add,
-                color: navTextColor,
-              ),
-              label: Text(
-                AppLocalizations.of(context).tr('add'),
-                style: navTextStyle,
-              )),
-        ],
-      ),
-      body: GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4),
-          primary: false,
-          padding: const EdgeInsets.all(10),
-          children: applicationList.map((e) {
-            return AppButton(
-              title: e,
-            );
-          }).toList()),
-    );
+        body: GridView(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4),
+            primary: false,
+            padding: const EdgeInsets.all(10)
+            // children: applicationList.map((e) {
+            //return AppButton(title: e);
+            //}).toList()),
+            ));
   }
 }
 
