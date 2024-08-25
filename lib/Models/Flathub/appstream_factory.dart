@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
+import 'package:dupot_easy_flatpak/Models/Flathub/appstream_category.dart';
 
 import 'package:path/path.dart' as p;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -87,6 +88,25 @@ class AppStreamFactory {
     return true;
   }
 
+  Future<bool> insertAppStreamList(List<AppStream> appStreamList) async {
+    final db = await getDb();
+
+    await db.transaction((txn) async {
+      var batch = txn.batch();
+      for (AppStream appStreamLoop in appStreamList) {
+        try {
+          batch.insert(constTableAppStream, appStreamLoop.toMap(),
+              conflictAlgorithm: ConflictAlgorithm.replace);
+        } catch (exception) {
+          throw "some error while insertion";
+        }
+      }
+      await batch.commit(continueOnError: false, noResult: true);
+    });
+
+    return true;
+  }
+
   Future<List<String>> findAllCategoryList() async {
     final db = await getDb();
     final List<Map<String, Object?>> rawCategoryList =
@@ -134,6 +154,27 @@ class AppStreamFactory {
     ];
   }
 
+  Future<List<AppStream>> findListAppStreamByCategoryLimited(
+      String categoryId, int limited) async {
+    final db = await getDb();
+    // Query the table for all the dogs.
+    final List<Map<String, Object?>> appStreamList = await db.rawQuery(
+        'SELECT $constTableAppStream.* from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON id=appstream_id where category_id=? LIMIT $limited',
+        [categoryId]);
+
+    // Convert the list of each dog's fields into a list of `Dog` objects.
+    return [
+      for (final {
+            'id': id as String,
+            'name': name as String,
+            'summary': summary as String,
+            'icon': icon as String,
+          } in appStreamList)
+        AppStream(
+            id: id, name: name, summary: summary, icon: icon, categoryList: []),
+    ];
+  }
+
   Future<bool> insertCategory(String category) async {
     final db = await getDb();
     db.insert(
@@ -153,6 +194,26 @@ class AppStreamFactory {
       {'appstream_id': appStream, 'category_id': category},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
+    return true;
+  }
+
+  Future<bool> insertAppStreamCategoryList(
+      List<AppStreamCategory> appStreamCategoryList) async {
+    final db = await getDb();
+    await db.transaction((txn) async {
+      var batch = txn.batch();
+      for (AppStreamCategory appStreamCategoryLoop in appStreamCategoryList) {
+        try {
+          batch.insert(
+              constTableAppStreamCategory, appStreamCategoryLoop.toMap(),
+              conflictAlgorithm: ConflictAlgorithm.replace);
+        } catch (exception) {
+          throw "some error while insertion";
+        }
+      }
+      await batch.commit(continueOnError: false);
+    });
 
     return true;
   }

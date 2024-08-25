@@ -45,8 +45,8 @@ class _Home extends State<Home> {
     ];
 
     for (String categoryIdLoop in categoryIdList) {
-      List<AppStream> appStreamList =
-          await appStreamFactory.findListAppStreamByCategory(categoryIdLoop);
+      List<AppStream> appStreamList = await appStreamFactory
+          .findListAppStreamByCategoryLimited(categoryIdLoop, 9);
 
       appStreamListList.add(appStreamList);
 

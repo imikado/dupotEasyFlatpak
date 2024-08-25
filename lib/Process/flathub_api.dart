@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
+import 'package:dupot_easy_flatpak/Models/Flathub/appstream_category.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,13 +11,16 @@ class FlathubApi {
   FlathubApi({required this.appStreamFactory});
 
   Future<void> load() async {
-    int limit = 2;
+    int limit = 1;
 
     List<dynamic> appStreamIdList = await getAppStreamList();
 
     appStreamFactory.connect();
 
     List<String> categoryList = await appStreamFactory.findAllCategoryList();
+
+    List<AppStream> appStreamList = [];
+    List<AppStreamCategory> appStreamCategoryList = [];
 
     int limitLoaded = 0;
     for (String appStreamIdLoop in appStreamIdList) {
@@ -27,19 +31,27 @@ class FlathubApi {
         break;
       }
 
-      if (!await appStreamFactory.insertAppStream(appStream)) {
+      appStreamList.add(appStream);
+      /*if (!await appStreamFactory.insertAppStream(appStream)) {
         print('insert KO appstream');
       }
-
+      */
       for (String categoryLoop in appStream.categoryList) {
         if (categoryList.contains(categoryLoop)) {
+          appStreamCategoryList.add(AppStreamCategory(
+              appstream_id: appStreamIdLoop, category_id: categoryLoop));
+          /*
           if (!await appStreamFactory.insertAppStreamCategory(
               appStreamIdLoop, categoryLoop)) {
             print('  insert KO appStream category');
           }
+          */
         }
       }
     }
+
+    await appStreamFactory.insertAppStreamList(appStreamList);
+    await appStreamFactory.insertAppStreamCategoryList(appStreamCategoryList);
   }
 
   Future<List<dynamic>> getAppStreamList() async {
