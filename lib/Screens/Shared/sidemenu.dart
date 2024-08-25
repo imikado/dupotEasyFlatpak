@@ -1,6 +1,5 @@
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:flutter/material.dart';
-import 'package:animated_sidebar/animated_sidebar.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu(
@@ -11,20 +10,31 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: 200,
-        child: Card(
-            child: ListView(
+    return Card(
+        color: const Color.fromARGB(255, 205, 230, 250),
+        margin: EdgeInsets.all(0),
+        elevation: 5,
+        child: ListView(
           children: menuItemList.map((menuItemLoop) {
+            bool isSelected = false;
+            if (menuItemLoop.label == selected) {
+              isSelected = true;
+            }
+
             return ListTile(
-              selected: menuItemLoop.label == selected,
+              tileColor: isSelected ? Colors.blueGrey : null,
+
+              // selected: menuItemLoop.label == selected,
               onTap: () {
                 menuItemLoop.action();
               },
-              title: Text(menuItemLoop.label),
+              title: Text(
+                menuItemLoop.label,
+                style: isSelected ? TextStyle(color: Colors.white) : null,
+              ),
             );
           }).toList(),
-        )));
+        ));
 
 /*
     return AnimatedSidebar(

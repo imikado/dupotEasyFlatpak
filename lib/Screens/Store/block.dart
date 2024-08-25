@@ -12,6 +12,32 @@ class Block extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 20),
+        Text(
+          categoryId,
+          style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey),
+        ),
+        SizedBox(height: 10),
+        Container(
+            height: 550,
+            child: GridView.count(
+                crossAxisCount: 4,
+                children: appStreamList.map((appStreamLoop) {
+                  return AppButton(
+                      title: appStreamLoop.name,
+                      sumary: appStreamLoop.summary,
+                      icon: appStreamLoop.icon);
+                }).toList()))
+      ],
+    );
+  }
+
+  Widget buildOFf(BuildContext context) {
     int maxNumberPerRow = 3;
 
     List<Widget> childrenList = [

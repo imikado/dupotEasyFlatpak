@@ -1,6 +1,4 @@
-import 'package:animated_sidebar/animated_sidebar.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
-import 'package:dupot_easy_flatpak/Screens/Shared/app_button.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
@@ -23,7 +21,7 @@ class _Home extends State<Home> {
   List<MenuItem> stateMenuItemList = [];
   final ScrollController scrollController = ScrollController();
 
-  String menuSelected = 'home';
+  String menuSelected = 'Home';
 
   @override
   void initState() {
@@ -56,7 +54,7 @@ class _Home extends State<Home> {
 
     for (String categoryIdLoop in categoryIdList) {
       List<AppStream> appStreamList = await appStreamFactory
-          .findListAppStreamByCategoryLimited(categoryIdLoop, 9);
+          .findListAppStreamByCategoryLimited(categoryIdLoop, 8);
 
       appStreamListList.add(appStreamList);
 
@@ -84,34 +82,17 @@ class _Home extends State<Home> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
-        appBar: AppBar(
-          leading: Builder(
-            builder: (context) {
-              return IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
-          title: Text(
-            AppLocalizations.of(context).tr("applications_available"),
-            style: const TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.blueGrey,
-          actions: const [],
-        ),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SideMenu(
-              menuItemList: stateMenuItemList,
-              selected: menuSelected,
-            ),
             Container(
-                width: 950,
+                width: 240,
+                child: SideMenu(
+                  menuItemList: stateMenuItemList,
+                  selected: menuSelected,
+                )),
+            Container(
+                width: 980,
                 child: Scrollbar(
                     interactive: false,
                     thumbVisibility: true,
