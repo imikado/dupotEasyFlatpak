@@ -9,78 +9,62 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/block.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
+class Category extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _Home();
+  State<StatefulWidget> createState() => _Category();
 }
 
-class _Home extends State<Home> {
+class _Category extends State<Category> {
   late AppStreamFactory appStreamFactory;
   List<String> stateCategoryIdList = [];
-  List<List<AppStream>> stateAppStreamListList = [];
+  List<AppStream> stateAppStreamList = [];
   List<MenuItem> stateMenuItemList = [];
   final ScrollController scrollController = ScrollController();
 
-  String menuSelected = 'home';
+  String categorySelected = 'aa';
 
-  @override
-  void initState() {
-    super.initState();
-
-    getData();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
+  bool stateIsLoaded = false;
 
   void getData() async {
     appStreamFactory = AppStreamFactory();
 
-    List<List<AppStream>> appStreamListList = [];
-
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
     List<MenuItem> menuItemList = [
-      MenuItem(menuSelected, () {
+      MenuItem('home', () {
         Navigator.popAndPushNamed(context, '/');
       })
     ];
 
-    /*List<SidebarItem> sideMenuItemList = [
-      SidebarItem(icon: Icons.home, text: 'home'),
-    ];*/
-
     for (String categoryIdLoop in categoryIdList) {
-      List<AppStream> appStreamList = await appStreamFactory
-          .findListAppStreamByCategoryLimited(categoryIdLoop, 9);
-
-      appStreamListList.add(appStreamList);
-
       menuItemList.add(MenuItem(categoryIdLoop, () {
         Navigator.popAndPushNamed(context, '/category',
             arguments: CategoryIdArgment(categoryIdLoop));
-        //print(categoryIdLoop);
       }));
-
-      /*
-      sideMenuItemList.add(
-        SidebarItem(icon: Icons.app_blocking_sharp, text: categoryIdLoop),
-      );*/
     }
+
+    List<AppStream> appStreamList = await appStreamFactory
+        .findListAppStreamByCategoryLimited(categorySelected, 30);
 
     setState(() {
       stateCategoryIdList = categoryIdList;
-      stateAppStreamListList = appStreamListList;
+      stateAppStreamList = appStreamList;
       stateMenuItemList = menuItemList;
+      stateIsLoaded = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!stateIsLoaded) {
+      CategoryIdArgment args =
+          ModalRoute.of(context)?.settings.arguments as CategoryIdArgment;
+
+      categorySelected = args.categoryId;
+
+      getData();
+    }
+
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
@@ -108,7 +92,7 @@ class _Home extends State<Home> {
           children: [
             SideMenu(
               menuItemList: stateMenuItemList,
-              selected: menuSelected,
+              selected: categorySelected,
             ),
             Container(
                 width: 950,
@@ -117,12 +101,40 @@ class _Home extends State<Home> {
                     thumbVisibility: true,
                     controller: scrollController,
                     child: ListView.builder(
-                        itemCount: stateCategoryIdList.length,
+                        itemCount: stateAppStreamList.length,
                         controller: scrollController,
                         itemBuilder: (context, index) {
-                          return Block(
-                              categoryId: stateCategoryIdList[index],
-                              appStreamList: stateAppStreamListList[index]);
+                          AppStream appStreamLoop = stateAppStreamList[index];
+
+                          String icon = appStreamLoop.icon;
+                          if (icon.length < 10) {
+                            return Card(
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                      title:
+                                          Text(stateAppStreamList[index].id)),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Card(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Image.network(icon),
+                                      Text(appStreamLoop.name)
+                                    ],
+                                  ),
+                                  Text(
+                                    appStreamLoop.summary,
+                                    textAlign: TextAlign.left,
+                                  )
+                                ],
+                              ),
+                            );
+                          }
                         })))
           ],
         ));

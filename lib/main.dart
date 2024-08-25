@@ -2,6 +2,7 @@ import 'package:dupot_easy_flatpak/Localizations/app_localizations_delegate.dart
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Process/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail.dart';
+import 'package:dupot_easy_flatpak/Screens/category.dart';
 import 'package:dupot_easy_flatpak/Screens/home.dart';
 import 'package:dupot_easy_flatpak/Screens/new_app.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ void main() async {
     await appStreamFactory.create();
 
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
-    await flathubApi.load();
+    //await flathubApi.load();
 
     print('end loaded');
   } on Exception catch (e) {
@@ -38,6 +39,8 @@ class DupotEasyFlatpak extends StatefulWidget {
 }
 
 class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
+  String param = 'test';
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,8 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
           '/': (context) => const Home(),
           //'/home': (context) => const AppList(),
           '/app': (context) => const AppDetail(),
-          '/add': (context) => const NewApp()
+          '/add': (context) => const NewApp(),
+          '/category': (context) => Category()
         });
   }
 }

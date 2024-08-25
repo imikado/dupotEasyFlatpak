@@ -1,4 +1,4 @@
-import 'package:dupot_easy_flatpak/Components/app_button.dart';
+import 'package:dupot_easy_flatpak/Screens/Shared/app_button.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:flutter/foundation.dart';
