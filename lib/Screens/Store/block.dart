@@ -4,54 +4,34 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class Block extends StatefulWidget {
-  final String category;
+class Block extends StatelessWidget {
+  final String categoryId;
+  final List<AppStream> appStreamList;
 
-  const Block({
-    super.key,
-    required this.category,
-  });
-
-  @override
-  State<StatefulWidget> createState() {
-    return _Block();
-  }
-}
-
-class _Block extends State<Block> {
-  List<AppStream> applicationList = [];
-
-  late AppStreamFactory appStreamFactory;
-
-  @override
-  void initState() {
-    super.initState();
-
-    getData();
-  }
-
-  void getData() async {
-    appStreamFactory = AppStreamFactory();
-
-    List<AppStream> newAppList =
-        await appStreamFactory.findListAppStreamByCategory(widget.category);
-
-    setState(() {
-      applicationList = newAppList;
-    });
-  }
+  const Block({required this.categoryId, required this.appStreamList});
 
   @override
   Widget build(BuildContext context) {
     int maxNumberPerRow = 3;
 
-    List<Widget> childrenList = [];
+    List<Widget> childrenList = [
+      SizedBox(
+        height: 30,
+      ),
+      Text(
+        categoryId,
+        style: TextStyle(fontSize: 32),
+      ),
+      SizedBox(
+        height: 10,
+      ),
+    ];
     List<Widget> itemRowList = [];
 
     int appDisplayed = 0;
     int maxAppDisplayed = 9;
 
-    for (AppStream appStreamLoop in applicationList) {
+    for (AppStream appStreamLoop in appStreamList) {
       appDisplayed++;
       if (appDisplayed > maxAppDisplayed) {
         break;
@@ -66,6 +46,7 @@ class _Block extends State<Block> {
               icon: appStreamLoop.icon)));
       if (itemRowList.length >= maxNumberPerRow) {
         childrenList.add(Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: itemRowList.toList(),
         ));
