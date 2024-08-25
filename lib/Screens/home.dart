@@ -1,7 +1,7 @@
 import 'package:dupot_easy_flatpak/Components/app_button.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
-import 'package:dupot_easy_flatpak/Models/flatpak_app.dart';
-import 'package:dupot_easy_flatpak/Models/flatpak_factory.dart';
+import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
+import 'package:dupot_easy_flatpak/Screens/Store/block.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -12,7 +12,9 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-  List<FlatpakApp> flatpakList = [];
+  late AppStreamFactory appStreamFactory;
+  List<String> categoryList = [];
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -23,17 +25,16 @@ class _Home extends State<Home> {
 
   @override
   void didChangeDependencies() {
-    flatpakList = [];
-
     super.didChangeDependencies();
   }
 
   void getData() async {
-    List<FlatpakApp> newFlatpakList =
-        await FlathubFactory.getFlatpakList(context);
+    appStreamFactory = AppStreamFactory();
+
+    List<String> newCategoryList = await appStreamFactory.findAllCategoryList();
 
     setState(() {
-      flatpakList = newFlatpakList;
+      categoryList = newCategoryList;
     });
   }
 
@@ -43,26 +44,34 @@ class _Home extends State<Home> {
 
     const TextStyle navTextStyle = TextStyle(color: navTextColor);
 
+    List<Widget> childrenList = [];
+    for (String categoryIdLoop in categoryList) {
+      childrenList.add(Text(categoryIdLoop));
+      childrenList.add(Block(
+        category: categoryIdLoop,
+      ));
+    }
+
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        leading: const Icon(Icons.apps),
-        title: Text(
-          AppLocalizations.of(context).tr("applications_available"),
-          style: const TextStyle(color: Colors.white),
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+          leading: const Icon(Icons.apps),
+          title: Text(
+            AppLocalizations.of(context).tr("applications_available"),
+            style: const TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.blueGrey,
+          actions: const [],
         ),
-        centerTitle: true,
-        backgroundColor: Colors.blueGrey,
-        actions: [],
-      ),
-      body: GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4),
-          primary: false,
-          padding: const EdgeInsets.all(10),
-          children: flatpakList.map((e) {
-            return AppButton(title: e.title, sumary: e.sumary, icon: e.icon);
-          }).toList()),
-    );
+        body: Scrollbar(
+            interactive: false,
+            thumbVisibility: true,
+            controller: scrollController,
+            child: ListView(
+              controller: scrollController,
+              children: childrenList,
+            )));
   }
 }

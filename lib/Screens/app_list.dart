@@ -1,4 +1,3 @@
-import 'package:dupot_easy_flatpak/Components/app_button.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
