@@ -104,24 +104,24 @@ class _Category extends State<Category> {
                                   Row(
                                     children: [
                                       Image.network(icon),
-                                      SizedBox(width: 10),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            appStreamLoop.name,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(fontSize: 30),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            appStreamLoop.summary,
-                                            textAlign: TextAlign.left,
-                                          )
-                                        ],
+                                      SizedBox(width: 20),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              appStreamLoop.name,
+                                              style: TextStyle(fontSize: 30),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              appStreamLoop.summary,
+                                            )
+                                          ],
+                                        ),
                                       )
                                     ],
                                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class AppButton extends StatelessWidget {
   final String title;
@@ -28,9 +29,14 @@ class AppButton extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             ListTile(
-              leading: const Icon(Icons.album),
-              title: Text(title),
-              subtitle: Text(sumary),
+              title: Text(
+                title,
+                style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 5,
             ),
             Image.network(icon)
           ]));
@@ -40,9 +46,7 @@ class AppButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           ListTile(
-            leading: const Icon(Icons.album),
             title: Text(title),
-            subtitle: Text(sumary),
           )
         ]));
 
