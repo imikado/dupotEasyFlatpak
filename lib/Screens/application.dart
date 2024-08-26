@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Process/flatpak.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
@@ -5,6 +6,8 @@ import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
+import 'package:dupot_easy_flatpak/Screens/Store/install_button.dart';
+import 'package:dupot_easy_flatpak/Screens/Store/uninstall_button.dart';
 import 'package:flutter/material.dart';
 
 class Application extends StatefulWidget {
@@ -18,6 +21,8 @@ class _Application extends State<Application> {
   AppStream? stateAppStream;
   List<MenuItem> stateMenuItemList = [];
   final ScrollController scrollController = ScrollController();
+
+  bool stateIsAlreadyInstalled = false;
 
   String categorySelected = 'aa';
   String applicationId = '';
@@ -45,13 +50,23 @@ class _Application extends State<Application> {
     AppStream appStream =
         await appStreamFactory.findAppStreamById(applicationId);
 
-    print('search for $applicationId');
+    checkAlreadyInstalled(applicationId);
 
     setState(() {
       stateCategoryIdList = categoryIdList;
       stateAppStream = appStream;
       stateMenuItemList = menuItemList;
       stateIsLoaded = true;
+    });
+  }
+
+  void checkAlreadyInstalled(String applicationId) {
+    Flatpak()
+        .isApplicationAlreadyInstalled(applicationId)
+        .then((flatpakApplication) {
+      setState(() {
+        stateIsAlreadyInstalled = flatpakApplication.isInstalled;
+      });
     });
   }
 
@@ -65,6 +80,16 @@ class _Application extends State<Application> {
 
       getData();
     }
+
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+        backgroundColor: Colors.blueGrey,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14));
+
+    final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
+        backgroundColor: Colors.grey,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14));
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -106,6 +131,17 @@ class _Application extends State<Application> {
                                     SizedBox(
                                       height: 10,
                                     ),
+                                    stateIsAlreadyInstalled
+                                        ? UninstallButton(
+                                            buttonStyle: buttonStyle,
+                                            dialogButtonStyle:
+                                                dialogButtonStyle,
+                                            stateAppStream: stateAppStream)
+                                        : InstallButton(
+                                            buttonStyle: buttonStyle,
+                                            dialogButtonStyle:
+                                                dialogButtonStyle,
+                                            stateAppStream: stateAppStream)
                                   ],
                                 ),
                               )
