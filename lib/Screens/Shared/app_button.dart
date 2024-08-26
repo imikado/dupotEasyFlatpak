@@ -1,13 +1,16 @@
+import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class AppButton extends StatelessWidget {
+  final String id;
   final String title;
   final String sumary;
   final String icon;
 
   const AppButton(
       {super.key,
+      required this.id,
       required this.title,
       required this.sumary,
       required this.icon});
@@ -29,6 +32,10 @@ class AppButton extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             ListTile(
+              onTap: () {
+                Navigator.popAndPushNamed(context, '/application',
+                    arguments: ApplicationIdArgment(id));
+              },
               title: Text(
                 title,
                 style: TextStyle(fontSize: 20),

@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Models/Flathub/appstream_category.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/app_button.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
@@ -29,6 +30,7 @@ class Block extends StatelessWidget {
                 crossAxisCount: 4,
                 children: appStreamList.map((appStreamLoop) {
                   return AppButton(
+                      id: appStreamLoop.id,
                       title: appStreamLoop.name,
                       sumary: appStreamLoop.summary,
                       icon: appStreamLoop.icon);
@@ -67,6 +69,7 @@ class Block extends StatelessWidget {
           width: 300,
           height: 300,
           child: AppButton(
+              id: appStreamLoop.id,
               title: appStreamLoop.name,
               sumary: appStreamLoop.summary,
               icon: appStreamLoop.icon)));

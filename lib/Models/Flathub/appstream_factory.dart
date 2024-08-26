@@ -134,6 +134,28 @@ class AppStreamFactory {
     ];
   }
 
+  Future<AppStream> findAppStreamById(String id) async {
+    final db = await getDb();
+    // Query the table for all the dogs.
+    final List<Map<String, Object?>> appStreamList = await db.rawQuery(
+        'SELECT id,name,summary,icon FROM $constTableAppStream WHERE id=?',
+        [id]);
+
+    // Convert the list of each dog's fields into a list of `Dog` objects.
+    List<AppStream> rowList = [
+      for (final {
+            'id': id as String,
+            'name': name as String,
+            'summary': summary as String,
+            'icon': icon as String,
+          } in appStreamList)
+        AppStream(
+            id: id, name: name, summary: summary, icon: icon, categoryList: []),
+    ];
+
+    return rowList[0];
+  }
+
   Future<List<AppStream>> findListAppStreamByCategory(String categoryId) async {
     final db = await getDb();
     // Query the table for all the dogs.

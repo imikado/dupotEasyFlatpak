@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
@@ -110,9 +111,18 @@ class _Category extends State<Category> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              appStreamLoop.name,
-                                              style: TextStyle(fontSize: 30),
+                                            ListTile(
+                                              onTap: () {
+                                                Navigator.popAndPushNamed(
+                                                    context, '/application',
+                                                    arguments:
+                                                        ApplicationIdArgment(
+                                                            appStreamLoop.id));
+                                              },
+                                              title: Text(
+                                                appStreamLoop.name,
+                                                style: TextStyle(fontSize: 30),
+                                              ),
                                             ),
                                             SizedBox(
                                               height: 10,
