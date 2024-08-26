@@ -9,6 +9,7 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/install_button.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/uninstall_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 class Application extends StatefulWidget {
   @override
@@ -131,22 +132,27 @@ class _Application extends State<Application> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    stateIsAlreadyInstalled
-                                        ? UninstallButton(
-                                            buttonStyle: buttonStyle,
-                                            dialogButtonStyle:
-                                                dialogButtonStyle,
-                                            stateAppStream: stateAppStream)
-                                        : InstallButton(
-                                            buttonStyle: buttonStyle,
-                                            dialogButtonStyle:
-                                                dialogButtonStyle,
-                                            stateAppStream: stateAppStream)
                                   ],
                                 ),
                               )
                             ],
                           ),
+                          Padding(
+                            padding: EdgeInsets.all(20),
+                            child: HtmlWidget(
+                              stateAppStream!.description,
+                            ),
+                          ),
+                          Center(
+                              child: stateIsAlreadyInstalled
+                                  ? UninstallButton(
+                                      buttonStyle: buttonStyle,
+                                      dialogButtonStyle: dialogButtonStyle,
+                                      stateAppStream: stateAppStream)
+                                  : InstallButton(
+                                      buttonStyle: buttonStyle,
+                                      dialogButtonStyle: dialogButtonStyle,
+                                      stateAppStream: stateAppStream))
                         ],
                       ),
               ))

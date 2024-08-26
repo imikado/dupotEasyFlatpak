@@ -7,6 +7,7 @@ class AppStream {
   final String icon;
 
   final List<String> categoryList;
+  final String description;
 
   AppStream({
     required this.id,
@@ -14,6 +15,7 @@ class AppStream {
     required this.summary,
     required this.icon,
     required this.categoryList,
+    required this.description,
   });
 
   Map<String, Object?> toMap() {
@@ -22,7 +24,8 @@ class AppStream {
       'name': name,
       'summary': summary,
       'icon': icon,
-      'categoryList': jsonEncode(categoryList)
+      'categoryList': jsonEncode(categoryList),
+      'description': description,
     };
   }
 

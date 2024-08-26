@@ -11,7 +11,7 @@ class FlathubApi {
   FlathubApi({required this.appStreamFactory});
 
   Future<void> load() async {
-    int limit = 1;
+    int limit = 200;
 
     List<dynamic> appStreamIdList = await getAppStreamList();
 
@@ -83,6 +83,7 @@ class FlathubApi {
         name: rawAppStream['name'],
         summary: rawAppStream['summary'],
         icon: icon,
-        categoryList: categoryList);
+        categoryList: categoryList,
+        description: rawAppStream['description']);
   }
 }

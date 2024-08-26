@@ -51,7 +51,7 @@ class AppStreamFactory {
       final db = await getDb();
 
       db.execute('''
-      CREATE TABLE $constTableAppStream (id TEXT PRIMARY KEY, name TEXT, summary TEXT, icon TEXT, project_license TEXT , categoryList TEXT);
+      CREATE TABLE $constTableAppStream (id TEXT PRIMARY KEY, name TEXT, summary TEXT, icon TEXT, project_license TEXT , categoryList TEXT,description TEXT,metadata TEXT,urls TEXT, releases TEXT);
       CREATE TABLE category (id TEXT PRIMARY KEY) ; 
       CREATE TABLE category_appstream (  appstream_id TEXT, category_id TEXT, PRIMARY KEY (appstream_id, category_id))
       ''');
@@ -128,9 +128,15 @@ class AppStreamFactory {
             'name': name as String,
             'summary': summary as String,
             'icon': icon as String,
+            'description': description as String,
           } in appStreamList)
         AppStream(
-            id: id, name: name, summary: summary, icon: icon, categoryList: []),
+            id: id,
+            name: name,
+            summary: summary,
+            icon: icon,
+            categoryList: [],
+            description: description),
     ];
   }
 
@@ -138,7 +144,7 @@ class AppStreamFactory {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-        'SELECT id,name,summary,icon FROM $constTableAppStream WHERE id=?',
+        'SELECT id,name,summary,icon,description FROM $constTableAppStream WHERE id=?',
         [id]);
 
     // Convert the list of each dog's fields into a list of `Dog` objects.
@@ -148,9 +154,15 @@ class AppStreamFactory {
             'name': name as String,
             'summary': summary as String,
             'icon': icon as String,
+            'description': description as String,
           } in appStreamList)
         AppStream(
-            id: id, name: name, summary: summary, icon: icon, categoryList: []),
+            id: id,
+            name: name,
+            summary: summary,
+            icon: icon,
+            categoryList: [],
+            description: description),
     ];
 
     return rowList[0];
@@ -160,7 +172,7 @@ class AppStreamFactory {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-        'SELECT $constTableAppStream.* from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON id=appstream_id where category_id=?',
+        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON id=appstream_id where category_id=?',
         [categoryId]);
 
     // Convert the list of each dog's fields into a list of `Dog` objects.
@@ -172,7 +184,12 @@ class AppStreamFactory {
             'icon': icon as String,
           } in appStreamList)
         AppStream(
-            id: id, name: name, summary: summary, icon: icon, categoryList: []),
+            id: id,
+            name: name,
+            summary: summary,
+            icon: icon,
+            categoryList: [],
+            description: ''),
     ];
   }
 
@@ -181,7 +198,7 @@ class AppStreamFactory {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-        'SELECT $constTableAppStream.* from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON id=appstream_id where category_id=? LIMIT $limited',
+        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon  from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON id=appstream_id where category_id=? LIMIT $limited',
         [categoryId]);
 
     // Convert the list of each dog's fields into a list of `Dog` objects.
@@ -193,7 +210,12 @@ class AppStreamFactory {
             'icon': icon as String,
           } in appStreamList)
         AppStream(
-            id: id, name: name, summary: summary, icon: icon, categoryList: []),
+            id: id,
+            name: name,
+            summary: summary,
+            icon: icon,
+            categoryList: [],
+            description: ''),
     ];
   }
 

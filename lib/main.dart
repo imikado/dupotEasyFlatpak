@@ -21,7 +21,7 @@ void main() async {
     await appStreamFactory.create();
 
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
-    //await flathubApi.load();
+    await flathubApi.load();
 
     print('end loaded');
   } on Exception catch (e) {
