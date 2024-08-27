@@ -19,16 +19,22 @@ class FlathubApi {
 
     List<String> categoryList = await appStreamFactory.findAllCategoryList();
 
+    List<String> applicationIdList =
+        await appStreamFactory.findAllApplicationIdList();
+
     List<AppStream> appStreamList = [];
     List<AppStreamCategory> appStreamCategoryList = [];
 
     int limitLoaded = 0;
     for (String appStreamIdLoop in appStreamIdList) {
+      if (applicationIdList.contains(appStreamIdLoop)) {
+        continue;
+      }
       AppStream appStream = await getAppStream(appStreamIdLoop);
 
       limitLoaded++;
       if (limitLoaded > limit) {
-        break;
+        //break;
       }
 
       appStreamList.add(appStream);

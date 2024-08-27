@@ -168,11 +168,24 @@ class AppStreamFactory {
     return rowList[0];
   }
 
+  Future<List<String>> findAllApplicationIdList() async {
+    final db = await getDb();
+    // Query the table for all the dogs.
+    final List<Map<String, Object?>> appStreamList = await db
+        .rawQuery('SELECT $constTableAppStream.id from $constTableAppStream ');
+
+    List<String> applicationIdList = [];
+    for (Map<String, dynamic> rawAppStreamLoop in appStreamList) {
+      applicationIdList.add(rawAppStreamLoop['id']);
+    }
+    return applicationIdList;
+  }
+
   Future<List<AppStream>> findListAppStreamByCategory(String categoryId) async {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON id=appstream_id where category_id=?',
+        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON $constTableAppStream.id=$constTableAppStreamCategory.appstream_id where category_id=? ORDER by name asc',
         [categoryId]);
 
     // Convert the list of each dog's fields into a list of `Dog` objects.

@@ -41,8 +41,8 @@ class _Category extends State<Category> {
       }));
     }
 
-    List<AppStream> appStreamList = await appStreamFactory
-        .findListAppStreamByCategoryLimited(categorySelected, 30);
+    List<AppStream> appStreamList =
+        await appStreamFactory.findListAppStreamByCategory(categorySelected);
 
     setState(() {
       stateCategoryIdList = categoryIdList;
