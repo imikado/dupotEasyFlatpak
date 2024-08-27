@@ -6,17 +6,28 @@ class AppStream {
   final String summary;
   final String icon;
 
-  final List<String> categoryList;
-  final String description;
+  List<String> categoryIdList = [];
+  String description = '';
 
-  AppStream({
-    required this.id,
-    required this.name,
-    required this.summary,
-    required this.icon,
-    required this.categoryList,
-    required this.description,
-  });
+  Map<String, dynamic> metadataObj = {};
+  Map<String, String> urlObj = {};
+  List<Map<String, dynamic>> releaseObjList = [];
+  int lastUpdate = 0;
+
+  String projectLicense;
+
+  AppStream(
+      {required this.id,
+      required this.name,
+      required this.summary,
+      required this.icon,
+      required this.categoryIdList,
+      required this.description,
+      required this.metadataObj,
+      required this.urlObj,
+      required this.releaseObjList,
+      required this.lastUpdate,
+      required this.projectLicense});
 
   Map<String, Object?> toMap() {
     return {
@@ -24,8 +35,13 @@ class AppStream {
       'name': name,
       'summary': summary,
       'icon': icon,
-      'categoryList': jsonEncode(categoryList),
+      'categoryIdList': jsonEncode(categoryIdList),
       'description': description,
+      'metadataObj': jsonEncode(metadataObj),
+      'urlObj': jsonEncode(urlObj),
+      'releaseObjList': jsonEncode(releaseObjList),
+      'lastUpdate': lastUpdate,
+      'projectLicense': projectLicense
     };
   }
 

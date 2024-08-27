@@ -11,7 +11,7 @@ class FlathubApi {
   FlathubApi({required this.appStreamFactory});
 
   Future<void> load() async {
-    int limit = 200;
+    int limit = 100;
 
     List<dynamic> appStreamIdList = await getAppStreamList();
 
@@ -34,7 +34,7 @@ class FlathubApi {
 
       limitLoaded++;
       if (limitLoaded > limit) {
-        //break;
+        break;
       }
 
       appStreamList.add(appStream);
@@ -42,7 +42,7 @@ class FlathubApi {
         print('insert KO appstream');
       }
       */
-      for (String categoryLoop in appStream.categoryList) {
+      for (String categoryLoop in appStream.categoryIdList) {
         if (categoryList.contains(categoryLoop)) {
           appStreamCategoryList.add(AppStreamCategory(
               appstream_id: appStreamIdLoop, category_id: categoryLoop));
@@ -84,12 +84,47 @@ class FlathubApi {
       icon = rawAppStream['icon'];
     }
 
+    Map<String, dynamic> metadataObj = {};
+    if (rawAppStream.containsKey('metadata')) {
+      Map<String, dynamic> rawMetadata =
+          Map<String, dynamic>.from(rawAppStream['metadata'] as Map);
+
+      bool flathubVerified = false;
+      if (rawMetadata.containsKey('flathub::verification::verified') &&
+          rawMetadata['flathub::verification::verified'] == 'true') {
+        flathubVerified = true;
+      }
+
+      metadataObj['flathub_verified'] = flathubVerified;
+
+      if (rawMetadata.containsKey('flathub::verification::website')) {
+        metadataObj['flathub_verified_website'] =
+            rawMetadata['flathub::verification::website'];
+      }
+    }
+
+    Map<String, String> rawUrls = {};
+    if (rawAppStream.containsKey('urls')) {
+      rawUrls = Map<String, String>.from(rawAppStream['urls'] as Map);
+    }
+
+    List<Map<String, dynamic>> rawReleaseObjList = [];
+    if (rawAppStream.containsKey('releases')) {
+      rawReleaseObjList =
+          List<Map<String, dynamic>>.from(rawAppStream['releases'] as List);
+    }
+
     return AppStream(
         id: rawAppStream['id'],
         name: rawAppStream['name'],
         summary: rawAppStream['summary'],
         icon: icon,
-        categoryList: categoryList,
-        description: rawAppStream['description']);
+        categoryIdList: categoryList,
+        description: rawAppStream['description'],
+        lastUpdate: DateTime.now().millisecondsSinceEpoch,
+        metadataObj: metadataObj,
+        urlObj: rawUrls,
+        releaseObjList: rawReleaseObjList,
+        projectLicense: rawAppStream['project_license']);
   }
 }

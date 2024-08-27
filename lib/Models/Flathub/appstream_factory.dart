@@ -51,7 +51,20 @@ class AppStreamFactory {
       final db = await getDb();
 
       db.execute('''
-      CREATE TABLE $constTableAppStream (id TEXT PRIMARY KEY, name TEXT, summary TEXT, icon TEXT, project_license TEXT , categoryList TEXT,description TEXT,metadata TEXT,urls TEXT, releases TEXT);
+      CREATE TABLE $constTableAppStream 
+          (
+          id TEXT PRIMARY KEY, 
+          name TEXT, 
+          summary TEXT, 
+          icon TEXT, 
+          projectLicense TEXT , 
+          categoryIdList TEXT,
+          description TEXT,
+          metadataObj TEXT,
+          urlObj TEXT, 
+          releaseObjList TEXT,
+          lastUpdate INTEGER
+          );
       CREATE TABLE category (id TEXT PRIMARY KEY) ; 
       CREATE TABLE category_appstream (  appstream_id TEXT, category_id TEXT, PRIMARY KEY (appstream_id, category_id))
       ''');
@@ -129,14 +142,20 @@ class AppStreamFactory {
             'summary': summary as String,
             'icon': icon as String,
             'description': description as String,
+            'lastUpdate': lastUpdate as int
           } in appStreamList)
         AppStream(
             id: id,
             name: name,
             summary: summary,
             icon: icon,
-            categoryList: [],
-            description: description),
+            categoryIdList: [],
+            description: description,
+            lastUpdate: lastUpdate,
+            metadataObj: {},
+            releaseObjList: [],
+            urlObj: {},
+            projectLicense: ''),
     ];
   }
 
@@ -155,14 +174,20 @@ class AppStreamFactory {
             'summary': summary as String,
             'icon': icon as String,
             'description': description as String,
+            'lastUpdate': lastUpdate as int
           } in appStreamList)
         AppStream(
             id: id,
             name: name,
             summary: summary,
             icon: icon,
-            categoryList: [],
-            description: description),
+            categoryIdList: [],
+            description: description,
+            lastUpdate: lastUpdate,
+            metadataObj: {},
+            releaseObjList: [],
+            urlObj: {},
+            projectLicense: ''),
     ];
 
     return rowList[0];
@@ -185,7 +210,7 @@ class AppStreamFactory {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON $constTableAppStream.id=$constTableAppStreamCategory.appstream_id where category_id=? ORDER by name asc',
+        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon,$constTableAppStream.lastUpdate from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON $constTableAppStream.id=$constTableAppStreamCategory.appstream_id where category_id=? ORDER by name asc',
         [categoryId]);
 
     // Convert the list of each dog's fields into a list of `Dog` objects.
@@ -195,23 +220,29 @@ class AppStreamFactory {
             'name': name as String,
             'summary': summary as String,
             'icon': icon as String,
+            'lastUpdate': lastUpdate as int
           } in appStreamList)
         AppStream(
             id: id,
             name: name,
             summary: summary,
             icon: icon,
-            categoryList: [],
-            description: ''),
+            categoryIdList: [],
+            description: '',
+            lastUpdate: lastUpdate,
+            metadataObj: {},
+            releaseObjList: [],
+            urlObj: {},
+            projectLicense: ''),
     ];
   }
 
   Future<List<AppStream>> findListAppStreamByCategoryLimited(
-      String categoryId, int limited) async {
+      String categoryId, int limit) async {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon  from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON id=appstream_id where category_id=? LIMIT $limited',
+        'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon,$constTableAppStream.lastUpdate from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON $constTableAppStream.id=$constTableAppStreamCategory.appstream_id where category_id=? ORDER by name asc LIMIT $limit',
         [categoryId]);
 
     // Convert the list of each dog's fields into a list of `Dog` objects.
@@ -221,14 +252,20 @@ class AppStreamFactory {
             'name': name as String,
             'summary': summary as String,
             'icon': icon as String,
+            'lastUpdate': lastUpdate as int
           } in appStreamList)
         AppStream(
             id: id,
             name: name,
             summary: summary,
             icon: icon,
-            categoryList: [],
-            description: ''),
+            categoryIdList: [],
+            description: '',
+            lastUpdate: lastUpdate,
+            metadataObj: {},
+            releaseObjList: [],
+            urlObj: {},
+            projectLicense: ''),
     ];
   }
 
