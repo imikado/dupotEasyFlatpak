@@ -8,8 +8,12 @@ import 'package:flutter/material.dart';
 class Block extends StatelessWidget {
   final String categoryId;
   final List<AppStream> appStreamList;
+  final String appPath;
 
-  const Block({required this.categoryId, required this.appStreamList});
+  const Block(
+      {required this.categoryId,
+      required this.appStreamList,
+      required this.appPath});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class Block extends StatelessWidget {
                       id: appStreamLoop.id,
                       title: appStreamLoop.name,
                       sumary: appStreamLoop.summary,
-                      icon: appStreamLoop.icon);
+                      icon: appPath + '/' + appStreamLoop.getIcon());
                 }).toList()))
       ],
     );

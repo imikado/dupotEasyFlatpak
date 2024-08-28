@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
@@ -26,6 +27,14 @@ class AppStreamFactory {
 
     final appDocumentsDirPath = appDocumentsDir.path;
     dbPath = p.join(appDocumentsDirPath, "EasyFlatpak", "flathub_database.db");
+  }
+
+  Future<String> getPath() async {
+    final io.Directory appDocumentsDir =
+        await getApplicationDocumentsDirectory();
+
+    final appDocumentsDirPath = appDocumentsDir.path;
+    return p.join(appDocumentsDirPath, "EasyFlatpak");
   }
 
   Future<void> connect() async {
@@ -63,7 +72,8 @@ class AppStreamFactory {
           metadataObj TEXT,
           urlObj TEXT, 
           releaseObjList TEXT,
-          lastUpdate INTEGER
+          lastUpdate INTEGER,
+          developer_name TEXT
           );
       CREATE TABLE category (id TEXT PRIMARY KEY) ; 
       CREATE TABLE category_appstream (  appstream_id TEXT, category_id TEXT, PRIMARY KEY (appstream_id, category_id))
@@ -155,16 +165,16 @@ class AppStreamFactory {
             metadataObj: {},
             releaseObjList: [],
             urlObj: {},
-            projectLicense: ''),
+            projectLicense: '',
+            developer_name: ''),
     ];
   }
 
   Future<AppStream> findAppStreamById(String id) async {
     final db = await getDb();
     // Query the table for all the dogs.
-    final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-        'SELECT id,name,summary,icon,description FROM $constTableAppStream WHERE id=?',
-        [id]);
+    final List<Map<String, Object?>> appStreamList = await db
+        .rawQuery('SELECT * FROM $constTableAppStream WHERE id=?', [id]);
 
     // Convert the list of each dog's fields into a list of `Dog` objects.
     List<AppStream> rowList = [
@@ -174,7 +184,11 @@ class AppStreamFactory {
             'summary': summary as String,
             'icon': icon as String,
             'description': description as String,
-            'lastUpdate': lastUpdate as int
+            'lastUpdate': lastUpdate as int,
+            'urlObj': urlObjString as String,
+            'projectLicense': projectLicense as String,
+            'developer_name': developer_name as String,
+            'metadataObj': metadataObjString as String
           } in appStreamList)
         AppStream(
             id: id,
@@ -184,10 +198,11 @@ class AppStreamFactory {
             categoryIdList: [],
             description: description,
             lastUpdate: lastUpdate,
-            metadataObj: {},
+            metadataObj: jsonDecode(metadataObjString),
             releaseObjList: [],
-            urlObj: {},
-            projectLicense: ''),
+            urlObj: jsonDecode(urlObjString),
+            projectLicense: projectLicense,
+            developer_name: developer_name),
     ];
 
     return rowList[0];
@@ -233,7 +248,8 @@ class AppStreamFactory {
             metadataObj: {},
             releaseObjList: [],
             urlObj: {},
-            projectLicense: ''),
+            projectLicense: '',
+            developer_name: ''),
     ];
   }
 
@@ -265,7 +281,8 @@ class AppStreamFactory {
             metadataObj: {},
             releaseObjList: [],
             urlObj: {},
-            projectLicense: ''),
+            projectLicense: '',
+            developer_name: ''),
     ];
   }
 

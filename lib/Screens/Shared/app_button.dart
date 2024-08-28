@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -45,7 +47,7 @@ class AppButton extends StatelessWidget {
             SizedBox(
               height: 5,
             ),
-            Image.network(icon)
+            Image.file(File(icon))
           ]));
     }
 

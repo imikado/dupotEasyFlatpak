@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:path/path.dart' as p;
 
 class AppStream {
   final String id;
@@ -10,9 +11,11 @@ class AppStream {
   String description = '';
 
   Map<String, dynamic> metadataObj = {};
-  Map<String, String> urlObj = {};
+  Map<String, dynamic> urlObj = {};
   List<Map<String, dynamic>> releaseObjList = [];
   int lastUpdate = 0;
+
+  String developer_name;
 
   String projectLicense;
 
@@ -27,7 +30,8 @@ class AppStream {
       required this.urlObj,
       required this.releaseObjList,
       required this.lastUpdate,
-      required this.projectLicense});
+      required this.projectLicense,
+      required this.developer_name});
 
   Map<String, Object?> toMap() {
     return {
@@ -41,7 +45,8 @@ class AppStream {
       'urlObj': jsonEncode(urlObj),
       'releaseObjList': jsonEncode(releaseObjList),
       'lastUpdate': lastUpdate,
-      'projectLicense': projectLicense
+      'projectLicense': projectLicense,
+      'developer_name': developer_name
     };
   }
 
@@ -50,5 +55,44 @@ class AppStream {
   @override
   String toString() {
     return 'AppStream{id: $id, name: $name, summary: $summary}';
+  }
+
+  bool isVerified() {
+    if (metadataObj.containsKey('flathub_verified') &&
+        metadataObj['flathub_verified']) {
+      return true;
+    }
+    print(metadataObj);
+    return false;
+  }
+
+  String getVerifiedLabel() {
+    if (metadataObj.containsKey('flathub_verified_website')) {
+      return metadataObj['flathub_verified_website'];
+    }
+    return ' ';
+  }
+
+  List<Map<String, String>> getUrlObjList() {
+    List<Map<String, String>> urlObjList = [];
+
+    List<String> keyList = [
+      'homepage',
+      'bugtracker',
+      'vcs_browser',
+      'contribute'
+    ];
+
+    for (String keyLoop in keyList) {
+      if (urlObj.containsKey(keyLoop)) {
+        urlObjList.add({'key': keyLoop, 'value': urlObj[keyLoop].toString()});
+      }
+    }
+
+    return urlObjList;
+  }
+
+  String getIcon() {
+    return p.basename(icon);
   }
 }

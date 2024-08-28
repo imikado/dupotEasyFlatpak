@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
@@ -23,8 +25,11 @@ class _Category extends State<Category> {
 
   bool stateIsLoaded = false;
 
+  String appPath = '';
+
   void getData() async {
     appStreamFactory = AppStreamFactory();
+    appPath = await appStreamFactory.getPath();
 
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
@@ -62,6 +67,8 @@ class _Category extends State<Category> {
 
       getData();
     }
+
+    AppStreamFactory appStreamFactory = AppStreamFactory();
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -104,7 +111,9 @@ class _Category extends State<Category> {
                                 children: [
                                   Row(
                                     children: [
-                                      Image.network(icon),
+                                      Image.file(File(appPath +
+                                          '/' +
+                                          appStreamLoop.getIcon())),
                                       SizedBox(width: 20),
                                       Expanded(
                                         child: Column(

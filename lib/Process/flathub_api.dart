@@ -1,9 +1,14 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_category.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:path/path.dart' as p;
+import 'dart:io' as io;
+import 'package:path_provider/path_provider.dart';
 
 class FlathubApi {
   AppStreamFactory appStreamFactory;
@@ -11,7 +16,12 @@ class FlathubApi {
   FlathubApi({required this.appStreamFactory});
 
   Future<void> load() async {
-    int limit = 100;
+    final io.Directory appDocumentsDir =
+        await getApplicationDocumentsDirectory();
+
+    final appDocumentsDirPath = appDocumentsDir.path;
+
+    int limit = 10;
 
     List<dynamic> appStreamIdList = await getAppStreamList();
 
@@ -37,6 +47,8 @@ class FlathubApi {
         break;
       }
 
+      downloadIcon(appStream, appDocumentsDirPath);
+
       appStreamList.add(appStream);
       /*if (!await appStreamFactory.insertAppStream(appStream)) {
         print('insert KO appstream');
@@ -58,6 +70,21 @@ class FlathubApi {
 
     await appStreamFactory.insertAppStreamList(appStreamList);
     await appStreamFactory.insertAppStreamCategoryList(appStreamCategoryList);
+  }
+
+  Future<void> downloadIcon(AppStream appStream, appDocumentsDirPath) async {
+    String httpIconPath = appStream.icon;
+
+    if (httpIconPath.length < 10) {
+      return;
+    }
+
+    String iconName = p.basename(httpIconPath);
+
+    Dio dioDownload = Dio();
+
+    await dioDownload.download(
+        httpIconPath, p.join(appDocumentsDirPath, 'EasyFlatpak', iconName));
   }
 
   Future<List<dynamic>> getAppStreamList() async {
@@ -114,6 +141,11 @@ class FlathubApi {
           List<Map<String, dynamic>>.from(rawAppStream['releases'] as List);
     }
 
+    String developer_name = '';
+    if (rawAppStream.containsKey('developer_name')) {
+      developer_name = rawAppStream['developer_name'];
+    }
+
     return AppStream(
         id: rawAppStream['id'],
         name: rawAppStream['name'],
@@ -125,6 +157,7 @@ class FlathubApi {
         metadataObj: metadataObj,
         urlObj: rawUrls,
         releaseObjList: rawReleaseObjList,
-        projectLicense: rawAppStream['project_license']);
+        projectLicense: rawAppStream['project_license'],
+        developer_name: developer_name);
   }
 }

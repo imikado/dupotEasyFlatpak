@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dupot_easy_flatpak/Process/flatpak.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
@@ -9,6 +11,7 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/install_button.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/uninstall_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 class Application extends StatefulWidget {
@@ -30,8 +33,11 @@ class _Application extends State<Application> {
 
   bool stateIsLoaded = false;
 
+  String appPath = '';
+
   void getData() async {
     appStreamFactory = AppStreamFactory();
+    appPath = await appStreamFactory.getPath();
 
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
@@ -108,43 +114,56 @@ class _Application extends State<Application> {
                 child: stateAppStream == null
                     ? CircularProgressIndicator()
                     : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
                               (stateAppStream!.icon.length > 10)
-                                  ? Image.network(stateAppStream!.icon)
+                                  ? Image.file(File(appPath +
+                                      '/' +
+                                      stateAppStream!.getIcon()))
                                   : SizedBox(),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       stateAppStream!.name,
-                                      style: TextStyle(fontSize: 30),
+                                      style: const TextStyle(
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Text(
-                                      stateAppStream!.summary,
+                                      stateAppStream!.developer_name,
+                                      style: const TextStyle(
+                                          fontStyle: FontStyle.italic),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
+                                    stateAppStream!.isVerified()
+                                        ? TextButton.icon(
+                                            style: TextButton.styleFrom(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5,
+                                                    bottom: 5,
+                                                    right: 5,
+                                                    left: 0),
+                                                alignment: AlignmentDirectional
+                                                    .topStart),
+                                            icon: Icon(Icons.verified),
+                                            onPressed: () {},
+                                            label: Text(stateAppStream!
+                                                .getVerifiedLabel()))
+                                        : SizedBox()
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(20),
-                            child: HtmlWidget(
-                              stateAppStream!.description,
-                            ),
-                          ),
-                          Center(
-                              child: stateIsAlreadyInstalled
+                              ),
+                              stateIsAlreadyInstalled
                                   ? UninstallButton(
                                       buttonStyle: buttonStyle,
                                       dialogButtonStyle: dialogButtonStyle,
@@ -152,10 +171,62 @@ class _Application extends State<Application> {
                                   : InstallButton(
                                       buttonStyle: buttonStyle,
                                       dialogButtonStyle: dialogButtonStyle,
-                                      stateAppStream: stateAppStream))
+                                      stateAppStream: stateAppStream)
+                            ],
+                          ),
+                          Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    stateAppStream!.summary,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  HtmlWidget(
+                                    stateAppStream!.description,
+                                  ),
+                                ],
+                              )),
+                          ListTile(
+                              title: Text(
+                            'Links',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: 5, bottom: 5, right: 5, left: 10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: stateAppStream!
+                                      .getUrlObjList()
+                                      .map((urlObjLoop) {
+                                    return TextButton.icon(
+                                      icon:
+                                          getIcon(urlObjLoop['key'].toString()),
+                                      onPressed: () {},
+                                      label:
+                                          Text(urlObjLoop['value'].toString()),
+                                    );
+                                  }).toList()))
                         ],
                       ),
               ))
         ]));
+  }
+
+  Widget getIcon(String type) {
+    if (type == 'homepage') {
+      return Icon(Icons.home);
+    } else if (type == 'bugtracker') {
+      return Icon(Icons.bug_report);
+    }
+    return Icon(Icons.ac_unit);
   }
 }

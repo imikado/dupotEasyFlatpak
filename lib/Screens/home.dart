@@ -22,6 +22,7 @@ class _Home extends State<Home> {
   final ScrollController scrollController = ScrollController();
 
   String menuSelected = 'Home';
+  String appPath = '';
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _Home extends State<Home> {
 
   void getData() async {
     appStreamFactory = AppStreamFactory();
+    appPath = await appStreamFactory.getPath();
 
     List<List<AppStream>> appStreamListList = [];
 
@@ -103,7 +105,8 @@ class _Home extends State<Home> {
                         itemBuilder: (context, index) {
                           return Block(
                               categoryId: stateCategoryIdList[index],
-                              appStreamList: stateAppStreamListList[index]);
+                              appStreamList: stateAppStreamListList[index],
+                              appPath: appPath);
                         })))
           ],
         ));
