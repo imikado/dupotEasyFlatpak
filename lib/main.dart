@@ -5,7 +5,9 @@ import 'package:dupot_easy_flatpak/Screens/app_detail.dart';
 import 'package:dupot_easy_flatpak/Screens/application.dart';
 import 'package:dupot_easy_flatpak/Screens/category.dart';
 import 'package:dupot_easy_flatpak/Screens/home.dart';
+import 'package:dupot_easy_flatpak/Screens/installation.dart';
 import 'package:dupot_easy_flatpak/Screens/new_app.dart';
+import 'package:dupot_easy_flatpak/Screens/uninstallation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -21,7 +23,7 @@ void main() async {
     await appStreamFactory.create();
 
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
-    await flathubApi.load();
+    //await flathubApi.load();
 
     print('end loaded');
   } on Exception catch (e) {
@@ -67,7 +69,9 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
           '/app': (context) => const AppDetail(),
           '/add': (context) => const NewApp(),
           '/category': (context) => Category(),
-          '/application': (context) => Application()
+          '/application': (context) => Application(),
+          '/installation': (context) => Installation(),
+          '/uninstallation': (context) => Uninstallation()
         });
   }
 }

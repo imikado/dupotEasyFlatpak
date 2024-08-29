@@ -36,7 +36,7 @@ class UninstallButton extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
 
-                          Navigator.popAndPushNamed(context, '/uninstall',
+                          Navigator.popAndPushNamed(context, '/uninstallation',
                               arguments:
                                   ApplicationIdArgment(stateAppStream!.id));
                         },

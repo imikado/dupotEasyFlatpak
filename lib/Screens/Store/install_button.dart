@@ -36,7 +36,7 @@ class InstallButton extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
 
-                          Navigator.popAndPushNamed(context, '/install',
+                          Navigator.popAndPushNamed(context, '/installation',
                               arguments:
                                   ApplicationIdArgment(stateAppStream!.id));
                         },

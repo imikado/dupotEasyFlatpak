@@ -48,7 +48,23 @@ class Flatpak {
   Future<String> installApplicationThenOverrideList(
       String applicationId, List<List<String>> subProcessList) async {
     ProcessResult result = await Process.run(getFlatpakCommand(),
-        getFlatpakArgumentList(['install', '-y', applicationId]));
+        getFlatpakArgumentList(['install', '-y', '--system', applicationId]));
+
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
+
+    for (List<String> argListLoop in subProcessList) {
+      ProcessResult subResult = await Process.run(
+          getFlatpakCommand(), getFlatpakArgumentList(argListLoop));
+    }
+
+    return result.stdout.toString();
+  }
+
+  Future<String> uninstallApplicationThenOverrideList(
+      String applicationId, List<List<String>> subProcessList) async {
+    ProcessResult result = await Process.run(getFlatpakCommand(),
+        getFlatpakArgumentList(['uninstall', '-y', '--system', applicationId]));
 
     stdout.write(result.stdout);
     stderr.write(result.stderr);

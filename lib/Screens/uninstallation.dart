@@ -14,12 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
-class Application extends StatefulWidget {
+class Uninstallation extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _Application();
+  State<StatefulWidget> createState() => _Uninstallation();
 }
 
-class _Application extends State<Application> {
+class _Uninstallation extends State<Uninstallation> {
   late AppStreamFactory appStreamFactory;
   List<String> stateCategoryIdList = [];
   AppStream? stateAppStream;
@@ -35,8 +35,9 @@ class _Application extends State<Application> {
 
   String appPath = '';
 
+  String stateFlatpakOutput = '';
+
   void getData() async {
-    //TODO check lastUpdate if > 7days => call api to update , + select db again
     appStreamFactory = AppStreamFactory();
     appPath = await appStreamFactory.getPath();
 
@@ -58,8 +59,6 @@ class _Application extends State<Application> {
     AppStream appStream =
         await appStreamFactory.findAppStreamById(applicationId);
 
-    checkAlreadyInstalled(applicationId);
-
     setState(() {
       stateCategoryIdList = categoryIdList;
       stateAppStream = appStream;
@@ -68,14 +67,33 @@ class _Application extends State<Application> {
     });
   }
 
-  void checkAlreadyInstalled(String applicationId) {
-    Flatpak()
-        .isApplicationAlreadyInstalled(applicationId)
-        .then((flatpakApplication) {
-      setState(() {
-        stateIsAlreadyInstalled = flatpakApplication.isInstalled;
-      });
+  void install(String applicationId) async {
+    String stdout =
+        await Flatpak().uninstallApplicationThenOverrideList(applicationId, []);
+
+    setState(() {
+      stateFlatpakOutput =
+          "$stdout \n ${AppLocalizations.of(context).tr('uninstallation_finished')}";
     });
+
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.popAndPushNamed(context, '/application',
+                          arguments: ApplicationIdArgment(applicationId));
+                    },
+                    child: const Text('OK')),
+              ],
+              title: Text(AppLocalizations.of(context)
+                  .tr('uninstallation_successfully')),
+              contentPadding: const EdgeInsets.all(20.0),
+              content: Text(AppLocalizations.of(context)
+                  .tr('uninstallation_successfully')),
+            ));
   }
 
   @override
@@ -87,7 +105,12 @@ class _Application extends State<Application> {
       applicationId = args.applicationId;
 
       getData();
+
+      install(args.applicationId);
     }
+
+    const TextStyle outputTextStyle =
+        TextStyle(color: Colors.blueGrey, fontSize: 14.0);
 
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
         backgroundColor: Colors.blueGrey,
@@ -112,7 +135,7 @@ class _Application extends State<Application> {
           SizedBox(width: 10),
           Expanded(
               child: Card(
-            child: stateAppStream == null
+            child: stateFlatpakOutput.length == 0
                 ? CircularProgressIndicator()
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,15 +185,6 @@ class _Application extends State<Application> {
                               ],
                             ),
                           ),
-                          stateIsAlreadyInstalled
-                              ? UninstallButton(
-                                  buttonStyle: buttonStyle,
-                                  dialogButtonStyle: dialogButtonStyle,
-                                  stateAppStream: stateAppStream)
-                              : InstallButton(
-                                  buttonStyle: buttonStyle,
-                                  dialogButtonStyle: dialogButtonStyle,
-                                  stateAppStream: stateAppStream)
                         ],
                       ),
                       Padding(
@@ -183,34 +197,19 @@ class _Application extends State<Application> {
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              HtmlWidget(
-                                stateAppStream!.description,
-                              ),
+                              RichText(
+                                overflow: TextOverflow.clip,
+                                text: TextSpan(
+                                  text:
+                                      AppLocalizations.of(context).tr('output'),
+                                  style: outputTextStyle,
+                                  children: <TextSpan>[
+                                    TextSpan(text: stateFlatpakOutput),
+                                  ],
+                                ),
+                              )
                             ],
                           )),
-                      ListTile(
-                          title: Text(
-                        'Links',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: 5, bottom: 5, right: 5, left: 10),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: stateAppStream!
-                                  .getUrlObjList()
-                                  .map((urlObjLoop) {
-                                return TextButton.icon(
-                                  icon: getIcon(urlObjLoop['key'].toString()),
-                                  onPressed: () {},
-                                  label: Text(urlObjLoop['value'].toString()),
-                                );
-                              }).toList()))
                     ],
                   ),
           ))

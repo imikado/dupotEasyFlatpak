@@ -35,17 +35,5 @@ class SideMenu extends StatelessWidget {
             );
           }).toList(),
         ));
-
-/*
-    return AnimatedSidebar(
-      expanded: MediaQuery.of(context).size.width > 600,
-      items: items,
-      selectedIndex: 0,
-      onItemSelected: (index) => print(index),
-      headerIcon: Icons.list,
-      headerIconColor: Colors.amberAccent,
-      headerText: 'Categories',
-    );
-    */
   }
 }
