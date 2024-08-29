@@ -28,17 +28,21 @@ class Block extends StatelessWidget {
               color: Colors.blueGrey),
         ),
         SizedBox(height: 10),
-        Container(
-            height: 550,
-            child: GridView.count(
-                crossAxisCount: 4,
-                children: appStreamList.map((appStreamLoop) {
-                  return AppButton(
-                      id: appStreamLoop.id,
-                      title: appStreamLoop.name,
-                      sumary: appStreamLoop.summary,
-                      icon: appPath + '/' + appStreamLoop.getIcon());
-                }).toList()))
+        Wrap(
+            children: appStreamList.map((appStreamLoop) {
+          String icon = '';
+          if (appStreamLoop.getIcon().length > 3) {
+            icon = appPath + '/' + appStreamLoop.getIcon();
+          }
+
+          return Container(
+              width: 200,
+              child: AppButton(
+                  id: appStreamLoop.id,
+                  title: appStreamLoop.name,
+                  sumary: appStreamLoop.summary,
+                  icon: icon));
+        }).toList()),
       ],
     );
   }

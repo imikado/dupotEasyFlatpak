@@ -84,7 +84,8 @@ class _Home extends State<Home> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
-        body: Row(
+        body: Container(
+            child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
@@ -93,8 +94,7 @@ class _Home extends State<Home> {
                   menuItemList: stateMenuItemList,
                   selected: menuSelected,
                 )),
-            Container(
-                width: 980,
+            Expanded(
                 child: Scrollbar(
                     interactive: false,
                     thumbVisibility: true,
@@ -109,6 +109,6 @@ class _Home extends State<Home> {
                               appPath: appPath);
                         })))
           ],
-        ));
+        )));
   }
 }

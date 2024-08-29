@@ -74,7 +74,6 @@ class _Category extends State<Category> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
         body: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
                 width: 240,
@@ -82,8 +81,8 @@ class _Category extends State<Category> {
                   menuItemList: stateMenuItemList,
                   selected: categorySelected,
                 )),
-            Container(
-                width: 950,
+            SizedBox(width: 10),
+            Expanded(
                 child: Scrollbar(
                     interactive: false,
                     thumbVisibility: true,

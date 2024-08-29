@@ -36,6 +36,7 @@ class _Application extends State<Application> {
   String appPath = '';
 
   void getData() async {
+    //TODO check lastUpdate if > 7days => call api to update , + select db again
     appStreamFactory = AppStreamFactory();
     appPath = await appStreamFactory.getPath();
 
@@ -118,11 +119,9 @@ class _Application extends State<Application> {
                         children: [
                           Row(
                             children: [
-                              (stateAppStream!.icon.length > 10)
-                                  ? Image.file(File(appPath +
-                                      '/' +
-                                      stateAppStream!.getIcon()))
-                                  : SizedBox(),
+                              if (stateAppStream!.icon.length > 10)
+                                Image.file(File(
+                                    appPath + '/' + stateAppStream!.getIcon())),
                               const SizedBox(width: 20),
                               Expanded(
                                 child: Column(
