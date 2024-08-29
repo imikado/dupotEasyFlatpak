@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dupot_easy_flatpak/Models/recipe_factory.dart';
 import 'package:dupot_easy_flatpak/Process/flatpak.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
@@ -35,6 +36,8 @@ class _Application extends State<Application> {
 
   String appPath = '';
 
+  bool stateHasRecipe = false;
+
   void getData() async {
     //TODO check lastUpdate if > 7days => call api to update , + select db again
     appStreamFactory = AppStreamFactory();
@@ -60,12 +63,23 @@ class _Application extends State<Application> {
 
     checkAlreadyInstalled(applicationId);
 
+    checkHasRecipe(applicationId, context);
+
     setState(() {
       stateCategoryIdList = categoryIdList;
       stateAppStream = appStream;
       stateMenuItemList = menuItemList;
       stateIsLoaded = true;
     });
+  }
+
+  void checkHasRecipe(String applicationId, context) async {
+    List<String> recipeList = await RecipeFactory.getApplicationList(context);
+    if (recipeList.contains(applicationId)) {
+      setState(() {
+        stateHasRecipe = true;
+      });
+    }
   }
 
   void checkAlreadyInstalled(String applicationId) {

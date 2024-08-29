@@ -1,13 +1,10 @@
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Process/flatpak.dart';
-import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_already_installed.dart';
-import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_installed.dart';
-import 'package:dupot_easy_flatpak/Screens/app_detail/app_detail_content_not_installed.dart';
 import 'package:flutter/material.dart';
 import 'package:prompt_dialog/prompt_dialog.dart';
 
-import '../Models/application.dart';
-import '../Models/application_factory.dart';
+import '../Models/recipe.dart';
+import '../Models/recipe_factory.dart';
 import '../Models/permission.dart';
 import 'app_detail/app_detail_appbar.dart';
 import 'app_detail/app_detail_arguments.dart';
@@ -25,7 +22,7 @@ class AppDetail extends StatefulWidget {
 }
 
 class _AppDetail extends State<AppDetail> {
-  Application application = Application("loading", "loading", "", []);
+  Recipe application = Recipe("loading", "loading", "", []);
   bool loaded = false;
   String flatpakOutput = "";
 
@@ -39,7 +36,7 @@ class _AppDetail extends State<AppDetail> {
   List<List<String>> processList = [[]];
 
   void getData(BuildContext context, app) async {
-    Application newApp = await ApplicationFactory.getApplication(context, app);
+    Recipe newApp = await RecipeFactory.getApplication(context, app);
     checkAlreadyInstalled(newApp);
     setState(() {
       application = newApp;
@@ -47,7 +44,7 @@ class _AppDetail extends State<AppDetail> {
     });
   }
 
-  void checkAlreadyInstalled(Application applicationToCheck) {
+  void checkAlreadyInstalled(Recipe applicationToCheck) {
     Flatpak()
         .isApplicationAlreadyInstalled(applicationToCheck.flatpak)
         .then((flatpakApplication) {
@@ -82,29 +79,13 @@ class _AppDetail extends State<AppDetail> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Visibility(
-                        visible: displayAlreadyInstalled,
-                        child: AppDetailContentAlreadyInstalled(
-                            application: application,
-                            flatpakInfo: flatpakApplicationInfo)),
-                    Visibility(
-                        visible: displayInstallationFinished,
-                        child: AppDetailContentInstalled(
-                          application: application,
-                          flatpakOutput: flatpakOutput,
-                        )),
-                    Visibility(
                         visible: displayInstalling,
                         child: const AppDetailContentInstalling()),
-                    Visibility(
-                        visible: displayNotInstalled,
-                        child: AppDetailContentNotInstalled(
-                            application: application,
-                            handleLoadSetupThenInstall: loadSetupThenInstall)),
                   ])),
         ));
   }
 
-  Future<bool> loadSetup(Application application) async {
+  Future<bool> loadSetup(Recipe application) async {
     List<Permission> flatpakPermissionList =
         application.getFlatpakPermissionToOverrideList();
 
@@ -163,7 +144,7 @@ class _AppDetail extends State<AppDetail> {
     return selectedDirectory;
   }
 
-  void loadSetupThenInstall(Application application) {
+  void loadSetupThenInstall(Recipe application) {
     loadSetup(application).then((isSetupOk) {
       if (isSetupOk) {
         install(application);
@@ -171,7 +152,7 @@ class _AppDetail extends State<AppDetail> {
     });
   }
 
-  void install(Application application) {
+  void install(Recipe application) {
     setState(() {
       displayNotInstalled = false;
 

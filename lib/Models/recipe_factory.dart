@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
-import 'application.dart';
+import 'recipe.dart';
 
-class ApplicationFactory {
+class RecipeFactory {
   static bool isDebug = true;
 
   static Future<List<String>> getApplicationList(context) async {
@@ -35,7 +35,7 @@ class ApplicationFactory {
     return recipieList;
   }
 
-  static Future<Application> getApplication(context, app) async {
+  static Future<Recipe> getApplication(context, app) async {
     final languageCode = AppLocalizations.of(context).getLanguageCode();
 
     print('languageCode:$languageCode');
@@ -70,8 +70,8 @@ class ApplicationFactory {
       objectList.add(rawLoop);
     }
 
-    Application applicationLoaded = Application(jsonApp['title'],
-        jsonApp['description'], jsonApp['flatpak'], objectList);
+    Recipe applicationLoaded = Recipe(jsonApp['title'], jsonApp['description'],
+        jsonApp['flatpak'], objectList);
 
     return applicationLoaded;
   }

@@ -26,6 +26,7 @@ class AppLocalizations {
       'do_you_confirm_installation_of': 'Do you confirm installation of ',
       'do_you_confirm_uninstallation_of': 'Do you confirm uninstallation of ',
       'install': 'Install',
+      'install_with_recipe': 'Install with recipe',
       'uninstall': 'Uninstall',
       'application': 'Application',
       'applications': 'Applications',
@@ -56,6 +57,7 @@ class AppLocalizations {
       'do_you_confirm_uninstallation_of':
           'Confirmez-vous la désinstallation de',
       'install': 'Installer',
+      'install_with_recipe': 'Installer avec recette',
       'uninstall': 'Désinstaller',
       'application': 'Application',
       'applications': 'Applications',

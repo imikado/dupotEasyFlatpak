@@ -1,12 +1,12 @@
 import 'package:dupot_easy_flatpak/Models/permission.dart';
 
-class Application {
+class Recipe {
   final String title;
   final String description;
   final String flatpak;
   List<Permission> flatpakPermissionToOverrideList = [];
 
-  Application(this.title, this.description, this.flatpak,
+  Recipe(this.title, this.description, this.flatpak,
       List<Map<String, dynamic>> rawFlatpakPermissionToOverrideList) {
     for (Map<String, dynamic> rawPermissionLoop
         in rawFlatpakPermissionToOverrideList) {
