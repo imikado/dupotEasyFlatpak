@@ -11,6 +11,7 @@ import 'package:dupot_easy_flatpak/Screens/home.dart';
 import 'package:dupot_easy_flatpak/Screens/installation.dart';
 import 'package:dupot_easy_flatpak/Screens/installation_with_recipe.dart';
 import 'package:dupot_easy_flatpak/Screens/new_app.dart';
+import 'package:dupot_easy_flatpak/Screens/search.dart';
 import 'package:dupot_easy_flatpak/Screens/uninstallation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -71,7 +72,8 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
         ],
         title: 'Easy Flatpak',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromARGB(255, 205, 230, 250)),
           useMaterial3: false,
         ),
         initialRoute: '/',
@@ -84,7 +86,8 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
           '/application': (context) => Application(),
           '/installation': (context) => Installation(),
           '/uninstallation': (context) => Uninstallation(),
-          '/installationwithrecipe': (context) => InstallationWithRecipe()
+          '/installationwithrecipe': (context) => InstallationWithRecipe(),
+          '/search': (context) => Search()
         });
   }
 }

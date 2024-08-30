@@ -1,11 +1,12 @@
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
+import 'package:dupot_easy_flatpak/Screens/Shared/app_menu.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
-import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/block.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,6 +24,8 @@ class _Home extends State<Home> {
 
   String menuSelected = 'Home';
   String appPath = '';
+
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -45,6 +48,9 @@ class _Home extends State<Home> {
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
     List<MenuItem> menuItemList = [
+      MenuItem('Search', () {
+        Navigator.popAndPushNamed(context, '/search');
+      }),
       MenuItem(menuSelected, () {
         Navigator.popAndPushNamed(context, '/');
       })
@@ -82,6 +88,7 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(leading: Icon(Icons.home), title: Text('Easy Flatpak')),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
         body: Container(

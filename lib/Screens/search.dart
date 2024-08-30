@@ -9,23 +9,27 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:flutter/material.dart';
 
-class Category extends StatefulWidget {
+class Search extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _Category();
+  State<StatefulWidget> createState() => _Search();
 }
 
-class _Category extends State<Category> {
+class _Search extends State<Search> {
   late AppStreamFactory appStreamFactory;
   List<String> stateCategoryIdList = [];
   List<AppStream> stateAppStreamList = [];
   List<MenuItem> stateMenuItemList = [];
   final ScrollController scrollController = ScrollController();
 
-  String categorySelected = 'aa';
+  String categorySelected = 'Search';
+
+  String stateSearch = '';
 
   bool stateIsLoaded = false;
 
   String appPath = '';
+
+  final TextEditingController _searchController = TextEditingController();
 
   void getData() async {
     appStreamFactory = AppStreamFactory();
@@ -50,7 +54,7 @@ class _Category extends State<Category> {
     }
 
     List<AppStream> appStreamList =
-        await appStreamFactory.findListAppStreamByCategory(categorySelected);
+        await appStreamFactory.findListAppStreamBySearch(stateSearch);
 
     setState(() {
       stateCategoryIdList = categoryIdList;
@@ -63,18 +67,34 @@ class _Category extends State<Category> {
   @override
   Widget build(BuildContext context) {
     if (!stateIsLoaded) {
-      CategoryIdArgment args =
-          ModalRoute.of(context)?.settings.arguments as CategoryIdArgment;
-
-      categorySelected = args.categoryId;
-
       getData();
     }
 
     AppStreamFactory appStreamFactory = AppStreamFactory();
 
     return Scaffold(
-        appBar: AppBar(leading: Icon(Icons.home), title: Text('Easy Flatpak')),
+        appBar: AppBar(
+          leading: Icon(Icons.search),
+          title: TextField(
+            controller: _searchController,
+            style: const TextStyle(color: Colors.white),
+            cursorColor: Colors.white,
+            decoration: const InputDecoration(
+              hintText: 'Search...',
+              hintStyle: TextStyle(color: Colors.white54),
+              border: InputBorder.none,
+            ),
+            onChanged: (value) {
+              // Perform search functionality here
+              if (value.length > 4) {
+                setState(() {
+                  stateSearch = value;
+                  stateIsLoaded = false;
+                });
+              }
+            },
+          ),
+        ),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
         body: Row(

@@ -253,6 +253,38 @@ class AppStreamFactory {
     ];
   }
 
+  Future<List<AppStream>> findListAppStreamBySearch(String search) async {
+    final db = await getDb();
+    // Query the table for all the dogs.
+    final List<Map<String, Object?>> appStreamList = await db.rawQuery(
+      'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon,$constTableAppStream.lastUpdate from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON $constTableAppStream.id=$constTableAppStreamCategory.appstream_id where name like \'%$search%\'  ORDER by name asc',
+    );
+
+    // Convert the list of each dog's fields into a list of `Dog` objects.
+    return [
+      for (final {
+            'id': id as String,
+            'name': name as String,
+            'summary': summary as String,
+            'icon': icon as String,
+            'lastUpdate': lastUpdate as int
+          } in appStreamList)
+        AppStream(
+            id: id,
+            name: name,
+            summary: summary,
+            icon: icon,
+            categoryIdList: [],
+            description: '',
+            lastUpdate: lastUpdate,
+            metadataObj: {},
+            releaseObjList: [],
+            urlObj: {},
+            projectLicense: '',
+            developer_name: ''),
+    ];
+  }
+
   Future<List<AppStream>> findListAppStreamByCategoryLimited(
       String categoryId, int limit) async {
     final db = await getDb();

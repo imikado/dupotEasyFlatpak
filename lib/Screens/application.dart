@@ -47,6 +47,9 @@ class _Application extends State<Application> {
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
     List<MenuItem> menuItemList = [
+      MenuItem('Search', () {
+        Navigator.popAndPushNamed(context, '/search');
+      }),
       MenuItem('Home', () {
         Navigator.popAndPushNamed(context, '/');
       })
@@ -134,6 +137,7 @@ class _Application extends State<Application> {
     }
 
     return Scaffold(
+        appBar: AppBar(leading: Icon(Icons.home), title: Text('Easy Flatpak')),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
         body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
