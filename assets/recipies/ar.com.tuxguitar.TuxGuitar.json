@@ -1,0 +1,9 @@
+{
+    "flatpakPermissionToOverrideList": [
+        {
+            "label": "Indicate directory path where you store your games",
+            "label_fr": "Veuilez indiquer le chemin complet du répertoire contenant vos jeux",
+            "type": "filesystem"
+        }
+    ]
+}

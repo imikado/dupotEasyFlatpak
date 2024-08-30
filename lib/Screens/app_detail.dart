@@ -22,7 +22,7 @@ class AppDetail extends StatefulWidget {
 }
 
 class _AppDetail extends State<AppDetail> {
-  Recipe application = Recipe("loading", "loading", "", []);
+  Recipe application = Recipe("", []);
   bool loaded = false;
   String flatpakOutput = "";
 
@@ -46,7 +46,7 @@ class _AppDetail extends State<AppDetail> {
 
   void checkAlreadyInstalled(Recipe applicationToCheck) {
     Flatpak()
-        .isApplicationAlreadyInstalled(applicationToCheck.flatpak)
+        .isApplicationAlreadyInstalled(applicationToCheck.id)
         .then((flatpakApplication) {
       setState(() {
         if (flatpakApplication.isInstalled) {
@@ -103,7 +103,7 @@ class _AppDetail extends State<AppDetail> {
         ];
         argList.add(permissionLoop.getFlatpakOverrideType() + directoryPath);
 
-        argList.add(application.flatpak);
+        argList.add(application.id);
 
         processList.add(argList);
       } else if (permissionLoop.isFileSystemNoPrompt()) {
@@ -115,7 +115,7 @@ class _AppDetail extends State<AppDetail> {
         ];
         argList.add(permissionLoop.getFlatpakOverrideType() + directoryPath);
 
-        argList.add(application.flatpak);
+        argList.add(application.id);
 
         processList.add(argList);
       }
@@ -160,7 +160,7 @@ class _AppDetail extends State<AppDetail> {
     });
 
     Flatpak()
-        .installApplicationThenOverrideList(application.flatpak, processList)
+        .installApplicationThenOverrideList(application.id, processList)
         .then((stdout) {
       setState(() {
         flatpakOutput =

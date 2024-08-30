@@ -1,13 +1,12 @@
 import 'package:dupot_easy_flatpak/Models/permission.dart';
 
 class Recipe {
-  final String title;
-  final String description;
-  final String flatpak;
+  String id = '';
   List<Permission> flatpakPermissionToOverrideList = [];
 
-  Recipe(this.title, this.description, this.flatpak,
+  Recipe(String applicationId,
       List<Map<String, dynamic>> rawFlatpakPermissionToOverrideList) {
+    this.id = applicationId;
     for (Map<String, dynamic> rawPermissionLoop
         in rawFlatpakPermissionToOverrideList) {
       String value = "none";

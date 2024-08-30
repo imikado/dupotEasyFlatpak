@@ -6,6 +6,7 @@ import 'package:dupot_easy_flatpak/Screens/application.dart';
 import 'package:dupot_easy_flatpak/Screens/category.dart';
 import 'package:dupot_easy_flatpak/Screens/home.dart';
 import 'package:dupot_easy_flatpak/Screens/installation.dart';
+import 'package:dupot_easy_flatpak/Screens/installation_with_recipe.dart';
 import 'package:dupot_easy_flatpak/Screens/new_app.dart';
 import 'package:dupot_easy_flatpak/Screens/uninstallation.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,8 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
           '/category': (context) => Category(),
           '/application': (context) => Application(),
           '/installation': (context) => Installation(),
-          '/uninstallation': (context) => Uninstallation()
+          '/uninstallation': (context) => Uninstallation(),
+          '/installationwithrecipe': (context) => InstallationWithRecipe()
         });
   }
 }

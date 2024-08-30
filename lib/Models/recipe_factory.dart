@@ -14,7 +14,7 @@ class RecipeFactory {
   static Future<List<String>> getApplicationList(context) async {
     String recipiesString =
         await DefaultAssetBundle.of(context).loadString("assets/recipies.json");
-    List<String> recipieList = List<String>.from(json.decode(recipiesString));
+    List<String> recipeList = List<String>.from(json.decode(recipiesString));
 
     final directory = await getApplicationDocumentsDirectory();
 
@@ -23,19 +23,20 @@ class RecipeFactory {
     if (await subDirectory.exists()) {
       var fileList = subDirectory.listSync();
       for (var fileLoop in fileList) {
-        recipieList.add(
+        recipeList.add(
             path.basename(fileLoop.path).toString().replaceAll('.json', ''));
       }
     }
 
-    if (isDebug) {
-      print(recipieList);
+    List<String> recipeLowerCaseList = [];
+    for (String recipeId in recipeList) {
+      recipeLowerCaseList.add(recipeId.toLowerCase());
     }
 
-    return recipieList;
+    return recipeLowerCaseList;
   }
 
-  static Future<Recipe> getApplication(context, app) async {
+  static Future<Recipe> getApplication(context, id) async {
     final languageCode = AppLocalizations.of(context).getLanguageCode();
 
     print('languageCode:$languageCode');
@@ -46,12 +47,12 @@ class RecipeFactory {
 
     String applicaitonRecipieString = '';
 
-    File userFile = File('${subDirectory.path}/$app.json');
+    File userFile = File('${subDirectory.path}/$id.json');
     if (await userFile.exists()) {
       applicaitonRecipieString = await userFile.readAsString();
     } else {
       applicaitonRecipieString = await DefaultAssetBundle.of(context)
-          .loadString("assets/recipies/$app.json");
+          .loadString("assets/recipies/$id.json");
     }
 
     Map jsonApp = json.decode(applicaitonRecipieString);
@@ -70,8 +71,7 @@ class RecipeFactory {
       objectList.add(rawLoop);
     }
 
-    Recipe applicationLoaded = Recipe(jsonApp['title'], jsonApp['description'],
-        jsonApp['flatpak'], objectList);
+    Recipe applicationLoaded = Recipe(id, objectList);
 
     return applicationLoaded;
   }

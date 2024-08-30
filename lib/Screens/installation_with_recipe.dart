@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dupot_easy_flatpak/Models/permission.dart';
+import 'package:dupot_easy_flatpak/Models/recipe.dart';
 import 'package:dupot_easy_flatpak/Models/recipe_factory.dart';
 import 'package:dupot_easy_flatpak/Process/flatpak.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
@@ -9,19 +11,15 @@ import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
-import 'package:dupot_easy_flatpak/Screens/Store/install_button.dart';
-import 'package:dupot_easy_flatpak/Screens/Store/install_button_with_recipe.dart';
-import 'package:dupot_easy_flatpak/Screens/Store/uninstall_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:prompt_dialog/prompt_dialog.dart';
 
-class Application extends StatefulWidget {
+class InstallationWithRecipe extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _Application();
+  State<StatefulWidget> createState() => _InstallationWithRecipe();
 }
 
-class _Application extends State<Application> {
+class _InstallationWithRecipe extends State<InstallationWithRecipe> {
   late AppStreamFactory appStreamFactory;
   List<String> stateCategoryIdList = [];
   AppStream? stateAppStream;
@@ -37,10 +35,18 @@ class _Application extends State<Application> {
 
   String appPath = '';
 
-  bool stateHasRecipe = false;
+  bool isInstalling = true;
+
+  String stateFlatpakOutput = '';
+
+  List<List<String>> processList = [[]];
+
+  Future<Recipe> getRecipe(BuildContext context, String applicationId) async {
+    Recipe recipe = await RecipeFactory.getApplication(context, applicationId);
+    return recipe;
+  }
 
   void getData() async {
-    //TODO check lastUpdate if > 7days => call api to update , + select db again
     appStreamFactory = AppStreamFactory();
     appPath = await appStreamFactory.getPath();
 
@@ -62,10 +68,6 @@ class _Application extends State<Application> {
     AppStream appStream =
         await appStreamFactory.findAppStreamById(applicationId);
 
-    checkAlreadyInstalled(applicationId);
-
-    checkHasRecipe(applicationId, context);
-
     setState(() {
       stateCategoryIdList = categoryIdList;
       stateAppStream = appStream;
@@ -74,52 +76,102 @@ class _Application extends State<Application> {
     });
   }
 
-  void checkHasRecipe(String applicationId, context) async {
-    List<String> recipeList = await RecipeFactory.getApplicationList(context);
-    if (recipeList.contains(applicationId.toLowerCase())) {
-      setState(() {
-        stateHasRecipe = true;
-      });
+  Future<bool> loadSetup(Recipe recipe) async {
+    List<Permission> flatpakPermissionList =
+        recipe.getFlatpakPermissionToOverrideList();
+
+    for (Permission permissionLoop in flatpakPermissionList) {
+      if (permissionLoop.isFileSystem()) {
+        String directoryPath = await selectDirectory(permissionLoop.label);
+
+        if (directoryPath.length < 2) {
+          return false;
+        }
+
+        List<String> argList = [
+          'override',
+          '--user',
+        ];
+        argList.add(permissionLoop.getFlatpakOverrideType() + directoryPath);
+
+        argList.add(recipe.id);
+
+        processList.add(argList);
+      } else if (permissionLoop.isFileSystemNoPrompt()) {
+        String directoryPath = 'home';
+
+        List<String> argList = [
+          'override',
+          '--user',
+        ];
+        argList.add(permissionLoop.getFlatpakOverrideType() + directoryPath);
+
+        argList.add(recipe.id);
+
+        processList.add(argList);
+      }
     }
+
+    return true;
   }
 
-  void checkAlreadyInstalled(String applicationId) {
-    Flatpak()
-        .isApplicationAlreadyInstalled(applicationId)
-        .then((flatpakApplication) {
-      setState(() {
-        stateIsAlreadyInstalled = flatpakApplication.isInstalled;
-      });
+  Future<String> selectDirectory(String label) async {
+    String? selectedDirectory = await prompt(context,
+        title: Text(label),
+        isSelectedInitialValue: false,
+        textOK: Text(AppLocalizations.of(context).tr('confirm')),
+        textCancel: Text(AppLocalizations.of(context).tr('cancel')),
+        hintText: label, validator: (String? value) {
+      if (value == null || value.isEmpty) {
+        return AppLocalizations.of(context).tr('field_should_not_be_empty');
+      }
+      return null;
+    });
+
+    if (selectedDirectory == null) {
+      return "";
+    }
+
+    return selectedDirectory;
+  }
+
+  void loadSetupThenInstall(BuildContext context, String applicationId) async {
+    Recipe recipe = await getRecipe(context, applicationId);
+
+    loadSetup(recipe).then((isSetupOk) {
+      if (isSetupOk) {
+        install(applicationId);
+      }
     });
   }
 
-  Widget getButton() {
-    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-        backgroundColor: Colors.blueGrey,
-        padding: const EdgeInsets.all(20),
-        textStyle: const TextStyle(fontSize: 14));
+  void install(String applicationId) async {
+    String stdout = await Flatpak()
+        .installApplicationThenOverrideList(applicationId, processList);
+    setState(() {
+      stateFlatpakOutput =
+          "$stdout \n ${AppLocalizations.of(context).tr('installation_finished')}";
+      isInstalling = false;
+    });
 
-    final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
-        backgroundColor: Colors.grey,
-        padding: const EdgeInsets.all(20),
-        textStyle: const TextStyle(fontSize: 14));
-
-    if (stateIsAlreadyInstalled) {
-      return UninstallButton(
-          buttonStyle: buttonStyle,
-          dialogButtonStyle: dialogButtonStyle,
-          stateAppStream: stateAppStream);
-    } else if (stateHasRecipe) {
-      return InstallWithRecipeButton(
-          buttonStyle: buttonStyle,
-          dialogButtonStyle: dialogButtonStyle,
-          stateAppStream: stateAppStream);
-    }
-
-    return InstallButton(
-        buttonStyle: buttonStyle,
-        dialogButtonStyle: dialogButtonStyle,
-        stateAppStream: stateAppStream);
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.popAndPushNamed(context, '/application',
+                          arguments: ApplicationIdArgment(applicationId));
+                    },
+                    child: const Text('OK')),
+              ],
+              title: Text(
+                  AppLocalizations.of(context).tr('installation_successfully')),
+              contentPadding: const EdgeInsets.all(20.0),
+              content: Text(
+                  AppLocalizations.of(context).tr('installation_successfully')),
+            ));
   }
 
   @override
@@ -131,7 +183,22 @@ class _Application extends State<Application> {
       applicationId = args.applicationId;
 
       getData();
+
+      loadSetupThenInstall(context, args.applicationId);
     }
+
+    const TextStyle outputTextStyle =
+        TextStyle(color: Colors.blueGrey, fontSize: 14.0);
+
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+        backgroundColor: Colors.blueGrey,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14));
+
+    final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
+        backgroundColor: Colors.grey,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14));
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -146,7 +213,7 @@ class _Application extends State<Application> {
           SizedBox(width: 10),
           Expanded(
               child: Card(
-            child: stateAppStream == null
+            child: isInstalling
                 ? CircularProgressIndicator()
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +263,6 @@ class _Application extends State<Application> {
                               ],
                             ),
                           ),
-                          getButton()
                         ],
                       ),
                       Padding(
@@ -209,34 +275,19 @@ class _Application extends State<Application> {
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              HtmlWidget(
-                                stateAppStream!.description,
-                              ),
+                              RichText(
+                                overflow: TextOverflow.clip,
+                                text: TextSpan(
+                                  text:
+                                      AppLocalizations.of(context).tr('output'),
+                                  style: outputTextStyle,
+                                  children: <TextSpan>[
+                                    TextSpan(text: stateFlatpakOutput),
+                                  ],
+                                ),
+                              )
                             ],
                           )),
-                      ListTile(
-                          title: Text(
-                        'Links',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: 5, bottom: 5, right: 5, left: 10),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: stateAppStream!
-                                  .getUrlObjList()
-                                  .map((urlObjLoop) {
-                                return TextButton.icon(
-                                  icon: getIcon(urlObjLoop['key'].toString()),
-                                  onPressed: () {},
-                                  label: Text(urlObjLoop['value'].toString()),
-                                );
-                              }).toList()))
                     ],
                   ),
           ))
