@@ -14,7 +14,6 @@ installed_size: 21336
 dependencies:
   - flatpak
   - zenity
-  - libsqlite3
 
 essential: false
 
