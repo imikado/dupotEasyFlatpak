@@ -37,14 +37,15 @@ class FlathubApi {
 
     int limitLoaded = 0;
     for (String appStreamIdLoop in appStreamIdList) {
-      if (applicationIdList.contains(appStreamIdLoop)) {
+      if (applicationIdList.contains(appStreamIdLoop.toLowerCase())) {
         continue;
       }
+      print('$appStreamIdLoop missing, should insert');
       AppStream appStream = await getAppStream(appStreamIdLoop);
 
       limitLoaded++;
       if (limitLoaded > limit) {
-        break;
+        //break;
       }
 
       downloadIcon(appStream, appDocumentsDirPath);
@@ -146,6 +147,11 @@ class FlathubApi {
       developer_name = rawAppStream['developer_name'];
     }
 
+    String projectLicense = '';
+    if (rawAppStream.containsKey('')) {
+      projectLicense = rawAppStream['project_license'];
+    }
+
     return AppStream(
         id: rawAppStream['id'],
         name: rawAppStream['name'],
@@ -157,7 +163,7 @@ class FlathubApi {
         metadataObj: metadataObj,
         urlObj: rawUrls,
         releaseObjList: rawReleaseObjList,
-        projectLicense: rawAppStream['project_license'],
+        projectLicense: projectLicense,
         developer_name: developer_name);
   }
 }

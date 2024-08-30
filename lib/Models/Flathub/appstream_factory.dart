@@ -216,7 +216,7 @@ class AppStreamFactory {
 
     List<String> applicationIdList = [];
     for (Map<String, dynamic> rawAppStreamLoop in appStreamList) {
-      applicationIdList.add(rawAppStreamLoop['id']);
+      applicationIdList.add(rawAppStreamLoop['id'].toString().toLowerCase());
     }
     return applicationIdList;
   }

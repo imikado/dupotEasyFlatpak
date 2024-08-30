@@ -75,3 +75,5 @@ flutter:
   assets:
     - assets/recipies/
     - assets/recipies.json
+    - assets/icons/
+    - assets/db/

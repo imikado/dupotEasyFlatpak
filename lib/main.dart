@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dupot_easy_flatpak/Localizations/app_localizations_delegate.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
+import 'package:dupot_easy_flatpak/Process/first_installation.dart';
 import 'package:dupot_easy_flatpak/Process/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Screens/app_detail.dart';
 import 'package:dupot_easy_flatpak/Screens/application.dart';
@@ -18,13 +21,21 @@ void main() async {
   try {
     sqfliteFfiInit();
 
+    //before install db + icons
+    WidgetsFlutterBinding.ensureInitialized();
+
+    FirstInstallation firstInstallation = FirstInstallation();
+    await firstInstallation.process();
+
+    //end installation
+
     databaseFactory = databaseFactoryFfi;
 
     final appStreamFactory = AppStreamFactory();
     await appStreamFactory.create();
 
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
-    //await flathubApi.load();
+    await flathubApi.load();
 
     print('end loaded');
   } on Exception catch (e) {
