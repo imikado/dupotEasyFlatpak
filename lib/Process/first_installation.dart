@@ -13,37 +13,21 @@ class FirstInstallation {
         io.Directory(p.join(appDocumentsDirPath, "EasyFlatpak"));
 
     if (!documentsTargetDirectory.existsSync()) {
-      io.Directory newDocumentsTargetDirectory =
-          io.Directory(documentsTargetDirectory.path);
+      documentsTargetDirectory.createSync();
 
-      newDocumentsTargetDirectory.createSync();
-
-      String dbPath =
-          p.join(appDocumentsDirPath, "EasyFlatpak", "flathub_database.db");
-
-      io.Directory iconsDirectory = io.Directory('assets/icons/');
-      if (await iconsDirectory.exists()) {
-        var fileList = iconsDirectory.listSync();
-        for (var filePathLoop in fileList) {
-          final assetIcon = await rootBundle.load(filePathLoop.path);
-          final buffer = assetIcon.buffer;
-
-          io.File fileTarget = io.File(
-              '${documentsTargetDirectory.path}/${p.basename(filePathLoop.path)}');
-
-          await fileTarget.writeAsBytes(buffer.asUint8List(
-              assetIcon.offsetInBytes, assetIcon.lengthInBytes));
-        }
+      io.Directory assetsIconsDirectory = io.Directory('assets/icons/');
+      var assetIconList = assetsIconsDirectory.listSync();
+      for (io.FileSystemEntity assetIconLoop in assetIconList) {
+        io.File assetIconFileLoop = io.File(assetIconLoop.path);
+        assetIconFileLoop.copySync(
+            '${documentsTargetDirectory.path}/${p.basename(assetIconFileLoop.path)}');
+        print('Copy asset icon ${assetIconLoop.path} ');
       }
 
-      final assetIcon = await rootBundle.load('assets/db/flathub_database.db');
-      final buffer = assetIcon.buffer;
-
-      io.File fileTarget =
-          io.File('${documentsTargetDirectory.path}/flathub_database.db');
-
-      await fileTarget.writeAsBytes(
-          buffer.asUint8List(assetIcon.offsetInBytes, assetIcon.lengthInBytes));
+      io.File databaseFile = io.File('assets/db/flathub_database.db');
+      databaseFile
+          .copySync('${documentsTargetDirectory.path}/flathub_database.db');
+      print('Copy asset icon ${databaseFile.path} ');
     } else {
       print('already installed');
     }
