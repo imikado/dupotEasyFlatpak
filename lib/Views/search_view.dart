@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 class SearchView extends StatefulWidget {
   String categoryIdSelected;
   late Function handleGoToApplication;
+  late String searched;
   SearchView(
       {super.key,
       required this.categoryIdSelected,
-      required this.handleGoToApplication});
+      required this.handleGoToApplication,
+      required this.searched});
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -36,13 +38,14 @@ class _SearchViewState extends State<SearchView> {
   }
 
   Future<void> loadData() async {
+    stateSearch = widget.searched;
+
     lastCategoryIdSelected = widget.categoryIdSelected;
     AppStreamFactory appStreamFactory = AppStreamFactory();
     appPath = await appStreamFactory.getPath();
 
     List<AppStream> appStreamList =
         await appStreamFactory.findListAppStreamBySearch(stateSearch);
-    ;
 
     setState(() {
       stateAppStreamList = appStreamList;
@@ -51,7 +54,7 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
-    if (lastCategoryIdSelected != widget.categoryIdSelected) {
+    if (stateSearch != widget.searched) {
       loadData();
     }
 

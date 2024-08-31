@@ -4,16 +4,17 @@ import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgumen
 import 'package:flutter/material.dart';
 
 class InstallButton extends StatelessWidget {
-  const InstallButton({
-    super.key,
-    required this.buttonStyle,
-    required this.dialogButtonStyle,
-    required this.stateAppStream,
-  });
+  const InstallButton(
+      {super.key,
+      required this.buttonStyle,
+      required this.dialogButtonStyle,
+      required this.stateAppStream,
+      required this.handle});
 
   final ButtonStyle buttonStyle;
   final ButtonStyle dialogButtonStyle;
   final AppStream? stateAppStream;
+  final Function handle;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +37,7 @@ class InstallButton extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
 
-                          Navigator.popAndPushNamed(context, '/installation',
-                              arguments:
-                                  ApplicationIdArgment(stateAppStream!.id));
+                          handle(stateAppStream!.id);
                         },
                         child:
                             Text(AppLocalizations.of(context).tr('confirm'))),

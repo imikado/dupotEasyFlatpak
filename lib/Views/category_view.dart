@@ -30,7 +30,6 @@ class _CategoryViewState extends State<CategoryView> {
   void initState() {
     super.initState();
 
-    print('loaded ${widget.categoryIdSelected}');
     loadData();
   }
 

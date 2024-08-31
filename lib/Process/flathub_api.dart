@@ -21,8 +21,6 @@ class FlathubApi {
 
     final appDocumentsDirPath = appDocumentsDir.path;
 
-    int limit = 10;
-
     List<dynamic> appStreamIdList = await getAppStreamList();
 
     appStreamFactory.connect();
@@ -42,11 +40,6 @@ class FlathubApi {
       }
       print('$appStreamIdLoop missing, should insert');
       AppStream appStream = await getAppStream(appStreamIdLoop);
-
-      limitLoaded++;
-      if (limitLoaded > limit) {
-        //break;
-      }
 
       downloadIcon(appStream, appDocumentsDirPath);
 

@@ -4,16 +4,17 @@ import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgumen
 import 'package:flutter/material.dart';
 
 class InstallWithRecipeButton extends StatelessWidget {
-  const InstallWithRecipeButton({
-    super.key,
-    required this.buttonStyle,
-    required this.dialogButtonStyle,
-    required this.stateAppStream,
-  });
+  const InstallWithRecipeButton(
+      {super.key,
+      required this.buttonStyle,
+      required this.dialogButtonStyle,
+      required this.stateAppStream,
+      required this.handle});
 
   final ButtonStyle buttonStyle;
   final ButtonStyle dialogButtonStyle;
   final AppStream? stateAppStream;
+  final Function handle;
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +37,7 @@ class InstallWithRecipeButton extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
 
-                          Navigator.popAndPushNamed(
-                              context, '/installationwithrecipe',
-                              arguments:
-                                  ApplicationIdArgment(stateAppStream!.id));
+                          handle(stateAppStream!.id);
                         },
                         child:
                             Text(AppLocalizations.of(context).tr('confirm'))),

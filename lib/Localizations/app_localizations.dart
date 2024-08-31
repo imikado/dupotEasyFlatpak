@@ -38,7 +38,8 @@ class AppLocalizations {
       'application_name': 'Application\'s name',
       'application_json': 'Application\'s json setup recipie',
       'processing_form': 'Processing',
-      'save': 'Save'
+      'save': 'Save',
+      'close': 'close'
     },
     'fr': {
       'loading': 'Chargement',
@@ -70,7 +71,8 @@ class AppLocalizations {
       'application_json':
           'Json de paramétrage de la recette pour l\'application',
       'processing_form': 'Traitement en cours',
-      'save': 'Enregistrer'
+      'save': 'Enregistrer',
+      'close': 'Fermer'
     },
   };
 

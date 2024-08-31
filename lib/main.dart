@@ -1,23 +1,8 @@
 import 'dart:io';
 
-import 'package:dupot_easy_flatpak/Localizations/app_localizations_delegate.dart';
-import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
-import 'package:dupot_easy_flatpak/Models/settings.dart';
-import 'package:dupot_easy_flatpak/Process/commands.dart';
-import 'package:dupot_easy_flatpak/Process/first_installation.dart';
-import 'package:dupot_easy_flatpak/Process/flathub_api.dart';
-import 'package:dupot_easy_flatpak/Screens/application.dart';
-import 'package:dupot_easy_flatpak/Screens/category.dart';
-import 'package:dupot_easy_flatpak/Screens/home.dart';
-import 'package:dupot_easy_flatpak/Screens/installation.dart';
-import 'package:dupot_easy_flatpak/Screens/installation_with_recipe.dart';
-import 'package:dupot_easy_flatpak/Screens/loading.dart';
-import 'package:dupot_easy_flatpak/Screens/search.dart';
-import 'package:dupot_easy_flatpak/Screens/uninstallation.dart';
 import 'package:dupot_easy_flatpak/dupot_easy_flatpak.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
