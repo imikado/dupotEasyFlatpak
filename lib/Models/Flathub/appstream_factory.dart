@@ -259,7 +259,7 @@ class AppStreamFactory {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-      'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon,$constTableAppStream.lastUpdate from $constTableAppStream INNER JOIN $constTableAppStreamCategory ON $constTableAppStream.id=$constTableAppStreamCategory.appstream_id where name like \'%$search%\'  ORDER by name asc',
+      'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon,$constTableAppStream.lastUpdate from $constTableAppStream  where name like \'%$search%\' or summary like \'%$search%\'  ORDER by name asc',
     );
 
     // Convert the list of each dog's fields into a list of `Dog` objects.
