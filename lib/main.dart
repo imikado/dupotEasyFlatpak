@@ -51,7 +51,7 @@ void main() async {
 
     databaseFactory = databaseFactoryFfi;
 
-    runApp(DupotEasyFlatpak(shouldInstall: shouldInstall));
+    runApp(DupotEasyFlatpak());
   } on Exception catch (e) {
     print('Exception::');
     print(e);
@@ -59,9 +59,7 @@ void main() async {
 }
 
 class DupotEasyFlatpak extends StatefulWidget {
-  final bool shouldInstall;
-
-  const DupotEasyFlatpak({super.key, required this.shouldInstall});
+  const DupotEasyFlatpak({super.key});
 
   @override
   _DupotEasyFlatpakState createState() => _DupotEasyFlatpakState();
