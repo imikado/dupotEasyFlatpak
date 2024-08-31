@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Models/recipe_factory.dart';
-import 'package:dupot_easy_flatpak/Process/flatpak.dart';
+import 'package:dupot_easy_flatpak/Models/settings.dart';
+import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
@@ -39,7 +40,7 @@ class _Application extends State<Application> {
 
   bool stateHasRecipe = false;
 
-  void getData() async {
+  void getData(BuildContext context) async {
     //TODO check lastUpdate if > 7days => call api to update , + select db again
     appStreamFactory = AppStreamFactory();
     appPath = await appStreamFactory.getPath();
@@ -65,7 +66,7 @@ class _Application extends State<Application> {
     AppStream appStream =
         await appStreamFactory.findAppStreamById(applicationId);
 
-    checkAlreadyInstalled(applicationId);
+    checkAlreadyInstalled(context, applicationId);
 
     checkHasRecipe(applicationId, context);
 
@@ -86,8 +87,11 @@ class _Application extends State<Application> {
     }
   }
 
-  void checkAlreadyInstalled(String applicationId) {
-    Flatpak()
+  void checkAlreadyInstalled(BuildContext context, String applicationId) async {
+    Settings settingsObj = Settings(context: context);
+    await settingsObj.load();
+
+    Commands(settingsObj: settingsObj)
         .isApplicationAlreadyInstalled(applicationId)
         .then((flatpakApplication) {
       setState(() {
@@ -133,7 +137,7 @@ class _Application extends State<Application> {
 
       applicationId = args.applicationId;
 
-      getData();
+      getData(context);
     }
 
     return Scaffold(

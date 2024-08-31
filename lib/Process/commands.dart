@@ -1,24 +1,44 @@
 import 'dart:async';
 import 'dart:io';
 
-class Flatpak {
-  bool isFlatpak = false;
+import 'package:dupot_easy_flatpak/Models/settings.dart';
 
-  String sandboxCommand = 'flatpak-spawn';
-  String command = 'flatpak';
+class Commands {
+  static const String flatpakCommand = 'flatpak';
 
-  String getFlatpakCommand() {
-    if (isFlatpak) {
-      return sandboxCommand;
+  late Settings settingsObj;
+
+  Commands({required this.settingsObj});
+
+  bool isInsideFlatpak() {
+    return settingsObj.useFlatpakSpawn();
+  }
+
+  String getCommand(String command) {
+    if (isInsideFlatpak()) {
+      return settingsObj.getFlatpakSpawnCommand();
     }
     return command;
   }
 
-  List<String> getFlatpakArgumentList(List<String> subArgumentList) {
-    if (isFlatpak) {
+  Future<ProcessResult> runProcess(
+      String command, List<String> argumentList) async {
+    return await Process.run(getCommand(command),
+        getFlatpakSpawnArgumentList(command, argumentList));
+  }
+
+  Future<ProcessResult> runProcessSync(
+      String command, List<String> argumentList) async {
+    return Process.runSync(getCommand(command),
+        getFlatpakSpawnArgumentList(command, argumentList));
+  }
+
+  List<String> getFlatpakSpawnArgumentList(
+      String command, List<String> subArgumentList) {
+    if (isInsideFlatpak()) {
       List<String> argumentList = [];
       argumentList.add('--host');
-      argumentList.add('flatpak');
+      argumentList.add(command);
       argumentList.add('--user');
 
       for (String subArgumentLoop in subArgumentList) {
@@ -31,8 +51,8 @@ class Flatpak {
 
   Future<FlatpakApplication> isApplicationAlreadyInstalled(
       String applicationId) async {
-    ProcessResult result = await Process.run(
-        getFlatpakCommand(), getFlatpakArgumentList(['info', applicationId]));
+    ProcessResult result =
+        await runProcess(flatpakCommand, ['info', applicationId]);
 
     stdout.write(result.stdout);
 
@@ -47,15 +67,14 @@ class Flatpak {
 
   Future<String> installApplicationThenOverrideList(
       String applicationId, List<List<String>> subProcessList) async {
-    ProcessResult result = await Process.run(getFlatpakCommand(),
-        getFlatpakArgumentList(['install', '-y', '--system', applicationId]));
+    ProcessResult result = await runProcess(
+        flatpakCommand, ['install', '-y', '--system', applicationId]);
 
     stdout.write(result.stdout);
     stderr.write(result.stderr);
 
     for (List<String> argListLoop in subProcessList) {
-      ProcessResult subResult = await Process.run(
-          getFlatpakCommand(), getFlatpakArgumentList(argListLoop));
+      await runProcess(flatpakCommand, argListLoop);
     }
 
     return result.stdout.toString();
@@ -63,16 +82,11 @@ class Flatpak {
 
   Future<String> uninstallApplicationThenOverrideList(
       String applicationId, List<List<String>> subProcessList) async {
-    ProcessResult result = await Process.run(getFlatpakCommand(),
-        getFlatpakArgumentList(['uninstall', '-y', '--system', applicationId]));
+    ProcessResult result = await runProcess(
+        flatpakCommand, ['uninstall', '-y', '--system', applicationId]);
 
     stdout.write(result.stdout);
     stderr.write(result.stderr);
-
-    for (List<String> argListLoop in subProcessList) {
-      ProcessResult subResult = await Process.run(
-          getFlatpakCommand(), getFlatpakArgumentList(argListLoop));
-    }
 
     return result.stdout.toString();
   }

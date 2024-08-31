@@ -1,34 +1,36 @@
 import 'dart:io' as io;
+import 'package:dupot_easy_flatpak/Process/commands.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'dart:io';
 
 class FirstInstallation {
+  late Commands commands;
+
+  FirstInstallation({required this.commands});
+
   Future<void> mkdir(String path) async {
-    var result = Process.runSync('/usr/bin/mkdir', [path]);
-    print(result.stdout);
-    print(result.stderr);
-
-    await cwd();
-  }
-
-  Future<void> cwd() async {
-    var result = Process.runSync('/usr/bin/pwd', []);
+    io.ProcessResult result =
+        await commands.runProcessSync('/usr/bin/mkdir', [path]);
     print(result.stdout);
     print(result.stderr);
   }
 
   Future<void> copyTo(String fromPath, String targetPath) async {
-    var result = Process.runSync('/usr/bin/cp', [fromPath, targetPath],
-        runInShell: true);
+    io.ProcessResult result = await commands.runProcessSync(
+      '/usr/bin/cp',
+      [fromPath, targetPath],
+    );
     print(result.stdout);
     print(result.stderr);
   }
 
   Future<void> unarchive(String archivePath, String targetPath) async {
-    var result = Process.runSync(
+    io.ProcessResult result = await commands.runProcessSync(
         '/usr/bin/tar', ['-xvzf', archivePath, '-C', targetPath]);
     print(result.stdout);
     print(result.stderr);
@@ -42,29 +44,29 @@ class FirstInstallation {
     io.Directory documentsTargetDirectory =
         io.Directory(p.join(appDocumentsDirPath, "EasyFlatpak"));
 
-    if (!documentsTargetDirectory.existsSync()) {
-      await mkdir(documentsTargetDirectory.path);
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-      await copyAssetTo('assets/db/flathub_database.db',
-          '${documentsTargetDirectory.path}/flathub_database.db');
+    io.File buildInstalled = File('${documentsTargetDirectory.path}/build.log');
 
-      String targetIconsArchive =
-          '${documentsTargetDirectory.path}/Archive.tar.gz';
-
-      await copyAssetTo('assets/icons/Archive.tar.gz', targetIconsArchive);
-
-      await unarchive(targetIconsArchive, documentsTargetDirectory.path);
-
-/*
-      await copyTo('./assets/db/flathub_database.db',
-          '${documentsTargetDirectory.path}/flathub_database.db');
-
-      await unarchive(
-          './assets/icons/Archive.tar.gz', documentsTargetDirectory.path);
-          */
-    } else {
-      print('already installed');
+    if (buildInstalled.existsSync()) {
+      String buildInfo = buildInstalled.readAsStringSync();
+      if (buildInfo == packageInfo.version) {
+        return;
+      } else {
+        print(
+            'build installed $buildInfo different current ${packageInfo.version}');
+      }
     }
+    print('install icons');
+
+    String targetIconsArchive =
+        '${documentsTargetDirectory.path}/Archive.tar.gz';
+
+    await copyAssetTo('assets/icons/Archive.tar.gz', targetIconsArchive);
+
+    await unarchive(targetIconsArchive, documentsTargetDirectory.path);
+
+    buildInstalled.writeAsStringSync(packageInfo.version);
   }
 
   Future<void> copyAssetTo(String assetPath, String targetPath) async {

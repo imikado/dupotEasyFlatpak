@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:dupot_easy_flatpak/Process/flatpak.dart';
+import 'package:dupot_easy_flatpak/Models/settings.dart';
+import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
@@ -67,9 +68,12 @@ class _Uninstallation extends State<Uninstallation> {
     });
   }
 
-  void install(String applicationId) async {
-    String stdout =
-        await Flatpak().uninstallApplicationThenOverrideList(applicationId, []);
+  void install(BuildContext context, String applicationId) async {
+    Settings settingsObj = Settings(context: context);
+    await settingsObj.load();
+
+    String stdout = await Commands(settingsObj: settingsObj)
+        .uninstallApplicationThenOverrideList(applicationId, []);
 
     setState(() {
       stateFlatpakOutput =
@@ -106,7 +110,7 @@ class _Uninstallation extends State<Uninstallation> {
 
       getData();
 
-      install(args.applicationId);
+      install(context, args.applicationId);
     }
 
     const TextStyle outputTextStyle =

@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:dupot_easy_flatpak/Process/flatpak.dart';
+import 'package:dupot_easy_flatpak/Models/settings.dart';
+import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
@@ -69,9 +70,12 @@ class _Installation extends State<Installation> {
     });
   }
 
-  void install(String applicationId) async {
-    String stdout =
-        await Flatpak().installApplicationThenOverrideList(applicationId, []);
+  void install(BuildContext context, String applicationId) async {
+    Settings settingsObj = Settings(context: context);
+    await settingsObj.load();
+
+    String stdout = await Commands(settingsObj: settingsObj)
+        .installApplicationThenOverrideList(applicationId, []);
     setState(() {
       stateFlatpakOutput =
           "$stdout \n ${AppLocalizations.of(context).tr('installation_finished')}";
@@ -108,7 +112,7 @@ class _Installation extends State<Installation> {
 
       getData();
 
-      install(args.applicationId);
+      install(context, args.applicationId);
     }
 
     const TextStyle outputTextStyle =

@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:dupot_easy_flatpak/Models/permission.dart';
 import 'package:dupot_easy_flatpak/Models/recipe.dart';
 import 'package:dupot_easy_flatpak/Models/recipe_factory.dart';
-import 'package:dupot_easy_flatpak/Process/flatpak.dart';
+import 'package:dupot_easy_flatpak/Models/settings.dart';
+import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/applicationIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/Arguments/categoryIdArgument.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
@@ -140,13 +141,16 @@ class _InstallationWithRecipe extends State<InstallationWithRecipe> {
 
     loadSetup(recipe).then((isSetupOk) {
       if (isSetupOk) {
-        install(applicationId);
+        install(context, applicationId);
       }
     });
   }
 
-  void install(String applicationId) async {
-    String stdout = await Flatpak()
+  void install(BuildContext context, String applicationId) async {
+    Settings settingsObj = Settings(context: context);
+    await settingsObj.load();
+
+    String stdout = await Commands(settingsObj: settingsObj)
         .installApplicationThenOverrideList(applicationId, processList);
     setState(() {
       stateFlatpakOutput =
