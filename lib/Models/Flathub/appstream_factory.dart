@@ -58,7 +58,8 @@ class AppStreamFactory {
 
     if (!File(dbPath).existsSync()) {
       final db = await getDb();
-
+      print('Error database does not exist');
+/** 
       db.execute('''
       CREATE TABLE $constTableAppStream 
           (
@@ -95,6 +96,7 @@ class AppStreamFactory {
         await db
             .insert(constTableCategory, <String, Object?>{'id': categoryLoop});
       }
+      */
     } else {
       print('database already exist');
     }

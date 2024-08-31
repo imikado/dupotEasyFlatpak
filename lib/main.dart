@@ -33,7 +33,7 @@ void main() async {
     databaseFactory = databaseFactoryFfi;
 
     final appStreamFactory = AppStreamFactory();
-    await appStreamFactory.create();
+    //await appStreamFactory.create();
 
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
     await flathubApi.load();
