@@ -46,26 +46,12 @@ class _Installation extends State<Installation> {
 
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
-    List<MenuItem> menuItemList = [
-      MenuItem('Home', () {
-        Navigator.popAndPushNamed(context, '/');
-      })
-    ];
-
-    for (String categoryIdLoop in categoryIdList) {
-      menuItemList.add(MenuItem(categoryIdLoop, () {
-        Navigator.popAndPushNamed(context, '/category',
-            arguments: CategoryIdArgment(categoryIdLoop));
-      }));
-    }
-
     AppStream appStream =
         await appStreamFactory.findAppStreamById(applicationId);
 
     setState(() {
       stateCategoryIdList = categoryIdList;
       stateAppStream = appStream;
-      stateMenuItemList = menuItemList;
       stateIsLoaded = true;
     });
   }
@@ -132,12 +118,6 @@ class _Installation extends State<Installation> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
         body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-              width: 240,
-              child: SideMenu(
-                menuItemList: stateMenuItemList,
-                selected: categorySelected,
-              )),
           SizedBox(width: 10),
           Expanded(
               child: Card(

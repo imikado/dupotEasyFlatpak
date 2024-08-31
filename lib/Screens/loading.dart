@@ -7,6 +7,10 @@ import 'package:dupot_easy_flatpak/Process/flathub_api.dart';
 import 'package:flutter/material.dart';
 
 class Loading extends StatefulWidget {
+  Loading({required this.handle});
+
+  late Function handle;
+
   @override
   State<StatefulWidget> createState() => _Loading();
 }
@@ -32,15 +36,13 @@ class _Loading extends State<Loading> {
     setState(() {
       isLoaded = true;
     });
-
-    Navigator.popAndPushNamed(context, '/');
   }
 
   @override
   Widget build(BuildContext context) {
     if (!isLoaded) {
       processInit(context).then((value) {
-        Navigator.popAndPushNamed(context, '/');
+        widget.handle();
       });
     }
 

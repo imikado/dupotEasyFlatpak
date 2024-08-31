@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu(
-      {super.key, required this.menuItemList, required this.selected});
+      {super.key,
+      required this.menuItemList,
+      required this.pageSelected,
+      required this.categoryIdSelected});
 
   final List<MenuItem> menuItemList;
-  final String selected;
+  final String pageSelected;
+  final String categoryIdSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,8 @@ class SideMenu extends StatelessWidget {
         child: ListView(
           children: menuItemList.map((menuItemLoop) {
             bool isSelected = false;
-            if (menuItemLoop.label == selected) {
+            if (menuItemLoop.pageSelected == pageSelected &&
+                menuItemLoop.categoryIdSelected == categoryIdSelected) {
               isSelected = true;
             }
 

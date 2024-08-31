@@ -47,15 +47,6 @@ class _Home extends State<Home> {
 
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
-    List<MenuItem> menuItemList = [
-      MenuItem('Search', () {
-        Navigator.popAndPushNamed(context, '/search');
-      }),
-      MenuItem(menuSelected, () {
-        Navigator.popAndPushNamed(context, '/');
-      })
-    ];
-
     /*List<SidebarItem> sideMenuItemList = [
       SidebarItem(icon: Icons.home, text: 'home'),
     ];*/
@@ -66,12 +57,6 @@ class _Home extends State<Home> {
 
       appStreamListList.add(appStreamList);
 
-      menuItemList.add(MenuItem(categoryIdLoop, () {
-        Navigator.popAndPushNamed(context, '/category',
-            arguments: CategoryIdArgment(categoryIdLoop));
-        //print(categoryIdLoop);
-      }));
-
       /*
       sideMenuItemList.add(
         SidebarItem(icon: Icons.app_blocking_sharp, text: categoryIdLoop),
@@ -81,7 +66,6 @@ class _Home extends State<Home> {
     setState(() {
       stateCategoryIdList = categoryIdList;
       stateAppStreamListList = appStreamListList;
-      stateMenuItemList = menuItemList;
     });
   }
 
@@ -95,12 +79,6 @@ class _Home extends State<Home> {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-                width: 240,
-                child: SideMenu(
-                  menuItemList: stateMenuItemList,
-                  selected: menuSelected,
-                )),
             Expanded(
                 child: Scrollbar(
                     interactive: false,

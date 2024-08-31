@@ -14,6 +14,7 @@ import 'package:dupot_easy_flatpak/Screens/installation_with_recipe.dart';
 import 'package:dupot_easy_flatpak/Screens/loading.dart';
 import 'package:dupot_easy_flatpak/Screens/search.dart';
 import 'package:dupot_easy_flatpak/Screens/uninstallation.dart';
+import 'package:dupot_easy_flatpak/dupot_easy_flatpak.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -58,6 +59,8 @@ void main() async {
   }
 }
 
+
+/*
 class DupotEasyFlatpak extends StatefulWidget {
   const DupotEasyFlatpak({super.key});
 
@@ -102,3 +105,4 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
         });
   }
 }
+*/

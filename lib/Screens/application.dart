@@ -47,22 +47,6 @@ class _Application extends State<Application> {
 
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
-    List<MenuItem> menuItemList = [
-      MenuItem('Search', () {
-        Navigator.popAndPushNamed(context, '/search');
-      }),
-      MenuItem('Home', () {
-        Navigator.popAndPushNamed(context, '/');
-      })
-    ];
-
-    for (String categoryIdLoop in categoryIdList) {
-      menuItemList.add(MenuItem(categoryIdLoop, () {
-        Navigator.popAndPushNamed(context, '/category',
-            arguments: CategoryIdArgment(categoryIdLoop));
-      }));
-    }
-
     AppStream appStream =
         await appStreamFactory.findAppStreamById(applicationId);
 
@@ -73,7 +57,6 @@ class _Application extends State<Application> {
     setState(() {
       stateCategoryIdList = categoryIdList;
       stateAppStream = appStream;
-      stateMenuItemList = menuItemList;
       stateIsLoaded = true;
     });
   }
@@ -145,12 +128,6 @@ class _Application extends State<Application> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.grey[200],
         body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-              width: 240,
-              child: SideMenu(
-                menuItemList: stateMenuItemList,
-                selected: categorySelected,
-              )),
           SizedBox(width: 10),
           Expanded(
               child: Card(
