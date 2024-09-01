@@ -46,6 +46,12 @@ class _Loading extends State<Loading> {
       });
     }
 
-    return Text(AppLocalizations.of(context).tr("loading"));
+    return Scaffold(
+        backgroundColor: Color.fromARGB(255, 205, 230, 250),
+        body: Center(
+          child: Column(
+            children: [Image.asset('assets/logos/512x512.png')],
+          ),
+        ));
   }
 }

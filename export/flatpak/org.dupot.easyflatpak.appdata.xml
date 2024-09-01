@@ -12,10 +12,10 @@
   
    <name>Michael Bertocchi</name>
   </developer>
-  <summary>Simplify installation for some flatpak's application</summary>
+  <summary>A simple flatpak store</summary>
   <description>
     <p>
-    Use a recipe system (in json format) to setup easier way to install some flatpak's application. 
+    Install you flatpak application, and for some which need, we have recipe to help you ton install it better. 
     </p>
     <p>
     For example, for Steam, it ask user to choose folder where he stores his games before installation
@@ -35,6 +35,15 @@
       <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_04.png</image> 
     </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_05.png</image> 
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_06.png</image> 
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/4c7f05884ef6ed963bbaef2aac30501ed697ebab/export/screenshots/Screenshot_07.png</image> 
+    </screenshot>
     </screenshots>
 
     <url type="homepage">https://www.dupot.org/desktop.html</url>
@@ -43,7 +52,7 @@
     <content_rating type="oars-1.1"/>
     <releases>
 
-        <release date="2024-08-06" version="0.0.17"/>
+        <release date="2024-09-01" version="2.0.0"/>
     </releases>
 
 </component>
