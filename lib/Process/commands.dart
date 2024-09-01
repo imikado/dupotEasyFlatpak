@@ -40,6 +40,7 @@ class Commands {
       argumentList.add('--host');
       argumentList.add(command);
       argumentList.add('--user');
+      argumentList.add('flathub');
 
       for (String subArgumentLoop in subArgumentList) {
         argumentList.add(subArgumentLoop);
