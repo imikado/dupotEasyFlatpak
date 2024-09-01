@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
@@ -61,20 +62,62 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            leading: const Icon(Icons.home), title: const Text('Easy Flatpak')),
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.grey[200],
-        body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-              width: 240,
-              child: SideMenu(
-                menuItemList: stateMenuItemList,
-                pageSelected: widget.pageSelected,
-                categoryIdSelected: widget.categoryIdSelected,
-              )),
-          const SizedBox(width: 10),
-          Expanded(child: widget.content)
-        ]));
+      appBar: AppBar(
+        //leading: const Icon(Icons.home),
+        title: const Text('Easy Flatpak'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
+      ),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.grey[200],
+      body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Container(
+            width: 240,
+            child: SideMenu(
+              menuItemList: stateMenuItemList,
+              pageSelected: widget.pageSelected,
+              categoryIdSelected: widget.categoryIdSelected,
+            )),
+        const SizedBox(width: 10),
+        Expanded(child: widget.content),
+      ]),
+      drawer: Drawer(
+          child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Image.asset('assets/logos/512x512.png'),
+            ),
+            Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(children: [
+                  Text(
+                      '${AppLocalizations.of(context).tr('Author')}: Michael Bertocchi'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                      '${AppLocalizations.of(context).tr('Website')}: www.dupot.org'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                      '${AppLocalizations.of(context).tr('License')}:  LGPL-2.1')
+                ]))
+          ]) // Populate the Drawer in the next step.
+          ),
+    );
   }
 }

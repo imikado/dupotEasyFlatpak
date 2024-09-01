@@ -52,7 +52,10 @@ class AppLocalizations {
       'Science': 'Science',
       'System': 'System',
       'Utility': 'Utility',
-      'Search...': 'Search...'
+      'Search...': 'Search...',
+      'Author': 'Author',
+      'Website': 'Website',
+      'License': 'License'
     },
     'fr': {
       'loading': 'Chargement',
@@ -94,7 +97,10 @@ class AppLocalizations {
       'Science': 'Science',
       'System': 'Système',
       'Utility': 'Outils',
-      'Search...': 'Recherche...'
+      'Search...': 'Recherche...',
+      'Author': 'Auteur',
+      'Website': 'Site',
+      'License': 'Licence'
     },
   };
 
