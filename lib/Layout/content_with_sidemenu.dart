@@ -3,6 +3,7 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ContentWithSidemenu extends StatefulWidget {
   late Widget content;
@@ -28,6 +29,8 @@ class ContentWithSidemenu extends StatefulWidget {
 
 class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
   List<MenuItem> stateMenuItemList = [];
+
+  String version = '';
 
   @override
   void initState() {
@@ -56,6 +59,10 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
       setState(() {
         stateMenuItemList = menuItemList;
       });
+
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+      version = packageInfo.version;
     }
   }
 
@@ -114,7 +121,11 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
                     height: 10,
                   ),
                   Text(
-                      '${AppLocalizations.of(context).tr('License')}:  LGPL-2.1')
+                      '${AppLocalizations.of(context).tr('License')}:  LGPL-2.1'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(version)
                 ]))
           ]) // Populate the Drawer in the next step.
           ),

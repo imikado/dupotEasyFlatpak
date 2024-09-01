@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:archive/archive_io.dart';
 
 import 'dart:io';
 
@@ -30,10 +31,10 @@ class FirstInstallation {
   }
 
   Future<void> unarchive(String archivePath, String targetPath) async {
-    io.ProcessResult result = await commands.runProcessSync(
-        '/usr/bin/tar', ['-xvzf', archivePath, '-C', targetPath]);
-    print(result.stdout);
-    print(result.stderr);
+    final inputStream = InputFileStream(archivePath);
+    final archive = ZipDecoder().decodeBuffer(inputStream);
+
+    await extractArchiveToDisk(archive, targetPath);
   }
 
   Future<void> process() async {
@@ -59,10 +60,9 @@ class FirstInstallation {
     }
     print('install icons');
 
-    String targetIconsArchive =
-        '${documentsTargetDirectory.path}/Archive.tar.gz';
+    String targetIconsArchive = '${documentsTargetDirectory.path}/Archive.zip';
 
-    await copyAssetTo('assets/icons/Archive.tar.gz', targetIconsArchive);
+    await copyAssetTo('assets/icons/Archive.zip', targetIconsArchive);
 
     await unarchive(targetIconsArchive, documentsTargetDirectory.path);
 
