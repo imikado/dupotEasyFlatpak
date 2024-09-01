@@ -27,6 +27,7 @@ postuninstall_scripts:
 
 keywords:
   - flatpak
+  - store
 
 generic_name: Easy flatpak
 

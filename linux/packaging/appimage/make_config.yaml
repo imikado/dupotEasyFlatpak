@@ -1,0 +1,28 @@
+display_name: Easy flatpak
+
+icon: export/deb/512x512.png
+
+keywords:
+  - flatpak
+  - store
+
+generic_name: Easy flatpak
+
+categories:
+  - Utility
+
+startup_notify: true
+
+# You can specify the shared libraries that you want to bundle with your app
+#
+# flutter_distributor automatically detects the shared libraries that your app
+# depends on, but you can also specify them manually here.
+#
+# The following example shows how to bundle the libcurl library with your app.
+#
+# include:
+#   - libcurl.so.4
+include: []
+# You can also specify [metainfo](https://freedesktop.org/software/appstream/docs/chap-Quickstart.html) file
+# which contains metadata of the app.
+# metainfo: linux/packaging/myappid.appdata.xml

@@ -19,11 +19,11 @@ requires:
 
 keywords:
   - flatpak
+  - store
 
 generic_name: Easy flatpak
 
 categories:
-  - Development
   - Utility
 
 startup_notify: true
