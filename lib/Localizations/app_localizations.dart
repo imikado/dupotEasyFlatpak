@@ -39,7 +39,20 @@ class AppLocalizations {
       'application_json': 'Application\'s json setup recipie',
       'processing_form': 'Processing',
       'save': 'Save',
-      'close': 'close'
+      'close': 'close',
+      'Search': 'Search',
+      'Home': 'Home',
+      'AudioVideo': 'Audio / Video',
+      'Development': 'Development',
+      'Education': 'Education',
+      'Game': 'Game',
+      'Graphics': 'Graphics',
+      'Network': 'Network',
+      'Office': 'Office',
+      'Science': 'Science',
+      'System': 'System',
+      'Utility': 'Utility',
+      'Search...': 'Search...'
     },
     'fr': {
       'loading': 'Chargement',
@@ -72,7 +85,16 @@ class AppLocalizations {
           'Json de paramétrage de la recette pour l\'application',
       'processing_form': 'Traitement en cours',
       'save': 'Enregistrer',
-      'close': 'Fermer'
+      'Search': 'Recherche',
+      'Home': 'Accueil',
+      'close': 'Fermer',
+      'Graphics': 'Graphisme',
+      'Network': 'Réseau',
+      'Office': 'Bureautique',
+      'Science': 'Science',
+      'System': 'Système',
+      'Utility': 'Outils',
+      'Search...': 'Recherche...'
     },
   };
 

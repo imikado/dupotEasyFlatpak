@@ -4,7 +4,8 @@ import 'package:dupot_easy_flatpak/Screens/Store/block.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final Function handleGoToApplication;
+  const HomeView({super.key, required this.handleGoToApplication});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -19,7 +20,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     loadData();
@@ -57,9 +57,11 @@ class _HomeViewState extends State<HomeView> {
             controller: scrollController,
             itemBuilder: (context, index) {
               return Block(
-                  categoryId: stateCategoryIdList[index],
-                  appStreamList: stateAppStreamListList[index],
-                  appPath: appPath);
+                categoryId: stateCategoryIdList[index],
+                appStreamList: stateAppStreamListList[index],
+                appPath: appPath,
+                handleGoToApplication: widget.handleGoToApplication,
+              );
             }));
   }
 }

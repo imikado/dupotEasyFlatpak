@@ -9,25 +9,27 @@ class Block extends StatelessWidget {
   final String categoryId;
   final List<AppStream> appStreamList;
   final String appPath;
+  final Function handleGoToApplication;
 
   const Block(
       {required this.categoryId,
       required this.appStreamList,
-      required this.appPath});
+      required this.appPath,
+      required this.handleGoToApplication});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           categoryId,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
               color: Colors.blueGrey),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Wrap(
             children: appStreamList.map((appStreamLoop) {
           String icon = '';
@@ -41,73 +43,10 @@ class Block extends StatelessWidget {
                   id: appStreamLoop.id,
                   title: appStreamLoop.name,
                   sumary: appStreamLoop.summary,
-                  icon: icon));
+                  icon: icon,
+                  handle: handleGoToApplication));
         }).toList()),
       ],
     );
-  }
-
-  Widget buildOFf(BuildContext context) {
-    int maxNumberPerRow = 3;
-
-    List<Widget> childrenList = [
-      SizedBox(
-        height: 30,
-      ),
-      Text(
-        categoryId,
-        style: TextStyle(fontSize: 32),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-    ];
-    List<Widget> itemRowList = [];
-
-    int appDisplayed = 0;
-    int maxAppDisplayed = 9;
-
-    for (AppStream appStreamLoop in appStreamList) {
-      appDisplayed++;
-      if (appDisplayed > maxAppDisplayed) {
-        break;
-      }
-
-      itemRowList.add(SizedBox(
-          width: 300,
-          height: 300,
-          child: AppButton(
-              id: appStreamLoop.id,
-              title: appStreamLoop.name,
-              sumary: appStreamLoop.summary,
-              icon: appStreamLoop.icon)));
-      if (itemRowList.length >= maxNumberPerRow) {
-        childrenList.add(Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: itemRowList.toList(),
-        ));
-        itemRowList.clear();
-      }
-    }
-    if (itemRowList.isNotEmpty) {
-      childrenList.add(Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: itemRowList,
-      ));
-      itemRowList.clear();
-    }
-
-    return Column(children: childrenList.toList());
-    /*
-    Container(
-        height: 600,
-        child: GridView.count(
-            clipBehavior: Clip.hardEdge,
-            crossAxisCount: 6,
-            children: applicationList.map((e) {
-              return AppButton(title: e.name, sumary: e.summary, icon: e.icon);
-            }).toList()));
-            */
   }
 }

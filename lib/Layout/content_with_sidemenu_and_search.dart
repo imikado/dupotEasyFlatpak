@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
@@ -73,8 +74,8 @@ class _ContentWithSidemenuAndSearchState
             controller: _searchController,
             style: const TextStyle(color: Colors.white),
             cursorColor: Colors.white,
-            decoration: const InputDecoration(
-              hintText: 'Search...',
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context).tr('Search...'),
               hintStyle: TextStyle(color: Colors.white54),
               border: InputBorder.none,
             ),

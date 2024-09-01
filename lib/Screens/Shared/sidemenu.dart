@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class SideMenu extends StatelessWidget {
                 menuItemLoop.action();
               },
               title: Text(
-                menuItemLoop.label,
+                AppLocalizations.of(context).tr(menuItemLoop.label),
                 style: isSelected ? TextStyle(color: Colors.white) : null,
               ),
             );

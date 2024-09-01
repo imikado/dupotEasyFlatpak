@@ -63,7 +63,8 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
             MaterialPage(
                 key: const ValueKey(constPageHome),
                 child: ContentWithSidemenu(
-                  content: const HomeView(),
+                  content:
+                      HomeView(handleGoToApplication: _handleGoToApplication),
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
@@ -185,12 +186,14 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   void _handleGoToHome() {
     setState(() {
       statePageSelected = constPageHome;
+      stateCategoryIdSelected = '';
     });
   }
 
   void _handleGoToSearch() {
     setState(() {
       statePageSelected = constPageSearch;
+      stateCategoryIdSelected = '';
     });
   }
 

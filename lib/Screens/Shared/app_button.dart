@@ -9,13 +9,15 @@ class AppButton extends StatelessWidget {
   final String title;
   final String sumary;
   final String icon;
+  final Function handle;
 
   const AppButton(
       {super.key,
       required this.id,
       required this.title,
       required this.sumary,
-      required this.icon});
+      required this.icon,
+      required this.handle});
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,7 @@ class AppButton extends StatelessWidget {
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             ListTile(
               onTap: () {
-                Navigator.popAndPushNamed(context, '/application',
-                    arguments: ApplicationIdArgment(id));
+                handle(id);
               },
               title: Text(
                 title,
