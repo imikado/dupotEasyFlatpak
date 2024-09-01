@@ -13,6 +13,9 @@ build_arch: x86_64
 requires:
   - flatpak
   - zenity
+  - sqlite3
+  - libsqlite3-dev
+  - tar
 
 keywords:
   - flatpak
