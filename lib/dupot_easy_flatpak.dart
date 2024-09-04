@@ -87,7 +87,6 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
         Locale('en', ''),
         Locale('fr', ''),
       ],
-      locale: Locale('fr', ''),
       home: Navigator(
         pages: [
           if (statePageSelected == '')
