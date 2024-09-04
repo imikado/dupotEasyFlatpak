@@ -10,7 +10,9 @@ import 'package:dupot_easy_flatpak/Views/installation_with_recipe_view.dart';
 import 'package:dupot_easy_flatpak/Views/search_view.dart';
 import 'package:dupot_easy_flatpak/Views/uninstallation_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 
 class DupotEasyFlatpak extends StatefulWidget {
   const DupotEasyFlatpak({super.key});
@@ -26,6 +28,8 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   String stateSearch = '';
   bool show404 = false;
 
+  bool isDarkMode = false;
+
   static const String constPageCategory = 'category';
   static const String constPageApplication = 'application';
   static const String constPageHome = 'home';
@@ -37,12 +41,43 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme lightColorScheme =
+        ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 54, 79, 148));
+
+    ColorScheme darkColorScheme =
+        ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 2, 0, 12));
+
+    ThemeData lightTheme = ThemeData(
+      brightness: Brightness.light,
+      colorScheme: lightColorScheme,
+      primaryColor: lightColorScheme.primary,
+      secondaryHeaderColor: lightColorScheme.secondary,
+      canvasColor: lightColorScheme.surface,
+      textTheme: const TextTheme(
+          titleLarge: TextStyle(color: Colors.white),
+          headlineLarge: TextStyle(color: Colors.black)),
+      cardTheme: CardTheme(color: lightColorScheme.secondary),
+      cardColor: lightColorScheme.surfaceBright,
+      scaffoldBackgroundColor: lightColorScheme.primaryContainer,
+      useMaterial3: true,
+    );
+
+    ThemeData darkTheme2 = ThemeData(
+      brightness: Brightness.dark,
+      primaryColor: lightColorScheme.primary,
+      secondaryHeaderColor: lightColorScheme.secondary,
+      canvasColor: lightColorScheme.surface,
+      textTheme: const TextTheme(
+          titleLarge: TextStyle(color: Colors.white),
+          headlineLarge: TextStyle(color: Colors.black)),
+      cardTheme: CardTheme(color: lightColorScheme.secondary),
+      cardColor: lightColorScheme.surfaceTint,
+      scaffoldBackgroundColor: lightColorScheme.primaryContainer,
+      useMaterial3: true,
+    );
+
     return MaterialApp(
-      theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 205, 230, 250)),
-        useMaterial3: false,
-      ),
+      theme: isDarkMode ? darkTheme2 : lightTheme,
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -52,6 +87,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
         Locale('en', ''),
         Locale('fr', ''),
       ],
+      locale: Locale('fr', ''),
       home: Navigator(
         pages: [
           if (statePageSelected == '')
@@ -68,6 +104,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
+                  handleToggleDarkMode: _handleToggleDarkMode,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -83,6 +120,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
+                  handleToggleDarkMode: _handleToggleDarkMode,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -115,6 +153,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
+                  handleToggleDarkMode: _handleToggleDarkMode,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -130,6 +169,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
+                  handleToggleDarkMode: _handleToggleDarkMode,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -145,6 +185,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
+                  handleToggleDarkMode: _handleToggleDarkMode,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -160,6 +201,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
+                  handleToggleDarkMode: _handleToggleDarkMode,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -167,6 +209,18 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
         onPopPage: (route, result) => route.didPop(result),
       ),
     );
+  }
+
+  void _handleToggleDarkMode() {
+    if (isDarkMode) {
+      setState(() {
+        isDarkMode = false;
+      });
+    } else {
+      setState(() {
+        isDarkMode = true;
+      });
+    }
   }
 
   void _handleGoToCategory(String categoryId) {

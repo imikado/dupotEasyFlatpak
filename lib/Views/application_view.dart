@@ -73,6 +73,7 @@ class _ApplicationViewState extends State<ApplicationView> {
     }
 
     return Card(
+      color: Theme.of(context).cardColor,
       child: stateAppStream == null
           ? const CircularProgressIndicator()
           : Column(
@@ -160,12 +161,12 @@ class _ApplicationViewState extends State<ApplicationView> {
 
   Widget getButton() {
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-        backgroundColor: Colors.blueGrey,
-        padding: const EdgeInsets.all(20),
-        textStyle: const TextStyle(fontSize: 14));
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        padding: EdgeInsets.all(20),
+        textStyle: TextStyle(fontSize: 14, color: Colors.white));
 
     final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
-        backgroundColor: Colors.grey,
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         padding: const EdgeInsets.all(20),
         textStyle: const TextStyle(fontSize: 14));
 

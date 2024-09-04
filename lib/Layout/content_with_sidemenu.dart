@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
@@ -14,6 +15,8 @@ class ContentWithSidemenu extends StatefulWidget {
   late Function handleGoToCategory;
   late Function handleGoToSearch;
 
+  late Function handleToggleDarkMode;
+
   ContentWithSidemenu(
       {super.key,
       required this.content,
@@ -21,7 +24,8 @@ class ContentWithSidemenu extends StatefulWidget {
       required this.categoryIdSelected,
       required this.handleGoToHome,
       required this.handleGoToCategory,
-      required this.handleGoToSearch});
+      required this.handleGoToSearch,
+      required this.handleToggleDarkMode});
 
   @override
   _ContentWithSidemenuState createState() => _ContentWithSidemenuState();
@@ -70,11 +74,16 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColorDark,
         //leading: const Icon(Icons.home),
-        title: const Text('Easy Flatpak'),
+        title: Text(
+          'Easy Flatpak',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         leading: Builder(
           builder: (context) {
             return IconButton(
+              color: Theme.of(context).primaryTextTheme.titleLarge!.color,
               icon: const Icon(Icons.menu),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
@@ -82,9 +91,17 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
             );
           },
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                widget.handleToggleDarkMode();
+                print('siwth dark');
+              },
+              icon: Icon(Icons.dark_mode)),
+        ],
       ),
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Container(
             width: 240,

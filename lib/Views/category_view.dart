@@ -72,42 +72,44 @@ class _CategoryViewState extends State<CategoryView> {
                   ),
                 );
               } else {
-                return Card(
-                  child: Column(
-                    children: [
-                      Row(
+                return InkWell(
+                    borderRadius: BorderRadius.circular(12.0),
+                    onTap: () {
+                      widget.handleGoToApplication(appStreamLoop.id);
+                    },
+                    child: Card(
+                      color: Theme.of(context).cardColor,
+                      child: Column(
                         children: [
-                          Image.file(
-                              File('$appPath/${appStreamLoop.getIcon()}')),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ListTile(
-                                  onTap: () {
-                                    widget.handleGoToApplication(
-                                        appStreamLoop.id);
-                                  },
-                                  title: Text(
-                                    appStreamLoop.name,
-                                    style: const TextStyle(fontSize: 30),
-                                  ),
+                          Row(
+                            children: [
+                              Image.file(
+                                  File('$appPath/${appStreamLoop.getIcon()}')),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTile(
+                                      title: Text(
+                                        appStreamLoop.name,
+                                        style: const TextStyle(fontSize: 30),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      appStreamLoop.summary,
+                                    )
+                                  ],
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  appStreamLoop.summary,
-                                )
-                              ],
-                            ),
-                          )
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                );
+                    ));
               }
             }));
   }

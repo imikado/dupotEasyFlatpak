@@ -78,6 +78,7 @@ class _UninstallationViewState extends State<UninstallationView> {
         TextStyle(color: Colors.blueGrey, fontSize: 14.0);
 
     return Card(
+      color: Theme.of(context).cardColor,
       child: stateIsInstalling
           ? const CircularProgressIndicator()
           : Column(

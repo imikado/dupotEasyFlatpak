@@ -77,82 +77,89 @@ class _InstallationViewState extends State<InstallationView> {
     const TextStyle outputTextStyle =
         TextStyle(color: Colors.blueGrey, fontSize: 14.0);
 
-    return stateIsInstalling
-        ? const CircularProgressIndicator()
-        : Scrollbar(
-            interactive: false,
-            thumbVisibility: true,
-            controller: scrollController,
-            child: ListView(
-              controller: scrollController,
-              children: [
-                Row(
+    return Card(
+        color: Theme.of(context).cardColor,
+        child: stateIsInstalling
+            ? const CircularProgressIndicator()
+            : Scrollbar(
+                interactive: false,
+                thumbVisibility: true,
+                controller: scrollController,
+                child: ListView(
+                  controller: scrollController,
                   children: [
-                    if (stateAppStream!.icon.length > 10)
-                      Image.file(
-                          File(appPath + '/' + stateAppStream!.getIcon())),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            stateAppStream!.name,
-                            style: const TextStyle(
-                                fontSize: 35, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            stateAppStream!.developer_name,
-                            style: const TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          stateAppStream!.isVerified()
-                              ? TextButton.icon(
-                                  style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.only(
-                                          top: 5, bottom: 5, right: 5, left: 0),
-                                      alignment: AlignmentDirectional.topStart),
-                                  icon: Icon(Icons.verified),
-                                  onPressed: () {},
-                                  label:
-                                      Text(stateAppStream!.getVerifiedLabel()))
-                              : SizedBox(),
-                        ],
-                      ),
-                    ),
-                    getButton()
-                  ],
-                ),
-                Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Text(
-                          stateAppStream!.summary,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        RichText(
-                          overflow: TextOverflow.clip,
-                          text: TextSpan(
-                            text: AppLocalizations.of(context).tr('output'),
-                            style: outputTextStyle,
-                            children: <TextSpan>[
-                              TextSpan(text: stateInstallationOutput),
+                        if (stateAppStream!.icon.length > 10)
+                          Image.file(
+                              File(appPath + '/' + stateAppStream!.getIcon())),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                stateAppStream!.name,
+                                style: const TextStyle(
+                                    fontSize: 35, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                stateAppStream!.developer_name,
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              stateAppStream!.isVerified()
+                                  ? TextButton.icon(
+                                      style: TextButton.styleFrom(
+                                          padding: const EdgeInsets.only(
+                                              top: 5,
+                                              bottom: 5,
+                                              right: 5,
+                                              left: 0),
+                                          alignment:
+                                              AlignmentDirectional.topStart),
+                                      icon: Icon(Icons.verified),
+                                      onPressed: () {},
+                                      label: Text(
+                                          stateAppStream!.getVerifiedLabel()))
+                                  : SizedBox(),
                             ],
                           ),
-                        )
+                        ),
+                        getButton()
                       ],
-                    )),
-              ],
-            ),
-          );
+                    ),
+                    Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              stateAppStream!.summary,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            RichText(
+                              overflow: TextOverflow.clip,
+                              text: TextSpan(
+                                text: AppLocalizations.of(context).tr('output'),
+                                style: outputTextStyle,
+                                children: <TextSpan>[
+                                  TextSpan(text: stateInstallationOutput),
+                                ],
+                              ),
+                            )
+                          ],
+                        )),
+                  ],
+                ),
+              ));
   }
 
   Widget getButton() {

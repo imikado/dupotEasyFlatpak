@@ -15,31 +15,38 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        color: const Color.fromARGB(255, 205, 230, 250),
-        margin: EdgeInsets.all(0),
-        elevation: 5,
-        child: ListView(
-          children: menuItemList.map((menuItemLoop) {
-            bool isSelected = false;
-            if (menuItemLoop.pageSelected == pageSelected &&
-                menuItemLoop.categoryIdSelected == categoryIdSelected) {
-              isSelected = true;
-            }
+    return Padding(
+        padding: EdgeInsets.all(5),
+        child: Card(
+            color: Theme.of(context).primaryColorLight,
+            margin: EdgeInsets.all(0),
+            elevation: 5,
+            child: ListView(
+              children: menuItemList.map((menuItemLoop) {
+                bool isSelected = false;
+                if (menuItemLoop.pageSelected == pageSelected &&
+                    menuItemLoop.categoryIdSelected == categoryIdSelected) {
+                  isSelected = true;
+                }
 
-            return ListTile(
-              tileColor: isSelected ? Colors.blueGrey : null,
+                return ListTile(
+                    tileColor:
+                        isSelected ? Theme.of(context).primaryColorDark : null,
 
-              // selected: menuItemLoop.label == selected,
-              onTap: () {
-                menuItemLoop.action();
-              },
-              title: Text(
-                AppLocalizations.of(context).tr(menuItemLoop.label),
-                style: isSelected ? TextStyle(color: Colors.white) : null,
-              ),
-            );
-          }).toList(),
-        ));
+                    // selected: menuItemLoop.label == selected,
+                    onTap: () {
+                      menuItemLoop.action();
+                    },
+                    title: Text(
+                      AppLocalizations.of(context).tr(menuItemLoop.label),
+                      style: isSelected
+                          ? TextStyle(
+                              backgroundColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionHandleColor)
+                          : null,
+                    ));
+              }).toList(),
+            )));
   }
 }

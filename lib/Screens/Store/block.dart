@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_category.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/app_button.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
@@ -23,7 +24,7 @@ class Block extends StatelessWidget {
       children: [
         const SizedBox(height: 20),
         Text(
-          categoryId,
+          AppLocalizations.of(context).tr(categoryId),
           style: const TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,

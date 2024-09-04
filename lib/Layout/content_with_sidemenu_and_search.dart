@@ -69,6 +69,7 @@ class _ContentWithSidemenuAndSearchState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
           leading: const Icon(Icons.home),
           title: TextField(
             controller: _searchController,
@@ -88,7 +89,7 @@ class _ContentWithSidemenuAndSearchState
           ),
         ),
         resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Container(
               width: 240,
