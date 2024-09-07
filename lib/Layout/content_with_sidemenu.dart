@@ -69,7 +69,6 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
       });
 
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
       version = packageInfo.version;
     }
   }

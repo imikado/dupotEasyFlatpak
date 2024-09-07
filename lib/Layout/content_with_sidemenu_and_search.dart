@@ -3,6 +3,7 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ContentWithSidemenuAndSearch extends StatefulWidget {
   final Widget content;
@@ -34,6 +35,8 @@ class ContentWithSidemenuAndSearch extends StatefulWidget {
 class _ContentWithSidemenuAndSearchState
     extends State<ContentWithSidemenuAndSearch> {
   List<MenuItem> stateMenuItemList = [];
+
+  String version = '';
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -68,43 +71,90 @@ class _ContentWithSidemenuAndSearchState
         stateMenuItemList = menuItemList;
       });
     }
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          leading: const Icon(Icons.home),
-          title: TextField(
-            controller: _searchController,
-            style: const TextStyle(color: Colors.white),
-            cursorColor: Colors.white,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context).tr('Search...'),
-              hintStyle: TextStyle(color: Colors.white54),
-              border: InputBorder.none,
-            ),
-            onChanged: (value) {
-              // Perform search functionality here
-              if (value.length > 2) {
-                widget.handleSearch(value);
-              }
-            },
-          ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColorDark,
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              color: Theme.of(context).primaryTextTheme.titleLarge!.color,
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
         ),
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-              width: 240,
-              child: SideMenu(
-                menuItemList: stateMenuItemList,
-                pageSelected: widget.pageSelected,
-                categoryIdSelected: widget.categoryIdSelected,
-              )),
-          const SizedBox(width: 10),
-          Expanded(child: widget.content)
-        ]));
+        title: TextField(
+          controller: _searchController,
+          style: Theme.of(context).textTheme.titleLarge,
+          cursorColor: Colors.white,
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context).tr('Search...'),
+            hintStyle: TextStyle(color: Colors.white54),
+            border: InputBorder.none,
+          ),
+          onChanged: (value) {
+            // Perform search functionality here
+            if (value.length > 2) {
+              widget.handleSearch(value);
+            }
+          },
+        ),
+      ),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Container(
+            width: 240,
+            child: SideMenu(
+              menuItemList: stateMenuItemList,
+              pageSelected: widget.pageSelected,
+              categoryIdSelected: widget.categoryIdSelected,
+            )),
+        const SizedBox(width: 10),
+        Expanded(child: widget.content)
+      ]),
+      drawer: Drawer(
+          child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Image.asset('assets/logos/512x512.png'),
+            ),
+            Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(children: [
+                  Text(
+                      '${AppLocalizations.of(context).tr('Author')}: Michael Bertocchi'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                      '${AppLocalizations.of(context).tr('Website')}: www.dupot.org'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                      '${AppLocalizations.of(context).tr('License')}:  LGPL-2.1'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(version)
+                ]))
+          ]) // Populate the Drawer in the next step.
+          ),
+    );
   }
 }
