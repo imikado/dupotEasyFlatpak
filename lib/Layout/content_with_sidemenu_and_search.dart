@@ -5,16 +5,17 @@ import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:flutter/material.dart';
 
 class ContentWithSidemenuAndSearch extends StatefulWidget {
-  late Widget content;
-  late String pageSelected;
-  late String categoryIdSelected;
+  final Widget content;
+  final String pageSelected;
+  final String categoryIdSelected;
 
-  late Function handleGoToHome;
-  late Function handleGoToCategory;
-  late Function handleGoToSearch;
-  late Function handleSearch;
+  final Function handleGoToHome;
+  final Function handleGoToCategory;
+  final Function handleGoToSearch;
+  final Function handleGoToInstalledApps;
+  final Function handleSearch;
 
-  ContentWithSidemenuAndSearch(
+  const ContentWithSidemenuAndSearch(
       {super.key,
       required this.content,
       required this.pageSelected,
@@ -22,7 +23,8 @@ class ContentWithSidemenuAndSearch extends StatefulWidget {
       required this.handleGoToHome,
       required this.handleGoToCategory,
       required this.handleGoToSearch,
-      required this.handleSearch});
+      required this.handleSearch,
+      required this.handleGoToInstalledApps});
 
   @override
   _ContentWithSidemenuAndSearchState createState() =>
@@ -50,7 +52,10 @@ class _ContentWithSidemenuAndSearchState
       }, 'search', ''),
       MenuItem('Home', () {
         widget.handleGoToHome();
-      }, 'home', '')
+      }, 'home', ''),
+      MenuItem('InstalledApps', () {
+        widget.handleGoToInstalledApps();
+      }, 'installedApps', '')
     ];
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 

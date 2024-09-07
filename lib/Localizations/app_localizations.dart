@@ -55,7 +55,8 @@ class AppLocalizations {
       'Search...': 'Search...',
       'Author': 'Author',
       'Website': 'Website',
-      'License': 'License'
+      'License': 'License',
+      'InstalledApps': 'Installed applications'
     },
     'fr': {
       'loading': 'Chargement',
@@ -104,7 +105,8 @@ class AppLocalizations {
       'Search...': 'Recherche...',
       'Author': 'Auteur',
       'Website': 'Site',
-      'License': 'Licence'
+      'License': 'Licence',
+      'InstalledApps': 'Aplications installées'
     },
   };
 

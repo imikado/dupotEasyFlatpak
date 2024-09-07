@@ -7,6 +7,7 @@ import 'package:dupot_easy_flatpak/Views/category_view.dart';
 import 'package:dupot_easy_flatpak/Views/home_view.dart';
 import 'package:dupot_easy_flatpak/Views/installation_view.dart';
 import 'package:dupot_easy_flatpak/Views/installation_with_recipe_view.dart';
+import 'package:dupot_easy_flatpak/Views/installedapps_view.dart';
 import 'package:dupot_easy_flatpak/Views/search_view.dart';
 import 'package:dupot_easy_flatpak/Views/uninstallation_view.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   static const String constPageInstallationWithRecipe =
       'installationWithRecipe';
   static const String constPageUninstallation = 'uninstallation';
+  static const String constPageInstalledApps = 'installedApps';
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +106,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -120,6 +123,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -134,6 +138,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
                   handleSearch: _handleSearch,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
@@ -153,6 +158,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -169,6 +175,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -185,6 +192,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -201,6 +209,22 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
+                  pageSelected: statePageSelected,
+                  categoryIdSelected: stateCategoryIdSelected,
+                ))
+          else if (statePageSelected == constPageInstalledApps)
+            MaterialPage(
+                key: const ValueKey(constPageApplication),
+                child: ContentWithSidemenu(
+                  content: InstalledAppsView(
+                    handleGoToApplication: _handleGoToApplication,
+                  ),
+                  handleGoToHome: _handleGoToHome,
+                  handleGoToCategory: _handleGoToCategory,
+                  handleGoToSearch: _handleGoToSearch,
+                  handleToggleDarkMode: _handleToggleDarkMode,
+                  handleGoToInstalledApps: _handleGoToInstalledApps,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -247,6 +271,14 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     setState(() {
       statePageSelected = constPageSearch;
       stateCategoryIdSelected = '';
+    });
+  }
+
+  void _handleGoToInstalledApps() {
+    setState(() {
+      statePageSelected = constPageInstalledApps;
+      stateCategoryIdSelected = '';
+      stateApplicationIdSelected = '';
     });
   }
 

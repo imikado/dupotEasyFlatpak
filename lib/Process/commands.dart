@@ -89,6 +89,15 @@ class Commands {
 
     return result.stdout.toString();
   }
+
+  Future<List<String>> getInstalledApplicationList() async {
+    ProcessResult result =
+        await runProcessSync(flatpakCommand, ['list', '--columns=application']);
+
+    String outputString = result.stdout;
+    List<String> lineList = outputString.split('\n');
+    return lineList;
+  }
 }
 
 class FlatpakApplication {

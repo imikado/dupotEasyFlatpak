@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class ContentWithSidemenu extends StatefulWidget {
-  late Widget content;
-  late String pageSelected;
-  late String categoryIdSelected;
+  final Widget content;
+  final String pageSelected;
+  final String categoryIdSelected;
 
-  late Function handleGoToHome;
-  late Function handleGoToCategory;
-  late Function handleGoToSearch;
+  final Function handleGoToHome;
+  final Function handleGoToCategory;
+  final Function handleGoToSearch;
+  final Function handleGoToInstalledApps;
+  final Function handleToggleDarkMode;
 
-  late Function handleToggleDarkMode;
-
-  ContentWithSidemenu(
+  const ContentWithSidemenu(
       {super.key,
       required this.content,
       required this.pageSelected,
@@ -25,7 +25,8 @@ class ContentWithSidemenu extends StatefulWidget {
       required this.handleGoToHome,
       required this.handleGoToCategory,
       required this.handleGoToSearch,
-      required this.handleToggleDarkMode});
+      required this.handleToggleDarkMode,
+      required this.handleGoToInstalledApps});
 
   @override
   _ContentWithSidemenuState createState() => _ContentWithSidemenuState();
@@ -51,7 +52,10 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
       }, 'search', ''),
       MenuItem('Home', () {
         widget.handleGoToHome();
-      }, 'home', '')
+      }, 'home', ''),
+      MenuItem('InstalledApps', () {
+        widget.handleGoToInstalledApps();
+      }, 'installedApps', '')
     ];
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
