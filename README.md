@@ -7,3 +7,13 @@ This application help you to install your flatpak and for some of them, help you
 ![Application](export/screenshots/Screenshot_01.png)
 
 ![Application](export/screenshots/Screenshot_02.png)
+
+![Application](export/screenshots/Screenshot_03.png)
+
+![Application](export/screenshots/Screenshot_04.png)
+
+![Application](export/screenshots/Screenshot_05.png)
+
+![Application](export/screenshots/Screenshot_06.png)
+
+![Application](export/screenshots/Screenshot_07.png)
