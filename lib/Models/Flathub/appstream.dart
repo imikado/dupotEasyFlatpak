@@ -67,10 +67,17 @@ class AppStream {
   }
 
   String getVerifiedLabel() {
-    if (metadataObj.containsKey('flathub_verified_website')) {
-      return metadataObj['flathub_verified_website'];
+    if (metadataObj.containsKey('flathub_verified_label')) {
+      return metadataObj['flathub_verified_label'];
     }
     return ' ';
+  }
+
+  String getVerifiedUrl() {
+    if (metadataObj.containsKey('flathub_verified_url')) {
+      return metadataObj['flathub_verified_url'];
+    }
+    return '';
   }
 
   List<Map<String, String>> getUrlObjList() {
@@ -94,5 +101,13 @@ class AppStream {
 
   String getIcon() {
     return p.basename(icon);
+  }
+
+  bool lastUpdateIsOlderThan(int days) {
+    if ((DateTime.now().millisecondsSinceEpoch - lastUpdate) >
+        days * 86400000) {
+      return true;
+    }
+    return false;
   }
 }

@@ -403,6 +403,18 @@ class AppStreamFactory {
     return true;
   }
 
+  Future<bool> updateAppStream(AppStream appStream) async {
+    final db = await getDb();
+    db.update(
+      constTableAppStream,
+      appStream.toMap(),
+      where: 'id = ?',
+      whereArgs: [appStream.id],
+    );
+
+    return true;
+  }
+
 /*
   Future<void> update(AppStream dog) async {
     // Get a reference to the database.

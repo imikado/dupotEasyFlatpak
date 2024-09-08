@@ -56,7 +56,8 @@ class AppLocalizations {
       'Author': 'Author',
       'Website': 'Website',
       'License': 'License',
-      'InstalledApps': 'Installed applications'
+      'InstalledApps': 'Installed applications',
+      'Run': 'Run'
     },
     'fr': {
       'loading': 'Chargement',
@@ -106,13 +107,18 @@ class AppLocalizations {
       'Author': 'Auteur',
       'Website': 'Site',
       'License': 'Licence',
-      'InstalledApps': 'Aplications installées'
+      'InstalledApps': 'Aplications installées',
+      'Run': 'Ouvrir'
     },
   };
 
   static List<String> languages() => _localizedValues.keys.toList();
 
   String tr(String key) {
+    if (!_localizedValues[locale.languageCode]!.containsKey(key)) {
+      throw Exception(
+          'Missing localization for key: $key in language ${locale.languageCode}');
+    }
     return _localizedValues[locale.languageCode]![key]!;
   }
 

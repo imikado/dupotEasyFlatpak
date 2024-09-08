@@ -5,12 +5,14 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Models/recipe_factory.dart';
 import 'package:dupot_easy_flatpak/Models/settings.dart';
 import 'package:dupot_easy_flatpak/Process/commands.dart';
-import 'package:dupot_easy_flatpak/Screens/Store/block.dart';
+import 'package:dupot_easy_flatpak/Process/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/install_button.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/install_button_with_recipe.dart';
+import 'package:dupot_easy_flatpak/Screens/Store/run_button.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/uninstall_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ApplicationView extends StatefulWidget {
   String applicationIdSelected;
@@ -56,6 +58,14 @@ class _ApplicationViewState extends State<ApplicationView> {
 
     AppStream appStream =
         await appStreamFactory.findAppStreamById(applicationIdSelected);
+
+    if (appStream.lastUpdateIsOlderThan(7)) {
+      await FlathubApi(appStreamFactory: appStreamFactory)
+          .updateAppStream(applicationIdSelected);
+
+      appStream =
+          await appStreamFactory.findAppStreamById(applicationIdSelected);
+    }
 
     checkAlreadyInstalled(context, applicationIdSelected);
 
@@ -110,12 +120,20 @@ class _ApplicationViewState extends State<ApplicationView> {
                                         top: 5, bottom: 5, right: 5, left: 0),
                                     alignment: AlignmentDirectional.topStart),
                                 icon: const Icon(Icons.verified),
-                                onPressed: () {},
+                                onPressed: () {
+                                  String verifiedUrl =
+                                      stateAppStream!.getVerifiedUrl();
+                                  if (verifiedUrl.length > 0) {
+                                    launchUrl(Uri.parse(verifiedUrl));
+                                  }
+                                },
                                 label: Text(stateAppStream!.getVerifiedLabel()))
                         ],
                       ),
                     ),
-                    getButton()
+                    getButton(),
+                    const SizedBox(width: 5),
+                    getRunButton()
                   ],
                 ),
                 Padding(
@@ -148,15 +166,35 @@ class _ApplicationViewState extends State<ApplicationView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:
                             stateAppStream!.getUrlObjList().map((urlObjLoop) {
+                          String url = urlObjLoop['value'].toString();
+
                           return TextButton.icon(
                             icon: getIcon(urlObjLoop['key'].toString()),
-                            onPressed: () {},
-                            label: Text(urlObjLoop['value'].toString()),
+                            onPressed: () {
+                              launchUrl(Uri.parse(url));
+                            },
+                            label: Text(url),
                           );
                         }).toList()))
               ],
             ),
     );
+  }
+
+  Widget getRunButton() {
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14, color: Colors.white));
+
+    if (stateIsAlreadyInstalled) {
+      return RunButton(
+        buttonStyle: buttonStyle,
+        stateAppStream: stateAppStream,
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 
   Widget getButton() {

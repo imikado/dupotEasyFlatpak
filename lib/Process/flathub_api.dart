@@ -15,6 +15,12 @@ class FlathubApi {
 
   FlathubApi({required this.appStreamFactory});
 
+  Future<void> updateAppStream(String applicationId) async {
+    AppStream appStream = await getAppStream(applicationId);
+
+    await appStreamFactory.updateAppStream(appStream);
+  }
+
   Future<void> load() async {
     final io.Directory appDocumentsDir =
         await getApplicationDocumentsDirectory();
@@ -118,9 +124,22 @@ class FlathubApi {
 
       metadataObj['flathub_verified'] = flathubVerified;
 
-      if (rawMetadata.containsKey('flathub::verification::website')) {
-        metadataObj['flathub_verified_website'] =
-            rawMetadata['flathub::verification::website'];
+      if (rawMetadata.containsKey('flathub::verification::method')) {
+        String method = rawMetadata['flathub::verification::method'];
+
+        if (method == 'website') {
+          metadataObj['flathub_verified_url'] =
+              'https://${rawMetadata['flathub::verification::website']}';
+
+          metadataObj['flathub_verified_label'] =
+              rawMetadata['flathub::verification::website'];
+        } else if (method == 'login_provider') {
+          metadataObj['flathub_verified_url'] =
+              'https://${rawMetadata['flathub::verification::login_provider']}.com/${rawMetadata['flathub::verification::login_name']}';
+
+          metadataObj['flathub_verified_label'] =
+              '@${rawMetadata['flathub::verification::login_name']} on ${rawMetadata['flathub::verification::login_provider']}';
+        }
       }
     }
 

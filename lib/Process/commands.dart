@@ -98,6 +98,10 @@ class Commands {
     List<String> lineList = outputString.split('\n');
     return lineList;
   }
+
+  Future<void> run(String applicationId) async {
+    runProcess(flatpakCommand, ['run', applicationId]);
+  }
 }
 
 class FlatpakApplication {
