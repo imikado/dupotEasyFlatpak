@@ -144,7 +144,7 @@ class _ApplicationViewState extends State<ApplicationView> {
                                     onPressed: () {
                                       String verifiedUrl =
                                           stateAppStream!.getVerifiedUrl();
-                                      if (verifiedUrl.length > 0) {
+                                      if (verifiedUrl.isNotEmpty) {
                                         launchUrl(Uri.parse(verifiedUrl));
                                       }
                                     },
@@ -176,14 +176,14 @@ class _ApplicationViewState extends State<ApplicationView> {
                             ),
                           ],
                         )),
-                    if (stateAppStream!.screenshotObjList.length > 0)
+                    if (stateAppStream!.screenshotObjList.isNotEmpty)
                       const ListTile(
                           title: Text(
                         'Screenshots',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )),
-                    if (stateAppStream!.screenshotObjList.length > 0)
+                    if (stateAppStream!.screenshotObjList.isNotEmpty)
                       Padding(
                           padding: const EdgeInsets.all(20),
                           child: Scrollbar(
@@ -197,8 +197,19 @@ class _ApplicationViewState extends State<ApplicationView> {
                                       children: stateAppStream!
                                           .screenshotObjList
                                           .map((screenshotLoop) {
-                                    return Image.network(
-                                        screenshotLoop['preview']);
+                                    return IconButton(
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (_) => AlertDialog(
+                                                  buttonPadding:
+                                                      const EdgeInsets.all(0),
+                                                  content: Image.network(
+                                                      screenshotLoop[
+                                                          'large'])));
+                                        },
+                                        icon: Image.network(
+                                            screenshotLoop['preview']));
                                   }).toList())))),
                     const SizedBox(
                       height: 15,
@@ -251,8 +262,8 @@ class _ApplicationViewState extends State<ApplicationView> {
   Widget getButton() {
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-        padding: EdgeInsets.all(20),
-        textStyle: TextStyle(fontSize: 14, color: Colors.white));
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14, color: Colors.white));
 
     final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -283,11 +294,11 @@ class _ApplicationViewState extends State<ApplicationView> {
 
   Widget getIcon(String type) {
     if (type == 'homepage') {
-      return Icon(Icons.home);
+      return const Icon(Icons.home);
     } else if (type == 'bugtracker') {
-      return Icon(Icons.bug_report);
+      return const Icon(Icons.bug_report);
     }
-    return Icon(Icons.ac_unit);
+    return const Icon(Icons.ac_unit);
   }
 
   void checkHasRecipe(String applicationId, context) async {

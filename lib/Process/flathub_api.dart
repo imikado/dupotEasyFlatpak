@@ -176,7 +176,7 @@ class FlathubApi {
             if (int.parse(rawSizeLoop['width']) < 600) {
               screenshotLoop['preview'] = rawSizeLoop['src'];
             }
-            if (int.parse(rawSizeLoop['width']) > 600) {
+            if (int.parse(rawSizeLoop['width']) > 700) {
               screenshotLoop['large'] = rawSizeLoop['src'];
             }
           }
