@@ -58,6 +58,7 @@ class FirstInstallation {
             'build installed $buildInfo different current ${packageInfo.version}');
       }
     }
+
     print('install icons');
 
     String targetIconsArchive = '${documentsTargetDirectory.path}/Archive.zip';

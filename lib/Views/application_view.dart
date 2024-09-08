@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Models/recipe_factory.dart';
@@ -44,6 +46,8 @@ class _ApplicationViewState extends State<ApplicationView> {
 
   final ScrollController scrollController = ScrollController();
 
+  final ScrollController scrollControllerScreenshot = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +64,7 @@ class _ApplicationViewState extends State<ApplicationView> {
         await appStreamFactory.findAppStreamById(applicationIdSelected);
 
     if (appStream.lastUpdateIsOlderThan(7)) {
+      print('update from api');
       await FlathubApi(appStreamFactory: appStreamFactory)
           .updateAppStream(applicationIdSelected);
 
@@ -83,102 +88,148 @@ class _ApplicationViewState extends State<ApplicationView> {
     }
 
     return Card(
-      color: Theme.of(context).cardColor,
-      child: stateAppStream == null
-          ? const CircularProgressIndicator()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+        color: Theme.of(context).cardColor,
+        child: stateAppStream == null
+            ? const CircularProgressIndicator()
+            : Scrollbar(
+                interactive: false,
+                thumbVisibility: true,
+                controller: scrollController,
+                child: ListView(
+                  controller: scrollController,
                   children: [
-                    if (stateAppStream!.icon.length > 10)
-                      Image.file(File('$appPath/${stateAppStream!.getIcon()}')),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            stateAppStream!.name,
-                            style: const TextStyle(
-                                fontSize: 35, fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        if (stateAppStream!.icon.length > 10)
+                          Image.file(
+                              File('$appPath/${stateAppStream!.getIcon()}')),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                stateAppStream!.name,
+                                style: const TextStyle(
+                                    fontSize: 35, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                '${AppLocalizations.of(context).tr('By')} ${stateAppStream!.developer_name}',
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic, fontSize: 15),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              if (stateAppStream!.projectLicense.isNotEmpty)
+                                Text(
+                                    '${AppLocalizations.of(context).tr('License')}: ${stateAppStream!.projectLicense}'),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              if (stateAppStream!.isVerified())
+                                TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.only(
+                                            top: 5,
+                                            bottom: 5,
+                                            right: 5,
+                                            left: 0),
+                                        alignment:
+                                            AlignmentDirectional.topStart),
+                                    icon: const Icon(Icons.verified),
+                                    onPressed: () {
+                                      String verifiedUrl =
+                                          stateAppStream!.getVerifiedUrl();
+                                      if (verifiedUrl.length > 0) {
+                                        launchUrl(Uri.parse(verifiedUrl));
+                                      }
+                                    },
+                                    label: Text(
+                                        stateAppStream!.getVerifiedLabel())),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            stateAppStream!.developer_name,
-                            style: const TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          if (stateAppStream!.isVerified())
-                            TextButton.icon(
-                                style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.only(
-                                        top: 5, bottom: 5, right: 5, left: 0),
-                                    alignment: AlignmentDirectional.topStart),
-                                icon: const Icon(Icons.verified),
-                                onPressed: () {
-                                  String verifiedUrl =
-                                      stateAppStream!.getVerifiedUrl();
-                                  if (verifiedUrl.length > 0) {
-                                    launchUrl(Uri.parse(verifiedUrl));
-                                  }
-                                },
-                                label: Text(stateAppStream!.getVerifiedLabel()))
-                        ],
-                      ),
+                        ),
+                        getButton(),
+                        const SizedBox(width: 5),
+                        getRunButton()
+                      ],
                     ),
-                    getButton(),
-                    const SizedBox(width: 5),
-                    getRunButton()
+                    Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              stateAppStream!.summary,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            HtmlWidget(
+                              stateAppStream!.description,
+                            ),
+                          ],
+                        )),
+                    if (stateAppStream!.screenshotObjList.length > 0)
+                      const ListTile(
+                          title: Text(
+                        'Screenshots',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      )),
+                    if (stateAppStream!.screenshotObjList.length > 0)
+                      Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Scrollbar(
+                              interactive: false,
+                              thumbVisibility: true,
+                              controller: scrollControllerScreenshot,
+                              child: SingleChildScrollView(
+                                  controller: scrollControllerScreenshot,
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                      children: stateAppStream!
+                                          .screenshotObjList
+                                          .map((screenshotLoop) {
+                                    return Image.network(
+                                        screenshotLoop['preview']);
+                                  }).toList())))),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const ListTile(
+                        title: Text(
+                      'Links',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    )),
+                    Padding(
+                        padding: const EdgeInsets.only(
+                            top: 5, bottom: 5, right: 5, left: 10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: stateAppStream!
+                                .getUrlObjList()
+                                .map((urlObjLoop) {
+                              String url = urlObjLoop['value'].toString();
+
+                              return TextButton.icon(
+                                icon: getIcon(urlObjLoop['key'].toString()),
+                                onPressed: () {
+                                  launchUrl(Uri.parse(url));
+                                },
+                                label: Text(url),
+                              );
+                            }).toList()))
                   ],
                 ),
-                Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          stateAppStream!.summary,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        HtmlWidget(
-                          stateAppStream!.description,
-                        ),
-                      ],
-                    )),
-                const ListTile(
-                    title: Text(
-                  'Links',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                )),
-                Padding(
-                    padding: const EdgeInsets.only(
-                        top: 5, bottom: 5, right: 5, left: 10),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:
-                            stateAppStream!.getUrlObjList().map((urlObjLoop) {
-                          String url = urlObjLoop['value'].toString();
-
-                          return TextButton.icon(
-                            icon: getIcon(urlObjLoop['key'].toString()),
-                            onPressed: () {
-                              launchUrl(Uri.parse(url));
-                            },
-                            label: Text(url),
-                          );
-                        }).toList()))
-              ],
-            ),
-    );
+              ));
   }
 
   Widget getRunButton() {

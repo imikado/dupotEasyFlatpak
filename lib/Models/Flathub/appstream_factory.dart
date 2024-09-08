@@ -74,7 +74,8 @@ class AppStreamFactory {
           urlObj TEXT, 
           releaseObjList TEXT,
           lastUpdate INTEGER,
-          developer_name TEXT
+          developer_name TEXT,
+          screenshotList TEXT
           );
       CREATE TABLE category (id TEXT PRIMARY KEY) ; 
       CREATE TABLE category_appstream (  appstream_id TEXT, category_id TEXT, PRIMARY KEY (appstream_id, category_id))
@@ -168,7 +169,8 @@ class AppStreamFactory {
             releaseObjList: [],
             urlObj: {},
             projectLicense: '',
-            developer_name: ''),
+            developer_name: '',
+            screenshotObjList: []),
     ];
   }
 
@@ -190,7 +192,8 @@ class AppStreamFactory {
             'urlObj': urlObjString as String,
             'projectLicense': projectLicense as String,
             'developer_name': developer_name as String,
-            'metadataObj': metadataObjString as String
+            'metadataObj': metadataObjString as String,
+            'screenshotList': screenshotObjString as String
           } in appStreamList)
         AppStream(
             id: id,
@@ -204,7 +207,9 @@ class AppStreamFactory {
             releaseObjList: [],
             urlObj: jsonDecode(urlObjString),
             projectLicense: projectLicense,
-            developer_name: developer_name),
+            developer_name: developer_name,
+            screenshotObjList:
+                jsonDecode(screenshotObjString) as List<dynamic>),
     ];
 
     return rowList[0];
@@ -259,7 +264,8 @@ class AppStreamFactory {
             releaseObjList: [],
             urlObj: {},
             projectLicense: '',
-            developer_name: ''),
+            developer_name: '',
+            screenshotObjList: []),
     ];
   }
 
@@ -291,7 +297,8 @@ class AppStreamFactory {
             releaseObjList: [],
             urlObj: {},
             projectLicense: '',
-            developer_name: ''),
+            developer_name: '',
+            screenshotObjList: []),
     ];
   }
 
@@ -323,7 +330,8 @@ class AppStreamFactory {
             releaseObjList: [],
             urlObj: {},
             projectLicense: '',
-            developer_name: ''),
+            developer_name: '',
+            screenshotObjList: []),
     ];
   }
 
@@ -356,7 +364,8 @@ class AppStreamFactory {
             releaseObjList: [],
             urlObj: {},
             projectLicense: '',
-            developer_name: ''),
+            developer_name: '',
+            screenshotObjList: []),
     ];
   }
 

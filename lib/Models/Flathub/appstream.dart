@@ -19,6 +19,8 @@ class AppStream {
 
   String projectLicense;
 
+  List<dynamic> screenshotObjList = [];
+
   AppStream(
       {required this.id,
       required this.name,
@@ -31,7 +33,8 @@ class AppStream {
       required this.releaseObjList,
       required this.lastUpdate,
       required this.projectLicense,
-      required this.developer_name});
+      required this.developer_name,
+      required this.screenshotObjList});
 
   Map<String, Object?> toMap() {
     return {
@@ -46,7 +49,8 @@ class AppStream {
       'releaseObjList': jsonEncode(releaseObjList),
       'lastUpdate': lastUpdate,
       'projectLicense': projectLicense,
-      'developer_name': developer_name
+      'developer_name': developer_name,
+      'screenshotList': jsonEncode(screenshotObjList)
     };
   }
 

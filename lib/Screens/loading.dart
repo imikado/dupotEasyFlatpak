@@ -24,8 +24,10 @@ class _Loading extends State<Loading> {
 
     Commands commands = Commands(settingsObj: settingsObj);
 
+    print('Installation');
     FirstInstallation firstInstallation = FirstInstallation(commands: commands);
     await firstInstallation.process();
+    print('End installation');
 
     final appStreamFactory = AppStreamFactory();
     //await appStreamFactory.create();

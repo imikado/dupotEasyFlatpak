@@ -57,7 +57,8 @@ class AppLocalizations {
       'Website': 'Website',
       'License': 'License',
       'InstalledApps': 'Installed applications',
-      'Run': 'Run'
+      'Run': 'Run',
+      'By': 'By'
     },
     'fr': {
       'loading': 'Chargement',
@@ -108,7 +109,8 @@ class AppLocalizations {
       'Website': 'Site',
       'License': 'Licence',
       'InstalledApps': 'Aplications installées',
-      'Run': 'Ouvrir'
+      'Run': 'Ouvrir',
+      'By': 'Par'
     },
   };
 

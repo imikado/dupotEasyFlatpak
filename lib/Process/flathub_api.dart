@@ -160,8 +160,33 @@ class FlathubApi {
     }
 
     String projectLicense = '';
-    if (rawAppStream.containsKey('')) {
+    if (rawAppStream.containsKey('project_license')) {
       projectLicense = rawAppStream['project_license'];
+    }
+
+    List<Map<String, String>> screenshotObjList = [];
+    if (rawAppStream.containsKey('screenshots')) {
+      List<Map<String, dynamic>> rawScreenshotList =
+          List<Map<String, dynamic>>.from(rawAppStream['screenshots'] as List);
+
+      for (Map<String, dynamic> rawScreenshotLoop in rawScreenshotList) {
+        if (rawScreenshotLoop.containsKey('sizes')) {
+          Map<String, String> screenshotLoop = {};
+          for (Map<String, dynamic> rawSizeLoop in rawScreenshotLoop['sizes']) {
+            if (int.parse(rawSizeLoop['width']) < 600) {
+              screenshotLoop['preview'] = rawSizeLoop['src'];
+            }
+            if (int.parse(rawSizeLoop['width']) > 600) {
+              screenshotLoop['large'] = rawSizeLoop['src'];
+            }
+          }
+
+          if (screenshotLoop.containsKey('preview') &&
+              screenshotLoop.containsKey('large')) {
+            screenshotObjList.add(screenshotLoop);
+          }
+        }
+      }
     }
 
     return AppStream(
@@ -176,6 +201,7 @@ class FlathubApi {
         urlObj: rawUrls,
         releaseObjList: rawReleaseObjList,
         projectLicense: projectLicense,
-        developer_name: developer_name);
+        developer_name: developer_name,
+        screenshotObjList: screenshotObjList);
   }
 }
