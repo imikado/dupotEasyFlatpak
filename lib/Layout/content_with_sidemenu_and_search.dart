@@ -4,6 +4,7 @@ import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContentWithSidemenuAndSearch extends StatefulWidget {
   final Widget content;
@@ -138,17 +139,22 @@ class _ContentWithSidemenuAndSearchState
                 child: Column(children: [
                   Text(
                       '${AppLocalizations.of(context).tr('Author')}: Michael Bertocchi'),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                      '${AppLocalizations.of(context).tr('Website')}: www.dupot.org'),
-                  SizedBox(
+                  TextButton(
+                    child: Text(
+                        '${AppLocalizations.of(context).tr('Website')}: www.dupot.org'),
+                    onPressed: () {
+                      launchUrl(Uri.parse('https://www.dupot.org'));
+                    },
+                  ),
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
                       '${AppLocalizations.of(context).tr('License')}:  LGPL-2.1'),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(version)
