@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
@@ -62,104 +63,140 @@ class _InstallationViewState extends State<InstallationView> {
     Settings settingsObj = Settings(context: context);
     await settingsObj.load();
 
-    String stdout = await Commands(settingsObj: settingsObj)
-        .installApplicationThenOverrideList(applicationIdSelected, []);
+    Commands command = Commands(settingsObj: settingsObj);
 
-    setState(() {
-      stateInstallationOutput =
-          "$stdout \n ${AppLocalizations.of(context).tr('installation_finished')}";
-      stateIsInstalling = false;
+    String commandBin = 'flatpak';
+    List<String> commandArgList = [
+      'install',
+      '-y',
+      '--system',
+      applicationIdSelected
+    ];
+/*;
+    String stdout = await Commands(settingsObj: settingsObj)
+        .installApplicationThenOverrideList(applicationIdSelected, []);*/
+
+    Process.start(command.getCommand(commandBin),
+            command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
+        .then((Process process) {
+      process.stdout.transform(utf8.decoder).listen((data) {
+        print('STDOUT: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.stderr.transform(utf8.decoder).listen((data) {
+        print('STDERR: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.exitCode.then((exitCode) {
+        print('Exit code: $exitCode');
+        setState(() {
+          stateInstallationOutput =
+              "$stateInstallationOutput \n ${AppLocalizations.of(context).tr('installation_finished')}";
+          stateIsInstalling = false;
+        });
+      });
+    }).catchError((e) {
+      print('Error starting process: $e');
     });
   }
 
   @override
   Widget build(BuildContext context) {
     const TextStyle outputTextStyle =
-        TextStyle(color: Colors.blueGrey, fontSize: 14.0);
+        TextStyle(color: Colors.white, fontSize: 14.0);
 
-    return Card(
-        color: Theme.of(context).cardColor,
-        child: stateIsInstalling
-            ? const CircularProgressIndicator()
-            : Scrollbar(
-                interactive: false,
-                thumbVisibility: true,
+    return stateAppStream == null
+        ? const CircularProgressIndicator()
+        : Card(
+            color: Theme.of(context).cardColor,
+            child: Scrollbar(
+              interactive: false,
+              thumbVisibility: true,
+              controller: scrollController,
+              child: ListView(
                 controller: scrollController,
-                child: ListView(
-                  controller: scrollController,
-                  children: [
-                    Row(
-                      children: [
-                        if (stateAppStream!.icon.length > 10)
-                          Image.file(
-                              File(appPath + '/' + stateAppStream!.getIcon())),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                stateAppStream!.name,
-                                style: const TextStyle(
-                                    fontSize: 35, fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                stateAppStream!.developer_name,
-                                style: const TextStyle(
-                                    fontStyle: FontStyle.italic),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              stateAppStream!.isVerified()
-                                  ? TextButton.icon(
-                                      style: TextButton.styleFrom(
-                                          padding: const EdgeInsets.only(
-                                              top: 5,
-                                              bottom: 5,
-                                              right: 5,
-                                              left: 0),
-                                          alignment:
-                                              AlignmentDirectional.topStart),
-                                      icon: Icon(Icons.verified),
-                                      onPressed: () {},
-                                      label: Text(
-                                          stateAppStream!.getVerifiedLabel()))
-                                  : SizedBox(),
-                            ],
-                          ),
-                        ),
-                        getButton()
-                      ],
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(20),
+                children: [
+                  Row(
+                    children: [
+                      if (stateAppStream!.icon.length > 10)
+                        Image.file(
+                            File(appPath + '/' + stateAppStream!.getIcon())),
+                      const SizedBox(width: 20),
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              stateAppStream!.summary,
+                              stateAppStream!.name,
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 35, fontWeight: FontWeight.bold),
                             ),
-                            RichText(
-                              overflow: TextOverflow.clip,
-                              text: TextSpan(
-                                text: AppLocalizations.of(context).tr('output'),
-                                style: outputTextStyle,
-                                children: <TextSpan>[
-                                  TextSpan(text: stateInstallationOutput),
-                                ],
-                              ),
-                            )
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              stateAppStream!.developer_name,
+                              style:
+                                  const TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            stateAppStream!.isVerified()
+                                ? TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.only(
+                                            top: 5,
+                                            bottom: 5,
+                                            right: 5,
+                                            left: 0),
+                                        alignment:
+                                            AlignmentDirectional.topStart),
+                                    icon: Icon(Icons.verified),
+                                    onPressed: () {},
+                                    label: Text(
+                                        stateAppStream!.getVerifiedLabel()))
+                                : SizedBox(),
                           ],
-                        )),
-                  ],
-                ),
-              ));
+                        ),
+                      ),
+                      stateIsInstalling
+                          ? const CircularProgressIndicator()
+                          : getButton()
+                    ],
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              decoration:
+                                  const BoxDecoration(color: Colors.blueGrey),
+                              child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: RichText(
+                                    overflow: TextOverflow.clip,
+                                    text: TextSpan(
+                                      text: AppLocalizations.of(context)
+                                          .tr('output'),
+                                      style: outputTextStyle,
+                                      children: <TextSpan>[
+                                        TextSpan(text: stateInstallationOutput),
+                                      ],
+                                    ),
+                                  )))
+                        ],
+                      )),
+                ],
+              ),
+            ));
   }
 
   Widget getButton() {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
@@ -142,8 +143,55 @@ class _InstallationWithRecipeViewState
     Settings settingsObj = Settings(context: context);
     await settingsObj.load();
 
+    Commands command = Commands(settingsObj: settingsObj);
+
+    String commandBin = 'flatpak';
+    List<String> commandArgList = [
+      'install',
+      '-y',
+      '--system',
+      applicationIdSelected
+    ];
+
+/*
     String stdout = await Commands(settingsObj: settingsObj)
         .installApplicationThenOverrideList(applicationIdSelected, processList);
+*/
+    String flatpakCommand = 'flatpak';
+
+    Process.start(command.getCommand(commandBin),
+            command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
+        .then((Process process) {
+      process.stdout.transform(utf8.decoder).listen((data) {
+        print('STDOUT: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.stderr.transform(utf8.decoder).listen((data) {
+        print('STDERR: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.exitCode.then((exitCode) async {
+        print('Exit code: $exitCode');
+
+        for (List<String> argListLoop in processList) {
+          await command.runProcess(flatpakCommand, argListLoop);
+        }
+
+        setState(() {
+          stateInstallationOutput =
+              "$stateInstallationOutput \n ${AppLocalizations.of(context).tr('installation_finished')}";
+          stateIsInstalling = false;
+        });
+      });
+    }).catchError((e) {
+      print('Error starting process: $e');
+    });
 
     setState(() {
       stateInstallationOutput =
@@ -155,11 +203,11 @@ class _InstallationWithRecipeViewState
   @override
   Widget build(BuildContext context) {
     const TextStyle outputTextStyle =
-        TextStyle(color: Colors.blueGrey, fontSize: 14.0);
+        TextStyle(color: Colors.white, fontSize: 14.0);
 
     return Card(
         color: Theme.of(context).cardColor,
-        child: stateIsInstalling
+        child: stateAppStream == null
             ? const CircularProgressIndicator()
             : Scrollbar(
                 interactive: false,
@@ -212,29 +260,33 @@ class _InstallationWithRecipeViewState
                             ],
                           ),
                         ),
-                        getButton()
+                        stateIsInstalling
+                            ? const CircularProgressIndicator()
+                            : getButton()
                       ],
                     ),
                     Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              stateAppStream!.summary,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            RichText(
-                              overflow: TextOverflow.clip,
-                              text: TextSpan(
-                                text: AppLocalizations.of(context).tr('output'),
-                                style: outputTextStyle,
-                                children: <TextSpan>[
-                                  TextSpan(text: stateInstallationOutput),
-                                ],
-                              ),
-                            )
+                            Container(
+                                decoration:
+                                    const BoxDecoration(color: Colors.blueGrey),
+                                child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: RichText(
+                                      overflow: TextOverflow.clip,
+                                      text: TextSpan(
+                                        text: AppLocalizations.of(context)
+                                            .tr('output'),
+                                        style: outputTextStyle,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: stateInstallationOutput),
+                                        ],
+                                      ),
+                                    )))
                           ],
                         )),
                   ],
