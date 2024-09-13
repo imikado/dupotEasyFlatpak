@@ -266,29 +266,23 @@ class _InstallationWithRecipeViewState
                       ],
                     ),
                     Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                decoration:
-                                    const BoxDecoration(color: Colors.blueGrey),
-                                child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: RichText(
-                                      overflow: TextOverflow.clip,
-                                      text: TextSpan(
-                                        text: AppLocalizations.of(context)
-                                            .tr('output'),
-                                        style: outputTextStyle,
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                              text: stateInstallationOutput),
-                                        ],
-                                      ),
-                                    )))
-                          ],
-                        )),
+                      padding: const EdgeInsets.all(20),
+                      child: Container(
+                          constraints: const BoxConstraints(minHeight: 800),
+                          decoration:
+                              const BoxDecoration(color: Colors.blueGrey),
+                          child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: RichText(
+                                overflow: TextOverflow.clip,
+                                text: TextSpan(
+                                  style: outputTextStyle,
+                                  children: <TextSpan>[
+                                    TextSpan(text: stateInstallationOutput),
+                                  ],
+                                ),
+                              ))),
+                    ),
                   ],
                 ),
               ));
