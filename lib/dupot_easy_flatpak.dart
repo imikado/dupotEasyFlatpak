@@ -27,6 +27,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   String stateApplicationIdSelected = '';
   String statePageSelected = '';
   String stateSearch = '';
+  Locale stateLocale = const Locale.fromSubtags(languageCode: 'en');
   bool show404 = false;
 
   bool isDarkMode = false;
@@ -79,6 +80,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     );
 
     return MaterialApp(
+      locale: stateLocale,
       theme: isDarkMode ? darkTheme2 : lightTheme,
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
@@ -107,6 +109,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -124,6 +127,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -139,6 +143,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   handleSearch: _handleSearch,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
@@ -159,6 +164,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -176,6 +182,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -193,6 +200,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -210,6 +218,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -225,6 +234,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleGoToSearch: _handleGoToSearch,
                   handleToggleDarkMode: _handleToggleDarkMode,
                   handleGoToInstalledApps: _handleGoToInstalledApps,
+                  handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
@@ -306,6 +316,12 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     setState(() {
       statePageSelected = constPageUninstallation;
       stateApplicationIdSelected = applicationId;
+    });
+  }
+
+  void _handleSetLocale(String locale) {
+    setState(() {
+      stateLocale = Locale.fromSubtags(languageCode: locale);
     });
   }
 }

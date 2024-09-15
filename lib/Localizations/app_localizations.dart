@@ -58,7 +58,10 @@ class AppLocalizations {
       'License': 'License',
       'InstalledApps': 'Installed applications',
       'Run': 'Run',
-      'By': 'By'
+      'By': 'By',
+      'English': 'English',
+      'French': 'French',
+      'Language': 'Language'
     },
     'fr': {
       'loading': 'Chargement',
@@ -110,7 +113,10 @@ class AppLocalizations {
       'License': 'Licence',
       'InstalledApps': 'Aplications installées',
       'Run': 'Ouvrir',
-      'By': 'Par'
+      'By': 'Par',
+      'English': 'Anglais',
+      'French': 'Français',
+      'Language': 'Langage'
     },
   };
 

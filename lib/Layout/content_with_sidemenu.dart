@@ -1,11 +1,9 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
+import 'package:dupot_easy_flatpak/Screens/Shared/my_drawer.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContentWithSidemenu extends StatefulWidget {
   final Widget content;
@@ -17,6 +15,7 @@ class ContentWithSidemenu extends StatefulWidget {
   final Function handleGoToSearch;
   final Function handleGoToInstalledApps;
   final Function handleToggleDarkMode;
+  final Function handleSetLocale;
 
   const ContentWithSidemenu(
       {super.key,
@@ -27,7 +26,8 @@ class ContentWithSidemenu extends StatefulWidget {
       required this.handleGoToCategory,
       required this.handleGoToSearch,
       required this.handleToggleDarkMode,
-      required this.handleGoToInstalledApps});
+      required this.handleGoToInstalledApps,
+      required this.handleSetLocale});
 
   @override
   _ContentWithSidemenuState createState() => _ContentWithSidemenuState();
@@ -117,44 +117,10 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
         const SizedBox(width: 10),
         Expanded(child: widget.content),
       ]),
-      drawer: Drawer(
-          child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Image.asset('assets/logos/512x512.png'),
-            ),
-            Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(children: [
-                  Text(
-                      '${AppLocalizations.of(context).tr('Author')}: Michael Bertocchi'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextButton(
-                    child: Text(
-                        '${AppLocalizations.of(context).tr('Website')}: www.dupot.org'),
-                    onPressed: () {
-                      launchUrl(Uri.parse('https://www.dupot.org'));
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                      '${AppLocalizations.of(context).tr('License')}:  LGPL-2.1'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(version)
-                ]))
-          ]) // Populate the Drawer in the next step.
-          ),
+      drawer: MyDrawer(
+        version: version,
+        handleSetLocale: widget.handleSetLocale,
+      ),
     );
   }
 }
