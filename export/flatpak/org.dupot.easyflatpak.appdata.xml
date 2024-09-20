@@ -12,13 +12,13 @@
   
    <name>Michael Bertocchi</name>
   </developer>
-  <summary>A simple flatpak store</summary>
+  <summary>A simple Flatpak store</summary>
   <description>
     <p>
-    Install you flatpak application, and for some which need, we have recipe to help you ton install it better. 
+    It will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better. 
     </p>
     <p>
-    For example, for Steam, it ask user to choose folder where he stores his games before installation
+    For example, for Steam, it asks the user to choose a folder where they store their games before installation.
     </p>
   </description>
 
@@ -52,7 +52,21 @@
     <content_rating type="oars-1.1"/>
     <releases>
 
-        <release date="2024-09-20" version="2.5.0"/>
+        <release date="2024-09-20" version="2.5.1">
+            <description>
+              <ul>
+                <li>Fix description</li>
+              </ul>
+            </description>
+        </release>
+
+        <release date="2024-09-20" version="2.5.0">
+            <description>
+              <ul>
+                <li>Add italian Langage</li>
+              </ul>
+            </description>
+        </release>
 
         <release date="2024-09-15" version="2.4.0"/>
         <release date="2024-09-07" version="2.0.3"/>
