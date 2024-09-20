@@ -61,7 +61,8 @@ class AppLocalizations {
       'By': 'By',
       'English': 'English',
       'French': 'French',
-      'Language': 'Language'
+      'Language': 'Language',
+      'Italian': 'Italian'
     },
     'fr': {
       'loading': 'Chargement',
@@ -116,7 +117,8 @@ class AppLocalizations {
       'By': 'Par',
       'English': 'Anglais',
       'French': 'Français',
-      'Language': 'Langage'
+      'Language': 'Langage',
+      'Italian': 'Italien'
     },
     'it': {
       'loading': 'Caricamento',
@@ -131,7 +133,7 @@ class AppLocalizations {
       'cancel': 'Annulla',
       'confirm': 'Conferma',
       'confirmation_title': 'Confermare',
-      'do_you_confirm_installation_of': 'Confermi l'installazione di ',
+      'do_you_confirm_installation_of': 'Confermi l\'installazione di ',
       'do_you_confirm_uninstallation_of': 'Confermi la disinstallazione di',
       'install': 'Installa',
       'install_with_recipe': 'Installa con ricetta',
@@ -143,8 +145,8 @@ class AppLocalizations {
       'add_new_application': 'Aggiungi nuova applicazione',
       'add': 'Aggiungi',
       'field_should_not_be_empty': 'Il campo deve essere compilato',
-      'application_name': 'Nome dell'applicazione',
-      'application_json': 'Ricetta di installazione dell'applicazione json',
+      'application_name': 'Nome dell\'applicazione',
+      'application_json': 'Ricetta di installazione dell\'applicazione json',
       'processing_form': 'Elaborazione',
       'save': 'Save',
       'close': 'chiudi',
@@ -169,8 +171,9 @@ class AppLocalizations {
       'By': 'Di',
       'English': 'Inglese',
       'French': 'Francese',
-      'Italian': 'Italiano',
-      'Language': 'Lingua'
+      'Language': 'Lingua',
+      'Italian': 'Italiano'
+    }
   };
 
   static List<String> languages() => _localizedValues.keys.toList();

@@ -90,6 +90,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
       supportedLocales: const [
         Locale('en', ''),
         Locale('fr', ''),
+        Locale('it', ''),
       ],
       home: Navigator(
         pages: [

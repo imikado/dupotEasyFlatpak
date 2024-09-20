@@ -55,6 +55,19 @@ class MyDrawer extends StatelessWidget {
                         },
                       ),
                     ),
+                    ListTile(
+                      titleTextStyle:
+                          const TextStyle(fontSize: 14, color: Colors.black),
+                      title: Text(AppLocalizations.of(context).tr('Italian')),
+                      leading: Radio<String>(
+                        value: 'it',
+                        groupValue:
+                            AppLocalizations.of(context).getLanguageCode(),
+                        onChanged: (String? value) {
+                          handleSetLocale('it');
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 150),
