@@ -49,7 +49,7 @@ class AppButton extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                Image.file(File(icon))
+                Expanded(child: Image.file(File(icon)))
               ])));
     }
 

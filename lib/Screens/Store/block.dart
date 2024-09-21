@@ -40,6 +40,7 @@ class Block extends StatelessWidget {
 
           return Container(
               width: 200,
+              height: 250,
               child: AppButton(
                   id: appStreamLoop.id,
                   title: appStreamLoop.name,
