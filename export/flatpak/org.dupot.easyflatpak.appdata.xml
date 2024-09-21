@@ -53,7 +53,15 @@
     <releases>
 
 
-    
+      <release date="2024-09-21" version="2.6.0">
+            <description>
+              <ul>
+                <li>Improve home page</li>
+              </ul>
+             
+            </description>
+        </release>
+
         <release date="2024-09-21" version="2.5.2">
             <description>
               <ul>

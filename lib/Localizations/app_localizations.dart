@@ -62,7 +62,8 @@ class AppLocalizations {
       'English': 'English',
       'French': 'French',
       'Language': 'Language',
-      'Italian': 'Italian'
+      'Italian': 'Italian',
+      'More': 'More...'
     },
     'fr': {
       'loading': 'Chargement',
@@ -118,7 +119,8 @@ class AppLocalizations {
       'English': 'Anglais',
       'French': 'Français',
       'Language': 'Langage',
-      'Italian': 'Italien'
+      'Italian': 'Italien',
+      'More': 'Plus...'
     },
     'it': {
       'loading': 'Caricamento',
@@ -172,7 +174,8 @@ class AppLocalizations {
       'English': 'Inglese',
       'French': 'Francese',
       'Language': 'Lingua',
-      'Italian': 'Italiano'
+      'Italian': 'Italiano',
+      'More': 'Di più...'
     }
   };
 

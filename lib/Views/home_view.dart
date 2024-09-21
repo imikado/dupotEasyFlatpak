@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
   final Function handleGoToApplication;
-  const HomeView({super.key, required this.handleGoToApplication});
+  final Function handleGoToCategory;
+  const HomeView(
+      {super.key,
+      required this.handleGoToApplication,
+      required this.handleGoToCategory});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -35,7 +39,7 @@ class _HomeViewState extends State<HomeView> {
 
     for (String categoryIdLoop in categoryIdList) {
       List<AppStream> appStreamList = await appStreamFactory
-          .findListAppStreamByCategoryLimited(categoryIdLoop, 8);
+          .findListAppStreamByCategoryLimited(categoryIdLoop, 9);
 
       appStreamListList.add(appStreamList);
     }
@@ -57,11 +61,11 @@ class _HomeViewState extends State<HomeView> {
             controller: scrollController,
             itemBuilder: (context, index) {
               return Block(
-                categoryId: stateCategoryIdList[index],
-                appStreamList: stateAppStreamListList[index],
-                appPath: appPath,
-                handleGoToApplication: widget.handleGoToApplication,
-              );
+                  categoryId: stateCategoryIdList[index],
+                  appStreamList: stateAppStreamListList[index],
+                  appPath: appPath,
+                  handleGoToApplication: widget.handleGoToApplication,
+                  handleGoToCategory: widget.handleGoToCategory);
             }));
   }
 }

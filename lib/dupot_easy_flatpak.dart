@@ -103,8 +103,10 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
             MaterialPage(
                 key: const ValueKey(constPageHome),
                 child: ContentWithSidemenu(
-                  content:
-                      HomeView(handleGoToApplication: _handleGoToApplication),
+                  content: HomeView(
+                    handleGoToApplication: _handleGoToApplication,
+                    handleGoToCategory: _handleGoToCategory,
+                  ),
                   handleGoToHome: _handleGoToHome,
                   handleGoToCategory: _handleGoToCategory,
                   handleGoToSearch: _handleGoToSearch,
