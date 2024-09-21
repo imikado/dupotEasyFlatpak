@@ -1,4 +1,4 @@
-display_name: Easy flatpak
+display_name: Easy Flatpak
 
 icon: export/deb/512x512.png
 
@@ -6,7 +6,7 @@ keywords:
   - flatpak
   - store
 
-generic_name: Easy flatpak
+generic_name: Easy Flatpak
 
 categories:
   - Utility

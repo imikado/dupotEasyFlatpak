@@ -3,7 +3,7 @@
   <id>org.dupot.easyflatpak</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-only</project_license>
-  <name>Easy flatpak</name>
+  <name>Easy Flatpak</name>
   
   <launchable type="desktop-id">org.dupot.easyflatpak.desktop</launchable>
 

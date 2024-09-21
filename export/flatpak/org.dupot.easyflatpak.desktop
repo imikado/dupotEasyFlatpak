@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Easy flatpak
+Name=Easy Flatpak
 Exec=dupot_easy_flatpak
 StartupWMClass=dupot_easy_flatpak
 Type=Application

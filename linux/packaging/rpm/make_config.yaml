@@ -1,4 +1,4 @@
-display_name: Easy flatpak
+display_name: Easy Flatpak
 icon: export/rpm/512x512.png
 summary: An application to simplify install of some flatpak
 group: Applications/Development Tools
@@ -21,7 +21,7 @@ keywords:
   - flatpak
   - store
 
-generic_name: Easy flatpak
+generic_name: Easy Flatpak
 
 categories:
   - Utility
