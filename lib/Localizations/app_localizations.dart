@@ -150,7 +150,7 @@ class AppLocalizations {
       'application_name': 'Nome dell\'applicazione',
       'application_json': 'Ricetta di installazione dell\'applicazione json',
       'processing_form': 'Elaborazione',
-      'save': 'Save',
+      'save': 'Salva',
       'close': 'chiudi',
       'Search': 'Cerca',
       'Home': 'Home',
@@ -175,7 +175,7 @@ class AppLocalizations {
       'French': 'Francese',
       'Language': 'Lingua',
       'Italian': 'Italiano',
-      'More': 'Di più...'
+      'More': 'Altro...'
     }
   };
 
