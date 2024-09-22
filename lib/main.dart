@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:io';
 import 'dart:io';
 
+import 'package:dupot_easy_flatpak/Process/parameters.dart';
 import 'package:dupot_easy_flatpak/dupot_easy_flatpak.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,6 +46,8 @@ void main() async {
           shouldCopyDb = true;
         }
       }
+
+      Parameters('${documentsTargetDirectory.path}/parameters.json');
     }
 
     if (shouldCopyDb) {

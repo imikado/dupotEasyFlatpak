@@ -53,6 +53,14 @@
     <releases>
 
 
+        <release date="2024-09-22" version="2.8.0">
+            <description>
+              <ul>
+                <li>Store parameters (language and dark mode)</li>
+              </ul>
+             
+            </description>
+        </release>
 
         <release date="2024-09-22" version="2.7.0">
             <description>

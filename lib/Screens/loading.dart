@@ -1,6 +1,4 @@
-import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
-import 'package:dupot_easy_flatpak/Models/settings.dart';
 import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Process/first_installation.dart';
 import 'package:dupot_easy_flatpak/Process/flathub_api.dart';

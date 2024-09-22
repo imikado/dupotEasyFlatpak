@@ -4,6 +4,7 @@ import 'package:dupot_easy_flatpak/Layout/content_with_sidemenu_and_search.dart'
 import 'package:dupot_easy_flatpak/Localizations/app_localizations_delegate.dart';
 import 'package:dupot_easy_flatpak/Models/settings.dart';
 import 'package:dupot_easy_flatpak/Process/commands.dart';
+import 'package:dupot_easy_flatpak/Process/parameters.dart';
 import 'package:dupot_easy_flatpak/Screens/loading.dart';
 import 'package:dupot_easy_flatpak/Views/application_view.dart';
 import 'package:dupot_easy_flatpak/Views/category_view.dart';
@@ -36,7 +37,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
 
   bool show404 = false;
 
-  bool isDarkMode = false;
+  bool stateIsDarkMode = false;
 
   static const String constPageCategory = 'category';
   static const String constPageApplication = 'application';
@@ -47,6 +48,17 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
       'installationWithRecipe';
   static const String constPageUninstallation = 'uninstallation';
   static const String constPageInstalledApps = 'installedApps';
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      stateLocale =
+          Locale.fromSubtags(languageCode: Parameters().getLanguageCode());
+      stateIsDarkMode = Parameters().getDarkModeEnabled();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +126,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
 
     return MaterialApp(
       locale: stateLocale,
-      theme: isDarkMode ? darkTheme : lightTheme,
+      theme: stateIsDarkMode ? darkTheme : lightTheme,
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -283,13 +295,15 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   }
 
   void _handleToggleDarkMode() {
-    if (isDarkMode) {
+    if (stateIsDarkMode) {
+      Parameters().setDarModeEnabled(false);
       setState(() {
-        isDarkMode = false;
+        stateIsDarkMode = false;
       });
     } else {
+      Parameters().setDarModeEnabled(true);
       setState(() {
-        isDarkMode = true;
+        stateIsDarkMode = true;
       });
     }
   }
@@ -362,6 +376,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   }
 
   void _handleSetLocale(String locale) {
+    Parameters().setLanguageCode(locale);
     setState(() {
       stateLocale = Locale.fromSubtags(languageCode: locale);
     });
