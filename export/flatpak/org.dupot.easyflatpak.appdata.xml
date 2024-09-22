@@ -53,6 +53,19 @@
     <releases>
 
 
+
+        <release date="2024-09-22" version="2.7.0">
+            <description>
+              <ul>
+                <li>Improve darkmode</li>
+                <li>Add back button on application page</li>
+                <li>Update detailed application display</li>
+              </ul>
+             
+            </description>
+        </release>
+
+
       <release date="2024-09-22" version="2.6.1">
             <description>
               <ul>
