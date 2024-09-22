@@ -11,84 +11,105 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+        backgroundColor: Theme.of(context).primaryColorLight,
         child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Image.asset('assets/logos/512x512.png'),
-          ),
-          Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(children: [
-                ListTile(
-                  title: Text(AppLocalizations().tr('Language')),
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
                 ),
-                Column(
-                  children: <Widget>[
+                child: Image.asset('assets/logos/512x512.png'),
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(children: [
                     ListTile(
-                      titleTextStyle:
-                          const TextStyle(fontSize: 14, color: Colors.black),
-                      title: Text(AppLocalizations().tr('English')),
-                      leading: Radio<String>(
-                        value: 'en',
-                        groupValue: AppLocalizations().getLanguageCode(),
-                        onChanged: (String? value) {
-                          handleSetLocale('en');
-                        },
+                      title: Text(
+                        AppLocalizations().tr('Language'),
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .color),
                       ),
                     ),
-                    ListTile(
-                      titleTextStyle:
-                          const TextStyle(fontSize: 14, color: Colors.black),
-                      title: Text(AppLocalizations().tr('French')),
-                      leading: Radio<String>(
-                        value: 'fr',
-                        groupValue: AppLocalizations().getLanguageCode(),
-                        onChanged: (String? value) {
-                          handleSetLocale('fr');
-                        },
-                      ),
+                    Column(
+                      children: <Widget>[
+                        ListTile(
+                          titleTextStyle: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .color),
+                          title: Text(AppLocalizations().tr('English')),
+                          leading: Radio<String>(
+                            value: 'en',
+                            groupValue: AppLocalizations().getLanguageCode(),
+                            onChanged: (String? value) {
+                              handleSetLocale('en');
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          titleTextStyle: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .color),
+                          title: Text(AppLocalizations().tr('French')),
+                          leading: Radio<String>(
+                            value: 'fr',
+                            groupValue: AppLocalizations().getLanguageCode(),
+                            onChanged: (String? value) {
+                              handleSetLocale('fr');
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          titleTextStyle: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .color),
+                          title: Text(AppLocalizations().tr('Italian')),
+                          leading: Radio<String>(
+                            value: 'it',
+                            groupValue: AppLocalizations().getLanguageCode(),
+                            onChanged: (String? value) {
+                              handleSetLocale('it');
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    ListTile(
-                      titleTextStyle:
-                          const TextStyle(fontSize: 14, color: Colors.black),
-                      title: Text(AppLocalizations().tr('Italian')),
-                      leading: Radio<String>(
-                        value: 'it',
-                        groupValue: AppLocalizations().getLanguageCode(),
-                        onChanged: (String? value) {
-                          handleSetLocale('it');
-                        },
-                      ),
+                    const SizedBox(height: 150),
+                    Text(
+                        '${AppLocalizations().tr('Author')}: Michael Bertocchi'),
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 150),
-                Text('${AppLocalizations().tr('Author')}: Michael Bertocchi'),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton(
-                  child: Text(
-                      '${AppLocalizations().tr('Website')}: www.dupot.org'),
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://www.dupot.org'));
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text('${AppLocalizations().tr('License')}:  LGPL-2.1'),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(version),
-              ]))
-        ]) // Populate the Drawer in the next step.
+                    TextButton(
+                      child: Text(
+                          '${AppLocalizations().tr('Website')}: www.dupot.org'),
+                      onPressed: () {
+                        launchUrl(Uri.parse('https://www.dupot.org'));
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text('${AppLocalizations().tr('License')}:  LGPL-2.1'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(version),
+                  ]))
+            ]) // Populate the Drawer in the next step.
         );
   }
 }

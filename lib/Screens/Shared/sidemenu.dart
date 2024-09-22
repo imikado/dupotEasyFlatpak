@@ -30,8 +30,12 @@ class SideMenu extends StatelessWidget {
                 }
 
                 return ListTile(
-                    tileColor:
-                        isSelected ? Theme.of(context).primaryColorDark : null,
+                    tileColor: isSelected
+                        ? Theme.of(context).primaryColorDark
+                        : Theme.of(context).primaryColorLight,
+                    titleTextStyle: TextStyle(
+                        color:
+                            Theme.of(context).textTheme.headlineLarge!.color),
 
                     // selected: menuItemLoop.label == selected,
                     onTap: () {

@@ -32,7 +32,10 @@ class AppButton extends StatelessWidget {
                 ListTile(
                   title: Text(
                     title,
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(
+                        fontSize: 20,
+                        color:
+                            Theme.of(context).textTheme.headlineLarge!.color),
                     textAlign: TextAlign.center,
                   ),
                 ),

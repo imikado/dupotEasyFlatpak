@@ -95,11 +95,14 @@ class _SearchViewState extends State<SearchView> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    ListTile(
-                                      title: Text(
-                                        appStreamLoop.name,
-                                        style: const TextStyle(fontSize: 30),
-                                      ),
+                                    Text(
+                                      appStreamLoop.name,
+                                      style: TextStyle(
+                                          fontSize: 32,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .headlineLarge!
+                                              .color),
                                     ),
                                     const SizedBox(
                                       height: 10,

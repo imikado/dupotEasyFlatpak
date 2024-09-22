@@ -23,6 +23,7 @@ class UninstallButton extends StatelessWidget {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
+                  backgroundColor: Theme.of(context).primaryColor,
                   buttonPadding: const EdgeInsets.all(10),
                   actions: [
                     FilledButton(

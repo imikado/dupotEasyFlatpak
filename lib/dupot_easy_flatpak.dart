@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Layout/content_with_sidemenu.dart';
+import 'package:dupot_easy_flatpak/Layout/content_with_sidemenu_and_back.dart';
 import 'package:dupot_easy_flatpak/Layout/content_with_sidemenu_and_search.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations_delegate.dart';
 import 'package:dupot_easy_flatpak/Models/settings.dart';
@@ -28,6 +29,11 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   String statePageSelected = '';
   String stateSearch = '';
   Locale stateLocale = const Locale.fromSubtags(languageCode: 'en');
+
+  String statePreviousPageSelected = '';
+  String statePreviousSearch = '';
+  String statePreviousCategoryIdSelected = '';
+
   bool show404 = false;
 
   bool isDarkMode = false;
@@ -67,23 +73,48 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
       useMaterial3: true,
     );
 
-    ThemeData darkTheme2 = ThemeData(
-      brightness: Brightness.dark,
-      primaryColor: lightColorScheme.primary,
-      secondaryHeaderColor: lightColorScheme.secondary,
-      canvasColor: lightColorScheme.surface,
+    Color darkColor1 = const Color.fromARGB(255, 1, 2, 17);
+    Color darkColor2 = Color.fromARGB(255, 6, 40, 54);
+    Color darkColor3 = Color.fromARGB(255, 5, 6, 43);
+    Color darkColor4 = Color.fromARGB(255, 12, 51, 87);
+
+    Color darkColorWhite = Color.fromARGB(255, 255, 255, 255);
+
+    const TextStyle darkTextWhite = TextStyle(color: Colors.white);
+
+    ThemeData darkTheme = ThemeData(
+      brightness: Brightness.light,
+      primaryColorDark: darkColor1,
+      primaryColorLight: darkColor4,
+      secondaryHeaderColor: darkColor1,
+      canvasColor: darkColor1,
       textTheme: const TextTheme(
-          titleLarge: TextStyle(color: Colors.white),
-          headlineLarge: TextStyle(color: Colors.black)),
-      cardTheme: CardTheme(color: lightColorScheme.secondary),
-      cardColor: lightColorScheme.surfaceTint,
-      scaffoldBackgroundColor: lightColorScheme.primaryContainer,
+        titleLarge: darkTextWhite,
+        titleMedium: darkTextWhite,
+        titleSmall: darkTextWhite,
+        headlineLarge: darkTextWhite,
+        headlineMedium: darkTextWhite,
+        headlineSmall: darkTextWhite,
+        labelLarge: darkTextWhite,
+        labelMedium: darkTextWhite,
+        labelSmall: darkTextWhite,
+        bodyLarge: darkTextWhite,
+        bodyMedium: darkTextWhite,
+        bodySmall: darkTextWhite,
+        displayLarge: darkTextWhite,
+        displayMedium: darkTextWhite,
+        displaySmall: darkTextWhite,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+          selectionColor: darkColor3, cursorColor: darkColorWhite),
+      cardColor: darkColor1,
+      scaffoldBackgroundColor: darkColor2,
       useMaterial3: true,
     );
 
     return MaterialApp(
       locale: stateLocale,
-      theme: isDarkMode ? darkTheme2 : lightTheme,
+      theme: isDarkMode ? darkTheme : lightTheme,
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -158,7 +189,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
               stateApplicationIdSelected != '')
             MaterialPage(
                 key: const ValueKey(constPageApplication),
-                child: ContentWithSidemenu(
+                child: ContentWithSidemenuAndBack(
                   content: ApplicationView(
                       applicationIdSelected: stateApplicationIdSelected,
                       handleGoToInstallation: _handleGoToInstallation,
@@ -173,6 +204,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleSetLocale: _handleSetLocale,
                   pageSelected: statePageSelected,
                   categoryIdSelected: stateCategoryIdSelected,
+                  handleGoBack: _handleGoBack,
                 ))
           else if (statePageSelected == constPageInstallation &&
               stateApplicationIdSelected != '')
@@ -271,6 +303,10 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
 
   void _handleGoToApplication(String applicationId) {
     setState(() {
+      statePreviousPageSelected = statePageSelected;
+      statePreviousCategoryIdSelected = stateCategoryIdSelected;
+      statePreviousSearch = stateSearch;
+
       stateApplicationIdSelected = applicationId;
       statePageSelected = constPageApplication;
     });
@@ -329,5 +365,22 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     setState(() {
       stateLocale = Locale.fromSubtags(languageCode: locale);
     });
+  }
+
+  void _handleGoBack() {
+    if (statePreviousPageSelected == constPageCategory) {
+      _handleGoToCategory(statePreviousCategoryIdSelected);
+    } else if (statePreviousPageSelected == constPageSearch) {
+      _handleGoToSearch();
+      setState(() {
+        stateSearch = statePreviousSearch;
+      });
+    } else if (statePreviousPageSelected == constPageInstalledApps) {
+      _handleGoToInstalledApps();
+    } else if (statePreviousPageSelected == constPageHome) {
+      _handleGoToHome();
+    } else {
+      print('Error: got back not expected');
+    }
   }
 }

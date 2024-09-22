@@ -102,8 +102,10 @@ class _ApplicationViewState extends State<ApplicationView> {
                     Row(
                       children: [
                         if (stateAppStream!.icon.length > 10)
-                          Image.file(
-                              File('$appPath/${stateAppStream!.getIcon()}')),
+                          Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Image.file(File(
+                                  '$appPath/${stateAppStream!.getIcon()}'))),
                         const SizedBox(width: 20),
                         Expanded(
                           child: Column(
@@ -159,31 +161,17 @@ class _ApplicationViewState extends State<ApplicationView> {
                         getRunButton()
                       ],
                     ),
-                    Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              stateAppStream!.summary,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            HtmlWidget(
-                              stateAppStream!.description,
-                            ),
-                          ],
-                        )),
                     if (stateAppStream!.screenshotObjList.isNotEmpty)
-                      const ListTile(
-                          title: Text(
-                        'Screenshots',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
+                      ListTile(
+                        title: Text('Screenshots',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge!
+                                    .color)),
+                      ),
                     if (stateAppStream!.screenshotObjList.isNotEmpty)
                       Padding(
                           padding: const EdgeInsets.all(20),
@@ -212,14 +200,37 @@ class _ApplicationViewState extends State<ApplicationView> {
                                         icon: Image.network(
                                             screenshotLoop['preview']));
                                   }).toList())))),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const ListTile(
+                    Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              stateAppStream!.summary,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge!
+                                      .color),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            HtmlWidget(
+                              stateAppStream!.description,
+                            ),
+                          ],
+                        )),
+                    ListTile(
                         title: Text(
                       'Links',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color:
+                              Theme.of(context).textTheme.headlineLarge!.color),
                     )),
                     Padding(
                         padding: const EdgeInsets.only(

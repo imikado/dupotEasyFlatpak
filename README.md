@@ -1,8 +1,8 @@
 # Dupot Easy Flatpak
 
-Flatpak interface store.
+Flatpak store interface
 
-This application help you to install your flatpak and for some of them, help you to install it.
+This application will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better.
 
 ![Application](export/screenshots/Screenshot_01.png)
 
