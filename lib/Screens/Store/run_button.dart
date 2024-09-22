@@ -3,7 +3,6 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/settings.dart';
 import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class RunButton extends StatelessWidget {
   const RunButton(

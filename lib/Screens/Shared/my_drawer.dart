@@ -22,7 +22,7 @@ class MyDrawer extends StatelessWidget {
             child: Image.asset('assets/logos/512x512.png'),
           ),
           Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(children: [
                 ListTile(
                   title: Text(AppLocalizations.of(context).tr('Language')),

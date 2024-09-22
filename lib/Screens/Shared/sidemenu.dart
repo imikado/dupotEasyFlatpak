@@ -16,10 +16,10 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         child: Card(
             color: Theme.of(context).primaryColorLight,
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             elevation: 5,
             child: ListView(
               children: menuItemList.map((menuItemLoop) {

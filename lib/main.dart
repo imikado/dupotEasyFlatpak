@@ -63,7 +63,7 @@ void main() async {
 
     databaseFactory = databaseFactoryFfi;
 
-    runApp(DupotEasyFlatpak());
+    runApp(const DupotEasyFlatpak());
   } on Exception catch (e) {
     print('Exception::');
     print(e);

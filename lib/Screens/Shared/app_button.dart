@@ -42,7 +42,7 @@ class AppButton extends StatelessWidget {
                 ListTile(
                   title: Text(
                     title,
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                 ),

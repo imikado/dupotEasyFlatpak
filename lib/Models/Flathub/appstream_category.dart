@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class AppStreamCategory {
   final String appstream_id;
   final String category_id;

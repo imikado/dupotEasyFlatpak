@@ -49,7 +49,7 @@ class _Loading extends State<Loading> {
     }
 
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 205, 230, 250),
+        backgroundColor: const Color.fromARGB(255, 205, 230, 250),
         body: Center(
           child: Column(
             children: [Image.asset('assets/logos/512x512.png')],

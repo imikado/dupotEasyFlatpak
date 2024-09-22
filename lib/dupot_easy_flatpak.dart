@@ -45,10 +45,10 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   @override
   Widget build(BuildContext context) {
     ColorScheme lightColorScheme =
-        ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 54, 79, 148));
+        ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 54, 79, 148));
 
     ColorScheme darkColorScheme =
-        ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 2, 0, 12));
+        ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 2, 0, 12));
 
     ThemeData lightTheme = ThemeData(
       brightness: Brightness.light,

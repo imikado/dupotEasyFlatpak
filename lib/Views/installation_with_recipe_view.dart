@@ -220,7 +220,7 @@ class _InstallationWithRecipeViewState
                       children: [
                         if (stateAppStream!.icon.length > 10)
                           Image.file(
-                              File(appPath + '/' + stateAppStream!.getIcon())),
+                              File('$appPath/${stateAppStream!.getIcon()}')),
                         const SizedBox(width: 20),
                         Expanded(
                           child: Column(
@@ -252,11 +252,11 @@ class _InstallationWithRecipeViewState
                                               left: 0),
                                           alignment:
                                               AlignmentDirectional.topStart),
-                                      icon: Icon(Icons.verified),
+                                      icon: const Icon(Icons.verified),
                                       onPressed: () {},
                                       label: Text(
                                           stateAppStream!.getVerifiedLabel()))
-                                  : SizedBox(),
+                                  : const SizedBox(),
                             ],
                           ),
                         ),

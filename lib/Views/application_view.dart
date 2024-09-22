@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:dupot_easy_flatpak/Localizations/app_localizations.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';

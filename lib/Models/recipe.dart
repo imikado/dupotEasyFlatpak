@@ -6,7 +6,7 @@ class Recipe {
 
   Recipe(String applicationId,
       List<Map<String, dynamic>> rawFlatpakPermissionToOverrideList) {
-    this.id = applicationId;
+    id = applicationId;
     for (Map<String, dynamic> rawPermissionLoop
         in rawFlatpakPermissionToOverrideList) {
       String value = "none";

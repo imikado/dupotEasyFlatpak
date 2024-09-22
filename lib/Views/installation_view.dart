@@ -158,11 +158,11 @@ class _InstallationViewState extends State<InstallationView> {
                                             left: 0),
                                         alignment:
                                             AlignmentDirectional.topStart),
-                                    icon: Icon(Icons.verified),
+                                    icon: const Icon(Icons.verified),
                                     onPressed: () {},
                                     label: Text(
                                         stateAppStream!.getVerifiedLabel()))
-                                : SizedBox(),
+                                : const SizedBox(),
                           ],
                         ),
                       ),

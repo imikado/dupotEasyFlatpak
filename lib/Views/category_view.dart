@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream.dart';
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
-import 'package:dupot_easy_flatpak/Screens/Store/block.dart';
 import 'package:flutter/material.dart';
 
 class CategoryView extends StatefulWidget {
