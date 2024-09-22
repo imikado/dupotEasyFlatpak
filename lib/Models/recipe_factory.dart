@@ -9,9 +9,22 @@ import 'package:path/path.dart' as path;
 import 'recipe.dart';
 
 class RecipeFactory {
+  late BuildContext context;
+
+  static final RecipeFactory _singleton = RecipeFactory._internal();
+
+  factory RecipeFactory([BuildContext? newContext]) {
+    if (newContext != null) {
+      _singleton.context = newContext;
+    }
+    return _singleton;
+  }
+
+  RecipeFactory._internal();
+
   static bool isDebug = true;
 
-  static Future<List<String>> getApplicationList(context) async {
+  Future<List<String>> getApplicationList() async {
     String recipiesString =
         await DefaultAssetBundle.of(context).loadString("assets/recipies.json");
     List<String> recipeList = List<String>.from(json.decode(recipiesString));
@@ -36,8 +49,8 @@ class RecipeFactory {
     return recipeLowerCaseList;
   }
 
-  static Future<Recipe> getApplication(context, id) async {
-    final languageCode = AppLocalizations.of(context).getLanguageCode();
+  Future<Recipe> getApplication(id) async {
+    final languageCode = AppLocalizations().getLanguageCode();
 
     print('languageCode:$languageCode');
 

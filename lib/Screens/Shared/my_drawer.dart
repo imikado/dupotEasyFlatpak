@@ -25,18 +25,17 @@ class MyDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
                 ListTile(
-                  title: Text(AppLocalizations.of(context).tr('Language')),
+                  title: Text(AppLocalizations().tr('Language')),
                 ),
                 Column(
                   children: <Widget>[
                     ListTile(
                       titleTextStyle:
                           const TextStyle(fontSize: 14, color: Colors.black),
-                      title: Text(AppLocalizations.of(context).tr('English')),
+                      title: Text(AppLocalizations().tr('English')),
                       leading: Radio<String>(
                         value: 'en',
-                        groupValue:
-                            AppLocalizations.of(context).getLanguageCode(),
+                        groupValue: AppLocalizations().getLanguageCode(),
                         onChanged: (String? value) {
                           handleSetLocale('en');
                         },
@@ -45,11 +44,10 @@ class MyDrawer extends StatelessWidget {
                     ListTile(
                       titleTextStyle:
                           const TextStyle(fontSize: 14, color: Colors.black),
-                      title: Text(AppLocalizations.of(context).tr('French')),
+                      title: Text(AppLocalizations().tr('French')),
                       leading: Radio<String>(
                         value: 'fr',
-                        groupValue:
-                            AppLocalizations.of(context).getLanguageCode(),
+                        groupValue: AppLocalizations().getLanguageCode(),
                         onChanged: (String? value) {
                           handleSetLocale('fr');
                         },
@@ -58,11 +56,10 @@ class MyDrawer extends StatelessWidget {
                     ListTile(
                       titleTextStyle:
                           const TextStyle(fontSize: 14, color: Colors.black),
-                      title: Text(AppLocalizations.of(context).tr('Italian')),
+                      title: Text(AppLocalizations().tr('Italian')),
                       leading: Radio<String>(
                         value: 'it',
-                        groupValue:
-                            AppLocalizations.of(context).getLanguageCode(),
+                        groupValue: AppLocalizations().getLanguageCode(),
                         onChanged: (String? value) {
                           handleSetLocale('it');
                         },
@@ -71,14 +68,13 @@ class MyDrawer extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 150),
-                Text(
-                    '${AppLocalizations.of(context).tr('Author')}: Michael Bertocchi'),
+                Text('${AppLocalizations().tr('Author')}: Michael Bertocchi'),
                 const SizedBox(
                   height: 10,
                 ),
                 TextButton(
                   child: Text(
-                      '${AppLocalizations.of(context).tr('Website')}: www.dupot.org'),
+                      '${AppLocalizations().tr('Website')}: www.dupot.org'),
                   onPressed: () {
                     launchUrl(Uri.parse('https://www.dupot.org'));
                   },
@@ -86,8 +82,7 @@ class MyDrawer extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                    '${AppLocalizations.of(context).tr('License')}:  LGPL-2.1'),
+                Text('${AppLocalizations().tr('License')}:  LGPL-2.1'),
                 const SizedBox(
                   height: 10,
                 ),

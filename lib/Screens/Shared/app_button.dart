@@ -19,16 +19,6 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var myText = Text(
-      title,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 35,
-      ),
-    );
-
-    const double margin = 50;
-
     if (icon.length > 10) {
       return InkWell(
           borderRadius: BorderRadius.circular(12.0),

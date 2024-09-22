@@ -54,7 +54,7 @@ class _InstallationWithRecipeViewState
   }
 
   Future<Recipe> getRecipe(String applicationId) async {
-    Recipe recipe = await RecipeFactory.getApplication(context, applicationId);
+    Recipe recipe = await RecipeFactory().getApplication(applicationId);
     return recipe;
   }
 
@@ -101,11 +101,11 @@ class _InstallationWithRecipeViewState
     String? selectedDirectory = await prompt(context,
         title: Text(label),
         isSelectedInitialValue: false,
-        textOK: Text(AppLocalizations.of(context).tr('confirm')),
-        textCancel: Text(AppLocalizations.of(context).tr('cancel')),
+        textOK: Text(AppLocalizations().tr('confirm')),
+        textCancel: Text(AppLocalizations().tr('cancel')),
         hintText: label, validator: (String? value) {
       if (value == null || value.isEmpty) {
-        return AppLocalizations.of(context).tr('field_should_not_be_empty');
+        return AppLocalizations().tr('field_should_not_be_empty');
       }
       return null;
     });
@@ -140,10 +140,7 @@ class _InstallationWithRecipeViewState
   }
 
   Future<void> install() async {
-    Settings settingsObj = Settings(context: context);
-    await settingsObj.load();
-
-    Commands command = Commands(settingsObj: settingsObj);
+    Commands command = Commands();
 
     String commandBin = 'flatpak';
     List<String> commandArgList = [
@@ -153,10 +150,6 @@ class _InstallationWithRecipeViewState
       applicationIdSelected
     ];
 
-/*
-    String stdout = await Commands(settingsObj: settingsObj)
-        .installApplicationThenOverrideList(applicationIdSelected, processList);
-*/
     String flatpakCommand = 'flatpak';
 
     Process.start(command.getCommand(commandBin),
@@ -185,7 +178,7 @@ class _InstallationWithRecipeViewState
 
         setState(() {
           stateInstallationOutput =
-              "$stateInstallationOutput \n ${AppLocalizations.of(context).tr('installation_finished')}";
+              "$stateInstallationOutput \n ${AppLocalizations().tr('installation_finished')}";
           stateIsInstalling = false;
         });
       });
@@ -195,13 +188,15 @@ class _InstallationWithRecipeViewState
 
     setState(() {
       stateInstallationOutput =
-          "$stdout \n ${AppLocalizations.of(context).tr('installation_finished')}";
+          "$stdout \n ${AppLocalizations().tr('installation_finished')}";
       stateIsInstalling = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    RecipeFactory(context);
+
     const TextStyle outputTextStyle =
         TextStyle(color: Colors.white, fontSize: 14.0);
 
@@ -299,7 +294,7 @@ class _InstallationWithRecipeViewState
       onPressed: () {
         widget.handleGoToApplication(widget.applicationIdSelected);
       },
-      label: Text(AppLocalizations.of(context).tr('close')),
+      label: Text(AppLocalizations().tr('close')),
       icon: const Icon(Icons.close),
     );
   }

@@ -53,6 +53,17 @@
     <releases>
 
 
+      <release date="2024-09-22" version="2.6.1">
+            <description>
+              <ul>
+                <li>Update Italian language</li>
+                <li>Improve code quality</li>
+                <li>Update screenshot</li>
+              </ul>
+             
+            </description>
+        </release>
+
       <release date="2024-09-21" version="2.6.0">
             <description>
               <ul>

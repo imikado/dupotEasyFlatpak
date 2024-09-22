@@ -35,10 +35,7 @@ class _InstalledAppsViewState extends State<InstalledAppsView> {
   }
 
   Future<void> loadData() async {
-    Settings settingsObj = Settings(context: context);
-    await settingsObj.load();
-
-    Commands commands = Commands(settingsObj: settingsObj);
+    Commands commands = Commands();
 
     List<String> installedApplicationIdList =
         await commands.getInstalledApplicationList();

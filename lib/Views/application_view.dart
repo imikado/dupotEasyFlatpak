@@ -71,9 +71,9 @@ class _ApplicationViewState extends State<ApplicationView> {
           await appStreamFactory.findAppStreamById(applicationIdSelected);
     }
 
-    checkAlreadyInstalled(context, applicationIdSelected);
+    checkAlreadyInstalled(applicationIdSelected);
 
-    checkHasRecipe(applicationIdSelected, context);
+    checkHasRecipe(applicationIdSelected);
 
     setState(() {
       stateAppStream = appStream;
@@ -85,6 +85,8 @@ class _ApplicationViewState extends State<ApplicationView> {
     if (applicationIdSelected != widget.applicationIdSelected) {
       loadData();
     }
+
+    RecipeFactory(context);
 
     return Card(
         color: Theme.of(context).cardColor,
@@ -116,7 +118,7 @@ class _ApplicationViewState extends State<ApplicationView> {
                                 height: 10,
                               ),
                               Text(
-                                '${AppLocalizations.of(context).tr('By')} ${stateAppStream!.developer_name}',
+                                '${AppLocalizations().tr('By')} ${stateAppStream!.developer_name}',
                                 style: const TextStyle(
                                     fontStyle: FontStyle.italic, fontSize: 15),
                               ),
@@ -125,7 +127,7 @@ class _ApplicationViewState extends State<ApplicationView> {
                               ),
                               if (stateAppStream!.projectLicense.isNotEmpty)
                                 Text(
-                                    '${AppLocalizations.of(context).tr('License')}: ${stateAppStream!.projectLicense}'),
+                                    '${AppLocalizations().tr('License')}: ${stateAppStream!.projectLicense}'),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -300,8 +302,8 @@ class _ApplicationViewState extends State<ApplicationView> {
     return const Icon(Icons.ac_unit);
   }
 
-  void checkHasRecipe(String applicationId, context) async {
-    List<String> recipeList = await RecipeFactory.getApplicationList(context);
+  void checkHasRecipe(String applicationId) async {
+    List<String> recipeList = await RecipeFactory().getApplicationList();
     if (recipeList.contains(applicationId.toLowerCase())) {
       setState(() {
         stateHasRecipe = true;
@@ -309,11 +311,8 @@ class _ApplicationViewState extends State<ApplicationView> {
     }
   }
 
-  void checkAlreadyInstalled(BuildContext context, String applicationId) async {
-    Settings settingsObj = Settings(context: context);
-    await settingsObj.load();
-
-    Commands(settingsObj: settingsObj)
+  void checkAlreadyInstalled(String applicationId) async {
+    Commands()
         .isApplicationAlreadyInstalled(applicationId)
         .then((flatpakApplication) {
       setState(() {

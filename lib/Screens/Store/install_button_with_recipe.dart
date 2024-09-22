@@ -30,7 +30,7 @@ class InstallWithRecipeButton extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(AppLocalizations.of(context).tr('cancel'))),
+                        child: Text(AppLocalizations().tr('cancel'))),
                     FilledButton(
                         style: dialogButtonStyle,
                         onPressed: () {
@@ -38,19 +38,17 @@ class InstallWithRecipeButton extends StatelessWidget {
 
                           handle(stateAppStream!.id);
                         },
-                        child:
-                            Text(AppLocalizations.of(context).tr('confirm'))),
+                        child: Text(AppLocalizations().tr('confirm'))),
                   ],
-                  title: Text(
-                      AppLocalizations.of(context).tr('confirmation_title')),
+                  title: Text(AppLocalizations().tr('confirmation_title')),
                   contentPadding: const EdgeInsets.all(20.0),
                   content: Text(
-                      '${AppLocalizations.of(context).tr('do_you_confirm_installation_of')} ${stateAppStream!.name} ?'),
+                      '${AppLocalizations().tr('do_you_confirm_installation_of')} ${stateAppStream!.name} ?'),
                 ));
 
         //install(application);
       },
-      label: Text(AppLocalizations.of(context).tr('install_with_recipe')),
+      label: Text(AppLocalizations().tr('install_with_recipe')),
       icon: const Icon(Icons.install_desktop),
     );
   }

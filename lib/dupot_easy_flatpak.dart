@@ -1,6 +1,8 @@
 import 'package:dupot_easy_flatpak/Layout/content_with_sidemenu.dart';
 import 'package:dupot_easy_flatpak/Layout/content_with_sidemenu_and_search.dart';
 import 'package:dupot_easy_flatpak/Localizations/app_localizations_delegate.dart';
+import 'package:dupot_easy_flatpak/Models/settings.dart';
+import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Screens/loading.dart';
 import 'package:dupot_easy_flatpak/Views/application_view.dart';
 import 'package:dupot_easy_flatpak/Views/category_view.dart';
@@ -11,9 +13,7 @@ import 'package:dupot_easy_flatpak/Views/installedapps_view.dart';
 import 'package:dupot_easy_flatpak/Views/search_view.dart';
 import 'package:dupot_easy_flatpak/Views/uninstallation_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
 
 class DupotEasyFlatpak extends StatefulWidget {
   const DupotEasyFlatpak({super.key});
@@ -44,11 +44,13 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
 
   @override
   Widget build(BuildContext context) {
+    Settings settingsObj = Settings(context: context);
+    settingsObj.load().then((value) {
+      Commands(settingsObj);
+    });
+
     ColorScheme lightColorScheme =
         ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 54, 79, 148));
-
-    ColorScheme darkColorScheme =
-        ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 2, 0, 12));
 
     ThemeData lightTheme = ThemeData(
       brightness: Brightness.light,
@@ -86,11 +88,12 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('en', ''),
-        Locale('fr', ''),
-        Locale('it', ''),
+        Locale('en', 'EN'),
+        Locale('fr', 'FR'),
+        Locale('it', 'IT'),
       ],
       home: Navigator(
         pages: [

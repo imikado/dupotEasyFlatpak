@@ -40,7 +40,7 @@ class Block extends StatelessWidget {
         width: 200,
         height: 250,
         child: TextButton(
-          child: Text(AppLocalizations.of(context).tr('More')),
+          child: Text(AppLocalizations().tr('More')),
           // icon: Icon(Icons.more),
           onPressed: () {
             handleGoToCategory(categoryId);
@@ -51,7 +51,7 @@ class Block extends StatelessWidget {
       children: [
         const SizedBox(height: 20),
         Text(
-          AppLocalizations.of(context).tr(categoryId),
+          AppLocalizations().tr(categoryId),
           style: const TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,

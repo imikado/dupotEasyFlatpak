@@ -11,11 +11,8 @@ class RunButton extends StatelessWidget {
   final ButtonStyle buttonStyle;
   final AppStream? stateAppStream;
 
-  Future<void> run(BuildContext context, String applicationId) async {
-    Settings settingsObj = Settings(context: context);
-    await settingsObj.load();
-
-    Commands commands = Commands(settingsObj: settingsObj);
+  Future<void> run(String applicationId) async {
+    Commands commands = Commands();
     commands.run(applicationId);
   }
 
@@ -24,9 +21,9 @@ class RunButton extends StatelessWidget {
     return FilledButton.icon(
       style: buttonStyle,
       onPressed: () {
-        run(context, stateAppStream!.id);
+        run(stateAppStream!.id);
       },
-      label: Text(AppLocalizations.of(context).tr('Run')),
+      label: Text(AppLocalizations().tr('Run')),
       icon: const Icon(Icons.launch),
     );
   }

@@ -100,7 +100,7 @@ class _ContentWithSidemenuAndSearchState
           style: Theme.of(context).textTheme.titleLarge,
           cursorColor: Colors.white,
           decoration: InputDecoration(
-            hintText: AppLocalizations.of(context).tr('Search...'),
+            hintText: AppLocalizations().tr('Search...'),
             hintStyle: const TextStyle(color: Colors.white54),
             border: InputBorder.none,
           ),

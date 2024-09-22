@@ -8,7 +8,16 @@ class Commands {
 
   late Settings settingsObj;
 
-  Commands({required this.settingsObj});
+  static final Commands _singleton = Commands._internal();
+
+  factory Commands([Settings? settingsObj]) {
+    if (settingsObj != null) {
+      _singleton.settingsObj = settingsObj;
+    }
+    return _singleton;
+  }
+
+  Commands._internal();
 
   bool isInsideFlatpak() {
     return settingsObj.useFlatpakSpawn();

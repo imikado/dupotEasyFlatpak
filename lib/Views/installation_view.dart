@@ -60,10 +60,7 @@ class _InstallationViewState extends State<InstallationView> {
       stateAppStream = appStream;
     });
 
-    Settings settingsObj = Settings(context: context);
-    await settingsObj.load();
-
-    Commands command = Commands(settingsObj: settingsObj);
+    Commands command = Commands();
 
     String commandBin = 'flatpak';
     List<String> commandArgList = [
@@ -72,9 +69,6 @@ class _InstallationViewState extends State<InstallationView> {
       '--system',
       applicationIdSelected
     ];
-/*;
-    String stdout = await Commands(settingsObj: settingsObj)
-        .installApplicationThenOverrideList(applicationIdSelected, []);*/
 
     Process.start(command.getCommand(commandBin),
             command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
@@ -97,7 +91,7 @@ class _InstallationViewState extends State<InstallationView> {
         print('Exit code: $exitCode');
         setState(() {
           stateInstallationOutput =
-              "$stateInstallationOutput \n ${AppLocalizations.of(context).tr('installation_finished')}";
+              "$stateInstallationOutput \n ${AppLocalizations().tr('installation_finished')}";
           stateIsInstalling = false;
         });
       });
@@ -204,7 +198,7 @@ class _InstallationViewState extends State<InstallationView> {
       onPressed: () {
         widget.handleGoToApplication(widget.applicationIdSelected);
       },
-      label: Text(AppLocalizations.of(context).tr('close')),
+      label: Text(AppLocalizations().tr('close')),
       icon: const Icon(Icons.close),
     );
   }

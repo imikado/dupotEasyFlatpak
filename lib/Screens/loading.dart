@@ -18,11 +18,8 @@ class Loading extends StatefulWidget {
 class _Loading extends State<Loading> {
   bool isLoaded = false;
 
-  Future<void> processInit(BuildContext context) async {
-    Settings settingsObj = Settings(context: context);
-    await settingsObj.load();
-
-    Commands commands = Commands(settingsObj: settingsObj);
+  Future<void> processInit() async {
+    Commands commands = Commands();
 
     print('Installation');
     FirstInstallation firstInstallation = FirstInstallation(commands: commands);
@@ -43,7 +40,7 @@ class _Loading extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     if (!isLoaded) {
-      processInit(context).then((value) {
+      processInit().then((value) {
         widget.handle();
       });
     }

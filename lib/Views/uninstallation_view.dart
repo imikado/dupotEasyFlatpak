@@ -60,10 +60,7 @@ class _UninstallationViewState extends State<UninstallationView> {
       stateAppStream = appStream;
     });
 
-    Settings settingsObj = Settings(context: context);
-    await settingsObj.load();
-
-    Commands command = Commands(settingsObj: settingsObj);
+    Commands command = Commands();
 
     String commandBin = 'flatpak';
     List<String> commandArgList = [
@@ -72,11 +69,6 @@ class _UninstallationViewState extends State<UninstallationView> {
       '--system',
       applicationIdSelected
     ];
-
-/*
-    String stdout = await Commands(settingsObj: settingsObj)
-        .uninstallApplicationThenOverrideList(applicationIdSelected, []);
-        */
 
     Process.start(command.getCommand(commandBin),
             command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
@@ -99,7 +91,7 @@ class _UninstallationViewState extends State<UninstallationView> {
         print('Exit code: $exitCode');
         setState(() {
           stateInstallationOutput =
-              "$stateInstallationOutput \n ${AppLocalizations.of(context).tr('uninstallation_finished')}";
+              "$stateInstallationOutput \n ${AppLocalizations().tr('uninstallation_finished')}";
           stateIsInstalling = false;
         });
       });
@@ -202,7 +194,7 @@ class _UninstallationViewState extends State<UninstallationView> {
       onPressed: () {
         widget.handleGoToApplication(widget.applicationIdSelected);
       },
-      label: Text(AppLocalizations.of(context).tr('close')),
+      label: Text(AppLocalizations().tr('close')),
       icon: const Icon(Icons.close),
     );
   }

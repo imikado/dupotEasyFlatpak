@@ -13,7 +13,8 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   Future<AppLocalizations> load(Locale locale) {
     // Returning a SynchronousFuture here because an async "load" operation
     // isn't needed to produce an instance of AppLocalizations.
-    return SynchronousFuture<AppLocalizations>(AppLocalizations(locale));
+    return SynchronousFuture<AppLocalizations>(
+        AppLocalizations(newLanguageCode: locale.languageCode));
   }
 
   @override

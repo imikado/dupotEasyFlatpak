@@ -38,7 +38,7 @@ class SideMenu extends StatelessWidget {
                       menuItemLoop.action();
                     },
                     title: Text(
-                      AppLocalizations.of(context).tr(menuItemLoop.label),
+                      AppLocalizations().tr(menuItemLoop.label),
                       style: isSelected
                           ? TextStyle(
                               backgroundColor: Theme.of(context)

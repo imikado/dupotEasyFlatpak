@@ -1,13 +1,20 @@
-import 'package:flutter/material.dart';
-
 class AppLocalizations {
-  AppLocalizations(this.locale);
+  static final AppLocalizations _singleton = AppLocalizations._internal();
 
-  final Locale locale;
-
-  static AppLocalizations of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
+  factory AppLocalizations({String newLanguageCode = ''}) {
+    if (newLanguageCode.isNotEmpty) {
+      _singleton.languageCode = newLanguageCode;
+    }
+    return _singleton;
   }
+
+  void setLanguageCode(String newLanguageCode) {
+    _singleton.languageCode = newLanguageCode;
+  }
+
+  AppLocalizations._internal();
+
+  String languageCode = 'en';
 
   static const _localizedValues = <String, Map<String, String>>{
     'en': {
@@ -182,14 +189,14 @@ class AppLocalizations {
   static List<String> languages() => _localizedValues.keys.toList();
 
   String tr(String key) {
-    if (!_localizedValues[locale.languageCode]!.containsKey(key)) {
+    if (!_localizedValues[languageCode]!.containsKey(key)) {
       throw Exception(
-          'Missing localization for key: $key in language ${locale.languageCode}');
+          'Missing localization for key: $key in language $languageCode');
     }
-    return _localizedValues[locale.languageCode]![key]!;
+    return _localizedValues[languageCode]![key]!;
   }
 
   String getLanguageCode() {
-    return locale.languageCode;
+    return languageCode;
   }
 }
