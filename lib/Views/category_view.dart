@@ -43,6 +43,9 @@ class _CategoryViewState extends State<CategoryView> {
     setState(() {
       stateAppStreamList = appStreamList;
     });
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(0);
+    }
   }
 
   @override

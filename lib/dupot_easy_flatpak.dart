@@ -73,6 +73,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     ThemeData lightTheme = ThemeData(
       brightness: Brightness.light,
       colorScheme: lightColorScheme,
+      primaryColorLight: lightColorScheme.primaryContainer,
       primaryColor: lightColorScheme.primary,
       secondaryHeaderColor: lightColorScheme.secondary,
       canvasColor: lightColorScheme.surface,
@@ -86,11 +87,11 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     );
 
     Color darkColor1 = const Color.fromARGB(255, 1, 2, 17);
-    Color darkColor2 = Color.fromARGB(255, 6, 40, 54);
-    Color darkColor3 = Color.fromARGB(255, 5, 6, 43);
-    Color darkColor4 = Color.fromARGB(255, 12, 51, 87);
+    Color darkColor2 = const Color.fromARGB(255, 6, 40, 54);
+    Color darkColor3 = const Color.fromARGB(255, 5, 6, 43);
+    Color darkColor4 = const Color.fromARGB(255, 12, 51, 87);
 
-    Color darkColorWhite = Color.fromARGB(255, 255, 255, 255);
+    Color darkColorWhite = const Color.fromARGB(255, 255, 255, 255);
 
     const TextStyle darkTextWhite = TextStyle(color: Colors.white);
 

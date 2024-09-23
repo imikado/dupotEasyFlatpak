@@ -306,33 +306,68 @@ class AppStreamFactory {
     final db = await getDb();
     // Query the table for all the dogs.
     final List<Map<String, Object?>> appStreamList = await db.rawQuery(
-      'SELECT $constTableAppStream.id,$constTableAppStream.name,$constTableAppStream.summary,$constTableAppStream.icon,$constTableAppStream.lastUpdate from $constTableAppStream  where name like \'%$search%\' or summary like \'%$search%\'  ORDER by name asc',
+      '''
+        SELECT 
+          $constTableAppStream.id,
+          $constTableAppStream.name,
+          $constTableAppStream.summary,
+          $constTableAppStream.icon,
+          $constTableAppStream.lastUpdate 
+          
+          from $constTableAppStream  
+          
+          where name like  '%$search%' 
+
+        UNION ALL
+
+           SELECT 
+          $constTableAppStream.id,
+          $constTableAppStream.name,
+          $constTableAppStream.summary,
+          $constTableAppStream.icon,
+          $constTableAppStream.lastUpdate 
+          
+          from $constTableAppStream  
+          
+          where summary like  '%$search%'   
+
+
+        ''',
     );
 
-    // Convert the list of each dog's fields into a list of `Dog` objects.
-    return [
-      for (final {
-            'id': id as String,
-            'name': name as String,
-            'summary': summary as String,
-            'icon': icon as String,
-            'lastUpdate': lastUpdate as int
-          } in appStreamList)
-        AppStream(
-            id: id,
-            name: name,
-            summary: summary,
-            icon: icon,
-            categoryIdList: [],
-            description: '',
-            lastUpdate: lastUpdate,
-            metadataObj: {},
-            releaseObjList: [],
-            urlObj: {},
-            projectLicense: '',
-            developer_name: '',
-            screenshotObjList: []),
-    ];
+    List<String> appIdList = [];
+
+    final List<AppStream> distinctAppStreamList = [];
+    for (final {
+          'id': id as String,
+          'name': name as String,
+          'summary': summary as String,
+          'icon': icon as String,
+          'lastUpdate': lastUpdate as int
+        } in appStreamList) {
+      if (appIdList.contains(id)) {
+        continue;
+      }
+
+      distinctAppStreamList.add(AppStream(
+          id: id,
+          name: name,
+          summary: summary,
+          icon: icon,
+          categoryIdList: [],
+          description: '',
+          lastUpdate: lastUpdate,
+          metadataObj: {},
+          releaseObjList: [],
+          urlObj: {},
+          projectLicense: '',
+          developer_name: '',
+          screenshotObjList: []));
+
+      appIdList.add(id);
+    }
+
+    return distinctAppStreamList;
   }
 
   Future<List<AppStream>> findListAppStreamByCategoryLimited(
