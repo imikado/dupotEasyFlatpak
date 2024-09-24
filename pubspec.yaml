@@ -1,5 +1,5 @@
 name: dupot_easy_flatpak
-description: "Flatpak store with for some application a recipe to facilitate installation"
+description: "This application will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev

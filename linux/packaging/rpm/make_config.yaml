@@ -1,4 +1,6 @@
 display_name: Easy Flatpak
+package_name: dupot_easy_flatpak
+
 icon: export/rpm/512x512.png
 summary: An application to simplify install of some flatpak
 group: Applications/Development Tools
