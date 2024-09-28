@@ -23,6 +23,23 @@ class Commands {
     return settingsObj.useFlatpakSpawn();
   }
 
+  Future<bool> missFlathubInFlatpak() async {
+    ProcessResult result = await runProcessSync('flatpak', ['remotes']);
+    if (result.stdout.toString().contains('flathub')) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> setupFlathub() async {
+    await runProcessSync('flatpak', [
+      'remote-add',
+      '--if-not-exists',
+      'flathub',
+      'https://flathub.org/repo/flathub.flatpakrepo'
+    ]);
+  }
+
   String getCommand(String command) {
     if (isInsideFlatpak()) {
       return settingsObj.getFlatpakSpawnCommand();

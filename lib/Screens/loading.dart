@@ -2,6 +2,7 @@ import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
 import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Process/first_installation.dart';
 import 'package:dupot_easy_flatpak/Process/flathub_api.dart';
+import 'package:dupot_easy_flatpak/Process/parameters.dart';
 import 'package:flutter/material.dart';
 
 class Loading extends StatefulWidget {
@@ -29,6 +30,14 @@ class _Loading extends State<Loading> {
 
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
     await flathubApi.load();
+
+    if (!Commands().isInsideFlatpak() &&
+        await Commands().missFlathubInFlatpak()) {
+      print('need flathub');
+      await Commands().setupFlathub();
+    } else {
+      print(' flathub ok');
+    }
 
     setState(() {
       isLoaded = true;
