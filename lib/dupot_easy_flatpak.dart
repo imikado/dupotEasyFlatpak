@@ -29,6 +29,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
   String stateApplicationIdSelected = '';
   String statePageSelected = '';
   String stateSearch = '';
+  String stateDefaultSearch = '';
   Locale stateLocale = const Locale.fromSubtags(languageCode: 'en');
 
   String statePreviousPageSelected = '';
@@ -196,6 +197,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
                   handleSetLocale: _handleSetLocale,
                   handleSearch: _handleSearch,
                   pageSelected: statePageSelected,
+                  defaultSearch: stateDefaultSearch,
                   categoryIdSelected: stateCategoryIdSelected,
                 ))
           else if (statePageSelected == constPageApplication &&
@@ -334,8 +336,10 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     });
   }
 
-  void _handleGoToSearch() {
+  void _handleGoToSearch(String newSearch) {
     setState(() {
+      stateDefaultSearch = newSearch;
+      stateSearch = "";
       statePageSelected = constPageSearch;
       stateCategoryIdSelected = '';
     });
@@ -387,7 +391,7 @@ class _DupotEasyFlatpakState extends State<DupotEasyFlatpak> {
     if (statePreviousPageSelected == constPageCategory) {
       _handleGoToCategory(statePreviousCategoryIdSelected);
     } else if (statePreviousPageSelected == constPageSearch) {
-      _handleGoToSearch();
+      _handleGoToSearch('');
       setState(() {
         stateSearch = statePreviousSearch;
       });

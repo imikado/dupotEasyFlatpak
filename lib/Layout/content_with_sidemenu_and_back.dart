@@ -3,6 +3,7 @@ import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/my_drawer.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class ContentWithSidemenuAndBack extends StatefulWidget {
@@ -40,6 +41,9 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenuAndBack> {
   List<MenuItem> stateMenuItemList = [];
 
   String version = '';
+  final FocusNode _focusNode = FocusNode();
+
+  final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
 
   @override
   void initState() {
@@ -114,17 +118,27 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenuAndBack> {
       ),
       resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Container(
-            width: 240,
-            child: SideMenu(
-              menuItemList: stateMenuItemList,
-              pageSelected: widget.pageSelected,
-              categoryIdSelected: widget.categoryIdSelected,
-            )),
-        const SizedBox(width: 10),
-        Expanded(child: widget.content),
-      ]),
+      body: KeyboardListener(
+          focusNode: _focusNode,
+          autofocus: true,
+          onKeyEvent: (event) {
+            if (event is KeyDownEvent &&
+                alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {
+              widget.handleGoToSearch(event.logicalKey.keyLabel.toString());
+            }
+          },
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Container(
+                width: 240,
+                child: SideMenu(
+                  menuItemList: stateMenuItemList,
+                  pageSelected: widget.pageSelected,
+                  categoryIdSelected: widget.categoryIdSelected,
+                )),
+            const SizedBox(width: 10),
+            Expanded(child: widget.content),
+          ])),
       drawer: MyDrawer(
         version: version,
         handleSetLocale: widget.handleSetLocale,

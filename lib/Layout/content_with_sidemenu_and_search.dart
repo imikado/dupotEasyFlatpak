@@ -17,6 +17,7 @@ class ContentWithSidemenuAndSearch extends StatefulWidget {
   final Function handleGoToInstalledApps;
   final Function handleSearch;
   final Function handleSetLocale;
+  final String defaultSearch;
 
   const ContentWithSidemenuAndSearch(
       {super.key,
@@ -28,7 +29,8 @@ class ContentWithSidemenuAndSearch extends StatefulWidget {
       required this.handleGoToSearch,
       required this.handleSearch,
       required this.handleGoToInstalledApps,
-      required this.handleSetLocale});
+      required this.handleSetLocale,
+      required this.defaultSearch});
 
   @override
   _ContentWithSidemenuAndSearchState createState() =>
@@ -46,6 +48,8 @@ class _ContentWithSidemenuAndSearchState
   @override
   void initState() {
     super.initState();
+
+    _searchController.text = widget.defaultSearch;
 
     loadData();
   }
@@ -96,6 +100,7 @@ class _ContentWithSidemenuAndSearchState
           },
         ),
         title: TextField(
+          autofocus: true,
           controller: _searchController,
           style: Theme.of(context).textTheme.titleLarge,
           cursorColor: Colors.white,
@@ -105,10 +110,7 @@ class _ContentWithSidemenuAndSearchState
             border: InputBorder.none,
           ),
           onChanged: (value) {
-            // Perform search functionality here
-            if (value.length > 2) {
-              widget.handleSearch(value);
-            }
+            widget.handleSearch(value);
           },
         ),
       ),

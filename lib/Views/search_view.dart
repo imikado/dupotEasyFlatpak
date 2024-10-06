@@ -43,8 +43,11 @@ class _SearchViewState extends State<SearchView> {
     AppStreamFactory appStreamFactory = AppStreamFactory();
     appPath = await appStreamFactory.getPath();
 
-    List<AppStream> appStreamList =
-        await appStreamFactory.findListAppStreamBySearch(stateSearch);
+    List<AppStream> appStreamList = [];
+    if (stateSearch.length > 2) {
+      appStreamList =
+          await appStreamFactory.findListAppStreamBySearch(stateSearch);
+    }
 
     setState(() {
       stateAppStreamList = appStreamList;
