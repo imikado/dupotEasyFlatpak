@@ -10,6 +10,7 @@ import 'package:dupot_easy_flatpak/Screens/Store/install_button.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/install_button_with_recipe.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/run_button.dart';
 import 'package:dupot_easy_flatpak/Screens/Store/uninstall_button.dart';
+import 'package:dupot_easy_flatpak/Screens/Store/update_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,6 +21,7 @@ class ApplicationView extends StatefulWidget {
   Function handleGoToInstallation;
   Function handleGoToInstallationWithRecipe;
   Function handleGoToUninstallation;
+  Function handleGoToUpdate;
 
   ApplicationView({
     super.key,
@@ -27,6 +29,7 @@ class ApplicationView extends StatefulWidget {
     required this.handleGoToInstallation,
     required this.handleGoToInstallationWithRecipe,
     required this.handleGoToUninstallation,
+    required this.handleGoToUpdate,
   });
 
   @override
@@ -157,7 +160,9 @@ class _ApplicationViewState extends State<ApplicationView> {
                         ),
                         getButton(),
                         const SizedBox(width: 5),
-                        getRunButton()
+                        getRunButton(),
+                        const SizedBox(width: 5),
+                        getUpdateButton()
                       ],
                     ),
                     if (stateAppStream!.screenshotObjList.isNotEmpty)
@@ -252,6 +257,28 @@ class _ApplicationViewState extends State<ApplicationView> {
                   ],
                 ),
               ));
+  }
+
+  Widget getUpdateButton() {
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14, color: Colors.white));
+
+    final ButtonStyle dialogButtonStyle = FilledButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 14));
+
+    if (Commands().hasUpdateAvailableByAppId(stateAppStream!.id)) {
+      return UpdateButton(
+          buttonStyle: buttonStyle,
+          dialogButtonStyle: dialogButtonStyle,
+          stateAppStream: stateAppStream,
+          handle: widget.handleGoToUpdate);
+    } else {
+      return const SizedBox();
+    }
   }
 
   Widget getRunButton() {

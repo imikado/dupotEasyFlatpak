@@ -52,6 +52,18 @@
     <content_rating type="oars-1.1"/>
     <releases>
 
+    
+
+    <release date="2024-10-06" version="2.10.0">
+            <description>
+              <ul>
+                <li>Manage application's updates</li>
+                 
+              </ul>
+             
+            </description>
+        </release>
+
       <release date="2024-10-06" version="2.9.0">
             <description>
               <ul>

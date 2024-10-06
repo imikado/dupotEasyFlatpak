@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Models/Flathub/appstream_factory.dart';
+import 'package:dupot_easy_flatpak/Process/commands.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/menu_item.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/my_drawer.dart';
 import 'package:dupot_easy_flatpak/Screens/Shared/sidemenu.dart';
@@ -17,6 +18,7 @@ class ContentWithSidemenu extends StatefulWidget {
   final Function handleGoToInstalledApps;
   final Function handleToggleDarkMode;
   final Function handleSetLocale;
+  final Function handleGoToUpdatesAvailable;
 
   const ContentWithSidemenu(
       {super.key,
@@ -28,7 +30,8 @@ class ContentWithSidemenu extends StatefulWidget {
       required this.handleGoToSearch,
       required this.handleToggleDarkMode,
       required this.handleGoToInstalledApps,
-      required this.handleSetLocale});
+      required this.handleSetLocale,
+      required this.handleGoToUpdatesAvailable});
 
   @override
   _ContentWithSidemenuState createState() => _ContentWithSidemenuState();
@@ -55,20 +58,29 @@ class _ContentWithSidemenuState extends State<ContentWithSidemenu> {
     List<MenuItem> menuItemList = [
       MenuItem('Search', () {
         widget.handleGoToSearch('');
-      }, 'search', ''),
+      }, 'search', '', ''),
       MenuItem('Home', () {
         widget.handleGoToHome();
-      }, 'home', ''),
+      }, 'home', '', ''),
       MenuItem('InstalledApps', () {
         widget.handleGoToInstalledApps();
-      }, 'installedApps', '')
+      }, 'installedApps', '', '')
     ];
+
+    if (Commands().getNumberOfUpdates() > 0) {
+      menuItemList.add(MenuItem('Updates', widget.handleGoToUpdatesAvailable,
+          'updates', '', Commands().getNumberOfUpdates().toString()));
+    } else {
+      menuItemList.add(MenuItem('NoUpdates', () {}, 'updates', '',
+          Commands().getNumberOfUpdates().toString()));
+    }
+
     List<String> categoryIdList = await appStreamFactory.findAllCategoryList();
 
     for (String categoryIdLoop in categoryIdList) {
       menuItemList.add(MenuItem(categoryIdLoop, () {
         widget.handleGoToCategory(categoryIdLoop);
-      }, 'category', categoryIdLoop));
+      }, 'category', categoryIdLoop, ''));
 
       setState(() {
         stateMenuItemList = menuItemList;

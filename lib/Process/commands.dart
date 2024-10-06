@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dupot_easy_flatpak/Models/app_update.dart';
 import 'package:dupot_easy_flatpak/Models/settings.dart';
 
 class Commands {
   static const String flatpakCommand = 'flatpak';
 
   late Settings settingsObj;
+  late String updatesAvailableOutput;
+  List<AppUpdate> appUpdateAvailableList = [];
 
   static final Commands _singleton = Commands._internal();
 
@@ -29,6 +32,65 @@ class Commands {
       return false;
     }
     return true;
+  }
+
+  int getNumberOfUpdates() {
+    return appUpdateAvailableList.length;
+  }
+
+  List<AppUpdate> getAppUpdateAvailableList() {
+    return appUpdateAvailableList;
+  }
+
+  List<String> getAppIdUpdateAvailableList() {
+    List<String> appIdList = [];
+    for (AppUpdate appUpdateLoop in appUpdateAvailableList) {
+      appIdList.add(appUpdateLoop.id);
+    }
+    return appIdList;
+  }
+
+  Future<String> updateFlatpak(String appId) async {
+    ProcessResult result = await runProcess('flatpak', ['update', '-y', appId]);
+    return result.stdout.toString();
+  }
+
+  Future<void> checkUpdates() async {
+    ProcessResult result = await runProcess(
+        'flatpak', ['remote-ls', '--updates', '--columns=application,version']);
+    updatesAvailableOutput = result.stdout.toString();
+
+    appUpdateAvailableList.clear();
+
+    List<String> lineList = updatesAvailableOutput.split("\n");
+    if (lineList.isNotEmpty) {
+      //lineList.removeAt(0);
+      for (String lineLoop in lineList) {
+        if (RegExp(r'\t').hasMatch(lineLoop)) {
+          List<String> lineLoopList = lineLoop.split("\t");
+          appUpdateAvailableList
+              .add(AppUpdate(lineLoopList[0], lineLoopList[1]));
+        }
+      }
+    }
+  }
+
+  bool hasUpdateAvailableByAppId(String appId) {
+    for (AppUpdate appUpdateAvailableLoop in appUpdateAvailableList) {
+      if (appUpdateAvailableLoop.id == appId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  String getAppUpdateVersionByAppId(String appId) {
+    for (AppUpdate appUpdateAvailableLoop in appUpdateAvailableList) {
+      if (appUpdateAvailableLoop.id == appId) {
+        return appUpdateAvailableLoop.version;
+      }
+    }
+    throw new Exception('Cannot find app version available for id: $appId');
   }
 
   Future<void> setupFlathub() async {

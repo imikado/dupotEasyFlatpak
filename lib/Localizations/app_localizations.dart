@@ -70,7 +70,11 @@ class AppLocalizations {
       'French': 'French',
       'Language': 'Language',
       'Italian': 'Italian',
-      'More': 'More...'
+      'More': 'More...',
+      'Updates': 'Updates availables',
+      'NoUpdates': 'No updates availables',
+      'Update': 'Update',
+      'update_finished': 'Update finished'
     },
     'fr': {
       'loading': 'Chargement',
@@ -127,7 +131,11 @@ class AppLocalizations {
       'French': 'Français',
       'Language': 'Langage',
       'Italian': 'Italien',
-      'More': 'Plus...'
+      'More': 'Plus...',
+      'Updates': 'Mises à jour',
+      'NoUpdates': 'Aucune mise à jour',
+      'Update': 'Mettre à jour',
+      'update_finished': 'Mise à jour terminée'
     },
     'it': {
       'loading': 'Caricamento',
@@ -182,7 +190,11 @@ class AppLocalizations {
       'French': 'Francese',
       'Language': 'Lingua',
       'Italian': 'Italiano',
-      'More': 'Altro...'
+      'More': 'Altro...',
+      'Updates': 'Updates',
+      'NoUpdates': 'No updates availables',
+      'Update': 'Update',
+      'update_finished': 'Update finished'
     }
   };
 

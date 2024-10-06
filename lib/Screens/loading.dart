@@ -31,13 +31,14 @@ class _Loading extends State<Loading> {
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
     await flathubApi.load();
 
-    if (!Commands().isInsideFlatpak() &&
-        await Commands().missFlathubInFlatpak()) {
+    if (!commands.isInsideFlatpak() && await commands.missFlathubInFlatpak()) {
       print('need flathub');
-      await Commands().setupFlathub();
+      await commands.setupFlathub();
     } else {
       print(' flathub ok');
     }
+
+    await commands.checkUpdates();
 
     setState(() {
       isLoaded = true;

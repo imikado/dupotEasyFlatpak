@@ -13,6 +13,23 @@ class SideMenu extends StatelessWidget {
   final String pageSelected;
   final String categoryIdSelected;
 
+  Widget getIcon(MenuItem menuItem) {
+    if (menuItem.pageSelected == 'home') {
+      return Icon(Icons.home);
+    } else if (menuItem.pageSelected == 'search') {
+      return Icon(Icons.search);
+    } else if (menuItem.pageSelected == 'installedApps') {
+      return Icon(Icons.install_desktop);
+    } else if (menuItem.pageSelected == 'updates') {
+      return Badge(
+        label: Text(menuItem.badge),
+        backgroundColor: Colors.blueAccent,
+        child: const Icon(Icons.notifications),
+      );
+    }
+    return Icon(Icons.category);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,14 +58,20 @@ class SideMenu extends StatelessWidget {
                     onTap: () {
                       menuItemLoop.action();
                     },
-                    title: Text(
-                      AppLocalizations().tr(menuItemLoop.label),
-                      style: isSelected
-                          ? TextStyle(
-                              backgroundColor: Theme.of(context)
-                                  .textSelectionTheme
-                                  .selectionHandleColor)
-                          : null,
+                    title: Row(
+                      children: [
+                        getIcon(menuItemLoop),
+                        SizedBox(width: 8),
+                        Text(
+                          AppLocalizations().tr(menuItemLoop.label),
+                          style: isSelected
+                              ? TextStyle(
+                                  backgroundColor: Theme.of(context)
+                                      .textSelectionTheme
+                                      .selectionHandleColor)
+                              : null,
+                        ),
+                      ],
                     ));
               }).toList(),
             )));
