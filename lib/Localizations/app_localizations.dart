@@ -191,10 +191,10 @@ class AppLocalizations {
       'Language': 'Lingua',
       'Italian': 'Italiano',
       'More': 'Altro...',
-      'Updates': 'Updates',
-      'NoUpdates': 'No updates availables',
-      'Update': 'Update',
-      'update_finished': 'Update finished'
+      'Updates': 'Aggiornamenti',
+      'NoUpdates': 'Nessun aggiornamento disponibile',
+      'Update': 'Aggiornamento',
+      'update_finished': 'Aggiornamento completato'
     }
   };
 
