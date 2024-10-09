@@ -53,8 +53,17 @@
     <releases>
 
     
+      <release date="2024-10-09" version="2.10.1">
+            <description>
+              <ul>
+                <li>Fix update page</li>
+                 <li>Update italian traduction</li>
+              </ul>
+             
+            </description>
+        </release>
 
-    <release date="2024-10-06" version="2.10.0">
+      <release date="2024-10-06" version="2.10.0">
             <description>
               <ul>
                 <li>Manage application's updates</li>

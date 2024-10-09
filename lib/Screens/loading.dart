@@ -38,6 +38,10 @@ class _Loading extends State<Loading> {
       print(' flathub ok');
     }
 
+    List<String> dbApplicationIdList =
+        await appStreamFactory.findAllApplicationIdList();
+
+    commands.setDbApplicationIdList(dbApplicationIdList);
     await commands.checkUpdates();
 
     setState(() {

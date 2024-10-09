@@ -10,6 +10,7 @@ class Commands {
   late Settings settingsObj;
   late String updatesAvailableOutput;
   List<AppUpdate> appUpdateAvailableList = [];
+  List<String> dbApplicationIdList = [];
 
   static final Commands _singleton = Commands._internal();
 
@@ -34,6 +35,10 @@ class Commands {
     return true;
   }
 
+  void setDbApplicationIdList(List<String> dbApplicationIdList) {
+    dbApplicationIdList = dbApplicationIdList;
+  }
+
   int getNumberOfUpdates() {
     return appUpdateAvailableList.length;
   }
@@ -45,7 +50,7 @@ class Commands {
   List<String> getAppIdUpdateAvailableList() {
     List<String> appIdList = [];
     for (AppUpdate appUpdateLoop in appUpdateAvailableList) {
-      appIdList.add(appUpdateLoop.id);
+      appIdList.add(appUpdateLoop.id.toLowerCase());
     }
     return appIdList;
   }
@@ -68,8 +73,11 @@ class Commands {
       for (String lineLoop in lineList) {
         if (RegExp(r'\t').hasMatch(lineLoop)) {
           List<String> lineLoopList = lineLoop.split("\t");
-          appUpdateAvailableList
-              .add(AppUpdate(lineLoopList[0], lineLoopList[1]));
+
+          if (dbApplicationIdList.contains(lineLoopList[0])) {
+            appUpdateAvailableList
+                .add(AppUpdate(lineLoopList[0], lineLoopList[1]));
+          }
         }
       }
     }
