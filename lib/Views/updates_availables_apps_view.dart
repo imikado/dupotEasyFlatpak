@@ -35,13 +35,13 @@ class _UpdatesAvailablesAppsViewState extends State<UpdatesAvailablesAppsView> {
   }
 
   Future<void> loadData() async {
-    Commands commands = Commands();
-
     AppStreamFactory appStreamFactory = AppStreamFactory();
     appPath = await appStreamFactory.getPath();
 
+    print(Commands().getAppIdUpdateAvailableList());
+
     List<AppStream> appStreamList = await appStreamFactory
-        .findListAppStreamByIdList(commands.getAppIdUpdateAvailableList());
+        .findListAppStreamByIdList(Commands().getAppIdUpdateAvailableList());
 
     setState(() {
       stateAppStreamList = appStreamList;

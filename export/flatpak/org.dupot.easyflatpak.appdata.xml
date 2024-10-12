@@ -52,6 +52,16 @@
     <content_rating type="oars-1.1"/>
     <releases>
 
+
+      <release date="2024-10-12" version="2.10.2">
+            <description>
+              <ul>
+                <li>Update database + applications icon</li>
+                <li>Fix update page</li>
+               </ul>
+             
+            </description>
+        </release>
     
       <release date="2024-10-09" version="2.10.1">
             <description>

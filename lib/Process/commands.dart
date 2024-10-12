@@ -36,7 +36,7 @@ class Commands {
   }
 
   void setDbApplicationIdList(List<String> dbApplicationIdList) {
-    dbApplicationIdList = dbApplicationIdList;
+    this.dbApplicationIdList = dbApplicationIdList;
   }
 
   int getNumberOfUpdates() {
@@ -74,9 +74,13 @@ class Commands {
         if (RegExp(r'\t').hasMatch(lineLoop)) {
           List<String> lineLoopList = lineLoop.split("\t");
 
-          if (dbApplicationIdList.contains(lineLoopList[0])) {
+          if (dbApplicationIdList
+              .contains(lineLoopList[0].toString().toLowerCase())) {
             appUpdateAvailableList
                 .add(AppUpdate(lineLoopList[0], lineLoopList[1]));
+          } else {
+            print('not find ' + lineLoopList[0].toString().toLowerCase());
+            print(dbApplicationIdList);
           }
         }
       }

@@ -18,10 +18,9 @@ class _Loading extends State<Loading> {
   bool isLoaded = false;
 
   Future<void> processInit() async {
-    Commands commands = Commands();
-
     print('Installation');
-    FirstInstallation firstInstallation = FirstInstallation(commands: commands);
+    FirstInstallation firstInstallation =
+        FirstInstallation(commands: Commands());
     await firstInstallation.process();
     print('End installation');
 
@@ -31,9 +30,10 @@ class _Loading extends State<Loading> {
     FlathubApi flathubApi = FlathubApi(appStreamFactory: appStreamFactory);
     await flathubApi.load();
 
-    if (!commands.isInsideFlatpak() && await commands.missFlathubInFlatpak()) {
+    if (!Commands().isInsideFlatpak() &&
+        await Commands().missFlathubInFlatpak()) {
       print('need flathub');
-      await commands.setupFlathub();
+      await Commands().setupFlathub();
     } else {
       print(' flathub ok');
     }
@@ -41,8 +41,8 @@ class _Loading extends State<Loading> {
     List<String> dbApplicationIdList =
         await appStreamFactory.findAllApplicationIdList();
 
-    commands.setDbApplicationIdList(dbApplicationIdList);
-    await commands.checkUpdates();
+    Commands().setDbApplicationIdList(dbApplicationIdList);
+    await Commands().checkUpdates();
 
     setState(() {
       isLoaded = true;
