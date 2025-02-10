@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
@@ -45,9 +46,20 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     //await appStreamFactory.create();
 
     print('start flathub load');
-    FlathubApi flathubApi =
-        FlathubApi(applicationRepository: applicatoinRepository);
-    await flathubApi.load();
+    UserSettingsEntity userSettingsEntity = UserSettingsEntity();
+
+    if (userSettingsEntity.shouldUpdateApplicationsFromApi()) {
+      FlathubApi flathubApi =
+          FlathubApi(applicationRepository: applicatoinRepository);
+      await flathubApi.load();
+
+      userSettingsEntity.updateLasttimeStampUpdateApplicationsFromApi();
+
+      UserSettingsEntity().save();
+    } else {
+      print(
+          'Last applications updates from API is newer than 7 days, not need');
+    }
     print('end flathub load');
 
     setState(() {

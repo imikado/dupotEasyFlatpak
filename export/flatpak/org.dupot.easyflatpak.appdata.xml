@@ -65,6 +65,16 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+ <release date="2025-02-10" version="3.5.6">
+      <description>
+        <ul>
+          <li>Update application list from api only every 7 days</li>
+          <li>Update application database and icons with latest application added on flathub</li>
+          <li>Bug fix missing cart button after adding new search button in side menu</li>
+        </ul>
+      </description>
+    </release>
+
     <release date="2025-02-09" version="3.5.5">
       <description>
         <ul>

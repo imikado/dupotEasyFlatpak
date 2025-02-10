@@ -24,6 +24,8 @@ class UserSettingsEntity {
   bool displayApplicationInstalledNumberInSideMenu = false;
   bool displayApplicationInstalledNumberInPage = false;
 
+  int lastUpdateFromApiTimestamp = 0;
+
   static final UserSettingsEntity _singleton = UserSettingsEntity._internal();
 
   factory UserSettingsEntity([String? newJsonUserSettingsPath]) {
@@ -74,12 +76,31 @@ class UserSettingsEntity {
 
         _singleton.displayApplicationInstalledNumberInPage =
             jsonParameterObj['displayApplicationInstalledNumberInPage'];
+
+        if (jsonParameterObj.containsKey('lastUpdateFromApiTimestamp')) {
+          _singleton.lastUpdateFromApiTimestamp =
+              jsonParameterObj['lastUpdateFromApiTimestamp'];
+        }
       }
     }
     return _singleton;
   }
 
   UserSettingsEntity._internal();
+
+  bool shouldUpdateApplicationsFromApi() {
+    int days = 7;
+
+    if ((DateTime.now().millisecondsSinceEpoch - lastUpdateFromApiTimestamp) >
+        days * 86400000) {
+      return true;
+    }
+    return false;
+  }
+
+  void updateLasttimeStampUpdateApplicationsFromApi() {
+    lastUpdateFromApiTimestamp = DateTime.now().millisecondsSinceEpoch;
+  }
 
   void setApplicationDataPath(String newApplicationDataPath) {
     applicationDataPath = newApplicationDataPath;
@@ -187,7 +208,8 @@ class UserSettingsEntity {
       'displayApplicationInstalledNumberInSideMenu':
           displayApplicationInstalledNumberInSideMenu,
       'displayApplicationInstalledNumberInPage':
-          displayApplicationInstalledNumberInPage
+          displayApplicationInstalledNumberInPage,
+      'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp
     };
 
     File jsonParameterFile = File(jsonUserSettingsPath);

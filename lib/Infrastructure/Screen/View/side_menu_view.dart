@@ -112,6 +112,13 @@ class _SideMenuViewState extends State<SideMenuView> {
       stateCategoryMenuItemList = categoryMenuItemList;
     });
 
+    List<MenuItemEntity> cartMenuItemList =
+        SideMenuViewModel(handleGoTo: widget.handleGoTo)
+            .getCartMenuItemEntyList(widget.applicationIdListInCart);
+    setState(() {
+      stateCartMenuItemList = cartMenuItemList;
+    });
+
     List<MenuItemEntity> searchMenuItemList =
         SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getSearchMenuItemEntyList(widget.pageSelected, widget.searched);
