@@ -64,6 +64,15 @@
   <update_contact>imikado@gmail.com</update_contact>
   <content_rating type="oars-1.1"/>
   <releases>
+ 
+ <release date="2025-02-12" version="3.5.7">
+      <description>
+        <ul>
+          <li>Improve loading information</li>
+        </ul>
+      </description>
+    </release>
+
 
  <release date="2025-02-10" version="3.5.6">
       <description>

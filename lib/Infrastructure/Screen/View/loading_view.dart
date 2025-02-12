@@ -20,6 +20,8 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
 
   double progressValue = 0.0;
 
+  String stateLoadingInfo = '';
+
   @override
   void initState() {
     super.initState();
@@ -32,11 +34,19 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       progressValue = 0.1;
     });
 
+    setState(() {
+      stateLoadingInfo = 'Check installation';
+    });
+
     print('Installation');
     UpdateFromFlathubProcess updateFromFlathubProcess =
         UpdateFromFlathubProcess(commandApi: CommandApi());
     await updateFromFlathubProcess.process();
     print('End installation');
+
+    setState(() {
+      stateLoadingInfo = 'Installation ok';
+    });
 
     setState(() {
       progressValue = 0.20;
@@ -46,9 +56,16 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     //await appStreamFactory.create();
 
     print('start flathub load');
+    setState(() {
+      stateLoadingInfo = 'Should update application list from Flathub api ?';
+    });
     UserSettingsEntity userSettingsEntity = UserSettingsEntity();
 
     if (userSettingsEntity.shouldUpdateApplicationsFromApi()) {
+      setState(() {
+        stateLoadingInfo = 'Starting update application list from Flathub api';
+      });
+
       FlathubApi flathubApi =
           FlathubApi(applicationRepository: applicatoinRepository);
       await flathubApi.load();
@@ -56,10 +73,17 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       userSettingsEntity.updateLasttimeStampUpdateApplicationsFromApi();
 
       UserSettingsEntity().save();
+
+      setState(() {
+        stateLoadingInfo = 'Update application list from Flathub api finished';
+      });
     } else {
-      print(
-          'Last applications updates from API is newer than 7 days, not need');
+      setState(() {
+        stateLoadingInfo =
+            'Last applications updates from API is newer than 7 days, not need';
+      });
     }
+
     print('end flathub load');
 
     setState(() {
@@ -77,6 +101,9 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       print(' flathub ok');
     }
 
+    setState(() {
+      stateLoadingInfo = 'Load application localizations';
+    });
     await LocalizationApi().load();
     setState(() {
       progressValue = 0.7;
@@ -85,6 +112,9 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     List<String> dbApplicationIdList =
         await applicatoinRepository.findAllApplicationIdList();
 
+    setState(() {
+      stateLoadingInfo = 'Looking for applications updates';
+    });
     CommandApi().setDbApplicationIdList(dbApplicationIdList);
     await CommandApi().loadApplicationInstalledList();
     setState(() {
@@ -116,7 +146,11 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
               LinearProgressIndicator(
                 value: progressValue,
                 color: Theme.of(context).primaryColorDark,
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(stateLoadingInfo)
             ],
           ),
         ));
