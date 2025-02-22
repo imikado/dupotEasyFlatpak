@@ -26,6 +26,10 @@ class ApplicationViewModel {
     }
 
     applicationEntity.isAlreadyInstalled = await checkAlreadyInstalled(appId);
+    if (applicationEntity.isAlreadyInstalled) {
+      applicationEntity.isScopeUser = await isInstalledInUserScope(appId);
+    }
+
     applicationEntity.isOverrided = await checkIsOverrided(appId);
 
     applicationEntity.hasRecipe = await checkHasRecipe(appId);
@@ -53,6 +57,10 @@ class ApplicationViewModel {
         await CommandApi().isApplicationAlreadyInstalled(applicationId);
 
     return result.isInstalled;
+  }
+
+  Future<bool> isInstalledInUserScope(String applicationId) async {
+    return await CommandApi().isApplicationInstalledInScopeUser(applicationId);
   }
 
   Future<bool> checkIsOverrided(String applicationId) async {

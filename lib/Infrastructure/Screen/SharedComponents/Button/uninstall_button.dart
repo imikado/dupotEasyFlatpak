@@ -7,12 +7,14 @@ class UninstallButton extends StatefulWidget {
   ApplicationEntity applicationEntity;
   Function handle;
   bool isActive;
+  bool scopeUser;
 
   UninstallButton(
       {super.key,
       required this.applicationEntity,
       required this.handle,
-      required this.isActive});
+      required this.isActive,
+      required this.scopeUser});
 
   @override
   State<UninstallButton> createState() => _UninstallButtonState();
@@ -52,7 +54,8 @@ class _UninstallButtonState extends State<UninstallButton> {
                               onPressed: () {
                                 Navigator.of(context).pop();
 
-                                widget.handle(stateWillDeleteAppData);
+                                widget.handle(
+                                    stateWillDeleteAppData, widget.scopeUser);
                               },
                               child: Text(LocalizationApi().tr('confirm'))),
                         ],

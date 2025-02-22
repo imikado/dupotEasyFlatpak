@@ -39,7 +39,8 @@ class _ScopeFormState extends State<ScopeForm> {
                 RadioBoolEntity(label: 'scopeSystem', value: false),
                 RadioBoolEntity(label: 'scopeUser', value: true)
               ],
-              value: widget.userSettings.getUserInstallationScopeEnabled(),
+              radioGroupValue:
+                  widget.userSettings.getUserInstallationScopeEnabled(),
               handleUpdateValue: updateUserInstallationScope))
     ]);
   }

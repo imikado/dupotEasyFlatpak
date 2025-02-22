@@ -32,7 +32,9 @@ class CommandApi {
 
   Future<bool> missFlathubInFlatpak() async {
     ProcessResult result = await runProcessSync('flatpak', ['remotes']);
-    if (result.stdout.toString().contains('flathub')) {
+    if (result.stdout.toString().contains('flathub') &&
+        result.stdout.toString().contains('system') &&
+        result.stdout.toString().contains('user')) {
       return false;
     }
     return true;
@@ -128,6 +130,14 @@ class CommandApi {
       'remote-add',
       '--if-not-exists',
       'flathub',
+      '--system',
+      'https://flathub.org/repo/flathub.flatpakrepo'
+    ]);
+    await runProcessSync('flatpak', [
+      'remote-add',
+      '--if-not-exists',
+      'flathub',
+      '--user',
       'https://flathub.org/repo/flathub.flatpakrepo'
     ]);
   }
@@ -201,6 +211,16 @@ class CommandApi {
     }
 
     return FlatpakApplication(isAlreadyInstalled, '');
+  }
+
+  Future<bool> isApplicationInstalledInScopeUser(String applicationId) async {
+    ProcessResult result =
+        await runProcessSync(flatpakCommand, ['info', applicationId]);
+
+    if (result.stdout.toString().contains('Installation: user')) {
+      return true;
+    }
+    return false;
   }
 
   Future<FlatpakOverrideApplication> isApplicationOverrided(

@@ -41,7 +41,7 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
               RadioBoolEntity(label: 'Yes', value: true),
               RadioBoolEntity(label: 'No', value: false)
             ],
-            value: widget.userSettings
+            radioGroupValue: widget.userSettings
                 .getDisplayApplicationInstalledNumberInSideMenu(),
             handleUpdateValue: setDisplayApplicationInstalledNumberInSideMenu),
       )

@@ -20,11 +20,13 @@ class InstallWithRecipeSubview extends StatefulWidget {
 
   Function handleGoToApplication;
 
-  InstallWithRecipeSubview({
-    super.key,
-    required this.applicationId,
-    required this.handleGoToApplication,
-  });
+  String installScope;
+
+  InstallWithRecipeSubview(
+      {super.key,
+      required this.applicationId,
+      required this.handleGoToApplication,
+      required this.installScope});
 
   @override
   State<InstallWithRecipeSubview> createState() =>
@@ -127,7 +129,7 @@ class _InstallationWithRecipeViewState extends State<InstallWithRecipeSubview> {
       'install',
       '-y',
       'flathub',
-      UserSettingsEntity().getInstallationScope(),
+      widget.installScope,
       applicationId
     ];
 

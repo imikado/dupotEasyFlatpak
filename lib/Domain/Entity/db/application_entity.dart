@@ -35,6 +35,8 @@ class ApplicationEntity {
 
   bool isEmpty = false;
 
+  bool isScopeUser = false;
+
   static ApplicationEntity generateEmpty() {
     ApplicationEntity appEmpty = ApplicationEntity(
         id: '',

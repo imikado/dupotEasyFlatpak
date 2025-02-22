@@ -54,21 +54,26 @@ class ApplicationView extends StatefulWidget {
     handleReload();
   }
 
-  void goToInstallation() {
+  void goToInstallation(bool installUserScope) {
     NavigationEntity.goToApplicationInstall(
-        handleGoTo: handleGoTo, applicationId: applicationIdSelected);
+        handleGoTo: handleGoTo,
+        applicationId: applicationIdSelected,
+        installUserScope: installUserScope);
   }
 
-  void goToInstallationWithRecipe() {
+  void goToInstallationWithRecipe(bool installUserScope) {
     NavigationEntity.goToApplicationInstallWithRecipe(
-        handleGoTo: handleGoTo, applicationId: applicationIdSelected);
+        handleGoTo: handleGoTo,
+        applicationId: applicationIdSelected,
+        installUserScope: installUserScope);
   }
 
-  void goToUninstallation(bool willDeleteAppData) {
+  void goToUninstallation(bool willDeleteAppData, bool installUserScope) {
     NavigationEntity.goToApplicationUninstall(
         handleGoTo: handleGoTo,
         applicationId: applicationIdSelected,
-        willDeleteAppData: willDeleteAppData);
+        willDeleteAppData: willDeleteAppData,
+        installUserScope: installUserScope);
   }
 
   void goToOverride() {
@@ -426,6 +431,7 @@ class _ApplicationViewState extends State<ApplicationView> {
         applicationEntity: stateAppStream!,
         handle: widget.goToUninstallation,
         isActive: widget.isMain,
+        scopeUser: stateAppStream!.isScopeUser,
       );
     }
 

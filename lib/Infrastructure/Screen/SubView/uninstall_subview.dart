@@ -14,11 +14,14 @@ class UninstallSubview extends StatefulWidget {
   Function handleGoToApplication;
   bool willDeleteAppData;
 
+  String installScope;
+
   UninstallSubview(
       {super.key,
       required this.applicationId,
       required this.handleGoToApplication,
-      required this.willDeleteAppData});
+      required this.willDeleteAppData,
+      required this.installScope});
 
   @override
   State<UninstallSubview> createState() => _InstallSubviewState();
@@ -50,7 +53,7 @@ class _InstallSubviewState extends State<UninstallSubview> {
     List<String> commandArgList = [
       'uninstall',
       '-y',
-      UserSettingsEntity().getInstallationScope(),
+      widget.installScope,
     ];
     if (widget.willDeleteAppData) {
       commandArgList.add('--delete-data');

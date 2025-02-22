@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 class RadioBoolListSubform extends StatelessWidget {
   List<RadioBoolEntity> radioBoolEntityList;
-  bool value;
+  bool radioGroupValue;
   Function handleUpdateValue;
   RadioBoolListSubform(
       {super.key,
       required this.radioBoolEntityList,
-      required this.value,
+      required this.radioGroupValue,
       required this.handleUpdateValue});
 
   @override
@@ -25,9 +25,9 @@ class RadioBoolListSubform extends StatelessWidget {
                 title: Text(LocalizationApi().tr(radioBoolEntityLoop.label)),
                 leading: Radio<bool>(
                   value: radioBoolEntityLoop.value,
-                  groupValue: value,
+                  groupValue: radioGroupValue,
                   onChanged: (bool? value) {
-                    handleUpdateValue(radioBoolEntityLoop.value);
+                    handleUpdateValue(value);
                   },
                 ),
               ),

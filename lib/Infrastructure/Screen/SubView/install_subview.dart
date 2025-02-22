@@ -13,11 +13,13 @@ class InstallSubview extends StatefulWidget {
 
   Function handleGoToApplication;
 
-  InstallSubview({
-    super.key,
-    required this.applicationId,
-    required this.handleGoToApplication,
-  });
+  String installScope;
+
+  InstallSubview(
+      {super.key,
+      required this.applicationId,
+      required this.handleGoToApplication,
+      required this.installScope});
 
   @override
   State<InstallSubview> createState() => _InstallSubviewState();
@@ -50,7 +52,7 @@ class _InstallSubviewState extends State<InstallSubview> {
       'install',
       '-y',
       'flathub',
-      UserSettingsEntity().getInstallationScope(),
+      widget.installScope,
       applicationIdSelected
     ];
 

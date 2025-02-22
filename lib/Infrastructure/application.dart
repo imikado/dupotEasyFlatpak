@@ -251,17 +251,24 @@ class _ApplicationState extends State<Application> {
       removeFromCart(applicationId);
 
       return InstallSubview(
-          applicationId: applicationId,
-          handleGoToApplication: () => NavigationEntity.gotToApplicationId(
-              handleGoTo: goTo, applicationId: applicationId));
+        applicationId: applicationId,
+        handleGoToApplication: () => NavigationEntity.gotToApplicationId(
+            handleGoTo: goTo, applicationId: applicationId),
+        installScope:
+            NavigationEntity.extractArgumentInstallScope(stateArgumentMap),
+      );
     } else if (subPageToLoad ==
         NavigationEntity.argumentSubPageInstallWithRecipe) {
       String applicationId =
           NavigationEntity.extractArgumentApplicationId(stateArgumentMap);
+
       return InstallWithRecipeSubview(
-          applicationId: applicationId,
-          handleGoToApplication: () => NavigationEntity.gotToApplicationId(
-              handleGoTo: goTo, applicationId: applicationId));
+        applicationId: applicationId,
+        handleGoToApplication: () => NavigationEntity.gotToApplicationId(
+            handleGoTo: goTo, applicationId: applicationId),
+        installScope:
+            NavigationEntity.extractArgumentInstallScope(stateArgumentMap),
+      );
     } else if (subPageToLoad == NavigationEntity.argumentSubPageUninstall) {
       String applicationId =
           NavigationEntity.extractArgumentApplicationId(stateArgumentMap);
@@ -272,11 +279,12 @@ class _ApplicationState extends State<Application> {
       }
 
       return UninstallSubview(
-        applicationId: applicationId,
-        handleGoToApplication: () => NavigationEntity.gotToApplicationId(
-            handleGoTo: goTo, applicationId: applicationId),
-        willDeleteAppData: willDeleteAppData,
-      );
+          applicationId: applicationId,
+          handleGoToApplication: () => NavigationEntity.gotToApplicationId(
+              handleGoTo: goTo, applicationId: applicationId),
+          willDeleteAppData: willDeleteAppData,
+          installScope:
+              NavigationEntity.extractArgumentInstallScope(stateArgumentMap));
     } else if (subPageToLoad == NavigationEntity.argumentSubPageOverride) {
       String applicationId =
           NavigationEntity.extractArgumentApplicationId(stateArgumentMap);

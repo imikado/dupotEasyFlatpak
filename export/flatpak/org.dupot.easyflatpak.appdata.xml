@@ -64,7 +64,21 @@
   <update_contact>imikado@gmail.com</update_contact>
   <content_rating type="oars-1.1"/>
   <releases>
+
+
+
+  
  
+  <release date="2025-02-22" version="3.6.0">
+      <description>
+        <ul>
+          <li>Fix scope installation</li>
+          <li>Fix scope during uninstall</li>
+        </ul>
+      </description>
+    </release>
+
+
  <release date="2025-02-12" version="3.5.7">
       <description>
         <ul>

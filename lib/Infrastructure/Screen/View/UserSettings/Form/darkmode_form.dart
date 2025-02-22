@@ -49,7 +49,8 @@ class _DarkmodeFormState extends State<DarkmodeForm> {
                       //    label: 'Use_system_darkmode', value: false),
                       RadioBoolEntity(label: 'Override_darkmode', value: true)
                     ],
-                    value: widget.userSettings.userOverrideDarkModeEnabled,
+                    radioGroupValue:
+                        widget.userSettings.userOverrideDarkModeEnabled,
                     handleUpdateValue: updateOverrideDarkMode),
                 if (widget.userSettings.userOverrideDarkModeEnabled)
                   Padding(
@@ -59,7 +60,8 @@ class _DarkmodeFormState extends State<DarkmodeForm> {
                             RadioBoolEntity(label: 'Yes', value: true),
                             RadioBoolEntity(label: 'No', value: false)
                           ],
-                          value: widget.userSettings.getUserDarkModeEnabled(),
+                          radioGroupValue:
+                              widget.userSettings.getUserDarkModeEnabled(),
                           handleUpdateValue: updateDarkMode)),
               ],
             )),

@@ -33,6 +33,8 @@ class NavigationEntity {
 
   static const String argumentSearch = 'search';
 
+  static const String argumentInstallScope = 'installScope';
+
   static goToCart({required Function handleGoTo}) {
     handleGoTo(page: pageCart, argumentMap: {'': ''});
   }
@@ -104,6 +106,10 @@ class NavigationEntity {
     return argumentMap[argumentSearch];
   }
 
+  static extractArgumentInstallScope(Map<String, String> argumentMap) {
+    return argumentMap[argumentInstallScope];
+  }
+
   static gotToApplicationId(
       {required Function handleGoTo, required String applicationId}) {
     handleGoTo(
@@ -117,30 +123,46 @@ class NavigationEntity {
         page: pageCategory, argumentMap: {argumentCategoryId: categoryId});
   }
 
+  static String getFlatpakScope(bool installUserScope) {
+    String installScope = '--system';
+    if (installUserScope) {
+      installScope = '--user';
+    }
+    return installScope;
+  }
+
   static goToApplicationInstall(
-      {required Function handleGoTo, required String applicationId}) {
+      {required Function handleGoTo,
+      required String applicationId,
+      required bool installUserScope}) {
     handleGoTo(page: pageApplication, argumentMap: {
       argumentApplicationId: applicationId,
-      argumentSubPage: argumentSubPageInstall
+      argumentSubPage: argumentSubPageInstall,
+      argumentInstallScope: getFlatpakScope(installUserScope)
     });
   }
 
   static goToApplicationInstallWithRecipe(
-      {required Function handleGoTo, required String applicationId}) {
+      {required Function handleGoTo,
+      required String applicationId,
+      required bool installUserScope}) {
     handleGoTo(page: pageApplication, argumentMap: {
       argumentApplicationId: applicationId,
-      argumentSubPage: argumentSubPageInstallWithRecipe
+      argumentSubPage: argumentSubPageInstallWithRecipe,
+      argumentInstallScope: getFlatpakScope(installUserScope)
     });
   }
 
   static goToApplicationUninstall(
       {required Function handleGoTo,
       required String applicationId,
-      required bool willDeleteAppData}) {
+      required bool willDeleteAppData,
+      required bool installUserScope}) {
     handleGoTo(page: pageApplication, argumentMap: {
       argumentApplicationId: applicationId,
       argumentSubPage: argumentSubPageUninstall,
-      if (willDeleteAppData) 'willDeleteAppData': 'yes'
+      if (willDeleteAppData) 'willDeleteAppData': 'yes',
+      argumentInstallScope: getFlatpakScope(installUserScope)
     });
   }
 
