@@ -69,11 +69,13 @@
 
   
  
-  <release date="2025-02-22" version="3.6.0">
+  <release date="2025-02-22" version="3.6.1">
       <description>
         <ul>
+          <li>Allow to choose scope durint installation</li>
           <li>Fix scope installation</li>
           <li>Fix scope during uninstall</li>
+          <li>Update IT,BR localizations</li>
         </ul>
       </description>
     </release>
