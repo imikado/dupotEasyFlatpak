@@ -90,8 +90,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       progressValue = 0.50;
     });
 
-    if (!CommandApi().isInsideFlatpak() &&
-        await CommandApi().missFlathubInFlatpak()) {
+    if (await CommandApi().missFlathubInFlatpak()) {
       print('need flathub');
       setState(() {
         progressValue = 0.6;
