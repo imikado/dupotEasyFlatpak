@@ -67,7 +67,14 @@
 
 
 
-  
+  <release date="2025-02-28" version="3.7.0">
+      <description>
+        <ul>
+          <li>Add loading translation</li>
+          <li>Applications database update</li>
+        </ul>
+      </description>
+    </release>
  
   <release date="2025-02-22" version="3.6.1">
       <description>

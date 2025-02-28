@@ -34,8 +34,13 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       progressValue = 0.1;
     });
 
+    await LocalizationApi().load();
     setState(() {
-      stateLoadingInfo = 'Check installation';
+      progressValue = 0.8;
+    });
+
+    setState(() {
+      stateLoadingInfo = LocalizationApi().tr('loading_Check_installation');
     });
 
     print('Installation');
@@ -45,7 +50,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     print('End installation');
 
     setState(() {
-      stateLoadingInfo = 'Installation ok';
+      stateLoadingInfo = LocalizationApi().tr('loading_Installation_ok');
     });
 
     setState(() {
@@ -57,13 +62,15 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
 
     print('start flathub load');
     setState(() {
-      stateLoadingInfo = 'Should update application list from Flathub api ?';
+      stateLoadingInfo = LocalizationApi()
+          .tr('loading_Should_update_application_list_from_Flathub_api');
     });
     UserSettingsEntity userSettingsEntity = UserSettingsEntity();
 
     if (userSettingsEntity.shouldUpdateApplicationsFromApi()) {
       setState(() {
-        stateLoadingInfo = 'Starting update application list from Flathub api';
+        stateLoadingInfo = LocalizationApi()
+            .tr('loading_Starting_update_application_list_from_Flathub_api');
       });
 
       FlathubApi flathubApi =
@@ -75,12 +82,13 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       UserSettingsEntity().save();
 
       setState(() {
-        stateLoadingInfo = 'Update application list from Flathub api finished';
+        stateLoadingInfo = LocalizationApi()
+            .tr('loading_Update_application_list_from_Flathub_api_finished');
       });
     } else {
       setState(() {
-        stateLoadingInfo =
-            'Last applications updates from API is newer than 7 days, not need';
+        stateLoadingInfo = LocalizationApi().tr(
+            'loading_Last_applications_updates_from_API_is_newer_than_7_days_not_need');
       });
     }
 
@@ -100,19 +108,12 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       print(' flathub ok');
     }
 
-    setState(() {
-      stateLoadingInfo = 'Load application localizations';
-    });
-    await LocalizationApi().load();
-    setState(() {
-      progressValue = 0.7;
-    });
-
     List<String> dbApplicationIdList =
         await applicatoinRepository.findAllApplicationIdList();
 
     setState(() {
-      stateLoadingInfo = 'Looking for applications updates';
+      stateLoadingInfo =
+          LocalizationApi().tr('loading_Looking_for_applications_updates');
     });
     CommandApi().setDbApplicationIdList(dbApplicationIdList);
     await CommandApi().loadApplicationInstalledList();

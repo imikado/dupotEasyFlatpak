@@ -93,5 +93,14 @@
   "cart_is_empty": "La cesta está vacía",
   "Name":"Nombre",
   "Description":"Descripción",
-    "No_result_corresponding_to_this_research":"No result corresponding to this research :("
+  "No_result_corresponding_to_this_research":"No result corresponding to this research :(",
+
+  "loading_Check_installation":"Check installation",
+  "loading_Installation_ok":"Installation ok",
+  "loading_Should_update_application_list_from_Flathub_api":"Should update application list from Flathub api ?",
+  "loading_Starting_update_application_list_from_Flathub_api":"Starting update application list from Flathub api",
+  "loading_Update_application_list_from_Flathub_api_finished":"Update application list from Flathub api finished",
+  "loading_Last_applications_updates_from_API_is_newer_than_7_days_not_need":"Last applications updates from API is newer than 7 days, not need",
+  "loading_Load_application_localizations":"Load application localizations",
+  "loading_Looking_for_applications_updates":"Looking for applications updates"
 }
