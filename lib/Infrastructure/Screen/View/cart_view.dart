@@ -13,14 +13,14 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button
 import 'package:flutter/material.dart';
 
 class CartView extends StatefulWidget {
-  Function handleGoTo;
-  List<String> applicationIdListInCart;
-  bool isMain;
-  Function handleRemoveFromCart;
-  Map<String, List<OverrideFormControl>> overrideSetupListByApplicationId;
-  String applicationId;
+  final Function handleGoTo;
+  final List<String> applicationIdListInCart;
+  final bool isMain;
+  final Function handleRemoveFromCart;
+  final Map<String, List<OverrideFormControl>> overrideSetupListByApplicationId;
+  final String applicationId;
 
-  CartView(
+  const CartView(
       {super.key,
       required this.handleGoTo,
       required this.isMain,

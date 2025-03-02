@@ -11,10 +11,10 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button
 import 'package:flutter/material.dart';
 
 class UpdatesAvailablesView extends StatefulWidget {
-  Function handleGoTo;
-  bool isMain;
+  final Function handleGoTo;
+  final bool isMain;
 
-  UpdatesAvailablesView(
+  const UpdatesAvailablesView(
       {super.key, required this.handleGoTo, required this.isMain});
 
   @override

@@ -7,10 +7,10 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class CategoryView extends StatefulWidget {
-  Function handleGoTo;
-  String categoryIdSelected;
+  final Function handleGoTo;
+  final String categoryIdSelected;
 
-  CategoryView(
+  const CategoryView(
       {super.key, required this.handleGoTo, required this.categoryIdSelected});
 
   @override

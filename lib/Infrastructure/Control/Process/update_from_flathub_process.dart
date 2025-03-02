@@ -6,10 +6,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:archive/archive_io.dart';
+import 'package:logging/logging.dart';
 
 import 'dart:io';
 
 class UpdateFromFlathubProcess {
+  static final _logger = Logger('UpdateFromFlathubProcess');
   CommandApi commandApi;
 
   UpdateFromFlathubProcess({required this.commandApi});
@@ -49,12 +51,12 @@ class UpdateFromFlathubProcess {
       if (buildInfo == packageInfo.version) {
         return;
       } else {
-        print(
-            'build installed $buildInfo different current ${packageInfo.version}');
+        _logger.info(
+            'Build installed $buildInfo different from current ${packageInfo.version}');
       }
     }
 
-    print('install icons');
+    _logger.info('Installing icons');
 
     String targetIconsArchive = '${documentsTargetDirectory.path}/Archive.zip';
 

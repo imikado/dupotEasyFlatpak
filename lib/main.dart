@@ -14,6 +14,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:window_manager/window_manager.dart';
+import 'package:logging/logging.dart';
+
+final _logger = Logger('Main');
 
 void main() async {
   try {
@@ -34,7 +37,7 @@ void main() async {
     bool shouldCopyUserSettings = false;
 
     if (!applicationDataDirectory.existsSync()) {
-      print('missing app directory, install database');
+      _logger.info('Missing app directory, installing database');
       await applicationDataDirectory.create();
 
       await applicationDataIconsDirectory.create();
@@ -42,7 +45,7 @@ void main() async {
       shouldCopyDb = true;
       shouldCopyUserSettings = true;
     } else {
-      print('app directory already there');
+      _logger.info('App directory already exists');
 
       if (!applicationDataIconsDirectory.existsSync()) {
         await applicationDataIconsDirectory.create();
@@ -55,10 +58,10 @@ void main() async {
       if (buildInstalled.existsSync()) {
         String buildInfo = buildInstalled.readAsStringSync();
         if (buildInfo == packageInfo.version) {
-          print('build installed is the latest ($buildInfo)');
+          _logger.info('Build installed is the latest ($buildInfo)');
         } else {
-          print(
-              'build installed $buildInfo different current ${packageInfo.version}');
+          _logger.info(
+              'Build installed $buildInfo different from current ${packageInfo.version}');
           shouldCopyDb = true;
         }
       }
@@ -113,7 +116,7 @@ void main() async {
       CommandApi(settingsObj);
     });
 
-    print('start application');
+    _logger.info('Starting application');
 
     sqfliteFfiInit();
 
@@ -131,17 +134,21 @@ void main() async {
       await windowManager.focus();
     });
 
+    Logger.root.level = Level.ALL;
+    Logger.root.onRecord.listen((record) {
+      stderr.writeln('${record.level.name}: ${record.time}: ${record.message}');
+    });
+
     runApp(const Application());
   } on Exception catch (e) {
-    print('Exception::');
-    print(e);
+    _logger.severe('Exception:', e);
   }
 }
 
 Future<void> copyAssetFilePath(String filePath, String targetPath) async {
-  print('Start copy $filePath');
+  _logger.info('Starting copy of $filePath');
   final bytes = await rootBundle.load('assets/$filePath');
   final targetFile = File('$targetPath/${p.basename(filePath)}');
   await targetFile.writeAsBytes(bytes.buffer.asUint8List());
-  print('End copy $filePath');
+  _logger.info('Finished copying $filePath');
 }

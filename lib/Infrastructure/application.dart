@@ -25,15 +25,18 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/user_settings_view
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:logging/logging.dart';
 
 class Application extends StatefulWidget {
   const Application({super.key});
 
   @override
-  _ApplicationState createState() => _ApplicationState();
+  ApplicationState createState() => ApplicationState();
 }
 
-class _ApplicationState extends State<Application> {
+class ApplicationState extends State<Application> {
+  static final _logger = Logger('ApplicationState');
+
   String statePage = NavigationEntity.pageLoading;
   Map<String, String> stateArgumentMap = {};
   String stateSearched = '';
@@ -405,8 +408,8 @@ class _ApplicationState extends State<Application> {
     if (NavigationEntity.hasArgumentSearch(argumentMap)) {
       String newSearch = NavigationEntity.extractArgumentSearch(argumentMap);
       if (newSearch != stateSearched) {
-        print('update search to ' +
-            NavigationEntity.extractArgumentSearch(argumentMap));
+        _logger.info(
+            'update search to ${NavigationEntity.extractArgumentSearch(argumentMap)}');
         setState(() {
           stateSearched = NavigationEntity.extractArgumentSearch(argumentMap);
         });

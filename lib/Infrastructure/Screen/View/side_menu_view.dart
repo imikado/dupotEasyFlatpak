@@ -6,16 +6,14 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_text_style.
 import 'package:flutter/material.dart';
 
 class SideMenuView extends StatefulWidget {
-  String pageSelected;
-  Map<String, String> argumentMapSelected;
-  Function handleGoTo;
-  List<String> applicationIdListInCart;
+  final String pageSelected;
+  final Map<String, String> argumentMapSelected;
+  final Function handleGoTo;
+  final List<String> applicationIdListInCart;
+  final int interfaceVersion;
+  final String searched;
 
-  int interfaceVersion = 0;
-
-  String searched;
-
-  SideMenuView(
+  const SideMenuView(
       {super.key,
       required this.pageSelected,
       required this.argumentMapSelected,

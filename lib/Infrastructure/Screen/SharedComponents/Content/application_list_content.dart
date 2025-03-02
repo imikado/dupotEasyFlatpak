@@ -5,13 +5,13 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class ApplicationListContent extends StatefulWidget {
-  ApplicationListContent(
+  final Function handleGoTo;
+  final List<ApplicationEntity> applicationEntityList;
+
+  const ApplicationListContent(
       {super.key,
       required this.applicationEntityList,
       required this.handleGoTo});
-
-  Function handleGoTo;
-  List<ApplicationEntity> applicationEntityList = [];
 
   @override
   State<ApplicationListContent> createState() => _ApplicationListContentState();

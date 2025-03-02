@@ -10,11 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:ini/ini.dart';
 
 class OverrideSubview extends StatefulWidget {
-  String applicationId;
+  final String applicationId;
+  final Function handleGoToApplication;
 
-  Function handleGoToApplication;
-
-  OverrideSubview({
+  const OverrideSubview({
     super.key,
     required this.applicationId,
     required this.handleGoToApplication,
@@ -187,6 +186,8 @@ class _OverrideSubviewState extends State<OverrideSubview> {
           });
           await overrideControl.save(
               widget.applicationId, stateOverrideFormControlList);
+
+          if (!mounted) return;
 
           final snackBar = SnackBar(
             content: Text(LocalizationApi().tr('successfully_saved')),

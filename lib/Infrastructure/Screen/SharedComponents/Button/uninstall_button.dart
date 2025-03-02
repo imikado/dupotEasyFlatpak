@@ -4,12 +4,12 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class UninstallButton extends StatefulWidget {
-  ApplicationEntity applicationEntity;
-  Function handle;
-  bool isActive;
-  bool scopeUser;
+  final ApplicationEntity applicationEntity;
+  final Function handle;
+  final bool isActive;
+  final bool scopeUser;
 
-  UninstallButton(
+  const UninstallButton(
       {super.key,
       required this.applicationEntity,
       required this.handle,

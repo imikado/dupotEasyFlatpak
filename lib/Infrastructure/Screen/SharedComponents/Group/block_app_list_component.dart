@@ -11,7 +11,7 @@ class BlockAppListComponent extends StatelessWidget {
   final String appPath;
   final Function handleGoTo;
 
-  BlockAppListComponent({
+  const BlockAppListComponent({
     super.key,
     required this.categoryId,
     required this.appStreamList,

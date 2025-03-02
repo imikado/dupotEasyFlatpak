@@ -4,16 +4,14 @@ import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/application.dart';
 import 'package:flutter/material.dart';
 
 class DatatableApplicationListComponent extends StatefulWidget {
-  List<ApplicationEntity> applicationEntityList;
-  Function handleGoTo;
+  final List<ApplicationEntity> applicationEntityList;
+  final Function handleGoTo;
+  final ScrollController handleScrollController;
 
-  ScrollController handleScrollController;
-
-  DatatableApplicationListComponent(
+  const DatatableApplicationListComponent(
       {super.key,
       required this.applicationEntityList,
       required this.handleGoTo,

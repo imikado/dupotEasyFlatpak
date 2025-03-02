@@ -3,9 +3,9 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class DialogConfirmButton extends StatelessWidget {
-  Function onPressedFunction;
+  final Function onPressedFunction;
 
-  DialogConfirmButton({super.key, required this.onPressedFunction});
+  const DialogConfirmButton({super.key, required this.onPressedFunction});
 
   @override
   Widget build(BuildContext context) {

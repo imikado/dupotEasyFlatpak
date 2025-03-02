@@ -4,12 +4,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/c
 import 'package:flutter/material.dart';
 
 class GridApplicationListComponent extends StatelessWidget {
-  List<ApplicationEntity> applicationEntityList;
-  Function handleGoTo;
+  final List<ApplicationEntity> applicationEntityList;
+  final Function handleGoTo;
+  final ScrollController handleScrollController;
 
-  ScrollController handleScrollController;
-
-  GridApplicationListComponent(
+  const GridApplicationListComponent(
       {super.key,
       required this.applicationEntityList,
       required this.handleGoTo,

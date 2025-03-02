@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CardOutputComponent extends StatelessWidget {
-  CardOutputComponent({super.key, required this.outputString});
+  final String outputString;
 
-  String outputString;
+  const CardOutputComponent({super.key, required this.outputString});
 
   @override
   Widget build(BuildContext context) {

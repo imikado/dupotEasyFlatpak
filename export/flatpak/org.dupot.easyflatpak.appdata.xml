@@ -65,7 +65,15 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
-
+<release date="2025-03-03" version="3.7.2"> 
+      <description>
+        <ul>
+          <li>Bugfix when try to install application with recipe</li>
+          <li>Code improvment</li>
+          <li>Switch to log application in place of print</li>
+        </ul>
+      </description>
+    </release>
 
   <release date="2025-03-02" version="3.7.1"> 
       <description>

@@ -1,25 +1,21 @@
-import 'dart:collection';
-
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_bool_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/dialog_cancel_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/dialog_confirm_button.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubForm/radio_bool_list_subform.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
 import 'package:flutter/material.dart';
 
 class InstallButton extends StatefulWidget {
-  InstallButton(
+  final ApplicationEntity applicationEntity;
+  final Function handle;
+  final bool isActive;
+
+  const InstallButton(
       {super.key,
       required this.applicationEntity,
       required this.handle,
       required this.isActive});
-
-  ApplicationEntity applicationEntity;
-  Function handle;
-  bool isActive;
 
   @override
   State<InstallButton> createState() => _InstallButtonState();

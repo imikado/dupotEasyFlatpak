@@ -1,22 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/close_subview_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/card_output_component.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 class UninstallSubview extends StatefulWidget {
-  String applicationId;
+  final String applicationId;
+  final Function handleGoToApplication;
+  final bool willDeleteAppData;
+  final String installScope;
 
-  Function handleGoToApplication;
-  bool willDeleteAppData;
-
-  String installScope;
-
-  UninstallSubview(
+  const UninstallSubview(
       {super.key,
       required this.applicationId,
       required this.handleGoToApplication,
@@ -28,6 +26,8 @@ class UninstallSubview extends StatefulWidget {
 }
 
 class _InstallSubviewState extends State<UninstallSubview> {
+  static final _logger = Logger('UninstallSubview');
+
   bool stateIsInstalling = true;
   String stateInstallationOutput = '';
 
@@ -64,29 +64,31 @@ class _InstallSubviewState extends State<UninstallSubview> {
             command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
         .then((Process process) {
       process.stdout.transform(utf8.decoder).listen((data) {
-        print('STDOUT: $data');
+        _logger.info('STDOUT: $data');
         setState(() {
           stateInstallationOutput = data;
         });
       });
 
       process.stderr.transform(utf8.decoder).listen((data) {
-        print('STDERR: $data');
+        _logger.warning('STDERR: $data');
         setState(() {
           stateInstallationOutput = data;
         });
       });
 
       process.exitCode.then((exitCode) {
-        print('Exit code: $exitCode');
+        _logger.info('Exit code: $exitCode');
         CommandApi().loadApplicationInstalledList();
 
         setState(() {
           stateIsInstalling = false;
         });
+      }).catchError((e) {
+        _logger.severe('Error starting process: $e');
       });
     }).catchError((e) {
-      print('Error starting process: $e');
+      _logger.severe('Error starting process: $e');
     });
   }
 

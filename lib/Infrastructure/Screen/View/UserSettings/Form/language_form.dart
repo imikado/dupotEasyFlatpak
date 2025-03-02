@@ -5,10 +5,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubFor
 import 'package:flutter/material.dart';
 
 class LanguageForm extends StatefulWidget {
-  UserSettingsEntity userSettings;
-  Function handleUpdateUserSettings;
-  Function handleReloadLanguage;
-  LanguageForm(
+  final UserSettingsEntity userSettings;
+  final Function handleUpdateUserSettings;
+  final Function handleReloadLanguage;
+
+  const LanguageForm(
       {super.key,
       required this.userSettings,
       required this.handleUpdateUserSettings,

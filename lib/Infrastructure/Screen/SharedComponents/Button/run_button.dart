@@ -5,11 +5,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class RunButton extends StatelessWidget {
-  RunButton(
-      {super.key, required this.applicationEntity, required this.isActive});
+  final ApplicationEntity applicationEntity;
+  final bool isActive;
 
-  ApplicationEntity applicationEntity;
-  bool isActive;
+  const RunButton(
+      {super.key, required this.applicationEntity, required this.isActive});
 
   @override
   Widget build(BuildContext context) {

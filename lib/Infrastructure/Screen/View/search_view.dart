@@ -5,9 +5,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Conten
 import 'package:flutter/material.dart';
 
 class SearchView extends StatefulWidget {
-  Function handleGoTo;
-  late String searched;
-  SearchView({super.key, required this.handleGoTo, required this.searched});
+  final Function handleGoTo;
+  final String searched;
+
+  const SearchView(
+      {super.key, required this.handleGoTo, required this.searched});
 
   @override
   State<SearchView> createState() => _SearchViewState();

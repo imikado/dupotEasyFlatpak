@@ -4,15 +4,15 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class AddToCartButton extends StatelessWidget {
-  AddToCartButton(
+  final ApplicationEntity applicationEntity;
+  final Function handle;
+  final bool isActive;
+
+  const AddToCartButton(
       {super.key,
       required this.applicationEntity,
       required this.handle,
       required this.isActive});
-
-  ApplicationEntity applicationEntity;
-  Function handle;
-  bool isActive;
 
   @override
   Widget build(BuildContext context) {

@@ -7,11 +7,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/UserSettings/Form/
 import 'package:flutter/material.dart';
 
 class UserSettingsView extends StatefulWidget {
-  Function handleGoTo;
-  Function handleReload;
-  Function handleReloadLanguage;
+  final Function handleGoTo;
+  final Function handleReload;
+  final Function handleReloadLanguage;
 
-  UserSettingsView(
+  const UserSettingsView(
       {super.key,
       required this.handleGoTo,
       required this.handleReload,

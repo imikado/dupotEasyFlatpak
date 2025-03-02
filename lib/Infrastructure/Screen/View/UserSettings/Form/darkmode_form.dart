@@ -5,9 +5,10 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubFor
 import 'package:flutter/material.dart';
 
 class DarkmodeForm extends StatefulWidget {
-  UserSettingsEntity userSettings;
-  Function handleUpdateUserSettings;
-  DarkmodeForm(
+  final UserSettingsEntity userSettings;
+  final Function handleUpdateUserSettings;
+
+  const DarkmodeForm(
       {super.key,
       required this.userSettings,
       required this.handleUpdateUserSettings});

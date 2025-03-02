@@ -5,17 +5,20 @@ import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Process/update_from_flathub_process.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 class LoadingView extends StatefulWidget {
-  LoadingView({super.key, required this.handle});
+  final Function handle;
 
-  Function handle;
+  const LoadingView({super.key, required this.handle});
 
   @override
   State<StatefulWidget> createState() => _LoadingView();
 }
 
 class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
+  static final _logger = Logger('LoadingView');
+
   bool isLoaded = false;
 
   double progressValue = 0.0;
@@ -43,11 +46,11 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       stateLoadingInfo = LocalizationApi().tr('loading_Check_installation');
     });
 
-    print('Installation');
+    _logger.info('Starting installation');
     UpdateFromFlathubProcess updateFromFlathubProcess =
         UpdateFromFlathubProcess(commandApi: CommandApi());
     await updateFromFlathubProcess.process();
-    print('End installation');
+    _logger.info('Installation complete');
 
     setState(() {
       stateLoadingInfo = LocalizationApi().tr('loading_Installation_ok');
@@ -60,7 +63,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     final applicatoinRepository = ApplicationRepository();
     //await appStreamFactory.create();
 
-    print('start flathub load');
+    _logger.info('Starting flathub load');
     setState(() {
       stateLoadingInfo = LocalizationApi()
           .tr('loading_Should_update_application_list_from_Flathub_api');
@@ -92,20 +95,20 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       });
     }
 
-    print('end flathub load');
+    _logger.info('Flathub load complete');
 
     setState(() {
       progressValue = 0.50;
     });
 
     if (await CommandApi().missFlathubInFlatpak()) {
-      print('need flathub');
+      _logger.info('Need flathub setup');
       setState(() {
         progressValue = 0.6;
       });
       await CommandApi().setupFlathub();
     } else {
-      print(' flathub ok');
+      _logger.info('Flathub already setup');
     }
 
     List<String> dbApplicationIdList =

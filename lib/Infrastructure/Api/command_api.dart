@@ -5,8 +5,11 @@ import 'package:dupot_easy_flatpak/Domain/Entity/application_installed_entity.da
 import 'package:dupot_easy_flatpak/Domain/Entity/application_update_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
+import 'package:logging/logging.dart';
 
 class CommandApi {
+  static final _logger = Logger('CommandApi');
+
   static const String flatpakCommand = 'flatpak';
 
   late Settings settingsObj;
@@ -67,7 +70,7 @@ class CommandApi {
   }
 
   Future<List<ApplicationUpdate>> checkUpdates() async {
-    print('check updates');
+    _logger.info('Checking updates');
     ProcessResult result = await runProcess('flatpak', ['--no-deps', 'update']);
     updatesAvailableOutput = result.stdout.toString();
 
@@ -179,11 +182,11 @@ class CommandApi {
   Future<void> loadApplicationInstalledList() async {
     ProcessResult result =
         await runProcess('flatpak', ['list', '--columns=application,version']);
-    String ApplicationInstalledOutput = result.stdout.toString();
+    String applicationInstalledOutput = result.stdout.toString();
 
     applicationInstalledList.clear();
 
-    List<String> lineList = ApplicationInstalledOutput.split("\n");
+    List<String> lineList = applicationInstalledOutput.split("\n");
     if (lineList.isNotEmpty) {
       for (String lineLoop in lineList) {
         if (RegExp(r'\t').hasMatch(lineLoop)) {
@@ -247,8 +250,10 @@ class CommandApi {
       applicationId
     ]);
 
-    stdout.write(result.stdout);
-    stderr.write(result.stderr);
+    _logger.info('Install output: ${result.stdout}');
+    if (result.stderr.toString().isNotEmpty) {
+      _logger.warning('Install error: ${result.stderr}');
+    }
 
     for (List<String> argListLoop in subProcessList) {
       await runProcess(flatpakCommand, argListLoop);
@@ -266,8 +271,10 @@ class CommandApi {
       applicationId
     ]);
 
-    stdout.write(result.stdout);
-    stderr.write(result.stderr);
+    _logger.info('Uninstall output: ${result.stdout}');
+    if (result.stderr.toString().isNotEmpty) {
+      _logger.warning('Uninstall error: ${result.stderr}');
+    }
 
     return result.stdout.toString();
   }

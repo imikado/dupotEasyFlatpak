@@ -4,8 +4,9 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Group/
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
-  Function handleGoTo;
-  HomeView({super.key, required this.handleGoTo});
+  final Function handleGoTo;
+
+  const HomeView({super.key, required this.handleGoTo});
 
   @override
   State<HomeView> createState() => _HomeViewState();

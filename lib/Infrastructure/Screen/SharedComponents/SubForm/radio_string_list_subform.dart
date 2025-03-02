@@ -3,10 +3,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_string_entity.dar
 import 'package:flutter/material.dart';
 
 class RadioStringListSubform extends StatelessWidget {
-  List<RadioStringEntity> radioStringEntityList;
-  String value;
-  Function handleUpdateValue;
-  RadioStringListSubform(
+  final List<RadioStringEntity> radioStringEntityList;
+  final String value;
+  final Function handleUpdateValue;
+
+  const RadioStringListSubform(
       {super.key,
       required this.radioStringEntityList,
       required this.value,

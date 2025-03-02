@@ -1,23 +1,21 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_bool_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/dialog_cancel_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/dialog_confirm_button.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubForm/radio_bool_list_subform.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
 import 'package:flutter/material.dart';
 
 class InstallWithRecipeButton extends StatefulWidget {
-  InstallWithRecipeButton(
+  final ApplicationEntity applicationEntity;
+  final Function handle;
+  final bool isActive;
+
+  const InstallWithRecipeButton(
       {super.key,
       required this.applicationEntity,
       required this.handle,
       required this.isActive});
-
-  ApplicationEntity applicationEntity;
-  Function handle;
-  bool isActive;
 
   @override
   State<InstallWithRecipeButton> createState() =>
@@ -59,7 +57,7 @@ class _InstallWithRecipeButtonState extends State<InstallWithRecipeButton> {
                           DialogConfirmButton(onPressedFunction: () {
                             Navigator.of(context).pop();
 
-                            widget.handle();
+                            widget.handle(stateUserInstallationScopeEnabled);
                           })
                         ],
                         title: Text(LocalizationApi().tr('confirmation_title')),

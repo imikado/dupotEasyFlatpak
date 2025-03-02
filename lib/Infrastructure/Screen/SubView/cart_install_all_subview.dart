@@ -12,15 +12,13 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class CartInstallAllSubview extends StatefulWidget {
-  Function handleGoToApplicationInstalled;
+  final Function handleGoToApplicationInstalled;
+  final List<String> applicationIdListInCart;
+  final Function handleRemoveFromCart;
+  final Map<String, List<OverrideFormControl>> overrideSetupListByApplicationId;
+  final Function handleSetApplicationLighted;
 
-  List<String> applicationIdListInCart;
-  Function handleRemoveFromCart;
-  Map<String, List<OverrideFormControl>> overrideSetupListByApplicationId;
-
-  Function handleSetApplicationLighted;
-
-  CartInstallAllSubview(
+  const CartInstallAllSubview(
       {super.key,
       required this.handleGoToApplicationInstalled,
       required this.applicationIdListInCart,

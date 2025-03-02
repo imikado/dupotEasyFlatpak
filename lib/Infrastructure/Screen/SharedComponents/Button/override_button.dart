@@ -4,17 +4,17 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class OverrideButton extends StatelessWidget {
-  OverrideButton(
+  final ApplicationEntity applicationEntity;
+  final Function handle;
+  final bool isActive;
+  final bool hasError;
+
+  const OverrideButton(
       {super.key,
       required this.applicationEntity,
       required this.handle,
       required this.isActive,
       required this.hasError});
-
-  ApplicationEntity applicationEntity;
-  Function handle;
-  bool isActive;
-  bool hasError;
 
   @override
   Widget build(BuildContext context) {

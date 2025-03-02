@@ -5,9 +5,10 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubFor
 import 'package:flutter/material.dart';
 
 class ScopeForm extends StatefulWidget {
-  UserSettingsEntity userSettings;
-  Function handleUpdateUserSettings;
-  ScopeForm(
+  final UserSettingsEntity userSettings;
+  final Function handleUpdateUserSettings;
+
+  const ScopeForm(
       {super.key,
       required this.userSettings,
       required this.handleUpdateUserSettings});

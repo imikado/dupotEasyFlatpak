@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ReloadView extends StatefulWidget {
-  ReloadView({super.key, required this.handle});
+  final Function handle;
 
-  Function handle;
+  const ReloadView({super.key, required this.handle});
 
   @override
   State<StatefulWidget> createState() => _ReloadViewState();

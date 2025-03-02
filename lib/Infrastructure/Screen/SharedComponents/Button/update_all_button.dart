@@ -5,10 +5,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_styl
 import 'package:flutter/material.dart';
 
 class UpdateAllButton extends StatelessWidget {
-  UpdateAllButton({super.key, required this.handle, required this.isActive});
+  final Function handle;
+  final bool isActive;
 
-  Function handle;
-  bool isActive;
+  const UpdateAllButton(
+      {super.key, required this.handle, required this.isActive});
 
   @override
   Widget build(BuildContext context) {

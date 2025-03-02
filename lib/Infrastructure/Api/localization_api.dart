@@ -37,7 +37,7 @@ class LocalizationApi {
 
   String languageCode = 'en';
 
-  static var _localizedValues = <String, Map<String, String>>{
+  static final _localizedValues = <String, Map<String, String>>{
     'en': {},
     'fr': {},
     'it': {},

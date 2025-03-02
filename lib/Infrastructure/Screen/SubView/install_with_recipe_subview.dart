@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
-import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
@@ -14,15 +13,14 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/c
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
 import 'package:flutter/material.dart';
 import 'package:prompt_dialog/prompt_dialog.dart';
+import 'package:logging/logging.dart';
 
 class InstallWithRecipeSubview extends StatefulWidget {
-  String applicationId;
+  final String applicationId;
+  final Function handleGoToApplication;
+  final String installScope;
 
-  Function handleGoToApplication;
-
-  String installScope;
-
-  InstallWithRecipeSubview(
+  const InstallWithRecipeSubview(
       {super.key,
       required this.applicationId,
       required this.handleGoToApplication,
@@ -34,6 +32,8 @@ class InstallWithRecipeSubview extends StatefulWidget {
 }
 
 class _InstallationWithRecipeViewState extends State<InstallWithRecipeSubview> {
+  static final _logger = Logger('InstallWithRecipeSubview');
+
   ApplicationEntity? stateApplicationEntity;
   bool stateIsInstalling = false;
   bool stateDisplayInstallButton = true;
@@ -137,7 +137,7 @@ class _InstallationWithRecipeViewState extends State<InstallWithRecipeSubview> {
             command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
         .then((Process process) {
       process.stdout.transform(utf8.decoder).listen((data) {
-        print('STDOUT: $data');
+        _logger.info('STDOUT: $data');
         if (mounted) {
           setState(() {
             stateInstallationOutput = data;
@@ -146,14 +146,14 @@ class _InstallationWithRecipeViewState extends State<InstallWithRecipeSubview> {
       });
 
       process.stderr.transform(utf8.decoder).listen((data) {
-        print('STDERR: $data');
+        _logger.warning('STDERR: $data');
         setState(() {
           stateInstallationOutput = data;
         });
       });
 
       process.exitCode.then((exitCode) async {
-        print('Exit code: $exitCode');
+        _logger.info('Exit code: $exitCode');
 
         await overrideControl.save(applicationId, stateOverrideFormControlList);
         await CommandApi().loadApplicationInstalledList();
@@ -163,7 +163,7 @@ class _InstallationWithRecipeViewState extends State<InstallWithRecipeSubview> {
         });
       });
     }).catchError((e) {
-      print('Error starting process: $e');
+      _logger.severe('Error starting process: $e');
     });
   }
 

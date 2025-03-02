@@ -2,15 +2,15 @@ import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart'
 import 'package:flutter/material.dart';
 
 class SideMenuWithContentAndSubContentLayout extends StatefulWidget {
-  Widget menu;
-  Widget content;
-  Widget subContent;
-  bool hasSubContent = false;
-  bool hasPrevious;
-  Function handleGoToPrevious;
-  String pageSelected = '';
+  final Widget menu;
+  final Widget content;
+  final Widget subContent;
+  final bool hasSubContent;
+  final bool hasPrevious;
+  final Function handleGoToPrevious;
+  final String pageSelected;
 
-  SideMenuWithContentAndSubContentLayout(
+  const SideMenuWithContentAndSubContentLayout(
       {super.key,
       required this.menu,
       required this.content,
@@ -21,11 +21,11 @@ class SideMenuWithContentAndSubContentLayout extends StatefulWidget {
       required this.pageSelected});
 
   @override
-  _SideMenuWithContentAndSubContentLayoutState createState() =>
-      _SideMenuWithContentAndSubContentLayoutState();
+  SideMenuWithContentAndSubContentLayoutState createState() =>
+      SideMenuWithContentAndSubContentLayoutState();
 }
 
-class _SideMenuWithContentAndSubContentLayoutState
+class SideMenuWithContentAndSubContentLayoutState
     extends State<SideMenuWithContentAndSubContentLayout> {
   @override
   Widget build(BuildContext context) {

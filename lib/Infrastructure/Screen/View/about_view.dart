@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutView extends StatelessWidget {
-  String version;
-  AboutView({super.key, required this.version});
+  final String version;
+
+  const AboutView({super.key, required this.version});
 
   Widget getLine(
       {required BuildContext context,

@@ -1,10 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
-
 import 'package:intl/intl.dart';
-
-import 'dart:convert' show utf8;
 
 class ApplicationEntity {
   String id;

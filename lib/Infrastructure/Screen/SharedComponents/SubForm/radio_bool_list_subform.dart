@@ -3,10 +3,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_bool_entity.dart'
 import 'package:flutter/material.dart';
 
 class RadioBoolListSubform extends StatelessWidget {
-  List<RadioBoolEntity> radioBoolEntityList;
-  bool radioGroupValue;
-  Function handleUpdateValue;
-  RadioBoolListSubform(
+  final List<RadioBoolEntity> radioBoolEntityList;
+  final bool radioGroupValue;
+  final Function handleUpdateValue;
+
+  const RadioBoolListSubform(
       {super.key,
       required this.radioBoolEntityList,
       required this.radioGroupValue,

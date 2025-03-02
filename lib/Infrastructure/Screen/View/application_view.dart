@@ -19,19 +19,16 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplicationView extends StatefulWidget {
-  String applicationIdSelected;
+  final String applicationIdSelected;
+  final Function handleGoTo;
+  final Function handleGoToPrevious;
+  final Function handleAddToCart;
+  final Function handleRemoveFromCart;
+  final Function handleReload;
+  final List<String> applicationIdListInCart;
+  final bool isMain;
 
-  Function handleGoTo;
-  Function handleGoToPrevious;
-  Function handleAddToCart;
-  Function handleRemoveFromCart;
-
-  Function handleReload;
-  List<String> applicationIdListInCart;
-
-  bool isMain;
-
-  ApplicationView(
+  const ApplicationView(
       {super.key,
       required this.applicationIdSelected,
       required this.handleGoTo,

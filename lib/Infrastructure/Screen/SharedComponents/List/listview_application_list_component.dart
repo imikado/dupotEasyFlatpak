@@ -6,12 +6,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart'
 import 'package:flutter/material.dart';
 
 class ListviewApplicationListComponent extends StatelessWidget {
-  List<ApplicationEntity> applicationEntityList;
-  Function handleGoTo;
+  final List<ApplicationEntity> applicationEntityList;
+  final Function handleGoTo;
+  final ScrollController handleScrollController;
 
-  ScrollController handleScrollController;
-
-  ListviewApplicationListComponent(
+  const ListviewApplicationListComponent(
       {super.key,
       required this.applicationEntityList,
       required this.handleGoTo,

@@ -11,8 +11,10 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'dart:io' as io;
 import 'package:path_provider/path_provider.dart';
+import 'package:logging/logging.dart';
 
 class FlathubApi {
+  static final _logger = Logger('FlathubApi');
   ApplicationRepository applicationRepository;
 
   FlathubApi({required this.applicationRepository});
@@ -67,14 +69,14 @@ class FlathubApi {
         continue;
       }
 
-      print('new appliction on flathub: ' + appStreamIdLoop.toLowerCase());
+      _logger
+          .info('New application on flathub: ${appStreamIdLoop.toLowerCase()}');
 
-      //print('$appStreamIdLoop missing, should insert');
       ApplicationEntity appStream =
           await getApplicationEntityFromApi(appStreamIdLoop);
       if (appStream.isEmpty) {
         appStream.id = appStreamIdLoop;
-        print('app not found on api :(');
+        _logger.warning('App not found on api');
       }
 
       downloadIcon(appStream, appDocumentsDirPath);

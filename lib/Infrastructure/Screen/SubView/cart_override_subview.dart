@@ -10,14 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:ini/ini.dart';
 
 class CartOverrideSubview extends StatefulWidget {
-  String applicationId;
+  final String applicationId;
+  final Function handleGoToCart;
+  final Function handleSaveOverrideSetup;
+  final List<OverrideFormControl> overrideSetupList;
 
-  Function handleGoToCart;
-  Function handleSaveOverrideSetup;
-
-  List<OverrideFormControl> overrideSetupList;
-
-  CartOverrideSubview({
+  const CartOverrideSubview({
     super.key,
     required this.applicationId,
     required this.handleGoToCart,
