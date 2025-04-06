@@ -302,7 +302,21 @@ class ApplicationRepository {
           
           from $constTableApplication  
           
-          where summary like  '%$search%'   
+          where summary like  '%$search%'
+
+        UNION ALL
+
+           SELECT 
+          $constTableApplication.id,
+          $constTableApplication.name,
+          $constTableApplication.summary,
+          $constTableApplication.icon,
+          $constTableApplication.lastUpdate,
+          $constTableApplication.lastReleaseTimestamp 
+          
+          from $constTableApplication  
+          
+          where description like  '%$search%'   
 
  
         ''',
