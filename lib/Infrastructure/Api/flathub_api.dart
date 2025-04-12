@@ -223,7 +223,9 @@ class FlathubApi {
 
     int lastReleaseTimestamp = 0;
     for (Map<String, dynamic> rawReleaseObjLoop in rawReleaseObjList) {
-      if (int.parse(rawReleaseObjLoop['timestamp']) > lastReleaseTimestamp) {
+      if (rawReleaseObjLoop.containsKey('timestamp') &&
+          rawReleaseObjLoop['timestamp'] != null &&
+          int.parse(rawReleaseObjLoop['timestamp']) > lastReleaseTimestamp) {
         lastReleaseTimestamp = int.parse(rawReleaseObjLoop['timestamp']);
       }
     }

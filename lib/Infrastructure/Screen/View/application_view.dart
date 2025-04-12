@@ -350,20 +350,34 @@ class _ApplicationViewState extends State<ApplicationView> {
                         children: stateAppStream!
                             .getReleaseObjList()
                             .map((realeaseObjLoop) {
-                          DateTime dateVersion =
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(realeaseObjLoop['timestamp']) *
-                                      1000);
+                          if (realeaseObjLoop.containsKey('timestamp') &&
+                              realeaseObjLoop['timestamp'] != null) {
+                            DateTime dateVersion =
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    int.parse(realeaseObjLoop['timestamp']) *
+                                        1000);
 
-                          return Row(children: [
-                            Text(DateFormat('dd/MM/yyyy').format(dateVersion)),
-                            const SizedBox(width: 2),
-                            const Text(':'),
-                            const SizedBox(width: 10),
-                            Text(realeaseObjLoop['version'],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold))
-                          ]);
+                            return Row(children: [
+                              Text(
+                                  DateFormat('dd/MM/yyyy').format(dateVersion)),
+                              const SizedBox(width: 2),
+                              const Text(':'),
+                              const SizedBox(width: 10),
+                              Text(realeaseObjLoop['version'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold))
+                            ]);
+                          } else {
+                            return Row(children: [
+                              Text('N/C'),
+                              const SizedBox(width: 2),
+                              const Text(':'),
+                              const SizedBox(width: 10),
+                              Text(realeaseObjLoop['version'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold))
+                            ]);
+                          }
                         }).toList())),
                 ListTile(
                     title: Text(
