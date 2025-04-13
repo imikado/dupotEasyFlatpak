@@ -102,5 +102,6 @@
     "loading_Update_application_list_from_Flathub_api_finished": "Atualização da lista de aplicativos da API do Flathub concluída",
     "loading_Last_applications_updates_from_API_is_newer_than_7_days_not_need": "As últimas atualizações de aplicativos da API têm menos de 7 dias, não é necessário",
     "loading_Load_application_localizations": "Carregando localizações do aplicativo",
-    "loading_Looking_for_applications_updates": "Procurando atualizações de aplicativos"
+    "loading_Looking_for_applications_updates": "Procurando atualizações de aplicativos",
+    "FlathubApiEnabled": "Flathub api enabled (can be disabled if network issue, proxies issues..)"
 }
