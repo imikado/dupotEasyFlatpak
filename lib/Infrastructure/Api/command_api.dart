@@ -78,17 +78,25 @@ class CommandApi {
 
     List<String> lineList = updatesAvailableOutput.split("\n");
 
+    List<String> distinctAppList = [];
+
     if (lineList.isNotEmpty) {
       for (String lineLoop in lineList) {
         if (RegExp(r'\t').hasMatch(lineLoop) && lineLoop.contains('flathub')) {
           List<String> lineLoopList = lineLoop.split("\t");
 
           String appId = lineLoopList[2].toLowerCase();
+
+          if (distinctAppList.contains(appId)) {
+            continue;
+          }
+
           String comment = lineLoopList[3];
           if (lineLoopList.length > 5) {
             comment = "${lineLoopList[3]} (${lineLoopList[6]})";
           }
           applicationUpdateAvailableList.add(ApplicationUpdate(appId, comment));
+          distinctAppList.add(appId);
         }
       }
     }
