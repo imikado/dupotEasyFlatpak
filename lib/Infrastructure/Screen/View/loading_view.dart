@@ -70,7 +70,8 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     });
     UserSettingsEntity userSettingsEntity = UserSettingsEntity();
 
-    if (userSettingsEntity.shouldUpdateApplicationsFromApi()) {
+    if (userSettingsEntity.isFlathubApiEnabled() &&
+        userSettingsEntity.shouldUpdateApplicationsFromApi()) {
       setState(() {
         stateLoadingInfo = LocalizationApi()
             .tr('loading_Starting_update_application_list_from_Flathub_api');

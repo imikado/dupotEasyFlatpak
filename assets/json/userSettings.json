@@ -1,5 +1,5 @@
 {
-    "version": 1,
+    "version": 2,
     "applicationDataPath": "",
     "userOverrideLanguageCode": false,
     "languageCode": "en",
@@ -7,5 +7,6 @@
     "darkModeEnabled": false,
     "userInstallationScopeEnabled": false,
     "displayApplicationInstalledNumberInSideMenu": false,
-    "displayApplicationInstalledNumberInPage": false
+    "displayApplicationInstalledNumberInPage": false,
+    "flathubApiEnabled": true
 }

@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
@@ -14,7 +15,9 @@ class ApplicationViewModel {
     ApplicationEntity applicationEntity =
         await appStreamFactory.findApplicationEntityById(appId);
 
-    if (applicationEntity.lastUpdateIsOlderThan(7)) {
+    UserSettingsEntity userSettingsEntity = UserSettingsEntity();
+    if (userSettingsEntity.isFlathubApiEnabled() &&
+        applicationEntity.lastUpdateIsOlderThan(7)) {
       _logger.info('Updating from API');
       if (!await FlathubApi(applicationRepository: appStreamFactory)
           .updateAppStream(appId)) {

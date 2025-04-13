@@ -80,6 +80,9 @@ void main() async {
             jsonDecode(jsonDefaultUserSettingsString);
         if (!userSettingsObj.containsKey('version')) {
           shouldCopyUserSettings = true;
+        } else if (defaultUserSettingObj['version'] == 2 &&
+            userSettingsObj['version'] == 1) {
+          userSettingsObj['flathubApiEnabled'] = true;
         } else if (defaultUserSettingObj['version'] !=
             userSettingsObj['version']) {
           shouldCopyUserSettings = true;

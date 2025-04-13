@@ -1,5 +1,6 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/UserSettings/Form/darkmode_form.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/UserSettings/Form/flathubapi_form.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/UserSettings/Form/language_form.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/UserSettings/Form/parameter_page_form.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/UserSettings/Form/scope_form.dart';
@@ -77,6 +78,9 @@ class _UserSettingsViewState extends State<UserSettingsView> {
                         userSettings: stateUserSettingsEntity,
                         handleUpdateUserSettings: updateStateUserSettings),
                     ParameterPageForm(
+                        userSettings: stateUserSettingsEntity,
+                        handleUpdateUserSettings: updateStateUserSettings),
+                    FlathubapiForm(
                         userSettings: stateUserSettingsEntity,
                         handleUpdateUserSettings: updateStateUserSettings)
                   ],

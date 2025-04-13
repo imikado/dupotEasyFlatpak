@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 class UserSettingsEntity {
-  int version = 1;
+  int version = 2;
 
   String jsonUserSettingsPath = '';
 
@@ -24,6 +24,8 @@ class UserSettingsEntity {
   bool displayApplicationInstalledNumberInSideMenu = false;
   bool displayApplicationInstalledNumberInPage = false;
 
+  bool flathubApiEnabled = false; //if we use flathub api
+
   int lastUpdateFromApiTimestamp = 0;
 
   static final UserSettingsEntity _singleton = UserSettingsEntity._internal();
@@ -43,14 +45,14 @@ class UserSettingsEntity {
           'darkModeEnabled',
           'userInstallationScopeEnabled',
           'displayApplicationInstalledNumberInSideMenu',
-          'displayApplicationInstalledNumberInPage'
+          'displayApplicationInstalledNumberInPage',
+          //'flathubApiEnabled'
         ]) {
           if (!jsonParameterObj.containsKey(mandatoryFieldLoop)) {
             throw Exception(
                 'Missing mandatory userSettings $mandatoryFieldLoop field in $newJsonUserSettingsPath');
           }
         }
-        _singleton.version = jsonParameterObj['version'];
         _singleton.applicationDataPath =
             jsonParameterObj.containsKey('applicationDataPath')
                 ? jsonParameterObj['applicationDataPath']
@@ -76,6 +78,10 @@ class UserSettingsEntity {
 
         _singleton.displayApplicationInstalledNumberInPage =
             jsonParameterObj['displayApplicationInstalledNumberInPage'];
+
+        if (jsonParameterObj.containsKey('flathubApiEnabled')) {
+          _singleton.flathubApiEnabled = jsonParameterObj['flathubApiEnabled'];
+        }
 
         if (jsonParameterObj.containsKey('lastUpdateFromApiTimestamp')) {
           _singleton.lastUpdateFromApiTimestamp =
@@ -162,6 +168,11 @@ class UserSettingsEntity {
     await save();
   }
 
+  Future<void> setFlathubApiEnabled(bool flathubApiEnabled) async {
+    this.flathubApiEnabled = flathubApiEnabled;
+    await save();
+  }
+
   String getActiveLanguageCode() {
     return getUserLanguageCode();
   }
@@ -197,6 +208,14 @@ class UserSettingsEntity {
     return displayApplicationInstalledNumberInPage;
   }
 
+  bool getFlathubApiEnabled() {
+    return flathubApiEnabled;
+  }
+
+  bool isFlathubApiEnabled() {
+    return getFlathubApiEnabled();
+  }
+
   Future<void> save() async {
     Map<String, dynamic> jsonParameterObj = {
       'version': version,
@@ -209,6 +228,7 @@ class UserSettingsEntity {
           displayApplicationInstalledNumberInSideMenu,
       'displayApplicationInstalledNumberInPage':
           displayApplicationInstalledNumberInPage,
+      'flathubApiEnabled': flathubApiEnabled,
       'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp
     };
 
