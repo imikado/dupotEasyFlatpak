@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
@@ -160,6 +161,7 @@ class ApplicationState extends State<Application> {
       handleGoTo: goTo,
       applicationIdListInCart: stateCartApplicationIdList,
       searched: stateSearched,
+      numberOfUpdates: CommandApi().getNumberOfUpdates(),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Model/View/side_menu_view_model.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/menu_item_entity.dart';
@@ -12,6 +13,7 @@ class SideMenuView extends StatefulWidget {
   final List<String> applicationIdListInCart;
   final int interfaceVersion;
   final String searched;
+  final int numberOfUpdates;
 
   const SideMenuView(
       {super.key,
@@ -20,7 +22,8 @@ class SideMenuView extends StatefulWidget {
       required this.handleGoTo,
       required this.interfaceVersion,
       required this.applicationIdListInCart,
-      required this.searched});
+      required this.searched,
+      required this.numberOfUpdates});
 
   @override
   State<SideMenuView> createState() => _SideMenuViewState();
@@ -35,6 +38,8 @@ class _SideMenuViewState extends State<SideMenuView> {
 
   String statePageSelected = '';
   String stateCategoryIdSelected = '';
+
+  int stateNumberOfUpdates = 0;
 
   ScrollController scrollController = ScrollController();
 
@@ -74,6 +79,8 @@ class _SideMenuViewState extends State<SideMenuView> {
       loadData(false);
     } else if (stateCartMenuItemList.length !=
         widget.applicationIdListInCart.length) {
+      loadData(false);
+    } else if (oldWidget.numberOfUpdates != widget.numberOfUpdates) {
       loadData(false);
     }
 

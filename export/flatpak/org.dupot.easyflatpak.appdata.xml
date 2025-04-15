@@ -20,8 +20,15 @@
     <p>
     For example, for Steam, it asks the user to choose a folder where they store their games before installation.
     </p>
-    <p>Available in language EN / ES / FR / IT</p>
-  </description>
+    <p>Available many languages:</p>
+    <p>- English</p>
+    <p>- Spanish</p>
+    <p>- French</p>
+    <p>- Italian</p>
+    <p>- Brazilian</p>
+    <p>- Arabic</p>
+    
+   </description>
 
   <screenshots>
     <screenshot type="default">
@@ -65,10 +72,11 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
- <release date="2025-04-14" version="3.10.0"> 
+ <release date="2025-04-15" version="3.10.1"> 
       <description>
         <ul>
           <li>Add Arabic language</li>
+          <li>Bufix: update number of updates available in side menu after processing</li>
         </ul>
       </description>
     </release>

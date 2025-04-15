@@ -68,8 +68,11 @@ class _UpdateAvailableProcessingSubviewState
 
     process.exitCode.then((exitCode) {
       _logger.info('Exit code: $exitCode');
-      setState(() {
-        stateIsInstalling = false;
+
+      CommandApi().checkUpdates().then((value) {
+        setState(() {
+          stateIsInstalling = false;
+        });
       });
     }).catchError((e) {
       _logger.severe('Error starting process: $e');
