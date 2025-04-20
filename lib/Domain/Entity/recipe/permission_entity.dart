@@ -10,6 +10,8 @@ class PermissionEntity {
 
   static const constTypeInstallYesNo = 'install_flatpak_yesno';
 
+  static const constTypeEnvYesNo = 'env_yesno';
+
   PermissionEntity(this.type, this.label,
       [this.value, this.subValueYes, this.subValueNo]);
 
@@ -23,6 +25,10 @@ class PermissionEntity {
 
   bool isInstallFlatpakYesNo() {
     return (type == constTypeInstallYesNo);
+  }
+
+  bool isEnvYesNo() {
+    return (type == constTypeEnvYesNo);
   }
 
   String getType() {

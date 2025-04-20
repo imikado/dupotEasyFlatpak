@@ -1,16 +1,14 @@
 class PermissionOverridedEntity {
   final String type;
   final String? value;
-  final String? subValueYes;
-  final String? subValueNo;
+  final String? subValueYesNo;
 
   static const constTypeFileSystem = 'filesystem';
   static const constTypeFileSystemNoPrompt = 'filesystem_noprompt';
 
   static const constTypeInstallYesNo = 'install_flatpak_yesno';
 
-  PermissionOverridedEntity(this.type,
-      [this.value, this.subValueYes, this.subValueNo]);
+  PermissionOverridedEntity(this.type, [this.value, this.subValueYesNo]);
 
   bool isFileSystem() {
     return (type == constTypeFileSystem);
@@ -32,12 +30,8 @@ class PermissionOverridedEntity {
     return value;
   }
 
-  String? getSubValueYes() {
-    return subValueYes;
-  }
-
-  String? getSubValueNo() {
-    return subValueNo;
+  String? getSubValueYesNo() {
+    return subValueYesNo;
   }
 
   String getFlatpakOverrideType() {
@@ -55,7 +49,6 @@ class PermissionOverridedEntity {
   Map<String, dynamic> toJson() => {
         'type': type,
         'value': value,
-        'subValueYes': subValueYes,
-        'subValueNo': subValueNo
+        'subValueYesNo': subValueYesNo,
       };
 }

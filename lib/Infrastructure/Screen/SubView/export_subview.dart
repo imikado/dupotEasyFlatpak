@@ -63,8 +63,6 @@ class _ExportSubviewState extends State<ExportSubview> {
   Future<void> export() async {
     CommandApi commands = CommandApi();
 
-    OverrideControl overrideControl = OverrideControl();
-
     List<String> installedApplicationIdList =
         await commands.getInstalledApplicationList();
 
@@ -76,6 +74,7 @@ class _ExportSubviewState extends State<ExportSubview> {
         overrideSetupListByApplicationId = {};
 
     for (ApplicationEntity applicationEntityLoop in applicationEntityList) {
+      OverrideControl overrideControl = OverrideControl();
       String applicationIdLoop = applicationEntityLoop.id;
 
       FlatpakOverrideApplication flatpakOverrideApplication =
@@ -100,6 +99,25 @@ class _ExportSubviewState extends State<ExportSubview> {
 
             permissionOverridedEntityList.add(PermissionOverridedEntity(
                 permissionRecipeEntityLoop.type, valueLoop));
+          } else if (permissionRecipeEntityLoop.isInstallFlatpakYesNo()) {
+          } else if (permissionRecipeEntityLoop.isEnvYesNo()) {
+            String valueYesNo = 'no';
+            if (await overrideControl.hasOverridedConfig(
+                permissionRecipeEntityLoop.type,
+                permissionRecipeEntityLoop.value.toString())) {
+              String textValue = await overrideControl.getOverridedSubConfig(
+                  permissionRecipeEntityLoop.type,
+                  permissionRecipeEntityLoop.value.toString());
+
+              if (textValue == permissionRecipeEntityLoop.subValueYes) {
+                valueYesNo = 'yes';
+              }
+            }
+
+            permissionOverridedEntityList.add(PermissionOverridedEntity(
+                permissionRecipeEntityLoop.type,
+                permissionRecipeEntityLoop.value,
+                valueYesNo));
           }
         }
 
@@ -112,11 +130,11 @@ class _ExportSubviewState extends State<ExportSubview> {
 
     String data = jsonEncode(overrideSetupListByApplicationId);
 
-    await CommandApi().exportInstalled(data);
+    String fileWritten = await CommandApi().exportInstalled(data);
 
     _logger.info('STDOUT: $data');
     setState(() {
-      stateInstallationOutput = data;
+      stateInstallationOutput = fileWritten;
     });
 
     setState(() {

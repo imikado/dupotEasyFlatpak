@@ -308,11 +308,13 @@ class CommandApi {
     runProcess(flatpakCommand, ['run', applicationId]);
   }
 
-  Future<void> exportInstalled(String jsonData) async {
+  Future<String> exportInstalled(String jsonData) async {
     File installedAppJsonFile =
         File('${await getApplicationDocumentsPath()}/installed_apps.json');
 
     installedAppJsonFile.writeAsStringSync(jsonData);
+
+    return installedAppJsonFile.path;
   }
 
   Future<String> getApplicationDocumentsPath() async {
