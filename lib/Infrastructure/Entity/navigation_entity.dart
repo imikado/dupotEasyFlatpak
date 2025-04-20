@@ -7,6 +7,8 @@ class NavigationEntity {
   static const String pageSearch = 'search';
   static const String pageUpdateAvailables = 'updatesAvailables';
   static const String pageUserSettings = 'userSettings';
+  static const String pageMore = 'more';
+
   static const String pageReload = 'reload';
   static const String pageAbout = 'about';
   static const String pageCart = 'cart';
@@ -27,6 +29,9 @@ class NavigationEntity {
       'updatesAvailables_processingAll';
   static const String argumentSubPageCartInstallAll = 'cart_install_all';
   static const String argumentSubPageCartSetupOverride = 'cart_setup_override';
+
+  static const String argumentSubPageExport = 'more_export';
+  static const String argumentSubPageImport = 'more_import';
 
   static const String argumentApplicationIdSelectedList =
       'application_id_selected_list';
@@ -79,6 +84,20 @@ class NavigationEntity {
 
   static goToSettings({required Function handleGoTo}) {
     handleGoTo(page: pageUserSettings, argumentMap: {'': ''});
+  }
+
+  static goToMore({required Function handleGoTo}) {
+    handleGoTo(page: pageMore, argumentMap: {'': ''});
+  }
+
+  static goToMoreExport({required Function handleGoTo}) {
+    handleGoTo(
+        page: pageMore, argumentMap: {argumentSubPage: argumentSubPageExport});
+  }
+
+  static goToMoreImport({required Function handleGoTo}) {
+    handleGoTo(
+        page: pageMore, argumentMap: {argumentSubPage: argumentSubPageImport});
   }
 
   static extractArgumentApplicationId(Map<String, String> argumentMap) {

@@ -103,5 +103,6 @@
   "loading_Last_applications_updates_from_API_is_newer_than_7_days_not_need": "Last applications updates from API is newer than 7 days, not need",
   "loading_Load_application_localizations": "Load application localizations",
   "loading_Looking_for_applications_updates": "Looking for applications updates",
-  "FlathubApiEnabled": "Flathub api enabled (can be disabled if network issue, proxies issues..)"
+  "FlathubApiEnabled": "Flathub api enabled (can be disabled if network issue, proxies issues..)",
+  "More_actions": "More actions"
 }

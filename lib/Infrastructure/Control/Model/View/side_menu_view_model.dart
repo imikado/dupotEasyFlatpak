@@ -139,6 +139,18 @@ class SideMenuViewModel {
         icon: Icons.settings));
 
     menuItemList.add(MenuItemEntity(
+        label: 'More_actions',
+        action: () {
+          NavigationEntity.goToMore(
+            handleGoTo: handleGoTo,
+          );
+        },
+        pageSelected: NavigationEntity.pageMore,
+        badge: '',
+        categoryIdSelected: '',
+        icon: Icons.import_export));
+
+    menuItemList.add(MenuItemEntity(
         label: 'About',
         action: () {
           NavigationEntity.goToAbout(

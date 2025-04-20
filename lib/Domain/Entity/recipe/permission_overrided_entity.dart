@@ -1,6 +1,5 @@
-class PermissionEntity {
+class PermissionOverridedEntity {
   final String type;
-  final String label;
   final String? value;
   final String? subValueYes;
   final String? subValueNo;
@@ -10,7 +9,7 @@ class PermissionEntity {
 
   static const constTypeInstallYesNo = 'install_flatpak_yesno';
 
-  PermissionEntity(this.type, this.label,
+  PermissionOverridedEntity(this.type,
       [this.value, this.subValueYes, this.subValueNo]);
 
   bool isFileSystem() {
@@ -27,10 +26,6 @@ class PermissionEntity {
 
   String getType() {
     return type;
-  }
-
-  String getLabel() {
-    return label;
   }
 
   String? getValue() {

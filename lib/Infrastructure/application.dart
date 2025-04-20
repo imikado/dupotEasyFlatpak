@@ -6,6 +6,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_lay
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_content_and_subcontent.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_install_all_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_override_subview.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/export_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_with_recipe_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/override_subview.dart';
@@ -19,6 +20,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/category_view.dart
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/home_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/installed_applications_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/loading_view.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/moreactions_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/search_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/side_menu_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/updates_availables_view.dart';
@@ -212,6 +214,10 @@ class ApplicationState extends State<Application> {
           handleGoTo: goTo,
           handleReload: reload,
           handleReloadLanguage: reloadLanguage);
+    } else if (pageToLoad == NavigationEntity.pageMore) {
+      return MoreActionsView(
+        handleGoTo: goTo,
+      );
     } else if (pageToLoad == NavigationEntity.pageAbout) {
       return AboutView(
         version: version,
@@ -332,6 +338,12 @@ class ApplicationState extends State<Application> {
           handleRemoveFromCart: removeFromCart,
           overrideSetupListByApplicationId:
               stateCartOverrideFormControlListByApplicationId);
+    } else if (subPageToLoad == NavigationEntity.argumentSubPageExport) {
+      return ExportSubview(
+        handleGoToMore: () {
+          NavigationEntity.goToMore(handleGoTo: goTo);
+        },
+      );
     }
     throw Exception(
         'missing content sub view for subPageToLoad $subPageToLoad');
@@ -439,6 +451,7 @@ class ApplicationState extends State<Application> {
     } else if ([
       NavigationEntity.pageUpdateAvailables,
       NavigationEntity.pageUserSettings,
+      NavigationEntity.pageMore,
     ].contains(page)) {
       statePreviousPage = '';
       //statePreviousPArgumentMap = [];

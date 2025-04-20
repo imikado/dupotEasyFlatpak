@@ -6,6 +6,8 @@ import 'package:dupot_easy_flatpak/Domain/Entity/application_update_entity.dart'
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 class CommandApi {
   static final _logger = Logger('CommandApi');
@@ -304,6 +306,23 @@ class CommandApi {
 
   Future<void> run(String applicationId) async {
     runProcess(flatpakCommand, ['run', applicationId]);
+  }
+
+  Future<void> exportInstalled(String jsonData) async {
+    File installedAppJsonFile =
+        File('${await getApplicationDocumentsPath()}/installed_apps.json');
+
+    installedAppJsonFile.writeAsStringSync(jsonData);
+  }
+
+  Future<String> getApplicationDocumentsPath() async {
+    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+    String appDocumentsDirPath = appDocumentsDir.path;
+
+    Directory applicationDataDirectory =
+        Directory(p.join(appDocumentsDirPath, "EasyFlatpak"));
+
+    return applicationDataDirectory.path;
   }
 }
 

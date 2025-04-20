@@ -103,5 +103,7 @@
   "loading_Last_applications_updates_from_API_is_newer_than_7_days_not_need": "La dernière mise à jour de l' API date de moins de 7 jours, pas besoin de mettre à jour",
   "loading_Load_application_localizations": "Chargement des traductions",
   "loading_Looking_for_applications_updates": "Recherche de mises à jour",
-  "FlathubApiEnabled": "API Flathub activée (peut être désactiviée en cas de soucis réseaux ou de problème avec un proxy..)"
+  "FlathubApiEnabled": "API Flathub activée (peut être désactiviée en cas de soucis réseaux ou de problème avec un proxy..)",
+  "More_actions": "More actions",
+  "export_finished": "Export finished"
 }
