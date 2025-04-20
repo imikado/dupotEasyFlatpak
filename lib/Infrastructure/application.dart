@@ -7,6 +7,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_c
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_install_all_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_override_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/export_subview.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/import_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_with_recipe_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/override_subview.dart';
@@ -343,6 +344,13 @@ class ApplicationState extends State<Application> {
         handleGoToMore: () {
           NavigationEntity.goToMore(handleGoTo: goTo);
         },
+      );
+    } else if (subPageToLoad == NavigationEntity.argumentSubPageImport) {
+      return ImportSubview(
+        handleGoToMore: () {
+          NavigationEntity.goToMore(handleGoTo: goTo);
+        },
+        handleAddToCart: addToCart,
       );
     }
     throw Exception(

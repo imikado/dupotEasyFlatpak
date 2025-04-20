@@ -317,6 +317,13 @@ class CommandApi {
     return installedAppJsonFile.path;
   }
 
+  Future<String> importFromJson() async {
+    File installedAppJsonFile =
+        File('${await getApplicationDocumentsPath()}/installed_apps.json');
+
+    return installedAppJsonFile.readAsStringSync();
+  }
+
   Future<String> getApplicationDocumentsPath() async {
     final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
     String appDocumentsDirPath = appDocumentsDir.path;

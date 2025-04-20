@@ -69,7 +69,11 @@ class _MoreActionsViewState extends State<MoreActionsView> {
           getLine(() {
             return NavigationEntity.goToMoreExport(
                 handleGoTo: widget.handleGoTo);
-          }, Icons.download, "export", "export apps")
+          }, Icons.download, "export", "export apps"),
+          getLine(() {
+            return NavigationEntity.goToMoreImport(
+                handleGoTo: widget.handleGoTo);
+          }, Icons.download, "import", "imports apps in cart")
         ]));
   }
 }
