@@ -1,5 +1,6 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Model/SubView/override_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
@@ -14,14 +15,15 @@ class CartOverrideSubview extends StatefulWidget {
   final Function handleGoToCart;
   final Function handleSaveOverrideSetup;
   final List<OverrideFormControl> overrideSetupList;
+  final List<PermissionOverridedEntity> importedPermissionOverridedList;
 
-  const CartOverrideSubview({
-    super.key,
-    required this.applicationId,
-    required this.handleGoToCart,
-    required this.handleSaveOverrideSetup,
-    required this.overrideSetupList,
-  });
+  const CartOverrideSubview(
+      {super.key,
+      required this.applicationId,
+      required this.handleGoToCart,
+      required this.handleSaveOverrideSetup,
+      required this.overrideSetupList,
+      required this.importedPermissionOverridedList});
 
   @override
   State<CartOverrideSubview> createState() => _CartOverrideSubviewState();
@@ -72,6 +74,10 @@ class _CartOverrideSubviewState extends State<CartOverrideSubview> {
     List<OverrideFormControl> overrideFormControlList = [];
     if (widget.overrideSetupList.isNotEmpty) {
       overrideFormControlList = widget.overrideSetupList;
+    } else if (widget.importedPermissionOverridedList.isNotEmpty) {
+      overrideFormControlList =
+          await overrideControl.getOverrideControlWithImportedConfigList(
+              applicationId, widget.importedPermissionOverridedList);
     } else {
       overrideFormControlList = await overrideControl
           .getOverrideControlWithoutConfigList(applicationId);

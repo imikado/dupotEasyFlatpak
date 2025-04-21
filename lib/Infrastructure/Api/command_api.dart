@@ -309,17 +309,25 @@ class CommandApi {
   }
 
   Future<String> exportInstalled(String jsonData) async {
-    File installedAppJsonFile =
-        File('${await getApplicationDocumentsPath()}/installed_apps.json');
+    File installedAppJsonFile = File(await getImportJsonPath());
 
     installedAppJsonFile.writeAsStringSync(jsonData);
 
     return installedAppJsonFile.path;
   }
 
+  Future<String> getImportJsonPath() async {
+    return '${await getApplicationDocumentsPath()}/installed_apps.json';
+  }
+
+  Future<bool> doesImportJsonFileExist() async {
+    File installedAppJsonFile = File(await getImportJsonPath());
+
+    return installedAppJsonFile.exists();
+  }
+
   Future<String> importFromJson() async {
-    File installedAppJsonFile =
-        File('${await getApplicationDocumentsPath()}/installed_apps.json');
+    File installedAppJsonFile = File(await getImportJsonPath());
 
     return installedAppJsonFile.readAsStringSync();
   }

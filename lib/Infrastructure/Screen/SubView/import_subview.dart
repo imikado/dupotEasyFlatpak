@@ -20,9 +20,13 @@ import 'package:logging/logging.dart';
 class ImportSubview extends StatefulWidget {
   final Function handleGoToMore;
   final Function handleAddToCart;
+  final Function handleSaveImportedPermissionOverridedEntity;
 
   const ImportSubview(
-      {super.key, required this.handleGoToMore, required this.handleAddToCart});
+      {super.key,
+      required this.handleGoToMore,
+      required this.handleAddToCart,
+      required this.handleSaveImportedPermissionOverridedEntity});
 
   @override
   State<ImportSubview> createState() => _ImportSubviewState();
@@ -62,13 +66,53 @@ class _ImportSubviewState extends State<ImportSubview> {
   Future<void> import() async {
     CommandApi commands = CommandApi();
 
+    if (!await commands.doesImportJsonFileExist()) {
+      String importJsonPath = await commands.getImportJsonPath();
+
+      setState(() {
+        stateInstallationOutput = 'Missing import file $importJsonPath';
+      });
+
+      setState(() {
+        stateIsInstalling = false;
+      });
+
+      return;
+    }
+
+    List<String> installedApplicationIdList =
+        await commands.getInstalledApplicationList();
+
     String jsonData = await commands.importFromJson();
 
     Map<String, dynamic> installedJsonObj = jsonDecode(jsonData);
 
+    Map<String, List<PermissionOverridedEntity>>
+        importedPermissionOverridedEntityList = {};
+
     for (String applicationIdLoop in installedJsonObj.keys) {
-      widget.handleAddToCart(applicationIdLoop);
+      if (!installedApplicationIdList
+          .contains(applicationIdLoop.toLowerCase())) {
+        widget.handleAddToCart(applicationIdLoop);
+
+        List<PermissionOverridedEntity> permissionOverrideEntityList = [];
+
+        for (dynamic rawPermissionOverridedEntityLoop
+            in installedJsonObj[applicationIdLoop]!) {
+          permissionOverrideEntityList.add(PermissionOverridedEntity(
+            rawPermissionOverridedEntityLoop['type']!,
+            rawPermissionOverridedEntityLoop['value']!,
+            rawPermissionOverridedEntityLoop['valueYesNo'],
+          ));
+        }
+
+        importedPermissionOverridedEntityList[applicationIdLoop] =
+            permissionOverrideEntityList;
+      }
     }
+
+    widget.handleSaveImportedPermissionOverridedEntity(
+        importedPermissionOverridedEntityList);
 
     _logger.info('STDOUT: imported in cart');
     setState(() {

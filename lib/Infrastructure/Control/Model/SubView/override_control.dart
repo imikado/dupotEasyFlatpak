@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/recipe_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
@@ -68,6 +69,48 @@ class OverrideControl {
     }
 
     return overrideFormControlList;
+  }
+
+  Future<List<OverrideFormControl>> getOverrideControlWithImportedConfigList(
+      applicationId,
+      List<PermissionOverridedEntity> importedPermissionEntityList) async {
+    RecipeEntity recipe = await RecipeApi().getApplication(applicationId);
+
+    List<OverrideFormControl> overrideFormControlList = [];
+
+    List<PermissionEntity> recipePermissionList =
+        recipe.getFlatpakPermissionToOverrideList();
+
+    for (PermissionEntity recipePermissionLoop in recipePermissionList) {
+      OverrideFormControl overrideFormControlLoop = OverrideFormControl();
+      overrideFormControlLoop.setLabel(recipePermissionLoop.label);
+
+      String textValue = getValueFromImportedConfigByType(
+          recipePermissionLoop.type,
+          importedPermissionEntityList,
+          recipePermissionLoop.getValue().toString());
+
+      overrideFormControlLoop.setValue(textValue);
+
+      overrideFormControlLoop.setType(recipePermissionLoop.type);
+
+      overrideFormControlList.add(overrideFormControlLoop);
+    }
+
+    return overrideFormControlList;
+  }
+
+  String getValueFromImportedConfigByType(
+      String type,
+      List<PermissionOverridedEntity> permissionOverridedEntityList,
+      String defaultValue) {
+    for (PermissionOverridedEntity permissionOverridedEntityLoop
+        in permissionOverridedEntityList) {
+      if (permissionOverridedEntityLoop.type == type) {
+        return permissionOverridedEntityLoop.value!;
+      }
+    }
+    return defaultValue;
   }
 
   Future<List<OverrideFormControl>> getOverrideControlWithoutConfigList(

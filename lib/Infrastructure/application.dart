@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
@@ -53,6 +54,8 @@ class ApplicationState extends State<Application> {
   List<String> stateCartApplicationIdList = [];
   Map<String, List<OverrideFormControl>>
       stateCartOverrideFormControlListByApplicationId = {};
+  Map<String, List<PermissionOverridedEntity>>
+      stateImportedPermissionOverridedEntityListByApplicationId = {};
 
   String stateApplicationIdLighted = '';
 
@@ -325,6 +328,8 @@ class ApplicationState extends State<Application> {
           handleSaveOverrideSetup: saveCartOverrideSetupForApplicationId,
           overrideSetupList:
               getCartOverrideSetupForApplicationId(applicationId),
+          importedPermissionOverridedList:
+              getImportedPermissionOverridedForApplicationId(applicationId),
           handleGoToCart: () {
             NavigationEntity.goToCart(handleGoTo: goTo);
           });
@@ -351,6 +356,8 @@ class ApplicationState extends State<Application> {
           NavigationEntity.goToMore(handleGoTo: goTo);
         },
         handleAddToCart: addToCart,
+        handleSaveImportedPermissionOverridedEntity:
+            saveImportedPermissionOverridedEntity,
       );
     }
     throw Exception(
@@ -365,6 +372,16 @@ class ApplicationState extends State<Application> {
     });
   }
 
+  List<PermissionOverridedEntity>
+      getImportedPermissionOverridedForApplicationId(String applicationId) {
+    if (stateImportedPermissionOverridedEntityListByApplicationId
+        .containsKey(applicationId)) {
+      return stateImportedPermissionOverridedEntityListByApplicationId[
+          applicationId]!;
+    }
+    return [];
+  }
+
   List<OverrideFormControl> getCartOverrideSetupForApplicationId(
       String applicationId) {
     if (stateCartOverrideFormControlListByApplicationId
@@ -372,6 +389,15 @@ class ApplicationState extends State<Application> {
       return stateCartOverrideFormControlListByApplicationId[applicationId]!;
     }
     return [];
+  }
+
+  void saveImportedPermissionOverridedEntity(
+      Map<String, List<PermissionOverridedEntity>>
+          importedPermissionOverridedEntityListByApplicationId) {
+    setState(() {
+      stateImportedPermissionOverridedEntityListByApplicationId =
+          importedPermissionOverridedEntityListByApplicationId;
+    });
   }
 
   void saveCartOverrideSetupForApplicationId(

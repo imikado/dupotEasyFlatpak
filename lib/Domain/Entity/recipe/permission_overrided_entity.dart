@@ -10,6 +10,11 @@ class PermissionOverridedEntity {
 
   PermissionOverridedEntity(this.type, [this.value, this.subValueYesNo]);
 
+  PermissionOverridedEntity.fromJson(Map<String, dynamic> json)
+      : type = json['type'] as String,
+        value = json['value'] as String,
+        subValueYesNo = json['subValueYesNo'];
+
   bool isFileSystem() {
     return (type == constTypeFileSystem);
   }
