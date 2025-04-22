@@ -59,6 +59,16 @@ class LocalizationApi {
     return _localizedValues[languageCode]![key]!;
   }
 
+  String trAndReplace(String key, Map<String, String> patternList) {
+    String rawTranslation = tr(key);
+    String resultTranslation = rawTranslation;
+    for (String patternLoop in patternList.keys) {
+      resultTranslation =
+          rawTranslation.replaceAll(patternLoop, patternList[patternLoop]!);
+    }
+    return resultTranslation;
+  }
+
   String getLanguageCode() {
     return languageCode;
   }

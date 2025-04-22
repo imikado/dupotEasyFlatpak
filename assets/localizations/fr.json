@@ -105,5 +105,10 @@
   "loading_Looking_for_applications_updates": "Recherche de mises à jour",
   "FlathubApiEnabled": "API Flathub activée (peut être désactiviée en cas de soucis réseaux ou de problème avec un proxy..)",
   "More_actions": "More actions",
-  "export_finished": "Export finished"
+  "export_finished": "Export finished",
+  "Export": "Export",
+  "Export_installed_apps": "Export installed applications into a json file",
+  "Import": "Import",
+  "Import_installed_apps_from_json": "Import installed applications from a json file",
+  "Exported_to_pattern_filePath": "Exported to _filePath_"
 }

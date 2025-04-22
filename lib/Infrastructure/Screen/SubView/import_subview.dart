@@ -1,16 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
-import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
-import 'package:dupot_easy_flatpak/Domain/Entity/recipe/recipe_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Model/SubView/override_control.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/close_subview_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/card_output_component.dart';
 import 'package:flutter/material.dart';

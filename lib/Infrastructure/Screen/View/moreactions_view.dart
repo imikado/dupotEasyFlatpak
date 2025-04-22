@@ -1,4 +1,4 @@
-import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:flutter/material.dart';
 
@@ -69,11 +69,13 @@ class _MoreActionsViewState extends State<MoreActionsView> {
           getLine(() {
             return NavigationEntity.goToMoreExport(
                 handleGoTo: widget.handleGoTo);
-          }, Icons.download, "export", "export apps"),
+          }, Icons.upload, LocalizationApi().tr('Export'),
+              LocalizationApi().tr('Export_installed_apps')),
           getLine(() {
             return NavigationEntity.goToMoreImport(
                 handleGoTo: widget.handleGoTo);
-          }, Icons.download, "import", "imports apps in cart")
+          }, Icons.download, LocalizationApi().tr('Import'),
+              LocalizationApi().tr('Import_installed_apps_from_json'))
         ]));
   }
 }

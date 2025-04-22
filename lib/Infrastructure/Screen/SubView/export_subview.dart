@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_entity.dart';
@@ -9,7 +8,6 @@ import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Model/SubView/override_control.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/close_subview_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/card_output_component.dart';
@@ -134,7 +132,8 @@ class _ExportSubviewState extends State<ExportSubview> {
 
     _logger.info('STDOUT: $data');
     setState(() {
-      stateInstallationOutput = fileWritten;
+      stateInstallationOutput = LocalizationApi().trAndReplace(
+          'Exported_to_pattern_filePath', {'_filePath_': fileWritten});
     });
 
     setState(() {
