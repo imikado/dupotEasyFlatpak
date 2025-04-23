@@ -103,5 +103,15 @@
   "loading_Last_applications_updates_from_API_is_newer_than_7_days_not_need": "آخر تحديثات للتطبيقات من الواجهة أحدث من 7 أيام، لا حاجة للتحديث",
   "loading_Load_application_localizations": "تحميل ترجمات التطبيق",
   "loading_Looking_for_applications_updates": "البحث عن تحديثات للبرامج",
-  "FlathubApiEnabled": "واجهة Flathub مفعلة (يمكن تعطيلها في حال وجود مشاكل بالشبكة، مشاكل بالبروكسي..)"
+  "FlathubApiEnabled": "واجهة Flathub مفعلة (يمكن تعطيلها في حال وجود مشاكل بالشبكة، مشاكل بالبروكسي..)",
+  "More_actions": "More actions",
+  "export_finished": "Export finished",
+  "Export": "Export",
+  "Export_installed_apps": "Export installed applications into a json file",
+  "Import": "Import",
+  "Import_installed_apps_from_json": "Import installed applications from a json file",
+  "Exported_to_pattern_filePath": "Exported to _filePath_",
+  "Missing_import_pattern_filePath": "Missing import file _filePath_",
+  "Successfully_imported_in_cart": "Successfully imported in cart",
+  "Already_synced_nothing_to_import": "Already synced, nothing to import"
 }

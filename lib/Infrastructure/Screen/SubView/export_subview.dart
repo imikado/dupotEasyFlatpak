@@ -28,7 +28,7 @@ class ExportSubview extends StatefulWidget {
 }
 
 class _ExportSubviewState extends State<ExportSubview> {
-  static final _logger = Logger('InstallSubview');
+  static final _logger = Logger('ExportSubview');
 
   bool stateIsInstalling = true;
   String stateInstallationOutput = '';

@@ -243,6 +243,8 @@ class ApplicationState extends State<Application> {
           handleRemoveFromCart: removeFromCart,
           overrideSetupListByApplicationId:
               stateCartOverrideFormControlListByApplicationId,
+          importedPermissionOverridedEntityListByApplicationId:
+              stateImportedPermissionOverridedEntityListByApplicationId,
           isMain: isMain,
           applicationId: applicationId);
     }

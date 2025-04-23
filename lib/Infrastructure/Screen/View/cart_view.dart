@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
@@ -18,6 +19,8 @@ class CartView extends StatefulWidget {
   final bool isMain;
   final Function handleRemoveFromCart;
   final Map<String, List<OverrideFormControl>> overrideSetupListByApplicationId;
+  final Map<String, List<PermissionOverridedEntity>>
+      importedPermissionOverridedEntityListByApplicationId;
   final String applicationId;
 
   const CartView(
@@ -27,6 +30,7 @@ class CartView extends StatefulWidget {
       required this.applicationIdListInCart,
       required this.handleRemoveFromCart,
       required this.overrideSetupListByApplicationId,
+      required this.importedPermissionOverridedEntityListByApplicationId,
       required this.applicationId});
 
   @override

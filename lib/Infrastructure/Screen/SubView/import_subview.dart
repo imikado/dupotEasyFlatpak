@@ -26,7 +26,7 @@ class ImportSubview extends StatefulWidget {
 }
 
 class _ImportSubviewState extends State<ImportSubview> {
-  static final _logger = Logger('InstallSubview');
+  static final _logger = Logger('ImportSubview');
 
   bool stateIsInstalling = true;
   String stateInstallationOutput = '';
@@ -63,7 +63,8 @@ class _ImportSubviewState extends State<ImportSubview> {
       String importJsonPath = await commands.getImportJsonPath();
 
       setState(() {
-        stateInstallationOutput = 'Missing import file $importJsonPath';
+        stateInstallationOutput = LocalizationApi().trAndReplace(
+            'Missing_import_pattern_filePath', {'_filePath_': importJsonPath});
       });
 
       setState(() {
@@ -109,7 +110,9 @@ class _ImportSubviewState extends State<ImportSubview> {
 
     _logger.info('STDOUT: imported in cart');
     setState(() {
-      stateInstallationOutput = 'imported in cart';
+      stateInstallationOutput = importedPermissionOverridedEntityList.isNotEmpty
+          ? LocalizationApi().tr('Successfully_imported_in_cart')
+          : LocalizationApi().tr('Already_synced_nothing_to_import');
     });
 
     setState(() {
