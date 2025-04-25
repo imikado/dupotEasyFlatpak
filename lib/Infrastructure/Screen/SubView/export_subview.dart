@@ -108,7 +108,7 @@ class _ExportSubviewState extends State<ExportSubview> {
                   permissionRecipeEntityLoop.value.toString());
 
               if (textValue == permissionRecipeEntityLoop.subValueYes) {
-                valueYesNo = 'yes';
+                valueYesNo = PermissionOverridedEntity.constSubValueTrue;
               }
             }
 

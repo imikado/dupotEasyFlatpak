@@ -94,6 +94,15 @@ class OverrideControl {
 
       overrideFormControlLoop.setType(recipePermissionLoop.type);
 
+      if (recipePermissionLoop.isEnvYesNo()) {
+        bool boolValue = getBoolValueFromImportedConfigByType(
+            recipePermissionLoop.type,
+            importedPermissionEntityList,
+            recipePermissionLoop.getValue().toString());
+
+        overrideFormControlLoop.boolValue = boolValue;
+      }
+
       overrideFormControlList.add(overrideFormControlLoop);
     }
 
@@ -111,6 +120,23 @@ class OverrideControl {
       }
     }
     return defaultValue;
+  }
+
+  bool getBoolValueFromImportedConfigByType(
+      String type,
+      List<PermissionOverridedEntity> permissionOverridedEntityList,
+      String valueToCheck) {
+    for (PermissionOverridedEntity permissionOverridedEntityLoop
+        in permissionOverridedEntityList) {
+      if (permissionOverridedEntityLoop.type == type &&
+          permissionOverridedEntityLoop.value == valueToCheck) {
+        return permissionOverridedEntityLoop.subValueYesNo ==
+                PermissionOverridedEntity.constSubValueTrue
+            ? true
+            : false;
+      }
+    }
+    return false;
   }
 
   Future<List<OverrideFormControl>> getOverrideControlWithoutConfigList(

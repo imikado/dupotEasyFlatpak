@@ -3,6 +3,8 @@ class PermissionOverridedEntity {
   final String? value;
   final String? subValueYesNo;
 
+  static const constSubValueTrue = 'yes';
+
   static const constTypeFileSystem = 'filesystem';
   static const constTypeFileSystemNoPrompt = 'filesystem_noprompt';
 

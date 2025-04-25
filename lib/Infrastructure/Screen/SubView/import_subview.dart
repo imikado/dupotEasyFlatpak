@@ -86,7 +86,8 @@ class _ImportSubviewState extends State<ImportSubview> {
 
     for (String applicationIdLoop in installedJsonObj.keys) {
       if (!installedApplicationIdList
-          .contains(applicationIdLoop.toLowerCase())) {
+              .contains(applicationIdLoop.toLowerCase()) ||
+          true) {
         widget.handleAddToCart(applicationIdLoop);
 
         List<PermissionOverridedEntity> permissionOverrideEntityList = [];
@@ -96,7 +97,7 @@ class _ImportSubviewState extends State<ImportSubview> {
           permissionOverrideEntityList.add(PermissionOverridedEntity(
             rawPermissionOverridedEntityLoop['type']!,
             rawPermissionOverridedEntityLoop['value']!,
-            rawPermissionOverridedEntityLoop['valueYesNo'],
+            rawPermissionOverridedEntityLoop['subValueYesNo'],
           ));
         }
 

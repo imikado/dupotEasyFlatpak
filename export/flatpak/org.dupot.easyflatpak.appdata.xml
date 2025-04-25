@@ -73,10 +73,10 @@
   <releases>
 
 
-   <release date="2025-04-21" version="3.11.0"> 
+   <release date="2025-04-25" version="3.11.2"> 
       <description>
         <ul>
-          <li>Add import/export</li>
+          <li>Add import/export feature</li>
         </ul>
       </description>
     </release>
