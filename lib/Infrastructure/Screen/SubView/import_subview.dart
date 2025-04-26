@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Model/SubView/override_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/close_subview_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/card_output_component.dart';
 import 'package:flutter/material.dart';
 import 'package:ini/ini.dart';
-import 'package:logging/logging.dart';
 
 class ImportSubview extends StatefulWidget {
   final Function handleGoToMore;
@@ -26,8 +26,6 @@ class ImportSubview extends StatefulWidget {
 }
 
 class _ImportSubviewState extends State<ImportSubview> {
-  static final _logger = Logger('ImportSubview');
-
   bool stateIsInstalling = true;
   String stateInstallationOutput = '';
 
@@ -109,7 +107,7 @@ class _ImportSubviewState extends State<ImportSubview> {
     widget.handleSaveImportedPermissionOverridedEntity(
         importedPermissionOverridedEntityList);
 
-    _logger.info('STDOUT: imported in cart');
+    LoggerApi().info('STDOUT: imported in cart');
     setState(() {
       stateInstallationOutput = importedPermissionOverridedEntityList.isNotEmpty
           ? LocalizationApi().tr('Successfully_imported_in_cart')

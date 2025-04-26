@@ -5,6 +5,7 @@ import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/application.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,9 +15,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:window_manager/window_manager.dart';
-import 'package:logging/logging.dart';
-
-final _logger = Logger('Main');
 
 void main() async {
   try {
@@ -30,6 +28,8 @@ void main() async {
     Directory applicationDataDirectory =
         Directory(p.join(appDocumentsDirPath, "EasyFlatpak"));
 
+    LoggerApi(File(p.join(applicationDataDirectory.path, 'application.log')));
+
     Directory applicationDataIconsDirectory =
         Directory(p.join(applicationDataDirectory.path, "icons"));
 
@@ -37,7 +37,7 @@ void main() async {
     bool shouldCopyUserSettings = false;
 
     if (!applicationDataDirectory.existsSync()) {
-      _logger.info('Missing app directory, installing database');
+      LoggerApi().info('Missing app directory, installing database');
       await applicationDataDirectory.create();
 
       await applicationDataIconsDirectory.create();
@@ -45,7 +45,7 @@ void main() async {
       shouldCopyDb = true;
       shouldCopyUserSettings = true;
     } else {
-      _logger.info('App directory already exists');
+      LoggerApi().info('App directory already exists');
 
       if (!applicationDataIconsDirectory.existsSync()) {
         await applicationDataIconsDirectory.create();
@@ -58,9 +58,9 @@ void main() async {
       if (buildInstalled.existsSync()) {
         String buildInfo = buildInstalled.readAsStringSync();
         if (buildInfo == packageInfo.version) {
-          _logger.info('Build installed is the latest ($buildInfo)');
+          LoggerApi().info('Build installed is the latest ($buildInfo)');
         } else {
-          _logger.info(
+          LoggerApi().info(
               'Build installed $buildInfo different from current ${packageInfo.version}');
           shouldCopyDb = true;
         }
@@ -119,7 +119,7 @@ void main() async {
       CommandApi(settingsObj);
     });
 
-    _logger.info('Starting application');
+    LoggerApi().info('Starting application');
 
     sqfliteFfiInit();
 
@@ -137,21 +137,16 @@ void main() async {
       await windowManager.focus();
     });
 
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((record) {
-      stderr.writeln('${record.level.name}: ${record.time}: ${record.message}');
-    });
-
     runApp(const Application());
   } on Exception catch (e) {
-    _logger.severe('Exception:', e);
+    LoggerApi().error('Exception: $e');
   }
 }
 
 Future<void> copyAssetFilePath(String filePath, String targetPath) async {
-  _logger.info('Starting copy of $filePath');
+  LoggerApi().info('Starting copy of $filePath');
   final bytes = await rootBundle.load('assets/$filePath');
   final targetFile = File('$targetPath/${p.basename(filePath)}');
   await targetFile.writeAsBytes(bytes.buffer.asUint8List());
-  _logger.info('Finished copying $filePath');
+  LoggerApi().info('Finished copying $filePath');
 }

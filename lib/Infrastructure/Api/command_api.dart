@@ -5,13 +5,11 @@ import 'package:dupot_easy_flatpak/Domain/Entity/application_installed_entity.da
 import 'package:dupot_easy_flatpak/Domain/Entity/application_update_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
-import 'package:logging/logging.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 class CommandApi {
-  static final _logger = Logger('CommandApi');
-
   static const String flatpakCommand = 'flatpak';
 
   late Settings settingsObj;
@@ -72,7 +70,7 @@ class CommandApi {
   }
 
   Future<List<ApplicationUpdate>> checkUpdates() async {
-    _logger.info('Checking updates');
+    LoggerApi().info('Checking updates');
     ProcessResult result = await runProcess('flatpak', ['--no-deps', 'update']);
     updatesAvailableOutput = result.stdout.toString();
 
@@ -260,9 +258,9 @@ class CommandApi {
       applicationId
     ]);
 
-    _logger.info('Install output: ${result.stdout}');
+    LoggerApi().info('Install output: ${result.stdout}');
     if (result.stderr.toString().isNotEmpty) {
-      _logger.warning('Install error: ${result.stderr}');
+      LoggerApi().warning('Install error: ${result.stderr}');
     }
 
     for (List<String> argListLoop in subProcessList) {
@@ -281,9 +279,9 @@ class CommandApi {
       applicationId
     ]);
 
-    _logger.info('Uninstall output: ${result.stdout}');
+    LoggerApi().info('Uninstall output: ${result.stdout}');
     if (result.stderr.toString().isNotEmpty) {
-      _logger.warning('Uninstall error: ${result.stderr}');
+      LoggerApi().warning('Uninstall error: ${result.stderr}');
     }
 
     return result.stdout.toString();

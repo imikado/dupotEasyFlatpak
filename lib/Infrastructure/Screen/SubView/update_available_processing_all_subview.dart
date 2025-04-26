@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/close_subview_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/card_output_component.dart';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 
 class UpdateAvailableProcessingAllSubview extends StatefulWidget {
   final Function handleGoTo;
@@ -25,8 +25,6 @@ class UpdateAvailableProcessingAllSubview extends StatefulWidget {
 
 class _UpdateAvailableProcessingSubviewState
     extends State<UpdateAvailableProcessingAllSubview> {
-  static final _logger = Logger('UpdateAvailableProcessingAllSubview');
-
   bool stateIsInstalling = true;
   String stateInstallationOutput = '';
 
@@ -53,21 +51,21 @@ class _UpdateAvailableProcessingSubviewState
         command.getFlatpakSpawnArgumentList(commandBin, commandArgList));
 
     process.stdout.transform(utf8.decoder).listen((data) {
-      _logger.info('STDOUT: $data');
+      LoggerApi().info('STDOUT: $data');
       setState(() {
         stateInstallationOutput = data;
       });
     });
 
     process.stderr.transform(utf8.decoder).listen((data) {
-      _logger.warning('STDERR: $data');
+      LoggerApi().warning('STDERR: $data');
       setState(() {
         stateInstallationOutput = data;
       });
     });
 
     process.exitCode.then((exitCode) {
-      _logger.info('Exit code: $exitCode');
+      LoggerApi().info('Exit code: $exitCode');
 
       CommandApi().checkUpdates().then((value) {
         setState(() {
@@ -75,7 +73,7 @@ class _UpdateAvailableProcessingSubviewState
         });
       });
     }).catchError((e) {
-      _logger.severe('Error starting process: $e');
+      LoggerApi().error('Error starting process: $e');
     });
   }
 

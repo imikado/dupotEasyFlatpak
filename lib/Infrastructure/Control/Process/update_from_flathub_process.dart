@@ -1,17 +1,16 @@
 import 'dart:io' as io;
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:archive/archive_io.dart';
-import 'package:logging/logging.dart';
 
 import 'dart:io';
 
 class UpdateFromFlathubProcess {
-  static final _logger = Logger('UpdateFromFlathubProcess');
   CommandApi commandApi;
 
   UpdateFromFlathubProcess({required this.commandApi});
@@ -51,12 +50,12 @@ class UpdateFromFlathubProcess {
       if (buildInfo == packageInfo.version) {
         return;
       } else {
-        _logger.info(
+        LoggerApi().info(
             'Build installed $buildInfo different from current ${packageInfo.version}');
       }
     }
 
-    _logger.info('Installing icons');
+    LoggerApi().info('Installing icons');
 
     String targetIconsArchive = '${documentsTargetDirectory.path}/Archive.zip';
 

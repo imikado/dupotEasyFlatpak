@@ -2,13 +2,12 @@ import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:logging/logging.dart';
 
 class ApplicationViewModel {
-  static final _logger = Logger('ApplicationViewModel');
-
   Future<ApplicationEntity> getApplicationEntity(String appId) async {
     ApplicationRepository appStreamFactory = ApplicationRepository();
 
@@ -18,7 +17,7 @@ class ApplicationViewModel {
     UserSettingsEntity userSettingsEntity = UserSettingsEntity();
     if (userSettingsEntity.isFlathubApiEnabled() &&
         applicationEntity.lastUpdateIsOlderThan(7)) {
-      _logger.info('Updating from API');
+      LoggerApi().info('Updating from API');
       if (!await FlathubApi(applicationRepository: appStreamFactory)
           .updateAppStream(appId)) {
         applicationEntity.isEmpty = true;

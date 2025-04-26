@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_category_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 
 import 'package:http/http.dart' as http;
@@ -11,10 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'dart:io' as io;
 import 'package:path_provider/path_provider.dart';
-import 'package:logging/logging.dart';
 
 class FlathubApi {
-  static final _logger = Logger('FlathubApi');
   ApplicationRepository applicationRepository;
 
   FlathubApi({required this.applicationRepository});
@@ -69,14 +68,14 @@ class FlathubApi {
         continue;
       }
 
-      _logger
+      LoggerApi()
           .info('New application on flathub: ${appStreamIdLoop.toLowerCase()}');
 
       ApplicationEntity appStream =
           await getApplicationEntityFromApi(appStreamIdLoop);
       if (appStream.isEmpty) {
         appStream.id = appStreamIdLoop;
-        _logger.warning('App not found on api');
+        LoggerApi().warning('App not found on api');
       }
 
       downloadIcon(appStream, appDocumentsDirPath);

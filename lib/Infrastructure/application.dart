@@ -1,6 +1,7 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
@@ -30,7 +31,6 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/user_settings_view
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:logging/logging.dart';
 
 class Application extends StatefulWidget {
   const Application({super.key});
@@ -40,8 +40,6 @@ class Application extends StatefulWidget {
 }
 
 class ApplicationState extends State<Application> {
-  static final _logger = Logger('ApplicationState');
-
   String statePage = NavigationEntity.pageLoading;
   Map<String, String> stateArgumentMap = {};
   String stateSearched = '';
@@ -458,7 +456,7 @@ class ApplicationState extends State<Application> {
     if (NavigationEntity.hasArgumentSearch(argumentMap)) {
       String newSearch = NavigationEntity.extractArgumentSearch(argumentMap);
       if (newSearch != stateSearched) {
-        _logger.info(
+        LoggerApi().info(
             'update search to ${NavigationEntity.extractArgumentSearch(argumentMap)}');
         setState(() {
           stateSearched = NavigationEntity.extractArgumentSearch(argumentMap);

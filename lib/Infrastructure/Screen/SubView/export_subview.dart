@@ -6,6 +6,7 @@ import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_ent
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/recipe_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Model/SubView/override_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
@@ -13,7 +14,6 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/card_output_component.dart';
 import 'package:flutter/material.dart';
 import 'package:ini/ini.dart';
-import 'package:logging/logging.dart';
 
 class ExportSubview extends StatefulWidget {
   final Function handleGoToMore;
@@ -28,8 +28,6 @@ class ExportSubview extends StatefulWidget {
 }
 
 class _ExportSubviewState extends State<ExportSubview> {
-  static final _logger = Logger('ExportSubview');
-
   bool stateIsInstalling = true;
   String stateInstallationOutput = '';
 
@@ -130,7 +128,7 @@ class _ExportSubviewState extends State<ExportSubview> {
 
     String fileWritten = await CommandApi().exportInstalled(data);
 
-    _logger.info('STDOUT: $data');
+    LoggerApi().info('STDOUT: $data');
     setState(() {
       stateInstallationOutput = LocalizationApi().trAndReplace(
           'Exported_to_pattern_filePath', {'_filePath_': fileWritten});

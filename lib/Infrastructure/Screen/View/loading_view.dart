@@ -2,10 +2,10 @@ import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Process/update_from_flathub_process.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 
 class LoadingView extends StatefulWidget {
   final Function handle;
@@ -17,8 +17,6 @@ class LoadingView extends StatefulWidget {
 }
 
 class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
-  static final _logger = Logger('LoadingView');
-
   bool isLoaded = false;
 
   double progressValue = 0.0;
@@ -46,11 +44,11 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       stateLoadingInfo = LocalizationApi().tr('loading_Check_installation');
     });
 
-    _logger.info('Starting installation');
+    LoggerApi().info('Starting installation');
     UpdateFromFlathubProcess updateFromFlathubProcess =
         UpdateFromFlathubProcess(commandApi: CommandApi());
     await updateFromFlathubProcess.process();
-    _logger.info('Installation complete');
+    LoggerApi().info('Installation complete');
 
     setState(() {
       stateLoadingInfo = LocalizationApi().tr('loading_Installation_ok');
@@ -63,7 +61,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     final applicatoinRepository = ApplicationRepository();
     //await appStreamFactory.create();
 
-    _logger.info('Starting flathub load');
+    LoggerApi().info('Starting flathub load');
     setState(() {
       stateLoadingInfo = LocalizationApi()
           .tr('loading_Should_update_application_list_from_Flathub_api');
@@ -96,20 +94,20 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       });
     }
 
-    _logger.info('Flathub load complete');
+    LoggerApi().info('Flathub load complete');
 
     setState(() {
       progressValue = 0.50;
     });
 
     if (await CommandApi().missFlathubInFlatpak()) {
-      _logger.info('Need flathub setup');
+      LoggerApi().info('Need flathub setup');
       setState(() {
         progressValue = 0.6;
       });
       await CommandApi().setupFlathub();
     } else {
-      _logger.info('Flathub already setup');
+      LoggerApi().info('Flathub already setup');
     }
 
     List<String> dbApplicationIdList =
