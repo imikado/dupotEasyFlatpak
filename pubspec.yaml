@@ -83,6 +83,8 @@ flutter:
     - assets/images/
     - assets/recipies/
     - assets/recipies.json
+    - assets/bundles/
+    - assets/bundles.json
     - assets/icons/
     - assets/db/
     - assets/json/

@@ -29,8 +29,8 @@ class BlockAppListComponent extends StatelessWidget {
       }
 
       return SizedBox(
-          width: 170,
-          height: 160,
+          width: 198,
+          height: 122,
           child: CardApplicationComponent(
               id: appStreamLoop.id,
               title: appStreamLoop.getName(),
@@ -41,7 +41,7 @@ class BlockAppListComponent extends StatelessWidget {
 
     widgetList.add(SizedBox(
         width: 170,
-        height: 160,
+        height: 140,
         child: IconButton(
           icon: const Icon(Icons.more_horiz_outlined),
 

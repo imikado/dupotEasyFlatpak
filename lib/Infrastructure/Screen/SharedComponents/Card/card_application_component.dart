@@ -33,19 +33,21 @@ class CardApplicationComponent extends StatelessWidget {
               child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ListTile(
                   title: Text(
-                    title.length > 8 ? '${title.substring(0, 8)}...' : title,
+                    title.length > 12 ? '${title.substring(0, 12)}..' : title,
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         color:
                             Theme.of(context).textTheme.headlineLarge!.color),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                Expanded(
-                    child: Image.file(
+                SizedBox(
+                  height: 5,
+                ),
+                Image.file(
                   File(icon),
-                  width: 50,
-                ))
+                  width: 47,
+                )
               ])));
     }
 

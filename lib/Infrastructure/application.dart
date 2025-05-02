@@ -18,6 +18,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/update_availabl
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/update_available_processing_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/about_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/application_view.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/bundles_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/cart_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/category_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/home_view.dart';
@@ -56,6 +57,8 @@ class ApplicationState extends State<Application> {
       stateImportedPermissionOverridedEntityListByApplicationId = {};
 
   String stateApplicationIdLighted = '';
+
+  String stateBundleIdLighted = '';
 
   String version = '';
 
@@ -219,6 +222,12 @@ class ApplicationState extends State<Application> {
     } else if (pageToLoad == NavigationEntity.pageMore) {
       return MoreActionsView(
         handleGoTo: goTo,
+      );
+    } else if (pageToLoad == NavigationEntity.pageBundles) {
+      return BundlesView(
+        handleGoTo: goTo,
+        isMain: isMain,
+        bundleId: stateBundleIdLighted,
       );
     } else if (pageToLoad == NavigationEntity.pageAbout) {
       return AboutView(

@@ -1,0 +1,36 @@
+{
+    "Gaming": {
+        "icon": "assets/bundles/Gaming.png",
+        "applicationList": [
+            "com.valvesoftware.Steam",
+            "com.discordapp.Discord",
+            "net.lutris.Lutris",
+            "com.heroicgameslauncher.hgl",
+            "net.davidotek.pupgui2",
+            "org.freedesktop.Platform.VulkanLayer.MangoHud"
+        ]
+    },
+    "Graphic_design": {
+        "icon": "assets/bundles/Graphic_design.png",
+        "applicationList": [
+            "org.kde.kdenlive",
+            "org.audacityteam.Audacity",
+            "com.obsproject.Studio",
+            "fr.handbrake.ghb",
+            "org.kde.krita",
+            "org.gimp.GIMP",
+            "org.inkscape.Inkscape"
+        ]
+    },
+    "Software_development": {
+        "icon": "assets/bundles/Software_development.png",
+        "applicationList": [
+            "com.visualstudio.code",
+            "com.google.AndroidStudio",
+            "org.pgadmin.pgadmin4",
+            "rest.insomnia.Insomnia",
+            "io.dbeaver.DBeaverCommunity",
+            "org.sqlitebrowser.sqlitebrowser"
+        ]
+    }
+}

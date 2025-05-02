@@ -108,6 +108,18 @@ class SideMenuViewModel {
     List<MenuItemEntity> menuItemList = [];
 
     menuItemList.add(MenuItemEntity(
+        label: 'Bundles',
+        action: () {
+          NavigationEntity.goToBundles(
+            handleGoTo: handleGoTo,
+          );
+        },
+        pageSelected: NavigationEntity.pageBundles,
+        badge: '',
+        categoryIdSelected: '',
+        icon: Icons.add_box));
+
+    menuItemList.add(MenuItemEntity(
         label: 'InstalledApps',
         action: () {
           NavigationEntity.goToInstalledApplications(handleGoTo: handleGoTo);

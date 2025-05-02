@@ -8,6 +8,7 @@ class NavigationEntity {
   static const String pageUpdateAvailables = 'updatesAvailables';
   static const String pageUserSettings = 'userSettings';
   static const String pageMore = 'more';
+  static const String pageBundles = 'bundles';
 
   static const String pageReload = 'reload';
   static const String pageAbout = 'about';
@@ -42,6 +43,10 @@ class NavigationEntity {
 
   static goToCart({required Function handleGoTo}) {
     handleGoTo(page: pageCart, argumentMap: {'': ''});
+  }
+
+  static goToBundles({required Function handleGoTo}) {
+    handleGoTo(page: pageBundles, argumentMap: {'': ''});
   }
 
   static goToCartInstallingAll({required Function handleGoTo}) {

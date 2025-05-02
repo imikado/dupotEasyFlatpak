@@ -13,8 +13,10 @@ class LoggerApi {
       _singleton.logFile = logFile;
       _singleton.logger = Logger(
         filter: null, // Use the default LogFilter (-> only log in debug mode)
-        printer: null, // Use the PrettyPrinter to format and print log
+        printer:
+            PrettyPrinter(), // Use the PrettyPrinter to format and print log
         output: FileOutput(
+            overrideExisting: true,
             file:
                 logFile), // Use the default LogOutput (-> send everything to console)
       );
