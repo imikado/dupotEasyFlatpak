@@ -67,31 +67,7 @@ class _SideMenuViewState extends State<SideMenuView> {
 
   @override
   void didUpdateWidget(covariant SideMenuView oldWidget) {
-    if (oldWidget.pageSelected != widget.pageSelected ||
-        (oldWidget.pageSelected == widget.pageSelected &&
-            oldWidget.pageSelected == NavigationEntity.pageCategory &&
-            oldWidget.argumentMapSelected[
-                    NavigationEntity.argumentCategoryId]! !=
-                widget.argumentMapSelected[
-                    NavigationEntity.argumentCategoryId])) {
-      loadData(false);
-    } else if (oldWidget.interfaceVersion != widget.interfaceVersion) {
-      loadData(false);
-    } else if (stateCartMenuItemList.length !=
-        widget.applicationIdListInCart.length) {
-      loadData(false);
-    } else if (oldWidget.numberOfUpdates != widget.numberOfUpdates) {
-      loadData(false);
-    }
-
-    if (oldWidget.searched != widget.searched) {
-      _searchController.text = widget.searched;
-      _searchController.selection = TextSelection.fromPosition(
-        TextPosition(offset: widget.searched.length),
-      );
-
-      loadData(false);
-    }
+    loadData(false);
 
     super.didUpdateWidget(oldWidget);
   }

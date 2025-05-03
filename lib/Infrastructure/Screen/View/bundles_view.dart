@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dupot_easy_flatpak/Domain/Entity/bundle_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/bundle_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:flutter/material.dart';
 
 class BundlesView extends StatefulWidget {
@@ -61,8 +62,15 @@ class _BundlesViewState extends State<BundlesView> {
 
   Widget getLine(BundleEntity bundleEntity) {
     return Card(
-        color: Theme.of(context).primaryColorLight,
+        color: widget.bundleId == bundleEntity.name
+            ? Theme.of(context).primaryColorLight
+            : Theme.of(context).secondaryHeaderColor,
         child: ListTile(
+          enabled: widget.isMain,
+          onTap: () => widget.isMain
+              ? NavigationEntity.goToBundleDetail(
+                  handleGoTo: widget.handleGoTo, bundleId: bundleEntity.name)
+              : null,
           title: Column(
             children: [
               Row(
@@ -83,7 +91,6 @@ class _BundlesViewState extends State<BundlesView> {
                                   .headlineLarge!
                                   .color),
                         ),
-                        Text('..'),
                       ],
                     ),
                   ),

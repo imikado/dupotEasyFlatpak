@@ -16,6 +16,7 @@ class NavigationEntity {
 
   static const String argumentApplicationId = 'applicationId';
   static const String argumentCategoryId = 'categoryId';
+  static const String argumentBundleId = 'bundleId';
 
   static const String argumentSubPage = 'subPage';
 
@@ -34,6 +35,8 @@ class NavigationEntity {
   static const String argumentSubPageExport = 'more_export';
   static const String argumentSubPageImport = 'more_import';
 
+  static const String argumentSubPageBundleDetail = 'bundle_detail';
+
   static const String argumentApplicationIdSelectedList =
       'application_id_selected_list';
 
@@ -47,6 +50,14 @@ class NavigationEntity {
 
   static goToBundles({required Function handleGoTo}) {
     handleGoTo(page: pageBundles, argumentMap: {'': ''});
+  }
+
+  static goToBundleDetail(
+      {required Function handleGoTo, required String bundleId}) {
+    handleGoTo(page: pageBundles, argumentMap: {
+      argumentSubPage: argumentSubPageBundleDetail,
+      argumentBundleId: bundleId
+    });
   }
 
   static goToCartInstallingAll({required Function handleGoTo}) {
@@ -105,6 +116,10 @@ class NavigationEntity {
         page: pageMore, argumentMap: {argumentSubPage: argumentSubPageImport});
   }
 
+  static extractArgumentBundleId(Map<String, String> argumentMap) {
+    return argumentMap[argumentBundleId];
+  }
+
   static extractArgumentApplicationId(Map<String, String> argumentMap) {
     return argumentMap[argumentApplicationId];
   }
@@ -124,6 +139,10 @@ class NavigationEntity {
 
   static hasArgumentSearch(Map<String, String> argumentMap) {
     return argumentMap.containsKey(argumentSearch);
+  }
+
+  static hasArgumentBundle(Map<String, String> argumentMap) {
+    return argumentMap.containsKey(argumentBundleId);
   }
 
   static extractArgumentSearch(Map<String, String> argumentMap) {

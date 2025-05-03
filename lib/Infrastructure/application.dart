@@ -6,6 +6,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart'
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_content_and_subcontent.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/bundle_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_install_all_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_override_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/export_subview.dart';
@@ -368,6 +369,16 @@ class ApplicationState extends State<Application> {
         handleSaveImportedPermissionOverridedEntity:
             saveImportedPermissionOverridedEntity,
       );
+    } else if (subPageToLoad == NavigationEntity.argumentSubPageBundleDetail) {
+      String bundleId =
+          NavigationEntity.extractArgumentBundleId(stateArgumentMap);
+
+      return BundleSubview(
+        handleAddToCart: addToCart,
+        handleGoTo: goTo,
+        bundleId: bundleId,
+        applicationIdListInCart: stateCartApplicationIdList,
+      );
     }
     throw Exception(
         'missing content sub view for subPageToLoad $subPageToLoad');
@@ -471,6 +482,13 @@ class ApplicationState extends State<Application> {
           stateSearched = NavigationEntity.extractArgumentSearch(argumentMap);
         });
       }
+    }
+
+    if (NavigationEntity.hasArgumentBundle(argumentMap)) {
+      setState(() {
+        stateBundleIdLighted =
+            NavigationEntity.extractArgumentBundleId(argumentMap);
+      });
     }
 
     if (page != NavigationEntity.pageSearch) {

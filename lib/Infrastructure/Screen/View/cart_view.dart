@@ -55,10 +55,7 @@ class _CartViewState extends State<CartView> {
 
   @override
   void didUpdateWidget(CartView oldWidget) {
-    if (stateApplicationEntityList.length !=
-        widget.applicationIdListInCart.length) {
-      loadData();
-    }
+    loadData();
 
     super.didUpdateWidget(oldWidget);
   }
@@ -87,6 +84,31 @@ class _CartViewState extends State<CartView> {
     for (String distinctApplicationIdLoop in distinctApplicationIdList) {
       if (applicationRecipeIdList.contains(distinctApplicationIdLoop)) {
         applicationIdWhichHasRecipeList.add(distinctApplicationIdLoop);
+      }
+    }
+
+    List<String> applicationEntityIdList = [];
+    for (ApplicationEntity applicationEntityLoop in applicationEntityList) {
+      applicationEntityIdList.add(applicationEntityLoop.id);
+    }
+
+    for (String applicationIdInCartLoop in widget.applicationIdListInCart) {
+      if (!applicationEntityIdList.contains(applicationIdInCartLoop)) {
+        applicationEntityList.add(ApplicationEntity(
+            id: applicationIdInCartLoop,
+            name: applicationIdInCartLoop,
+            summary: 'n/c',
+            httpIcon: '',
+            categoryIdList: [],
+            description: '',
+            metadataObj: {},
+            urlObj: {},
+            releaseObjList: [],
+            lastUpdate: 0,
+            projectLicense: '',
+            developer_name: '',
+            screenshotObjList: [],
+            lastReleaseTimestamp: 0));
       }
     }
 
