@@ -484,11 +484,9 @@ class ApplicationState extends State<Application> {
       }
     }
 
+    String bundleIdLighted = '';
     if (NavigationEntity.hasArgumentBundle(argumentMap)) {
-      setState(() {
-        stateBundleIdLighted =
-            NavigationEntity.extractArgumentBundleId(argumentMap);
-      });
+      bundleIdLighted = NavigationEntity.extractArgumentBundleId(argumentMap);
     }
 
     if (page != NavigationEntity.pageSearch) {
@@ -522,6 +520,7 @@ class ApplicationState extends State<Application> {
     setState(() {
       statePage = page;
       stateArgumentMap = argumentMap;
+      stateBundleIdLighted = bundleIdLighted;
     });
   }
 }

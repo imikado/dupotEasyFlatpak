@@ -7,7 +7,7 @@
             "net.lutris.Lutris",
             "com.heroicgameslauncher.hgl",
             "net.davidotek.pupgui2",
-            "org.freedesktop.Platform.VulkanLayer.MangoHud"
+            "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
         ]
     },
     "Graphic_design": {

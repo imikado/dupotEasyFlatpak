@@ -83,7 +83,7 @@ class _BundlesViewState extends State<BundlesView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          bundleEntity.name,
+                          LocalizationApi().tr("bundle_${bundleEntity.name}"),
                           style: TextStyle(
                               fontSize: 26,
                               color: Theme.of(context)

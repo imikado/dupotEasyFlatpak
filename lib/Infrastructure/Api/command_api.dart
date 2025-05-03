@@ -61,8 +61,19 @@ class CommandApi {
   }
 
   Future<String> updateFlatpak(String appId) async {
-    ProcessResult result = await runProcess('flatpak', ['update', '-y', appId]);
-    return result.stdout.toString();
+    String output = '';
+
+    ProcessResult result = await runProcess(
+        'flatpak', ['update', '-y', '--noninteractive', appId]);
+    output += result.stdout.toString();
+
+    output += "\n\n";
+
+    ProcessResult userResult = await runProcess(
+        'flatpak', ['update', '-u', '-y', '--noninteractive', appId]);
+    output += userResult.stdout.toString();
+
+    return output;
   }
 
   bool hasApplicationInDatabase(String appId) {
@@ -71,7 +82,7 @@ class CommandApi {
 
   Future<List<ApplicationUpdate>> checkUpdates() async {
     LoggerApi().info('Checking updates');
-    ProcessResult result = await runProcess('flatpak', ['--no-deps', 'update']);
+    ProcessResult result = await runProcess('flatpak', ['update']);
     updatesAvailableOutput = result.stdout.toString();
 
     applicationUpdateAvailableList.clear();
@@ -86,10 +97,6 @@ class CommandApi {
           List<String> lineLoopList = lineLoop.split("\t");
 
           String appId = lineLoopList[2].toLowerCase();
-
-          if (distinctAppList.contains(appId)) {
-            continue;
-          }
 
           String comment = lineLoopList[3];
           if (lineLoopList.length > 5) {
@@ -253,6 +260,7 @@ class CommandApi {
     ProcessResult result = await runProcess(flatpakCommand, [
       'install',
       '-y',
+      '--noninteractive',
       'flathub',
       UserSettingsEntity().getInstallationScope(),
       applicationId

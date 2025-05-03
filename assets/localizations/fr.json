@@ -114,5 +114,8 @@
   "Exported_to_pattern_filePath": "Exporté vers _filePath_",
   "Missing_import_pattern_filePath": "Fichier d'importation manquant _filePath_",
   "Successfully_imported_in_cart": "Importé avec succès dans le panier",
-  "Already_synced_nothing_to_import": "Déjà synchronisé, rien à importer"
+  "Already_synced_nothing_to_import": "Déjà synchronisé, rien à importer",
+  "bundle_Gaming": "Bundle Gaming",
+  "bundle_Graphic_design": "Bundle Graphic design",
+  "bundle_Software_development": "Bundle Software development"
 }
