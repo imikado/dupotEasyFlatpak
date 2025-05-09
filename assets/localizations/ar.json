@@ -105,6 +105,7 @@
   "loading_Looking_for_applications_updates": "البحث عن تحديثات للبرامج",
   "FlathubApiEnabled": "واجهة Flathub مفعلة (يمكن تعطيلها في حال وجود مشاكل بالشبكة، مشاكل بالبروكسي..)",
   "More_actions": "More actions",
+  "Bundles": "Bundles",
   "export_finished": "Export finished",
   "Export": "Export",
   "Export_installed_apps": "Export installed applications into a json file",

@@ -105,6 +105,7 @@
   "loading_Looking_for_applications_updates": "Buscando actualizaciones de aplicaciones",
   "FlathubApiEnabled": "Flathub api enabled (can be disabled if network issue, proxies issues..)",
   "More_actions": "Más acciones",
+  "Bundles": "Bundles",
   "export_finished": "Exportación finalizada",
   "Export": "Exportar",
   "Export_installed_apps": "Exportar aplicaciones instaladas a un archivo json",
