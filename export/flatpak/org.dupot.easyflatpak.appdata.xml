@@ -78,6 +78,7 @@
           <li>Enable log file</li>
           <li>Translate missing languages</li>
           <li>Modify behavior in case of missing translation (to avoid crashing)</li>
+          <li>updates process bugfix</li>
         </ul>
       </description>
     </release>

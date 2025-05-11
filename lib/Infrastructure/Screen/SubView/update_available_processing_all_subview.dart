@@ -44,7 +44,7 @@ class _UpdateAvailableProcessingSubviewState
     List<String> commandArgList = [
       'update',
       '-y',
-      UserSettingsEntity().getInstallationScope(),
+      //UserSettingsEntity().getInstallationScope(),
     ];
 
     Process process = await Process.start(command.getCommand(commandBin),
