@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dupot_easy_flatpak/Domain/Entity/bundle_entity.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:flutter/services.dart';
 
 class BundleApi {

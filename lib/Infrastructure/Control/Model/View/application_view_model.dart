@@ -5,7 +5,6 @@ import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
-import 'package:logging/logging.dart';
 
 class ApplicationViewModel {
   Future<ApplicationEntity> getApplicationEntity(String appId) async {

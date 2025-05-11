@@ -12,7 +12,8 @@ class LoggerApi {
     if (logFile != null) {
       _singleton.logFile = logFile;
       _singleton.logger = Logger(
-        filter: null, // Use the default LogFilter (-> only log in debug mode)
+        filter:
+            ProductionFilter(), // Use the default LogFilter (-> only log in debug mode)
         printer:
             PrettyPrinter(), // Use the PrettyPrinter to format and print log
         output: FileOutput(

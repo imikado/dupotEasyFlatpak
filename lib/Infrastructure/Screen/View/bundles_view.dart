@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dupot_easy_flatpak/Domain/Entity/bundle_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/bundle_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';

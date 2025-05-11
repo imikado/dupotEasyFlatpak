@@ -53,8 +53,7 @@ class LocalizationApi {
       throw Exception(
           'Missing languageCode "$languageCode" in localization when ask tr("$key") ');
     } else if (!_localizedValues[languageCode]!.containsKey(key)) {
-      throw Exception(
-          'Missing localization for key: $key in language $languageCode');
+      return "$key (need translation)";
     }
     return _localizedValues[languageCode]![key]!;
   }

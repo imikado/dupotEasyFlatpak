@@ -72,7 +72,17 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
-  <release date="2025-05-09" version="3.12.3"> 
+    <release date="2025-05-11" version="3.12.4"> 
+      <description>
+        <ul>
+          <li>Enable log file</li>
+          <li>Translate missing languages</li>
+          <li>Modify behavior in case of missing translation (to avoid crashing)</li>
+        </ul>
+      </description>
+    </release>
+
+    <release date="2025-05-09" version="3.12.3"> 
       <description>
         <ul>
           <li>Bug fix: missing language key</li>
