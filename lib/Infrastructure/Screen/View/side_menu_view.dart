@@ -68,6 +68,9 @@ class _SideMenuViewState extends State<SideMenuView> {
   void didUpdateWidget(covariant SideMenuView oldWidget) {
     loadData(false);
 
+    if (oldWidget.searched != widget.searched) {
+      _searchController.text = widget.searched;
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -134,6 +137,7 @@ class _SideMenuViewState extends State<SideMenuView> {
                     ),
                     Expanded(
                       child: TextField(
+                        enableInteractiveSelection: false,
                         enabled: isActive(),
                         showCursor: true,
                         autofocus: false,

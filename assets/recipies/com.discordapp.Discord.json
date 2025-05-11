@@ -1,14 +1,12 @@
 {
-    "title":"Discord",
-    "description":"Discord",
-    "flatpak":"com.discordapp.Discord",
-
-    "flatpakPermissionToOverrideList":[
+    "title": "Discord",
+    "description": "Discord",
+    "flatpak": "com.discordapp.Discord",
+    "flatpakPermissionToOverrideList": [
         {
-            "label":"",
-            "type":"filesystem_noprompt",
-            "value":"home"
+            "label": "For information: should allow discord to access your home directory (let it setuped)",
+            "type": "filesystem_noprompt",
+            "value": "home"
         }
     ]
- 
 }

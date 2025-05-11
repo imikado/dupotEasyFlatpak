@@ -72,6 +72,19 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+  
+  <release date="2025-05-11" version="3.12.6"> 
+      <description>
+        <ul>
+          <li>Enable log file</li>
+          <li>Translate missing languages</li>
+          <li>Modify behavior in case of missing translation (to avoid crashing)</li>
+          <li>updates process bugfix</li>
+          <li>side menu: search field bugfix</li>
+        </ul>
+      </description>
+    </release>
+
     <release date="2025-05-11" version="3.12.5"> 
       <description>
         <ul>
