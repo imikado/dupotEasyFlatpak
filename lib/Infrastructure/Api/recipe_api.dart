@@ -47,9 +47,6 @@ class RecipeApi {
 
     List<Map<String, dynamic>> objectList = [];
     for (Map<String, dynamic> rawLoop in rawList) {
-      if (rawLoop.containsKey('label_$languageCode')) {
-        rawLoop['label'] = rawLoop['label_$languageCode'];
-      }
       objectList.add(rawLoop);
     }
 

@@ -117,5 +117,9 @@
   "Already_synced_nothing_to_import": "Déjà synchronisé, rien à importer",
   "bundle_Gaming": "Bundle Gaming",
   "bundle_Graphic_design": "Bundle Graphic design",
-  "bundle_Software_development": "Bundle Software development"
+  "bundle_Software_development": "Bundle Software development",
+  "recipe_share_your_home_label": "For information: should allow discord to access your home directory (let it setuped)",
+  "recipe_indicate_your_game_path_label": "Veuilez indiquer le chemin complet du répertoire contenant vos jeux",
+  "recipe_should_installMangoHud": "Installer mango hud",
+  "recipe_enable_mangohud": "Activer mango HUD"
 }

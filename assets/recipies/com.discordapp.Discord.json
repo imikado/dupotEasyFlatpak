@@ -4,7 +4,7 @@
     "flatpak": "com.discordapp.Discord",
     "flatpakPermissionToOverrideList": [
         {
-            "label": "For information: should allow discord to access your home directory (let it setuped)",
+            "label": "recipe_share_your_home_label",
             "type": "filesystem_noprompt",
             "value": "home"
         }

@@ -5,15 +5,13 @@
     "flatpak": "com.usebottles.bottles",
     "flatpakPermissionToOverrideList": [
         {
-            "label": "Indicate directory path where you store your games",
-            "label_fr": "Veuilez indiquer le chemin complet du répertoire contenant vos jeux",
+            "label": "recipe_indicate_your_game_path_label",
             "type": "filesystem"
         },
         {
-            "label":"Install mangohud",
-            "label_fr":"Installer mangohud",
-            "type":"install_flatpak_yesno",
-            "value":"org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
+            "label": "recipe_should_installMangoHud",
+            "type": "install_flatpak_yesno",
+            "value": "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
         }
     ]
 }

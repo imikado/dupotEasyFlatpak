@@ -118,5 +118,9 @@
     "Already_synced_nothing_to_import": "Já sincronizado, nada para importar",
     "bundle_Gaming": "Pacote Gaming",
     "bundle_Graphic_design": "Pacote Design Gráfico",
-    "bundle_Software_development": "Pacote Desenvolvimento de Software"
+    "bundle_Software_development": "Pacote Desenvolvimento de Software",
+    "recipe_share_your_home_label": "Para informação: deve permitir que o Discord acesse seu diretório home (deixe-o configurar)",
+    "recipe_indicate_your_game_path_label": "Indique o caminho do diretório onde você armazena seus jogos",
+    "recipe_should_installMangoHud": "Instalar mango hud",
+    "recipe_enable_mangohud": "Ativar mangohud"
 }

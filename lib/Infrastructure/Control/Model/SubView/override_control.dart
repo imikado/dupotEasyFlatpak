@@ -3,6 +3,7 @@ import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_ent
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/recipe_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:ini/ini.dart';
@@ -35,7 +36,8 @@ class OverrideControl {
         continue;
       }
       OverrideFormControl overrideFormControlLoop = OverrideFormControl();
-      overrideFormControlLoop.setLabel(recipePermissionLoop.label);
+      overrideFormControlLoop
+          .setLabel(LocalizationApi().tr(recipePermissionLoop.label));
       overrideFormControlLoop.setType(recipePermissionLoop.type);
 
       if (overrideFormControlLoop.isTypeFileSystem()) {
@@ -83,7 +85,8 @@ class OverrideControl {
 
     for (PermissionEntity recipePermissionLoop in recipePermissionList) {
       OverrideFormControl overrideFormControlLoop = OverrideFormControl();
-      overrideFormControlLoop.setLabel(recipePermissionLoop.label);
+      overrideFormControlLoop
+          .setLabel(LocalizationApi().tr(recipePermissionLoop.label));
 
       String textValue = getValueFromImportedConfigByType(
           recipePermissionLoop.type,
@@ -150,7 +153,8 @@ class OverrideControl {
 
     for (PermissionEntity recipePermissionLoop in recipePermissionList) {
       OverrideFormControl overrideFormControlLoop = OverrideFormControl();
-      overrideFormControlLoop.setLabel(recipePermissionLoop.label);
+      overrideFormControlLoop
+          .setLabel(LocalizationApi().tr(recipePermissionLoop.label));
 
       String textValue = recipePermissionLoop.getValue().toString();
 

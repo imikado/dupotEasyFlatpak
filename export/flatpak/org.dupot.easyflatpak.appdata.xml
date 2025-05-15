@@ -72,6 +72,18 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+  
+
+
+  <release date="2025-05-15" version="3.12.8"> 
+      <description>
+        <ul>
+          <li>Update bugfix when select application(s) to update</li>
+          <li>Add recipes override labels translations</li>
+        </ul>
+      </description>
+    </release>
+
   <release date="2025-05-15" version="3.12.7"> 
       <description>
         <ul>
@@ -79,9 +91,6 @@
         </ul>
       </description>
     </release>
-
-
-  
   <release date="2025-05-11" version="3.12.6"> 
       <description>
         <ul>
