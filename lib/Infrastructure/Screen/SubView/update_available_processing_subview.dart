@@ -43,12 +43,7 @@ class _UpdateAvailableProcessingSubviewState
 
     for (String applicationIdSelectedLoop in applicationIdSelectedList) {
       String commandBin = 'flatpak';
-      List<String> commandArgList = [
-        'update',
-        '-y',
-        UserSettingsEntity().getInstallationScope(),
-        applicationIdSelectedLoop
-      ];
+      List<String> commandArgList = ['update', '-y', applicationIdSelectedLoop];
 
       Process process = await Process.start(command.getCommand(commandBin),
           command.getFlatpakSpawnArgumentList(commandBin, commandArgList));
