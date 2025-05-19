@@ -30,6 +30,9 @@ class _UpdateAvailableProcessingSubviewState
 
   final ScrollController scrollController = ScrollController();
 
+  CommandApi command = CommandApi();
+  String commandBin = 'flatpak';
+
   @override
   void initState() {
     super.initState();
@@ -38,38 +41,39 @@ class _UpdateAvailableProcessingSubviewState
   }
 
   Future<void> updateList(List<String> applicationIdSelectedList) async {
-    CommandApi command = CommandApi();
-
     for (String applicationIdSelectedLoop in applicationIdSelectedList) {
-      String commandBin = 'flatpak';
-      List<String> commandArgList = ['update', '-y', applicationIdSelectedLoop];
-
-      Process process = await Process.start(command.getCommand(commandBin),
-          command.getFlatpakSpawnArgumentList(commandBin, commandArgList));
-
-      process.stdout.transform(utf8.decoder).listen((data) {
-        LoggerApi().info('STDOUT: $data');
-        setState(() {
-          stateInstallationOutput = data;
-        });
-      });
-
-      process.stderr.transform(utf8.decoder).listen((data) {
-        LoggerApi().warning('STDERR: $data');
-        setState(() {
-          stateInstallationOutput = data;
-        });
-      });
-
-      process.exitCode.then((exitCode) {
-        LoggerApi().info('Exit code: $exitCode');
-        setState(() {
-          stateIsInstalling = false;
-        });
-      }).catchError((e) {
-        LoggerApi().error('Error starting process: $e');
-      });
+      executeCommandWithArgList(['update', '-y', applicationIdSelectedLoop]);
+      executeCommandWithArgList(
+          ['update', '-u', '-y', applicationIdSelectedLoop]);
     }
+  }
+
+  void executeCommandWithArgList(List<String> argumentList) async {
+    Process process = await Process.start(command.getCommand(commandBin),
+        command.getFlatpakSpawnArgumentList(commandBin, argumentList));
+
+    process.stdout.transform(utf8.decoder).listen((data) {
+      LoggerApi().info('STDOUT: $data');
+      setState(() {
+        stateInstallationOutput = data;
+      });
+    });
+
+    process.stderr.transform(utf8.decoder).listen((data) {
+      LoggerApi().warning('STDERR: $data');
+      setState(() {
+        stateInstallationOutput = data;
+      });
+    });
+
+    process.exitCode.then((exitCode) {
+      LoggerApi().info('Exit code: $exitCode');
+      setState(() {
+        stateIsInstalling = false;
+      });
+    }).catchError((e) {
+      LoggerApi().error('Error starting process: $e');
+    });
   }
 
   @override

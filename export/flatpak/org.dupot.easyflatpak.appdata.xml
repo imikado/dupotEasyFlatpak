@@ -75,6 +75,17 @@
   
 
 
+<release date="2025-05-19" version="3.12.9"> 
+      <description>
+        <ul>
+          <li>Update bugfix when select application(s) to update</li>
+          <li>Update from flathub api</li>
+        </ul>
+      </description>
+    </release>
+
+
+
   <release date="2025-05-15" version="3.12.8"> 
       <description>
         <ul>
