@@ -96,7 +96,7 @@ class CommandApi {
         if (RegExp(r'\t').hasMatch(lineLoop) && lineLoop.contains('flathub')) {
           List<String> lineLoopList = lineLoop.split("\t");
 
-          String appId = lineLoopList[2].toLowerCase();
+          String appId = lineLoopList[2];
 
           String comment = lineLoopList[3];
           if (lineLoopList.length > 5) {

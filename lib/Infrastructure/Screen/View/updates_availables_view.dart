@@ -4,6 +4,7 @@ import 'package:dupot_easy_flatpak/Domain/Entity/application_update_entity.dart'
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/update_all_button.dart';
@@ -46,11 +47,10 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
 
     List<String> applicationUpdateIdList = [];
     for (ApplicationUpdate applicationUpdateLoop in applicationUpdateList) {
-      if (!applicationUpdateIdList
-          .contains(applicationUpdateLoop.id.toLowerCase())) {
-        applicationUpdateIdList.add(applicationUpdateLoop.id.toLowerCase());
+      if (!applicationUpdateIdList.contains(applicationUpdateLoop.id)) {
+        applicationUpdateIdList.add(applicationUpdateLoop.id);
 
-        checkboxList[applicationUpdateLoop.id.toLowerCase()] = false;
+        checkboxList[applicationUpdateLoop.id] = false;
 
         distinctApplicationUpdateList.add(applicationUpdateLoop);
       }
@@ -75,21 +75,30 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
           padding: const EdgeInsets.all(10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              getUpdateAllButton(),
-              const SizedBox(
-                width: 10,
-              ),
-              getUpdateButton()
-            ],
+            children: stateApplicationUpdateList.isEmpty
+                ? []
+                : [
+                    getUpdateAllButton(),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    getUpdateButton()
+                  ],
           )),
       Expanded(
           child: ListView(
               controller: scrollController,
-              children: stateApplicationUpdateList
-                  .map((ApplicationUpdate applicationUpdate) =>
-                      getLine(applicationUpdate))
-                  .toList()))
+              children: stateApplicationUpdateList.isEmpty
+                  ? [
+                      SizedBox(
+                        height: 150,
+                      ),
+                      Center(child: Text(LocalizationApi().tr('NoUpdates')))
+                    ]
+                  : stateApplicationUpdateList
+                      .map((ApplicationUpdate applicationUpdate) =>
+                          getLine(applicationUpdate))
+                      .toList()))
     ]);
   }
 
@@ -113,14 +122,14 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
           onChanged: (bool? value) {
             Map<String, bool> checkboxList = stateCheckboxList;
 
-            checkboxList[applicationUpdate.id.toLowerCase()] = value!;
+            checkboxList[applicationUpdate.id] = value!;
 
             setState(() {
               stateCheckboxList = checkboxList;
             });
           },
           enabled: applicationEntityFound != null,
-          value: stateCheckboxList[applicationUpdate.id.toLowerCase()],
+          value: stateCheckboxList[applicationUpdate.id],
           title: Column(
             spacing: 0,
             children: [
@@ -175,7 +184,7 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
 
         for (ApplicationUpdate applicationUpdateLoop
             in stateApplicationUpdateList) {
-          if (stateCheckboxList[applicationUpdateLoop.id.toLowerCase()]!) {
+          if (stateCheckboxList[applicationUpdateLoop.id]!) {
             applicationIdSelectedList.add(applicationUpdateLoop.id);
           }
         }

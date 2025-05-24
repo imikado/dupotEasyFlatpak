@@ -128,15 +128,18 @@ class SideMenuViewModel {
         categoryIdSelected: '',
         badge: await getInstalledAppLabel(),
         icon: Icons.install_desktop));
-    menuItemList.add(MenuItemEntity(
-        label: 'Updates',
-        action: () {
-          NavigationEntity.goToUpdatesAvailables(handleGoTo: handleGoTo);
-        },
-        pageSelected: NavigationEntity.pageUpdateAvailables,
-        categoryIdSelected: '',
-        badge: getUpdateAvailableLabel(),
-        icon: Icons.notifications));
+
+    if (shouldDisplayUpdateButton()) {
+      menuItemList.add(MenuItemEntity(
+          label: 'Updates',
+          action: () {
+            NavigationEntity.goToUpdatesAvailables(handleGoTo: handleGoTo);
+          },
+          pageSelected: NavigationEntity.pageUpdateAvailables,
+          categoryIdSelected: '',
+          badge: getUpdateAvailableLabel(),
+          icon: Icons.notifications));
+    }
 
     menuItemList.add(MenuItemEntity(
         label: 'Settings',
@@ -189,6 +192,13 @@ class SideMenuViewModel {
       return applicationEntityList.length.toString();
     }
     return '';
+  }
+
+  bool shouldDisplayUpdateButton() {
+    if (CommandApi().getNumberOfUpdates() > 0) {
+      return true;
+    }
+    return false;
   }
 
   String getUpdateAvailableLabel() {

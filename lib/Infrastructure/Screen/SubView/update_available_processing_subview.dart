@@ -41,8 +41,18 @@ class _UpdateAvailableProcessingSubviewState
   }
 
   Future<void> updateList(List<String> applicationIdSelectedList) async {
+    await updateSystem(applicationIdSelectedList);
+    await updateUser(applicationIdSelectedList);
+  }
+
+  Future<void> updateSystem(List<String> applicationIdSelectedList) async {
     for (String applicationIdSelectedLoop in applicationIdSelectedList) {
       executeCommandWithArgList(['update', '-y', applicationIdSelectedLoop]);
+    }
+  }
+
+  Future<void> updateUser(List<String> applicationIdSelectedList) async {
+    for (String applicationIdSelectedLoop in applicationIdSelectedList) {
       executeCommandWithArgList(
           ['update', '-u', '-y', applicationIdSelectedLoop]);
     }
