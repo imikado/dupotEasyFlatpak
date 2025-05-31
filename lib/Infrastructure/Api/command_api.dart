@@ -6,8 +6,7 @@ import 'package:dupot_easy_flatpak/Domain/Entity/application_update_entity.dart'
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
+import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
 
 class CommandApi {
   static const String flatpakCommand = 'flatpak';
@@ -315,37 +314,27 @@ class CommandApi {
   }
 
   Future<String> exportInstalled(String jsonData) async {
-    File installedAppJsonFile = File(await getImportJsonPath());
+    File installedAppJsonFile = File(PathApi.getExportJsonConfigPath());
 
     installedAppJsonFile.writeAsStringSync(jsonData);
 
     return installedAppJsonFile.path;
   }
 
-  Future<String> getImportJsonPath() async {
-    return '${await getApplicationDocumentsPath()}/installed_apps.json';
-  }
-
   Future<bool> doesImportJsonFileExist() async {
-    File installedAppJsonFile = File(await getImportJsonPath());
+    File installedAppJsonFile = File(PathApi.getImportJsonConfigPath());
 
     return installedAppJsonFile.exists();
   }
 
-  Future<String> importFromJson() async {
-    File installedAppJsonFile = File(await getImportJsonPath());
-
-    return installedAppJsonFile.readAsStringSync();
+  String getImportJsonPath() {
+    return PathApi.getImportJsonConfigPath();
   }
 
-  Future<String> getApplicationDocumentsPath() async {
-    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-    String appDocumentsDirPath = appDocumentsDir.path;
+  Future<String> importFromJson() async {
+    File installedAppJsonFile = File(PathApi.getImportJsonConfigPath());
 
-    Directory applicationDataDirectory =
-        Directory(p.join(appDocumentsDirPath, "EasyFlatpak"));
-
-    return applicationDataDirectory.path;
+    return installedAppJsonFile.readAsStringSync();
   }
 }
 

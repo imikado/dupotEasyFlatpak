@@ -73,6 +73,16 @@
   <releases>
 
   
+  <release date="2025-05-31" version="3.15.0"> 
+      <description>
+        <ul>
+          <li>Re-organize directory used by the application, now store in .config/Easyflatpak, .cache/Easyflatpak, .log/Easyflatpak</li>
+           <li>Update from flathub api</li>
+        </ul>
+      </description>
+    </release> 
+
+  
   <release date="2025-05-26" version="3.14.1"> 
       <description>
         <ul>

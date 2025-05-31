@@ -5,11 +5,8 @@ import 'dart:convert';
 
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_category_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
-import 'package:path/path.dart' as p;
+import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-import 'dart:io' as io;
-import 'package:path_provider/path_provider.dart';
 
 class ApplicationRepository {
   static const constTableApplication = 'appstream';
@@ -22,19 +19,7 @@ class ApplicationRepository {
   late String dbPath;
 
   Future<void> init() async {
-    final io.Directory appDocumentsDir =
-        await getApplicationDocumentsDirectory();
-
-    final appDocumentsDirPath = appDocumentsDir.path;
-    dbPath = p.join(appDocumentsDirPath, "EasyFlatpak", "flathub_database.db");
-  }
-
-  Future<String> getPath() async {
-    final io.Directory appDocumentsDir =
-        await getApplicationDocumentsDirectory();
-
-    final appDocumentsDirPath = appDocumentsDir.path;
-    return p.join(appDocumentsDirPath, "EasyFlatpak");
+    dbPath = PathApi.getDbCachePath();
   }
 
   Future<void> connect() async {

@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
+
 class UserSettingsEntity {
   int version = 2;
 
   String jsonUserSettingsPath = '';
-
-  String applicationDataPath = '';
-  String applicationIconPath = '';
 
   //language
   bool userOverrideLanguageCode = false; //if not: system
@@ -53,10 +52,7 @@ class UserSettingsEntity {
                 'Missing mandatory userSettings $mandatoryFieldLoop field in $newJsonUserSettingsPath');
           }
         }
-        _singleton.applicationDataPath =
-            jsonParameterObj.containsKey('applicationDataPath')
-                ? jsonParameterObj['applicationDataPath']
-                : '';
+
         _singleton.userOverrideLanguageCode =
             jsonParameterObj['userOverrideLanguageCode'];
         _singleton.userOverrideDarkModeEnabled =
@@ -104,21 +100,12 @@ class UserSettingsEntity {
     return false;
   }
 
+  String getApplicationIconsPath() {
+    return PathApi.getIconsCachePath();
+  }
+
   void updateLasttimeStampUpdateApplicationsFromApi() {
     lastUpdateFromApiTimestamp = DateTime.now().millisecondsSinceEpoch;
-  }
-
-  void setApplicationDataPath(String newApplicationDataPath) {
-    applicationDataPath = newApplicationDataPath;
-    applicationIconPath = "$applicationDataPath/icons";
-  }
-
-  String getApplicationDataPath() {
-    return applicationDataPath;
-  }
-
-  String getApplicationIconsPath() {
-    return applicationIconPath;
   }
 
   void setSystemDarkModeEnabled(bool newDarkModeEnabled) {

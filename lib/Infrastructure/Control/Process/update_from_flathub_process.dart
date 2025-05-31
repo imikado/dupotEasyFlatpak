@@ -2,6 +2,7 @@ import 'dart:io' as io;
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -34,16 +35,9 @@ class UpdateFromFlathubProcess {
   }
 
   Future<void> process() async {
-    final io.Directory appDocumentsDir =
-        await getApplicationDocumentsDirectory();
-    String appDocumentsDirPath = appDocumentsDir.path;
-
-    io.Directory documentsTargetDirectory =
-        io.Directory(p.join(appDocumentsDirPath, "EasyFlatpak"));
-
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-    io.File buildInstalled = File('${documentsTargetDirectory.path}/build.log');
+    io.File buildInstalled = File(PathApi.getBuildConfigPath());
 
     if (buildInstalled.existsSync()) {
       String buildInfo = buildInstalled.readAsStringSync();
@@ -57,12 +51,11 @@ class UpdateFromFlathubProcess {
 
     LoggerApi().info('Installing icons');
 
-    String targetIconsArchive = '${documentsTargetDirectory.path}/Archive.zip';
+    String targetIconsArchive = p.join(PathApi.getCachePath(), 'Archive.zip');
 
     await copyAssetTo('assets/icons/Archive.zip', targetIconsArchive);
 
-    await unarchive(
-        targetIconsArchive, UserSettingsEntity().getApplicationIconsPath());
+    await unarchive(targetIconsArchive, PathApi.getIconsCachePath());
 
     buildInstalled.writeAsStringSync(packageInfo.version);
   }

@@ -6,11 +6,11 @@ import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/application.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
@@ -22,91 +22,81 @@ void main() async {
 
     await windowManager.ensureInitialized();
 
-    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-    String appDocumentsDirPath = appDocumentsDir.path;
+    Directory configDirectory = Directory(PathApi.getConfigPath());
+    Directory cacheDirectory = Directory(PathApi.getCachePath());
+    Directory logDirectory = Directory(PathApi.getLogPath());
+    Directory iconsCacheDirectory = Directory(PathApi.getIconsCachePath());
+    Directory importConfigDirectory = Directory(PathApi.getImportConfigPath());
+    Directory exportConfigDirectory = Directory(PathApi.getExportConfigPath());
 
-    Directory applicationDataDirectory =
-        Directory(p.join(appDocumentsDirPath, "EasyFlatpak"));
+    for (Directory mandatoryDirectoryLoop in [
+      configDirectory,
+      cacheDirectory,
+      logDirectory,
+      iconsCacheDirectory,
+      importConfigDirectory,
+      exportConfigDirectory
+    ]) {
+      if (!mandatoryDirectoryLoop.existsSync()) {
+        mandatoryDirectoryLoop.createSync(recursive: true);
+      }
+    }
 
-    LoggerApi(File(p.join(applicationDataDirectory.path, 'application.log')));
-
-    Directory applicationDataIconsDirectory =
-        Directory(p.join(applicationDataDirectory.path, "icons"));
+    LoggerApi(File(p.join(logDirectory.path, 'application.log')));
 
     bool shouldCopyDb = false;
     bool shouldCopyUserSettings = false;
 
-    if (!applicationDataDirectory.existsSync()) {
-      LoggerApi().info('Missing app directory, installing database');
-      await applicationDataDirectory.create();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-      await applicationDataIconsDirectory.create();
+    File buildInstalled = File(PathApi.getBuildConfigPath());
 
+    if (!buildInstalled.existsSync()) {
       shouldCopyDb = true;
       shouldCopyUserSettings = true;
     } else {
-      LoggerApi().info('App directory already exists');
-
-      if (!applicationDataIconsDirectory.existsSync()) {
-        await applicationDataIconsDirectory.create();
-      }
-
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-      File buildInstalled = File('${applicationDataDirectory.path}/build.log');
-
-      if (buildInstalled.existsSync()) {
-        String buildInfo = buildInstalled.readAsStringSync();
-        if (buildInfo == packageInfo.version) {
-          LoggerApi().info('Build installed is the latest ($buildInfo)');
-        } else {
-          LoggerApi().info(
-              'Build installed $buildInfo different from current ${packageInfo.version}');
-          shouldCopyDb = true;
-        }
-      }
-
-      File userSettingsFile =
-          File('${applicationDataDirectory.path}/userSettings.json');
-      if (!userSettingsFile.existsSync()) {
-        shouldCopyUserSettings = true;
+      String buildInfo = buildInstalled.readAsStringSync();
+      if (buildInfo == packageInfo.version) {
+        LoggerApi().info('Build installed is the latest ($buildInfo)');
       } else {
-        String userSettingsString = userSettingsFile.readAsStringSync();
-        Map<String, dynamic> userSettingsObj = jsonDecode(userSettingsString);
+        LoggerApi().info(
+            'Build installed $buildInfo different from current ${packageInfo.version}');
+        shouldCopyDb = true;
+      }
+    }
 
-        String jsonDefaultUserSettingsString =
-            await rootBundle.loadString('assets/json/userSettings.json');
-        Map<String, dynamic> defaultUserSettingObj =
-            jsonDecode(jsonDefaultUserSettingsString);
-        if (!userSettingsObj.containsKey('version')) {
-          shouldCopyUserSettings = true;
-        } else if (defaultUserSettingObj['version'] == 2 &&
-            userSettingsObj['version'] == 1) {
-          userSettingsObj['flathubApiEnabled'] = true;
-        } else if (defaultUserSettingObj['version'] !=
-            userSettingsObj['version']) {
-          shouldCopyUserSettings = true;
-        }
+    File userSettingsFile = File(PathApi.getUserSettingsJsonConfigPath());
+    if (!userSettingsFile.existsSync()) {
+      shouldCopyDb = true;
+      shouldCopyUserSettings = true;
+    } else {
+      String userSettingsString = userSettingsFile.readAsStringSync();
+      Map<String, dynamic> userSettingsObj = jsonDecode(userSettingsString);
+
+      String jsonDefaultUserSettingsString =
+          await rootBundle.loadString('assets/json/userSettings.json');
+      Map<String, dynamic> defaultUserSettingObj =
+          jsonDecode(jsonDefaultUserSettingsString);
+      if (!userSettingsObj.containsKey('version')) {
+        shouldCopyUserSettings = true;
+      } else if (defaultUserSettingObj['version'] == 2 &&
+          userSettingsObj['version'] == 1) {
+        userSettingsObj['flathubApiEnabled'] = true;
+      } else if (defaultUserSettingObj['version'] !=
+          userSettingsObj['version']) {
+        shouldCopyUserSettings = true;
       }
     }
 
     if (shouldCopyDb) {
-      await copyAssetFilePath(
-          'db/flathub_database.db', applicationDataDirectory.path);
+      await copyAssetFilePath('db/flathub_database.db', PathApi.getCachePath());
     }
     if (shouldCopyUserSettings) {
       await copyAssetFilePath(
-          'json/userSettings.json', applicationDataDirectory.path);
-    }
-
-    File userSettingsFile =
-        File('${applicationDataDirectory.path}/userSettings.json');
-    if (!userSettingsFile.existsSync()) {
-      throw Exception('Unable to find UserSettings.json');
+          'json/userSettings.json', PathApi.getConfigPath());
     }
 
     UserSettingsEntity userSettings = UserSettingsEntity(userSettingsFile.path);
-    userSettings.setApplicationDataPath(applicationDataDirectory.path);
 
     if (userSettings.userOverrideLanguageCode) {
       LocalizationApi().setLanguageCode(userSettings.getUserLanguageCode());

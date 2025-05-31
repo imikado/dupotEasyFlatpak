@@ -5,13 +5,12 @@ import 'package:dupot_easy_flatpak/Domain/Entity/db/application_category_entity.
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 
 import 'package:http/http.dart' as http;
 
 import 'package:path/path.dart' as p;
-import 'dart:io' as io;
-import 'package:path_provider/path_provider.dart';
 
 class FlathubApi {
   ApplicationRepository applicationRepository;
@@ -28,22 +27,12 @@ class FlathubApi {
 
     await applicationRepository.updateApplicationEntity(appStream);
 
-    final io.Directory appDocumentsDir =
-        await getApplicationDocumentsDirectory();
-
-    final appDocumentsDirPath = appDocumentsDir.path;
-
-    downloadIcon(appStream, appDocumentsDirPath);
+    downloadIcon(appStream, PathApi.getIconsCachePath());
 
     return true;
   }
 
   Future<void> load() async {
-    final io.Directory appDocumentsDir =
-        await getApplicationDocumentsDirectory();
-
-    final appDocumentsDirPath = appDocumentsDir.path;
-
     List<String> appStreamIdList = await getRawApplicationList();
 
     applicationRepository.connect();
@@ -78,7 +67,7 @@ class FlathubApi {
         LoggerApi().warning('App not found on api');
       }
 
-      downloadIcon(appStream, appDocumentsDirPath);
+      downloadIcon(appStream, PathApi.getIconsCachePath());
 
       appStreamList.add(appStream);
 
@@ -106,10 +95,8 @@ class FlathubApi {
 
     Dio dioDownload = Dio();
 
-    await dioDownload.download(
-        httpIconPath,
-        p.join(UserSettingsEntity().getApplicationIconsPath(),
-            appStream.getAppIcon()));
+    await dioDownload.download(httpIconPath,
+        p.join(PathApi.getIconsCachePath(), appStream.getAppIcon()));
   }
 
   Future<List<String>> getRawApplicationList() async {

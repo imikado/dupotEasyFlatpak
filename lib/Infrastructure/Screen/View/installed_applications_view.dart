@@ -30,7 +30,6 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 
 class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
   List<ApplicationEntity> stateAppStreamList = [];
-  String appPath = '';
 
   String stateSearch = '';
 
@@ -54,7 +53,6 @@ class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
         await commands.getInstalledApplicationList();
 
     ApplicationRepository applicationRepository = ApplicationRepository();
-    appPath = await applicationRepository.getPath();
 
     List<ApplicationEntity> applicationEntityList = await applicationRepository
         .findListApplicationEntityByIdList(installedApplicationIdList);
