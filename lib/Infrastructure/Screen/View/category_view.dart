@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/List/datatable_application_list_component.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/List/grid_application_list_component.dart';
@@ -17,14 +18,6 @@ class CategoryView extends StatefulWidget {
   State<CategoryView> createState() => _CategoryViewState();
 }
 
-enum AppDisplay { list, grid, table }
-
-const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
-  (AppDisplay.list, Icons.view_list),
-  (AppDisplay.grid, Icons.view_compact),
-  (AppDisplay.table, Icons.view_column),
-];
-
 class _CategoryViewState extends State<CategoryView> {
   List<ApplicationEntity> stateAppStreamList = [];
   List<String> stateCategoryIdList = [];
@@ -34,7 +27,9 @@ class _CategoryViewState extends State<CategoryView> {
 
   ScrollController scrollController = ScrollController();
 
-  Set<AppDisplay> _segmentedButtonSelection = <AppDisplay>{AppDisplay.list};
+  Set<AppDisplay> _segmentedButtonSelection = <AppDisplay>{
+    UserSettingsEntity().getDisplayAppsMode()
+  };
 
   @override
   void initState() {
@@ -94,6 +89,8 @@ class _CategoryViewState extends State<CategoryView> {
                       selected: _segmentedButtonSelection,
                       // This callback updates the set of selected segment values.
                       onSelectionChanged: (Set<AppDisplay> newSelection) {
+                        UserSettingsEntity()
+                            .setDisplayAppsMode(newSelection.first);
                         setState(() {
                           _segmentedButtonSelection = newSelection;
                         });

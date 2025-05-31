@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
@@ -20,14 +21,6 @@ class InstalledApplicationsView extends StatefulWidget {
       _InstalledApplicationsViewState();
 }
 
-enum AppDisplay { list, grid, table }
-
-const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
-  (AppDisplay.list, Icons.view_list),
-  (AppDisplay.grid, Icons.view_compact),
-  (AppDisplay.table, Icons.view_column),
-];
-
 class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
   List<ApplicationEntity> stateAppStreamList = [];
 
@@ -37,8 +30,9 @@ class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
 
   final ScrollController scrollController = ScrollController();
 
-  Set<AppDisplay> _segmentedButtonSelection = <AppDisplay>{AppDisplay.list};
-
+  Set<AppDisplay> _segmentedButtonSelection = <AppDisplay>{
+    UserSettingsEntity().getDisplayAppsMode()
+  };
   @override
   void initState() {
     super.initState();
@@ -91,6 +85,7 @@ class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
                 selected: _segmentedButtonSelection,
                 // This callback updates the set of selected segment values.
                 onSelectionChanged: (Set<AppDisplay> newSelection) {
+                  UserSettingsEntity().setDisplayAppsMode(newSelection.first);
                   setState(() {
                     _segmentedButtonSelection = newSelection;
                   });

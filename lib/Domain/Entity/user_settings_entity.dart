@@ -2,9 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
+import 'package:flutter/material.dart';
+
+enum AppDisplay { list, grid, table }
+
+const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
+  (AppDisplay.list, Icons.view_list),
+  (AppDisplay.grid, Icons.view_compact),
+  (AppDisplay.table, Icons.view_column),
+];
 
 class UserSettingsEntity {
-  int version = 2;
+  int version = 3;
 
   String jsonUserSettingsPath = '';
 
@@ -26,6 +35,12 @@ class UserSettingsEntity {
   bool flathubApiEnabled = false; //if we use flathub api
 
   int lastUpdateFromApiTimestamp = 0;
+
+  String displayAppsMode = displayModeList;
+
+  static const String displayModeList = 'displayModeList';
+  static const String displayModeGrid = 'displayModeGrid';
+  static const String displayModeTable = 'displayModeTable';
 
   static final UserSettingsEntity _singleton = UserSettingsEntity._internal();
 
@@ -83,6 +98,8 @@ class UserSettingsEntity {
           _singleton.lastUpdateFromApiTimestamp =
               jsonParameterObj['lastUpdateFromApiTimestamp'];
         }
+
+        _singleton.displayAppsMode = jsonParameterObj['displayAppsMode'];
       }
     }
     return _singleton;
@@ -160,6 +177,17 @@ class UserSettingsEntity {
     await save();
   }
 
+  Future<void> setDisplayAppsMode(AppDisplay appDisplay) async {
+    if (appDisplay == AppDisplay.list) {
+      displayAppsMode = displayModeList;
+    } else if (appDisplay == AppDisplay.grid) {
+      displayAppsMode = displayModeGrid;
+    } else {
+      displayAppsMode = displayModeTable;
+    }
+    await save();
+  }
+
   String getActiveLanguageCode() {
     return getUserLanguageCode();
   }
@@ -203,6 +231,15 @@ class UserSettingsEntity {
     return getFlathubApiEnabled();
   }
 
+  AppDisplay getDisplayAppsMode() {
+    if (displayAppsMode == displayModeList) {
+      return AppDisplay.list;
+    } else if (displayAppsMode == displayModeGrid) {
+      return AppDisplay.grid;
+    }
+    return AppDisplay.table;
+  }
+
   Future<void> save() async {
     Map<String, dynamic> jsonParameterObj = {
       'version': version,
@@ -216,7 +253,8 @@ class UserSettingsEntity {
       'displayApplicationInstalledNumberInPage':
           displayApplicationInstalledNumberInPage,
       'flathubApiEnabled': flathubApiEnabled,
-      'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp
+      'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp,
+      'displayAppsMode': displayAppsMode
     };
 
     File jsonParameterFile = File(jsonUserSettingsPath);

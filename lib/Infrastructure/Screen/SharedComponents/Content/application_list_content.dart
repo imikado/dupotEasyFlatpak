@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/List/grid_application_list_component.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/List/listview_application_list_component.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
@@ -17,18 +18,12 @@ class ApplicationListContent extends StatefulWidget {
   State<ApplicationListContent> createState() => _ApplicationListContentState();
 }
 
-enum AppDisplay { list, grid }
-
-const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
-  (AppDisplay.list, Icons.view_list),
-  (AppDisplay.grid, Icons.view_compact),
-];
-
 class _ApplicationListContentState extends State<ApplicationListContent> {
   ScrollController scrollController = ScrollController();
 
-  Set<AppDisplay> _segmentedButtonSelection = <AppDisplay>{AppDisplay.list};
-
+  Set<AppDisplay> _segmentedButtonSelection = <AppDisplay>{
+    UserSettingsEntity().getDisplayAppsMode()
+  };
   @override
   Widget build(BuildContext context) {
     ThemeButtonStyle themeButtonStyle = ThemeButtonStyle(context: context);
@@ -57,6 +52,9 @@ class _ApplicationListContentState extends State<ApplicationListContent> {
                     selected: _segmentedButtonSelection,
                     // This callback updates the set of selected segment values.
                     onSelectionChanged: (Set<AppDisplay> newSelection) {
+                      UserSettingsEntity()
+                          .setDisplayAppsMode(newSelection.first);
+
                       setState(() {
                         _segmentedButtonSelection = newSelection;
                       });
