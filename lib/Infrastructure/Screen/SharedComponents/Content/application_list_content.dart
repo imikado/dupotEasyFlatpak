@@ -1,5 +1,6 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/List/datatable_application_list_component.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/List/grid_application_list_component.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/List/listview_application_list_component.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
@@ -74,18 +75,28 @@ class _ApplicationListContentState extends State<ApplicationListContent> {
                     width: 10,
                   )
                 ])),
-            Expanded(
-              child: _segmentedButtonSelection.first == AppDisplay.grid
-                  ? GridApplicationListComponent(
-                      applicationEntityList: widget.applicationEntityList,
-                      handleGoTo: widget.handleGoTo,
-                      handleScrollController: scrollController)
-                  : ListviewApplicationListComponent(
-                      applicationEntityList: widget.applicationEntityList,
-                      handleGoTo: widget.handleGoTo,
-                      handleScrollController: scrollController),
-            )
+            Expanded(child: getContent())
           ],
         ));
+  }
+
+  Widget getContent() {
+    if (_segmentedButtonSelection.first == AppDisplay.grid) {
+      return GridApplicationListComponent(
+          applicationEntityList: widget.applicationEntityList,
+          handleGoTo: widget.handleGoTo,
+          handleScrollController: scrollController);
+    }
+    if (_segmentedButtonSelection.first == AppDisplay.list) {
+      return ListviewApplicationListComponent(
+          applicationEntityList: widget.applicationEntityList,
+          handleGoTo: widget.handleGoTo,
+          handleScrollController: scrollController);
+    }
+
+    return DatatableApplicationListComponent(
+        applicationEntityList: widget.applicationEntityList,
+        handleGoTo: widget.handleGoTo,
+        handleScrollController: scrollController);
   }
 }

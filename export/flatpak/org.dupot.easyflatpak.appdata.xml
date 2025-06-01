@@ -72,7 +72,7 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
- <release date="2025-05-31" version="3.16.0"> 
+ <release date="2025-05-31" version="3.16.1"> 
       <description>
         <ul>
           <li>Re-organize directory used by the application, now store in .config/Easyflatpak, .cache/Easyflatpak, .log/Easyflatpak</li>
