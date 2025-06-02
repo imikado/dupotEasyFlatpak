@@ -10,8 +10,12 @@ class PathApi {
     return Platform.environment['HOME']!;
   }
 
+  static String getDataPath() {
+    return p.join(getHomePath(), '.local', 'share', appPath);
+  }
+
   static String getCachePath() {
-    return p.join(getHomePath(), '.cache', appPath);
+    return getDataPath();
   }
 
   static String getConfigPath() {
@@ -19,7 +23,7 @@ class PathApi {
   }
 
   static String getLogPath() {
-    return p.join(getHomePath(), '.log', appPath);
+    return getDataPath();
   }
 
   static String getImportConfigPath() {
