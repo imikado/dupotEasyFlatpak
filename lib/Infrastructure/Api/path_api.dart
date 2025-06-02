@@ -6,12 +6,8 @@ class PathApi {
   static String appPath = 'Easyflatpak';
   static String installedJsonFilename = 'installed_apps.json';
 
-  static String getHomePath() {
-    return Platform.environment['HOME']!;
-  }
-
   static String getDataPath() {
-    return p.join(getHomePath(), '.local', 'share', appPath);
+    return Platform.environment['XDG_DATA_HOME']!;
   }
 
   static String getCachePath() {
@@ -19,7 +15,7 @@ class PathApi {
   }
 
   static String getConfigPath() {
-    return p.join(getHomePath(), '.config', appPath);
+    return Platform.environment['XDG_CONFIG_HOME']!;
   }
 
   static String getLogPath() {
