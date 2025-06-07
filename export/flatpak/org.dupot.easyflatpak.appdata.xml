@@ -72,6 +72,16 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+  
+
+   <release date="2025-06-08" version="3.17.0"> 
+      <description>
+        <ul>
+          <li>Try to identify darkmode from os</li>
+        </ul>
+      </description>
+    </release> 
+
  <release date="2025-06-02" version="3.16.3"> 
       <description>
         <ul>

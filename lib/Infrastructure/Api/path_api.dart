@@ -7,6 +7,9 @@ class PathApi {
   static String installedJsonFilename = 'installed_apps.json';
 
   static String getDataPath() {
+    if (!Platform.environment.containsKey('XDG_DATA_HOME')) {
+      return p.join(Platform.environment['HOME']!, '.data');
+    }
     return Platform.environment['XDG_DATA_HOME']!;
   }
 
@@ -15,6 +18,10 @@ class PathApi {
   }
 
   static String getConfigPath() {
+    if (!Platform.environment.containsKey('XDG_CONFIG_HOME')) {
+      return p.join(Platform.environment['HOME']!, '.config');
+    }
+
     return Platform.environment['XDG_CONFIG_HOME']!;
   }
 

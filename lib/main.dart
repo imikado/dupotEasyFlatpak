@@ -105,9 +105,16 @@ void main() async {
     }
 
     Settings settingsObj = Settings();
-    settingsObj.load().then((value) {
-      CommandApi(settingsObj);
-    });
+    await settingsObj.load();
+
+    CommandApi(settingsObj);
+
+    final result = await CommandApi().runProcessSync(
+        'gsettings', ['get', 'org.gnome.desktop.interface', 'gtk-theme']);
+
+    final theme = result.stdout.toString().toLowerCase();
+    bool isDarkMode = theme.contains('dark');
+    UserSettingsEntity().setDarkModeEnabled(isDarkMode);
 
     LoggerApi().info('Starting application');
 
