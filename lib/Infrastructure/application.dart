@@ -89,6 +89,10 @@ class ApplicationState extends State<Application> {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      UserSettingsEntity().setDarkModeEnabled(true);
+    }
+
     ThemeData themData = ThemeData(
       useMaterial3: true,
       primaryColorLight: const Color.fromARGB(221, 59, 59, 59),

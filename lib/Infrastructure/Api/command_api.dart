@@ -32,6 +32,27 @@ class CommandApi {
     return settingsObj.useFlatpakSpawn();
   }
 
+  Future<bool> isOsDarkMode() async {
+    final colorShemeResult = await CommandApi().runProcessSync(
+        'gsettings', ['get', 'org.gnome.desktop.interface', 'color-scheme']);
+
+    final colorShemeResultStdout =
+        colorShemeResult.stdout.toString().toLowerCase();
+    if (colorShemeResultStdout.contains('dark')) {
+      return true;
+    }
+
+    final themeResult = await CommandApi().runProcessSync(
+        'gsettings', ['get', 'org.gnome.desktop.interface', 'gtk-theme']);
+
+    final themeResultStdout = themeResult.stdout.toString().toLowerCase();
+    if (themeResultStdout.contains('dark')) {
+      return true;
+    }
+
+    return false;
+  }
+
   Future<bool> missFlathubInFlatpak() async {
     ProcessResult result = await runProcessSync('flatpak', ['remotes']);
     if (result.stdout.toString().contains('flathub') &&

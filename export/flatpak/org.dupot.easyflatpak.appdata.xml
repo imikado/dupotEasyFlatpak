@@ -74,7 +74,7 @@
 
   
 
-   <release date="2025-06-08" version="3.17.0"> 
+   <release date="2025-06-08" version="3.17.1"> 
       <description>
         <ul>
           <li>Try to identify darkmode from os</li>

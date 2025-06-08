@@ -109,12 +109,7 @@ void main() async {
 
     CommandApi(settingsObj);
 
-    final result = await CommandApi().runProcessSync(
-        'gsettings', ['get', 'org.gnome.desktop.interface', 'gtk-theme']);
-
-    final theme = result.stdout.toString().toLowerCase();
-    bool isDarkMode = theme.contains('dark');
-    UserSettingsEntity().setDarkModeEnabled(isDarkMode);
+    UserSettingsEntity().setDarkModeEnabled(await CommandApi().isOsDarkMode());
 
     LoggerApi().info('Starting application');
 
