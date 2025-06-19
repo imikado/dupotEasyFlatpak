@@ -33,9 +33,12 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/user_settings_view
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:adwaita/adwaita.dart';
+import 'package:window_manager/window_manager.dart';
 
 class Application extends StatefulWidget {
-  const Application({super.key});
+  const Application({super.key, required this.themeNotifier});
+  final ValueNotifier<ThemeMode> themeNotifier;
 
   @override
   ApplicationState createState() => ApplicationState();
@@ -87,18 +90,15 @@ class ApplicationState extends State<Application> {
     super.dispose();
   }
 
+  void changeTheme() {
+    print(widget.themeNotifier.value);
+    widget.themeNotifier.value = widget.themeNotifier.value == ThemeMode.light
+        ? ThemeMode.dark
+        : ThemeMode.light;
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      UserSettingsEntity().setDarkModeEnabled(true);
-    }
-
-    ThemeData themData = ThemeData(
-      useMaterial3: true,
-      primaryColorLight: const Color.fromARGB(221, 59, 59, 59),
-      brightness: Brightness.dark,
-    );
-
     bool hasSubContent = false;
     bool isMain = true;
     if (stateArgumentMap.containsKey(NavigationEntity.argumentSubPage)) {
@@ -127,35 +127,22 @@ class ApplicationState extends State<Application> {
                 search: stateSearched.substring(0, stateSearched.length - 1));
           }
         },
-        child: MaterialApp(
-            theme: UserSettingsEntity().getActiveDarkModeEnabled()
-                ? themData
-                : ThemeData.light(),
-            home: Navigator(
-              pages: [
-                if (statePage == NavigationEntity.pageLoading)
-                  MaterialPage(
-                      key: const ValueKey(NavigationEntity.pageLoading),
-                      child: OnlyContentLayout(
-                          handleGoTo: goTo,
-                          content: LoadingView(handle: () {
-                            goToPrevious();
-                          })))
-                else
-                  MaterialPage(
-                      key: const ValueKey(NavigationEntity.pageHome),
-                      child: SideMenuWithContentAndSubContentLayout(
-                        menu: getSideMenuView(),
-                        content: getContentView(statePage, isMain),
-                        subContent: getSubContentView(hasSubContent),
-                        hasSubContent: hasSubContent,
-                        hasPrevious: stateHasPrevious,
-                        handleGoToPrevious: goToPrevious,
-                        pageSelected: statePage,
-                      ))
-              ],
-              onDidRemovePage: (page) => true,
-            )));
+        child: (statePage == NavigationEntity.pageLoading)
+            ? OnlyContentLayout(
+                handleGoTo: goTo,
+                content: LoadingView(handle: () {
+                  goToPrevious();
+                }))
+            : SideMenuWithContentAndSubContentLayout(
+                menu: getSideMenuView(),
+                content: getContentView(statePage, isMain),
+                subContent: getSubContentView(hasSubContent),
+                hasSubContent: hasSubContent,
+                hasPrevious: stateHasPrevious,
+                handleGoToPrevious: goToPrevious,
+                changeTheme: changeTheme,
+                pageSelected: statePage,
+              ));
   }
 
   String getSubPage() {

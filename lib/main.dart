@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:adwaita/adwaita.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
@@ -15,6 +16,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:window_manager/window_manager.dart';
+
+bool isOsDarkMode = false;
 
 void main() async {
   try {
@@ -109,7 +112,8 @@ void main() async {
 
     CommandApi(settingsObj);
 
-    UserSettingsEntity().setDarkModeEnabled(await CommandApi().isOsDarkMode());
+    isOsDarkMode = await CommandApi().isOsDarkMode();
+    //UserSettingsEntity().setDarkModeEnabled(await CommandApi().isOsDarkMode());
 
     LoggerApi().info('Starting application');
 
@@ -117,21 +121,58 @@ void main() async {
 
     databaseFactory = databaseFactoryFfi;
 
-    WindowOptions windowOptions = WindowOptions(
-      size: Size(1280, 800),
-      center: true,
-      backgroundColor: Colors.transparent,
+    await windowManager.ensureInitialized();
+
+    const windowOptions = WindowOptions(
+      size: Size(1000, 600),
+      minimumSize: Size(800, 350),
       skipTaskbar: false,
-      titleBarStyle: TitleBarStyle.normal,
+      backgroundColor: Colors.transparent,
+      titleBarStyle: TitleBarStyle.hidden,
+      title: 'Easy flatpak',
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.setAsFrameless();
+
       await windowManager.show();
       await windowManager.focus();
     });
 
-    runApp(const Application());
+    runApp(MyApp());
   } on Exception catch (e) {
     LoggerApi().error('Exception: $e');
+  }
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key}) {
+    if (isOsDarkMode) {
+      themeNotifier.value = ThemeMode.dark;
+    }
+  }
+
+  final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.system);
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return MaterialApp(
+          builder: (context, child) {
+            final virtualWindowFrame = VirtualWindowFrameInit();
+
+            return virtualWindowFrame(context, child);
+          },
+          theme: AdwaitaThemeData.light(),
+          darkTheme: AdwaitaThemeData.dark(),
+          debugShowCheckedModeBanner: false,
+          home: Application(themeNotifier: themeNotifier),
+          themeMode: currentMode,
+        );
+      },
+    );
   }
 }
 
