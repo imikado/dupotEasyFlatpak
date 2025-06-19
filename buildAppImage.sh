@@ -17,6 +17,10 @@ flutter build linux --release
 mkdir -p "$APPDIR"
 cp -r "$BUILD_DIR"/* "$APPDIR/"
 
+cp appImage/AppRun "$APPDIR/"
+chmod +x "$APPDIR/AppRun"
+
+
 # Ensure icon is placed correctly
 ICON_TARGET_DIR="$APPDIR/usr/share/icons/hicolor/512x512/apps"
 mkdir -p "$ICON_TARGET_DIR"
