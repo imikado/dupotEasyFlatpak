@@ -1,5 +1,4 @@
 #!/bin/sh
 HERE="$(dirname "$(readlink -f "$0")")"
-# Add lib directory to LD_LIBRARY_PATH so Flutter can find libapp.so
-export LD_LIBRARY_PATH="$HERE/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$HERE/usr/lib:$HERE/lib:$LD_LIBRARY_PATH"
 exec "$HERE/dupot_easy_flatpak"
