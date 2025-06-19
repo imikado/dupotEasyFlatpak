@@ -1,8 +1,19 @@
+#!/usr/bin/env bash
+
+# Clean up previous build
+rm -rf /tmp/dupotEasyFlatpak.AppDir
+
+# Build Flutter app for Linux
+flutter build linux --release
+
+# Create AppDir structure
+mkdir -p /tmp/dupotEasyFlatpak.AppDir/usr/lib
+
 set -euo pipefail
 SEEN_LIBS=()  # <--- FIX: initialize this array
 
 APP_BIN="build/linux/x64/release/bundle/dupot_easy_flatpak"
-DEST_DIR="build/linux/x64/release/bundle/lib"
+DEST_DIR="/tmp/dupotEasyFlatpak.AppDir/usr/lib"
 
 copy_lib() {
   local lib_path="$1"
@@ -61,4 +72,13 @@ ldd "$APP_BIN" | while read -r line; do
   fi
 done
 
-flutter_distributor release --name=dev --jobs=dupot-easy-flatpak-appimage
+
+# Copy main bundle contents and AppImage metadata
+cp -r build/linux/x64/release/bundle/* /tmp/dupotEasyFlatpak.AppDir/
+cp assets/logo.png /tmp/dupotEasyFlatpak.AppDir/dupot_easy_flatpak.png
+cp appImage/AppRun /tmp/dupotEasyFlatpak.AppDir/AppRun
+chmod +x /tmp/dupotEasyFlatpak.AppDir/AppRun
+cp appImage/dupot_easy_flatpak.desktop /tmp/dupotEasyFlatpak.AppDir/
+
+# Build the AppImage
+appimagetool-x86_64.AppImage /tmp/dupotEasyFlatpak.AppDir
