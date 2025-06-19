@@ -17,3 +17,7 @@ This application will help you install Flatpak apps in a user-friendly way. We h
 ![Application](export/screenshots/Screenshot_application_steam.png)
 
 ![Application](export/screenshots/Screenshot_application_steam_confirm_install.png)
+
+
+//test flatpak install --user https://dl.flathub.org/build-repo/193071/org.dupot.easyflatpak.flatpakref
+
