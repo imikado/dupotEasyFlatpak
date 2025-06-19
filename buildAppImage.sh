@@ -14,15 +14,15 @@ rm -rf "$APPDIR"
 # Build Flutter app for Linux
 flutter build linux --release
 
-# Copy full Flutter bundle into AppDir root
+# Copy Flutter bundle into AppDir
 mkdir -p "$APPDIR"
 cp -r "$BUILD_DIR"/* "$APPDIR/"
 
-# Install custom AppRun (must set LD_LIBRARY_PATH)
+# Custom AppRun
 cp appImage/AppRun "$APPDIR/"
 chmod +x "$APPDIR/AppRun"
 
-# Copy desktop file
+# Copy .desktop
 mkdir -p "$APPDIR/usr/share/applications"
 cp "appImage/$APP_NAME.desktop" "$APPDIR/usr/share/applications/"
 
@@ -31,22 +31,21 @@ ICON_TARGET_DIR="$APPDIR/usr/share/icons/hicolor/512x512/apps"
 mkdir -p "$ICON_TARGET_DIR"
 cp "assets/logos/512x512.png" "$ICON_TARGET_DIR/$ICON_NAME"
 
-# Copy extra graphics libraries to fix black screen (Debian EGL/GL)
+# Copy OpenGL-related libraries manually (no ldconfig)
 GL_LIBS=(libEGL.so.1 libGL.so.1 libgbm.so.1 libdrm.so.2)
-
 mkdir -p "$APPDIR/usr/lib"
 
 for libname in "${GL_LIBS[@]}"; do
-  libpath=$(ldconfig -p | grep "$libname" | head -n1 | awk '{print $NF}')
+  libpath=$(find /usr/lib /lib /usr/lib64 /lib64 -name "$libname" 2>/dev/null | head -n1)
   if [[ -n "$libpath" && -f "$libpath" ]]; then
-    echo "✅ Bundling $libname from $libpath"
+    echo "✅ Copying $libname from $libpath"
     cp "$libpath" "$APPDIR/usr/lib/"
   else
-    echo "⚠️  Warning: $libname not found via ldconfig"
+    echo "⚠️  Warning: $libname not found"
   fi
 done
 
-# Final AppImage packaging with linuxdeploy (don't override AppRun)
+# Package AppImage
 linuxdeploy-x86_64.AppImage --appdir "$APPDIR" \
   -d "$APPDIR/usr/share/applications/$APP_NAME.desktop" \
   -i "$ICON_TARGET_DIR/$ICON_NAME" \
