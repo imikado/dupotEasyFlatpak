@@ -31,8 +31,7 @@ mkdir -p "$APPDIR/usr/share/applications"
 cp "appImage/$APP_NAME.desktop" "$APPDIR/usr/share/applications/"
 
 # Run linuxdeploy to finish packaging into AppImage
-linuxdeploy-x86_64.AppImage --appdir "$APPDIR" \
-  -e "$BUILD_DIR/$APP_NAME" \
+./linuxdeploy-x86_64.AppImage --appdir "$APPDIR" \
   -d "$APPDIR/usr/share/applications/$APP_NAME.desktop" \
   -i "$ICON_TARGET_DIR/$ICON_NAME" \
   --output appimage
