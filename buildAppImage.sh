@@ -40,7 +40,7 @@ copy_lib() {
     libpng16.so.*)
       ;;
     *)
-      echo "Skipping (not whitelisted): $lib_name"
+      #echo "Skipping (not whitelisted): $lib_name"
       return
       ;;
   esac
@@ -75,7 +75,7 @@ done
 
 # Copy main bundle contents and AppImage metadata
 cp -r build/linux/x64/release/bundle/* /tmp/dupotEasyFlatpak.AppDir/
-cp assets/logo.png /tmp/dupotEasyFlatpak.AppDir/dupot_easy_flatpak.png
+cp assets/logos/512x512.png /tmp/dupotEasyFlatpak.AppDir/dupot_easy_flatpak.png
 cp appImage/AppRun /tmp/dupotEasyFlatpak.AppDir/AppRun
 chmod +x /tmp/dupotEasyFlatpak.AppDir/AppRun
 cp appImage/dupot_easy_flatpak.desktop /tmp/dupotEasyFlatpak.AppDir/
