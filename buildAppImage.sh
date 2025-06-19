@@ -74,20 +74,18 @@ copy_lib() {
 
 # Start with main binary
 # Start with main binary: extract all valid absolute paths
-ldd "$APP_BIN" | while read -r line; do
-  lib_path=$(echo "$line" | grep -o '/[^ ]*' || true)
-  if [[ -n "$lib_path" && -f "$lib_path" ]]; then
-    copy_lib "$lib_path"
-  fi
-done
+#ldd "$APP_BIN" | while read -r line; do
+#  lib_path=$(echo "$line" | grep -o '/[^ ]*' || true)
+#  if [[ -n "$lib_path" && -f "$lib_path" ]]; then
+#    copy_lib "$lib_path"
+#  fi
+#done
+
+linuxdeploy-x86_64.AppImage --appdir /tmp/dupotEasyFlatpak.AppDir \
+  -e build/linux/x64/release/bundle/dupot_easy_flatpak \
+  -d appImage/dupot_easy_flatpak.desktop \
+  -i assets/logos/512x512.png \
+  --output appimage
 
 
-# Copy main bundle contents and AppImage metadata
-cp -r build/linux/x64/release/bundle/* /tmp/dupotEasyFlatpak.AppDir/
-cp assets/logos/512x512.png /tmp/dupotEasyFlatpak.AppDir/dupot_easy_flatpak.png
-cp appImage/AppRun /tmp/dupotEasyFlatpak.AppDir/AppRun
-chmod +x /tmp/dupotEasyFlatpak.AppDir/AppRun
-cp appImage/dupot_easy_flatpak.desktop /tmp/dupotEasyFlatpak.AppDir/
 
-# Build the AppImage
-appimagetool-x86_64.AppImage /tmp/dupotEasyFlatpak.AppDir
