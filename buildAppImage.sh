@@ -37,13 +37,22 @@ copy_lib() {
     libcairo.so.*| \
     libatk-bridge-2.0.so.*| \
     libpangoft2-1.0.so.*| \
-    libpng16.so.*)
-      ;;
+    libpng16.so.*| \
+    libgobject-2.0.so.*| \
+    libglib-2.0.so.*| \
+    libharfbuzz.so.*| \
+    libstdc++.so.*| \
+    libffi.so.*| \
+    libz.so.*| \
+    libX11.so.*| \
+    libXext.so.*| \
+    libXrender.so.*| \
+    libXfixes.so.*)
+        ;;
     *)
-      #echo "Skipping (not whitelisted): $lib_name"
-      return
-      ;;
-  esac
+        return
+        ;;
+    esac
 
   if [[ ! " ${SEEN_LIBS[*]} " =~ " ${lib_name} " ]]; then
     SEEN_LIBS+=("$lib_name")
