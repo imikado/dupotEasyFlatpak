@@ -4,5 +4,5 @@ Type=Application
 Terminal=false
 Name=Easy flatpak
 Exec=dupot_easy_flatpak %u
-Icon=512x512
+Icon=dupot_easy_flatpak
 Categories=Utility;

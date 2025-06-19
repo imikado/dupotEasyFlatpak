@@ -1,91 +1,34 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+APP_NAME="dupot_easy_flatpak"
+BUILD_DIR="build/linux/x64/release/bundle"
+APPDIR="/tmp/dupotEasyFlatpak.AppDir"
+ICON_NAME="dupot_easy_flatpak.png"
+
 # Clean up previous build
-rm -rf /tmp/dupotEasyFlatpak.AppDir
+rm -rf "$APPDIR"
 
 # Build Flutter app for Linux
 flutter build linux --release
 
-# Create AppDir structure
-mkdir -p /tmp/dupotEasyFlatpak.AppDir/usr/lib
+# Copy full Flutter bundle to AppDir root (to preserve libapp.so, data, icudtl.dat, etc.)
+mkdir -p "$APPDIR"
+cp -r "$BUILD_DIR"/* "$APPDIR/"
 
-set -euo pipefail
-SEEN_LIBS=()  # <--- FIX: initialize this array
+# Ensure icon is placed correctly
+ICON_TARGET_DIR="$APPDIR/usr/share/icons/hicolor/512x512/apps"
+mkdir -p "$ICON_TARGET_DIR"
+cp "assets/logos/512x512.png" "$ICON_TARGET_DIR/$ICON_NAME"
 
-APP_BIN="build/linux/x64/release/bundle/dupot_easy_flatpak"
-DEST_DIR="/tmp/dupotEasyFlatpak.AppDir/usr/lib"
+# Ensure desktop file is present
+mkdir -p "$APPDIR/usr/share/applications"
+cp "appImage/$APP_NAME.desktop" "$APPDIR/usr/share/applications/"
 
-copy_lib() {
-  local lib_path="$1"
-
-  [[ "$lib_path" != /* || ! -f "$lib_path" ]] && return
-
-  local lib_name
-  lib_name=$(basename "$lib_path")
-  local dest_path="$DEST_DIR/$lib_name"
-
-  # Only include libraries that match your whitelist
-  case "$lib_name" in
-    libepoxy.so.*| \
-    libgtk-3.so.*| \
-    libadwaita-1.so.*| \
-    libgraphite2.so.*| \
-    libpangocairo-1.0.so.*| \
-    libpango-1.0.so.*| \
-    libatk-1.0.so.*| \
-    libgdk-3.so.*| \
-    libcairo.so.*| \
-    libatk-bridge-2.0.so.*| \
-    libpangoft2-1.0.so.*| \
-    libpng16.so.*| \
-    libgobject-2.0.so.*| \
-    libglib-2.0.so.*| \
-    libharfbuzz.so.*| \
-    libstdc++.so.*| \
-    libffi.so.*| \
-    libz.so.*| \
-    libX11.so.*| \
-    libXext.so.*| \
-    libXrender.so.*| \
-    libXfixes.so.*)
-        ;;
-    *)
-        return
-        ;;
-    esac
-
-  if [[ ! " ${SEEN_LIBS[*]} " =~ " ${lib_name} " ]]; then
-    SEEN_LIBS+=("$lib_name")
-    echo "Copying $lib_name"
-    cp "$lib_path" "$dest_path"
-
-    # Recursively resolve whitelisted dependencies
-    ldd "$lib_path" | while read -r line; do
-      subdep=$(echo "$line" | grep -o '/[^ ]*' || true)
-      if [[ -n "$subdep" && -f "$subdep" ]]; then
-        copy_lib "$subdep"
-      fi
-    done
-  fi
-}
-
-
-
-
-# Start with main binary
-# Start with main binary: extract all valid absolute paths
-#ldd "$APP_BIN" | while read -r line; do
-#  lib_path=$(echo "$line" | grep -o '/[^ ]*' || true)
-#  if [[ -n "$lib_path" && -f "$lib_path" ]]; then
-#    copy_lib "$lib_path"
-#  fi
-#done
-
-linuxdeploy-x86_64.AppImage --appdir /tmp/dupotEasyFlatpak.AppDir \
-  -e build/linux/x64/release/bundle/dupot_easy_flatpak \
-  -d appImage/dupot_easy_flatpak.desktop \
-  -i assets/logos/512x512.png \
+# Run linuxdeploy to finish packaging into AppImage
+linuxdeploy-x86_64.AppImage --appdir "$APPDIR" \
+  -e "$BUILD_DIR/$APP_NAME" \
+  -d "$APPDIR/usr/share/applications/$APP_NAME.desktop" \
+  -i "$ICON_TARGET_DIR/$ICON_NAME" \
   --output appimage
-
-
-
