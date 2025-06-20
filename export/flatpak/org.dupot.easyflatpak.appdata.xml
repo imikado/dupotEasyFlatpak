@@ -75,10 +75,10 @@
 
 
   
-   <release date="2025-06-20" version="3.18.1"> 
+   <release date="2025-06-20" version="3.18.2"> 
       <description>
         <ul>
-          <li>Try new window manager library libadwaita</li>
+          <li>Try new window manager library libadwaita and new way to adapt dark/light mode from OS</li>
         </ul>
       </description>
     </release> 

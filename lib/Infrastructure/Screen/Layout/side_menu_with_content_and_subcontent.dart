@@ -44,12 +44,7 @@ class SideMenuWithContentAndSubContentLayoutState
 
     return AdwScaffold(
       actions: AdwActions().windowManager,
-      start: [
-        AdwHeaderButton(
-          icon: const Icon(Icons.nightlight_round, size: 15),
-          onPressed: () => widget.changeTheme(),
-        ),
-      ],
+      start: [],
       body: Stack(
         children: [
           Row(
