@@ -112,7 +112,7 @@ void main() async {
 
     CommandApi(settingsObj);
 
-    isOsDarkMode = await CommandApi().isOsDarkMode();
+    //isOsDarkMode = await CommandApi().isOsDarkMode();
     //UserSettingsEntity().setDarkModeEnabled(await CommandApi().isOsDarkMode());
 
     LoggerApi().info('Starting application');
@@ -145,11 +145,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key}) {
-    if (isOsDarkMode) {
-      themeNotifier.value = ThemeMode.dark;
-    }
-  }
+  MyApp({super.key});
 
   final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.system);

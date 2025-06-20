@@ -75,7 +75,7 @@
 
 
   
-   <release date="2025-06-19" version="3.18.0"> 
+   <release date="2025-06-20" version="3.18.1"> 
       <description>
         <ul>
           <li>Try new window manager library libadwaita</li>
