@@ -22,7 +22,7 @@ class UpdateButton extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                        backgroundColor: Theme.of(context).primaryColorLight,
+                        backgroundColor: Theme.of(context).secondaryHeaderColor,
                         buttonPadding: const EdgeInsets.all(10),
                         actions: [
                           const DialogCancelButton(),

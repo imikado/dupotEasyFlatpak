@@ -25,7 +25,7 @@ class _MoreActionsViewState extends State<MoreActionsView> {
         borderRadius: BorderRadius.circular(8.0),
         onTap: () => functionToCall(),
         child: Card(
-          color: Theme.of(context).primaryColorLight,
+          color: Theme.of(context).secondaryHeaderColor,
           child: Column(
             children: [
               Row(

@@ -48,7 +48,7 @@ class _ApplicationListContentState extends State<ApplicationListContent> {
                     emptySelectionAllowed: false,
 
                     // Hide the selected icon to match the behavior of ToggleButtons.
-                    showSelectedIcon: true,
+                    showSelectedIcon: false,
                     // SegmentedButton uses a Set<T> to track its selection state.
                     selected: _segmentedButtonSelection,
                     // This callback updates the set of selected segment values.

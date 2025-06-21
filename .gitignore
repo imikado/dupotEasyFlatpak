@@ -51,3 +51,4 @@ web/icons/Icon-maskable-512.png
 dist/
 remoteBuildAndDownload.sh
 todo.txt
+Easy_flatpak-x86_64.AppImage

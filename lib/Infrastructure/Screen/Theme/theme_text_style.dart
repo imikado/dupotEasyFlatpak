@@ -6,21 +6,20 @@ class ThemeTextStyle {
   ThemeTextStyle({required this.context});
 
   Color getBadgetTextColor(bool isSelected) {
-    return Colors.white;
+    if (Theme.of(context).brightness == Brightness.dark) {
+      return Colors.white;
+    }
+    return Colors.black87;
   }
 
   Color getHeadlineTextColor(bool isSelected) {
     if (Theme.of(context).brightness == Brightness.dark) {
-      return isSelected
-          ? const Color.fromARGB(255, 167, 200, 223)
-          : Colors.white;
+      return Colors.white;
     }
-    return isSelected
-        ? Colors.white
-        : Theme.of(context).textTheme.bodyMedium!.color!;
+    return Colors.black87;
   }
 
   Color getHeadlineBackgroundColor(bool isSelected) {
-    return isSelected ? Theme.of(context).primaryColorDark : Colors.transparent;
+    return isSelected ? Theme.of(context).cardColor : Colors.transparent;
   }
 }

@@ -31,7 +31,7 @@ class ListviewApplicationListComponent extends StatelessWidget {
                     handleGoTo: handleGoTo, applicationId: appStreamLoop.id);
               },
               child: Card(
-                color: Theme.of(context).primaryColorLight,
+                color: Theme.of(context).secondaryHeaderColor,
                 child: Column(
                   children: [
                     Row(

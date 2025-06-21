@@ -38,6 +38,8 @@ class UserSettingsEntity {
 
   String displayAppsMode = displayModeList;
 
+  late ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.system);
+
   static const String displayModeList = 'displayModeList';
   static const String displayModeGrid = 'displayModeGrid';
   static const String displayModeTable = 'displayModeTable';
@@ -72,6 +74,11 @@ class UserSettingsEntity {
             jsonParameterObj['userOverrideLanguageCode'];
         _singleton.userOverrideDarkModeEnabled =
             jsonParameterObj['userOverrideDarkModeEnabled'];
+
+//dark mode enabled
+        if (_singleton.userOverrideDarkModeEnabled) {
+          _singleton.themeNotifier.value = ThemeMode.dark;
+        }
 
         if (_singleton.userOverrideLanguageCode) {
           _singleton.languageCode = jsonParameterObj['languageCode'];
@@ -138,6 +145,9 @@ class UserSettingsEntity {
 
   Future<void> setDarkModeEnabled(bool newDarkModeEnabled) async {
     darkModeEnabled = newDarkModeEnabled;
+
+    themeNotifier.value = newDarkModeEnabled ? ThemeMode.dark : ThemeMode.light;
+
     await save();
   }
 

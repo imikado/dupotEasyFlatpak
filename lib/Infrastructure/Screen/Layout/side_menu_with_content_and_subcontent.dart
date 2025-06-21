@@ -11,18 +11,17 @@ class SideMenuWithContentAndSubContentLayout extends StatefulWidget {
   final bool hasPrevious;
   final Function handleGoToPrevious;
   final String pageSelected;
-  final Function changeTheme;
 
-  const SideMenuWithContentAndSubContentLayout(
-      {super.key,
-      required this.menu,
-      required this.content,
-      required this.subContent,
-      required this.hasSubContent,
-      required this.hasPrevious,
-      required this.handleGoToPrevious,
-      required this.pageSelected,
-      required this.changeTheme});
+  const SideMenuWithContentAndSubContentLayout({
+    super.key,
+    required this.menu,
+    required this.content,
+    required this.subContent,
+    required this.hasSubContent,
+    required this.hasPrevious,
+    required this.handleGoToPrevious,
+    required this.pageSelected,
+  });
 
   @override
   SideMenuWithContentAndSubContentLayoutState createState() =>
@@ -56,7 +55,7 @@ class SideMenuWithContentAndSubContentLayoutState
                   width: 270,
                   child: Card(
                     elevation: 4,
-                    color: Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).secondaryHeaderColor,
                     child: widget.menu,
                   ),
                 ),

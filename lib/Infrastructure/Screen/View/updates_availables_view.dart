@@ -116,7 +116,7 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
         getApplicationEntity(applicationUpdate.id);
 
     return Card(
-        color: Theme.of(context).primaryColorLight,
+        color: Theme.of(context).secondaryHeaderColor,
         child: CheckboxListTile(
           visualDensity: VisualDensity(horizontal: 0, vertical: -4),
           onChanged: (bool? value) {

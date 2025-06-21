@@ -22,10 +22,9 @@ class ThemeButtonStyle {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        backgroundColor: Theme.of(context).primaryColorLight,
-        foregroundColor: Colors.white54,
-        selectedForegroundColor: Colors.white,
-        selectedBackgroundColor: const Color.fromARGB(255, 27, 78, 112),
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        selectedForegroundColor: Colors.white, // Selected text color
+        selectedBackgroundColor: Theme.of(context).canvasColor,
       );
     }
 
@@ -36,7 +35,7 @@ class ThemeButtonStyle {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       foregroundColor: Theme.of(context).primaryColor,
       selectedForegroundColor: Colors.white,
       selectedBackgroundColor: Theme.of(context).primaryColorDark,
@@ -46,7 +45,7 @@ class ThemeButtonStyle {
   ButtonStyle getButtonStyle() {
     if (Theme.of(context).brightness == Brightness.dark) {
       return ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColorLight,
+          backgroundColor: Theme.of(context).canvasColor,
           padding: const EdgeInsets.all(16),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -64,12 +63,12 @@ class ThemeButtonStyle {
   ButtonStyle getDialogButtonStyle() {
     if (Theme.of(context).brightness == Brightness.dark) {
       return FilledButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+          backgroundColor: Theme.of(context).cardColor,
           padding: const EdgeInsets.all(20),
           textStyle: const TextStyle(fontSize: 14, color: Colors.black));
     }
     return FilledButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        backgroundColor: Theme.of(context).primaryColor,
         padding: const EdgeInsets.all(20),
         textStyle: const TextStyle(fontSize: 14));
   }

@@ -61,7 +61,7 @@ class _BundlesViewState extends State<BundlesView> {
   Widget getLine(BundleEntity bundleEntity) {
     return Card(
         color: widget.bundleId == bundleEntity.name
-            ? Theme.of(context).primaryColorLight
+            ? Theme.of(context).secondaryHeaderColor
             : Theme.of(context).secondaryHeaderColor,
         child: ListTile(
           enabled: widget.isMain,

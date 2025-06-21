@@ -145,15 +145,12 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final ValueNotifier<ThemeMode> themeNotifier =
-      ValueNotifier(ThemeMode.system);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeNotifier,
+      valueListenable: UserSettingsEntity().themeNotifier,
       builder: (_, ThemeMode currentMode, __) {
         return MaterialApp(
           builder: (context, child) {
@@ -164,7 +161,7 @@ class MyApp extends StatelessWidget {
           theme: AdwaitaThemeData.light(),
           darkTheme: AdwaitaThemeData.dark(),
           debugShowCheckedModeBanner: false,
-          home: Application(themeNotifier: themeNotifier),
+          home: Application(),
           themeMode: currentMode,
         );
       },

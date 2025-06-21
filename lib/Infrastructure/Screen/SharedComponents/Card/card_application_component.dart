@@ -28,7 +28,7 @@ class CardApplicationComponent extends StatelessWidget {
                 handleGoTo: handleGoTo, applicationId: id);
           },
           child: Card(
-              color: Theme.of(context).primaryColorLight,
+              color: Theme.of(context).secondaryHeaderColor,
               clipBehavior: Clip.hardEdge,
               child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ListTile(
@@ -52,7 +52,7 @@ class CardApplicationComponent extends StatelessWidget {
     }
 
     return Card(
-        color: Theme.of(context).primaryColorLight,
+        color: Theme.of(context).secondaryHeaderColor,
         clipBehavior: Clip.hardEdge,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           ListTile(

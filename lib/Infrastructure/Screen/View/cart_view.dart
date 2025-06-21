@@ -167,7 +167,7 @@ class _CartViewState extends State<CartView> {
     return Card(
         color: widget.applicationId == applicationEntity.id
             ? Theme.of(context).secondaryHeaderColor
-            : Theme.of(context).primaryColorLight,
+            : Theme.of(context).secondaryHeaderColor,
         child: ListTile(
           title: Column(
             children: [

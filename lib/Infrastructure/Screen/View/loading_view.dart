@@ -134,7 +134,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColorLight,
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
         body: Center(
           child: Column(
             children: [

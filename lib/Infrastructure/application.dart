@@ -37,8 +37,7 @@ import 'package:adwaita/adwaita.dart';
 import 'package:window_manager/window_manager.dart';
 
 class Application extends StatefulWidget {
-  const Application({super.key, required this.themeNotifier});
-  final ValueNotifier<ThemeMode> themeNotifier;
+  const Application({super.key});
 
   @override
   ApplicationState createState() => ApplicationState();
@@ -90,13 +89,6 @@ class ApplicationState extends State<Application> {
     super.dispose();
   }
 
-  void changeTheme() {
-    print(widget.themeNotifier.value);
-    widget.themeNotifier.value = widget.themeNotifier.value == ThemeMode.light
-        ? ThemeMode.dark
-        : ThemeMode.light;
-  }
-
   @override
   Widget build(BuildContext context) {
     bool hasSubContent = false;
@@ -140,7 +132,6 @@ class ApplicationState extends State<Application> {
                 hasSubContent: hasSubContent,
                 hasPrevious: stateHasPrevious,
                 handleGoToPrevious: goToPrevious,
-                changeTheme: changeTheme,
                 pageSelected: statePage,
               ));
   }

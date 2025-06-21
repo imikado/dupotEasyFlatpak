@@ -80,7 +80,7 @@ class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
                 emptySelectionAllowed: false,
 
                 // Hide the selected icon to match the behavior of ToggleButtons.
-                showSelectedIcon: true,
+                showSelectedIcon: false,
                 // SegmentedButton uses a Set<T> to track its selection state.
                 selected: _segmentedButtonSelection,
                 // This callback updates the set of selected segment values.
@@ -95,7 +95,11 @@ class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
                 segments: appDisplayOptions.map<ButtonSegment<AppDisplay>>(
                     ((AppDisplay, IconData) shirt) {
                   return ButtonSegment<AppDisplay>(
-                      value: shirt.$1, label: Icon(shirt.$2));
+                      value: shirt.$1,
+                      label: Icon(
+                        shirt.$2,
+                        color: themeButtonStyle.getButtonTextStyle().color,
+                      ));
                 }).toList(),
               ),
               const SizedBox(
