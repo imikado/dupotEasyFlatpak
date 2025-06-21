@@ -100,7 +100,7 @@ class ApplicationState extends State<Application> {
 
     return KeyboardListener(
         focusNode: _focusNode,
-        autofocus: false,
+        autofocus: true,
         onKeyEvent: (event) {
           if (getSubPage() == '' &&
               event is KeyDownEvent &&
