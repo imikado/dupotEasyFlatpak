@@ -159,6 +159,9 @@ class UserSettingsEntity {
 
   Future<void> setUserOverrideDarkMode(bool userOverrideDarkModeEnabled) async {
     this.userOverrideDarkModeEnabled = userOverrideDarkModeEnabled;
+    if (!userOverrideDarkModeEnabled) {
+      themeNotifier.value = ThemeMode.system;
+    }
     await save();
   }
 
