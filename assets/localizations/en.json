@@ -121,5 +121,9 @@
   "recipe_share_your_home_label": "For information: should allow discord to access your home directory (let it setuped)",
   "recipe_indicate_your_game_path_label": "Indicate directory path where you store your games",
   "recipe_should_installMangoHud": "Install mango hud",
-  "recipe_enable_mangohud": "Enable mangohud"
+  "recipe_enable_mangohud": "Enable mangohud",
+  "parameter_thememode": "Theme",
+  "parameter_thememode_system": "Use system theme",
+  "parameter_thememode_light": "Use light theme",
+  "parameter_thememode_dark": "Use dark theme"
 }

@@ -1,10 +1,9 @@
 {
-    "version": 3,
+    "version": 4,
     "applicationDataPath": "",
     "userOverrideLanguageCode": false,
     "languageCode": "en",
-    "userOverrideDarkModeEnabled": true,
-    "darkModeEnabled": false,
+    "themeMode": "themeModeSystem",
     "userInstallationScopeEnabled": false,
     "displayApplicationInstalledNumberInSideMenu": false,
     "displayApplicationInstalledNumberInPage": false,

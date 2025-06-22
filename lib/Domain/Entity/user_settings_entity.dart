@@ -13,7 +13,7 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 ];
 
 class UserSettingsEntity {
-  int version = 3;
+  int version = 4;
 
   String jsonUserSettingsPath = '';
 
@@ -21,9 +21,12 @@ class UserSettingsEntity {
   bool userOverrideLanguageCode = false; //if not: system
   String languageCode = 'en';
 
-  //darkmode
-  bool userOverrideDarkModeEnabled = false; //if not: system
-  bool darkModeEnabled = false;
+  //theme
+  String stringThemeMode = themeModeSystem;
+
+  static const String themeModeSystem = 'themeModeSystem';
+  static const String themeModeLight = 'themeModeLight';
+  static const String themeModeDark = 'themeModeDark';
 
   //installation scope
   bool userInstallationScopeEnabled = false; //scope user/system
@@ -57,8 +60,7 @@ class UserSettingsEntity {
           'version',
           'userOverrideLanguageCode',
           'languageCode',
-          'userOverrideDarkModeEnabled',
-          'darkModeEnabled',
+          'themeMode',
           'userInstallationScopeEnabled',
           'displayApplicationInstalledNumberInSideMenu',
           'displayApplicationInstalledNumberInPage',
@@ -72,20 +74,14 @@ class UserSettingsEntity {
 
         _singleton.userOverrideLanguageCode =
             jsonParameterObj['userOverrideLanguageCode'];
-        _singleton.userOverrideDarkModeEnabled =
-            jsonParameterObj['userOverrideDarkModeEnabled'];
 
-//dark mode enabled
-        if (_singleton.userOverrideDarkModeEnabled) {
-          _singleton.themeNotifier.value = ThemeMode.dark;
-        }
+        _singleton.stringThemeMode = jsonParameterObj['themeMode'];
+
+        //theme mode
+        _singleton.setStringThemeMode(_singleton.stringThemeMode);
 
         if (_singleton.userOverrideLanguageCode) {
           _singleton.languageCode = jsonParameterObj['languageCode'];
-        }
-
-        if (_singleton.userOverrideDarkModeEnabled) {
-          _singleton.darkModeEnabled = jsonParameterObj['darkModeEnabled'];
         }
 
         _singleton.userInstallationScopeEnabled =
@@ -132,10 +128,24 @@ class UserSettingsEntity {
     lastUpdateFromApiTimestamp = DateTime.now().millisecondsSinceEpoch;
   }
 
-  void setSystemDarkModeEnabled(bool newDarkModeEnabled) {
-    if (!userOverrideDarkModeEnabled) {
-      darkModeEnabled = newDarkModeEnabled;
+  void setStringThemeMode(String newThemeMode) {
+    stringThemeMode = newThemeMode;
+
+    if (stringThemeMode == themeModeSystem) {
+      _singleton.themeNotifier.value = ThemeMode.system;
+    } else if (stringThemeMode == themeModeLight) {
+      _singleton.themeNotifier.value = ThemeMode.light;
+    } else if (stringThemeMode == themeModeDark) {
+      _singleton.themeNotifier.value = ThemeMode.dark;
+    } else {
+      throw Exception(
+          'Unexpected themeMode, expected : $themeModeSystem, $themeModeLight, $themeModeLight');
     }
+  }
+
+  Future<void> saveStringThemeMode(String newThemeMode) async {
+    setStringThemeMode(newThemeMode);
+    await save();
   }
 
   Future<void> setLanguageCode(String newLanguageCode) async {
@@ -143,25 +153,9 @@ class UserSettingsEntity {
     await save();
   }
 
-  Future<void> setDarkModeEnabled(bool newDarkModeEnabled) async {
-    darkModeEnabled = newDarkModeEnabled;
-
-    themeNotifier.value = newDarkModeEnabled ? ThemeMode.dark : ThemeMode.light;
-
-    await save();
-  }
-
   Future<void> setUserOverrideLanguageCode(
       bool userOverrideLanguageCode) async {
     this.userOverrideLanguageCode = userOverrideLanguageCode;
-    await save();
-  }
-
-  Future<void> setUserOverrideDarkMode(bool userOverrideDarkModeEnabled) async {
-    this.userOverrideDarkModeEnabled = userOverrideDarkModeEnabled;
-    if (!userOverrideDarkModeEnabled) {
-      themeNotifier.value = ThemeMode.system;
-    }
     await save();
   }
 
@@ -209,14 +203,6 @@ class UserSettingsEntity {
     return languageCode;
   }
 
-  bool getActiveDarkModeEnabled() {
-    return getUserDarkModeEnabled();
-  }
-
-  bool getUserDarkModeEnabled() {
-    return darkModeEnabled;
-  }
-
   bool getUserInstallationScopeEnabled() {
     return userInstallationScopeEnabled;
   }
@@ -258,8 +244,7 @@ class UserSettingsEntity {
       'version': version,
       'userOverrideLanguageCode': userOverrideLanguageCode,
       'languageCode': languageCode,
-      'userOverrideDarkModeEnabled': userOverrideDarkModeEnabled,
-      'darkModeEnabled': darkModeEnabled,
+      'themeMode': stringThemeMode,
       'userInstallationScopeEnabled': userInstallationScopeEnabled,
       'displayApplicationInstalledNumberInSideMenu':
           displayApplicationInstalledNumberInSideMenu,
