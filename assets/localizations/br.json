@@ -122,5 +122,9 @@
     "recipe_share_your_home_label": "Para informação: deve permitir que o Discord acesse seu diretório home (deixe-o configurar)",
     "recipe_indicate_your_game_path_label": "Indique o caminho do diretório onde você armazena seus jogos",
     "recipe_should_installMangoHud": "Instalar mango hud",
-    "recipe_enable_mangohud": "Ativar mangohud"
+    "recipe_enable_mangohud": "Ativar mangohud",
+    "parameter_thememode": "Tema",
+    "parameter_thememode_system": "Usar tema do sistema",
+    "parameter_thememode_light": "Usar tema claro",
+    "parameter_thememode_dark": "Usar tema escuro"
 }

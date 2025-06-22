@@ -121,5 +121,9 @@
   "recipe_share_your_home_label": "للمعلومة: يجب السماح لديسكورد بالوصول إلى مجلدك الرئيسي (دعه مضبوطًا)",
   "recipe_indicate_your_game_path_label": "أشر إلى مسار المجلد الذي تخزن فيه ألعابك",
   "recipe_should_installMangoHud": "تثبيت MangoHud",
-  "recipe_enable_mangohud": "تفعيل MangoHud"
+  "recipe_enable_mangohud": "تفعيل MangoHud",
+  "parameter_thememode": "السمة",
+  "parameter_thememode_system": "استخدام سمة النظام",
+  "parameter_thememode_light": "استخدام السمة الفاتحة",
+  "parameter_thememode_dark": "استخدام السمة الداكنة"
 }
