@@ -124,8 +124,8 @@ void main() async {
     await windowManager.ensureInitialized();
 
     const windowOptions = WindowOptions(
-      size: Size(1000, 600),
-      minimumSize: Size(800, 350),
+      size: Size(1200, 800),
+      minimumSize: Size(1200, 800),
       skipTaskbar: false,
       backgroundColor: Colors.transparent,
       titleBarStyle: TitleBarStyle.hidden,
@@ -134,9 +134,17 @@ void main() async {
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.setAsFrameless();
 
+      // Force apply size and position
+      await windowManager.setMinimumSize(const Size(1200, 800));
+      await windowManager.setSize(const Size(1200, 800));
+      await windowManager.center(); // optional: center on screen
+
       await windowManager.show();
       await windowManager.focus();
     });
+
+    final currentSize = await windowManager.getSize();
+    print('Window size after init: $currentSize');
 
     runApp(MyApp());
   } on Exception catch (e) {

@@ -17,8 +17,8 @@ class OnlyContentLayout extends StatefulWidget {
 class OnlyContentLayoutState extends State<OnlyContentLayout> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: widget.content,
+    return SizedBox.expand(
+      child: widget.content,
     );
   }
 }

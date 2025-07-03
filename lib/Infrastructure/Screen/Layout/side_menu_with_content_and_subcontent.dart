@@ -42,64 +42,66 @@ class SideMenuWithContentAndSubContentLayoutState
     );
 
     return AdwScaffold(
-      actions: AdwActions().windowManager,
-      start: [],
-      body: Stack(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        actions: AdwActions().windowManager,
+        start: [],
+        body: SizedBox.expand(
+          child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: SizedBox(
-                  width: 270,
-                  child: Card(
-                    elevation: 4,
-                    color: Theme.of(context).secondaryHeaderColor,
-                    child: widget.menu,
-                  ),
-                ),
-              ),
-              widget.hasSubContent
-                  ? SizedBox(width: 500, child: content)
-                  : Expanded(child: content),
-              if (widget.hasSubContent)
-                Expanded(
-                  child: Padding(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(5),
-                    child: Card(
-                      elevation: 4,
-                      color: Theme.of(context).secondaryHeaderColor,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: widget.subContent,
+                    child: SizedBox(
+                      width: 270,
+                      child: Card(
+                        elevation: 4,
+                        color: Theme.of(context).secondaryHeaderColor,
+                        child: widget.menu,
                       ),
                     ),
+                  ),
+                  widget.hasSubContent
+                      ? Expanded(flex: 2, child: content)
+                      : Expanded(child: content),
+                  if (widget.hasSubContent)
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Card(
+                          elevation: 4,
+                          color: Theme.of(context).secondaryHeaderColor,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: widget.subContent,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+
+              // Floating button overlay
+              if (widget.hasPrevious &&
+                  !widget.hasSubContent &&
+                  widget.pageSelected == NavigationEntity.pageApplication)
+                Positioned(
+                  bottom: 16,
+                  right: 16,
+                  child: ElevatedButton.icon(
+                    onPressed: () => widget.handleGoToPrevious(),
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(14),
+                      elevation: 6,
+                    ),
+                    label: const Icon(Icons.arrow_back_rounded),
                   ),
                 ),
             ],
           ),
-
-          // Floating button overlay
-          if (widget.hasPrevious &&
-              !widget.hasSubContent &&
-              widget.pageSelected == NavigationEntity.pageApplication)
-            Positioned(
-              bottom: 16,
-              right: 16,
-              child: ElevatedButton.icon(
-                onPressed: () => widget.handleGoToPrevious(),
-                style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(14),
-                  elevation: 6,
-                ),
-                label: const Icon(Icons.arrow_back_rounded),
-              ),
-            ),
-        ],
-      ),
-    );
+        ));
   }
 }
 
