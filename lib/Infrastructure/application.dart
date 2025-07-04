@@ -102,7 +102,22 @@ class ApplicationState extends State<Application> {
         focusNode: _focusNode,
         autofocus: true,
         onKeyEvent: (event) {
-          if (getSubPage() == '' &&
+          if (statePage == NavigationEntity.pageSearch) {
+            if (event is KeyDownEvent &&
+                event.logicalKey.keyLabel.toString().length == 1 &&
+                alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {
+              setState(() {
+                stateSearched = stateSearched +
+                    event.logicalKey.keyLabel.toString().toLowerCase();
+              });
+            } else if (event is KeyDownEvent &&
+                event.logicalKey.keyLabel == "Backspace") {
+              setState(() {
+                stateSearched =
+                    stateSearched.substring(0, stateSearched.length - 1);
+              });
+            }
+          } else if (getSubPage() == '' &&
               event is KeyDownEvent &&
               event.logicalKey.keyLabel.toString().length == 1 &&
               alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {

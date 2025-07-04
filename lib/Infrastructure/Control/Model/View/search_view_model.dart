@@ -7,7 +7,7 @@ class SearchViewModel {
     ApplicationRepository appStreamFactory = ApplicationRepository();
 
     List<ApplicationEntity> applicationEntityList = [];
-    if (search.length > 2) {
+    if (search.length > 3) {
       return await appStreamFactory.findListApplicationEntityBySearch(search);
     }
 

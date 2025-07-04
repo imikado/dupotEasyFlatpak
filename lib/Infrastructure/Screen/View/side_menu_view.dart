@@ -143,8 +143,14 @@ class _SideMenuViewState extends State<SideMenuView> {
                         autofocus: false,
                         controller: _searchController,
                         style: Theme.of(context).textTheme.titleSmall,
-                        decoration: InputDecoration.collapsed(
+                        decoration: InputDecoration(
                           hintText: LocalizationApi().tr('Search...'),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 2.0),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          border: InputBorder
+                              .none, // visually similar to .collapsed()
                         ),
                         onChanged: (value) {
                           _searchController.clearComposing();
