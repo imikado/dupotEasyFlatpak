@@ -129,7 +129,7 @@ void main() async {
       titleBarStyle: UserSettingsEntity().isWindowManagerLibadwaita()
           ? TitleBarStyle.hidden
           : TitleBarStyle.normal,
-      title: UserSettingsEntity().isWindowManagerLibadwaita() ? 'lib' : "nativ",
+      title: "Easy flatpak",
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       if (UserSettingsEntity().isWindowManagerLibadwaita()) {
