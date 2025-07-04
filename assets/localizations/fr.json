@@ -125,5 +125,8 @@
   "parameter_thememode": "Thème",
   "parameter_thememode_system": "Utiliser le thème du système",
   "parameter_thememode_light": "Utiliser le thème clair",
-  "parameter_thememode_dark": "Utiliser le thème sombre"
+  "parameter_thememode_dark": "Utiliser le thème sombre",
+  "parameter_Window_manager": "Decoration de fenêtre",
+  "parameter_windowManagerLibadwaita": "Gtk Adwaita",
+  "parameter_windowManagerNative": "Flutter natif"
 }

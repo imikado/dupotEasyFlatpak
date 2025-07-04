@@ -1,5 +1,5 @@
 {
-    "version": 4,
+    "version": 6,
     "applicationDataPath": "",
     "userOverrideLanguageCode": false,
     "languageCode": "en",
@@ -8,5 +8,6 @@
     "displayApplicationInstalledNumberInSideMenu": false,
     "displayApplicationInstalledNumberInPage": false,
     "flathubApiEnabled": true,
-    "displayAppsMode": "displayModeList"
+    "displayAppsMode": "displayModeList",
+    "windowManager": "windowManagerLibadwaita"
 }

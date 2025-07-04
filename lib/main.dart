@@ -112,9 +112,6 @@ void main() async {
 
     CommandApi(settingsObj);
 
-    //isOsDarkMode = await CommandApi().isOsDarkMode();
-    //UserSettingsEntity().setDarkModeEnabled(await CommandApi().isOsDarkMode());
-
     LoggerApi().info('Starting application');
 
     sqfliteFfiInit();
@@ -123,16 +120,21 @@ void main() async {
 
     await windowManager.ensureInitialized();
 
-    const windowOptions = WindowOptions(
+    WindowOptions windowOptions = WindowOptions(
       size: Size(1200, 800),
       minimumSize: Size(1200, 800),
       skipTaskbar: false,
+      //windowButtonVisibility: true,
       backgroundColor: Colors.transparent,
-      titleBarStyle: TitleBarStyle.hidden,
-      title: 'Easy flatpak',
+      titleBarStyle: UserSettingsEntity().isWindowManagerLibadwaita()
+          ? TitleBarStyle.hidden
+          : TitleBarStyle.normal,
+      title: UserSettingsEntity().isWindowManagerLibadwaita() ? 'lib' : "nativ",
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.setAsFrameless();
+      if (UserSettingsEntity().isWindowManagerLibadwaita()) {
+        await windowManager.setAsFrameless();
+      }
 
       // Force apply size and position
       await windowManager.setMinimumSize(const Size(1200, 800));
@@ -142,9 +144,6 @@ void main() async {
       await windowManager.show();
       await windowManager.focus();
     });
-
-    final currentSize = await windowManager.getSize();
-    print('Window size after init: $currentSize');
 
     runApp(MyApp());
   } on Exception catch (e) {
@@ -161,13 +160,18 @@ class MyApp extends StatelessWidget {
       valueListenable: UserSettingsEntity().themeNotifier,
       builder: (_, ThemeMode currentMode, __) {
         return MaterialApp(
+          title: "Easy flatpak",
           builder: (context, child) {
             final virtualWindowFrame = VirtualWindowFrameInit();
 
             return virtualWindowFrame(context, child);
           },
-          theme: AdwaitaThemeData.light(),
-          darkTheme: AdwaitaThemeData.dark(),
+          theme: UserSettingsEntity().isWindowManagerLibadwaita()
+              ? AdwaitaThemeData.light()
+              : ThemeData.light(),
+          darkTheme: UserSettingsEntity().isWindowManagerLibadwaita()
+              ? AdwaitaThemeData.dark()
+              : ThemeData.dark(),
           debugShowCheckedModeBanner: false,
           home: Application(),
           themeMode: currentMode,

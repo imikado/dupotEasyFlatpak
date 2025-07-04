@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
 import 'package:flutter/material.dart';
 
+import 'package:window_manager/window_manager.dart';
+
 enum AppDisplay { list, grid, table }
 
 const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
@@ -13,7 +15,7 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 ];
 
 class UserSettingsEntity {
-  int version = 4;
+  int version = 6;
 
   String jsonUserSettingsPath = '';
 
@@ -41,6 +43,11 @@ class UserSettingsEntity {
 
   String displayAppsMode = displayModeList;
 
+  static const String windowManagerNative = 'windowManagerNative';
+  static const String windowManagerLibadwaita = 'windowManagerLibadwaita';
+
+  String windowManagerString = windowManagerLibadwaita;
+
   late ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.system);
 
   static const String displayModeList = 'displayModeList';
@@ -64,6 +71,7 @@ class UserSettingsEntity {
           'userInstallationScopeEnabled',
           'displayApplicationInstalledNumberInSideMenu',
           'displayApplicationInstalledNumberInPage',
+          'windowManager'
           //'flathubApiEnabled'
         ]) {
           if (!jsonParameterObj.containsKey(mandatoryFieldLoop)) {
@@ -92,6 +100,8 @@ class UserSettingsEntity {
 
         _singleton.displayApplicationInstalledNumberInPage =
             jsonParameterObj['displayApplicationInstalledNumberInPage'];
+
+        _singleton.windowManagerString = jsonParameterObj['windowManager'];
 
         if (jsonParameterObj.containsKey('flathubApiEnabled')) {
           _singleton.flathubApiEnabled = jsonParameterObj['flathubApiEnabled'];
@@ -124,6 +134,14 @@ class UserSettingsEntity {
     return PathApi.getIconsCachePath();
   }
 
+  bool isWindowManagerNative() {
+    return windowManagerString == windowManagerNative;
+  }
+
+  bool isWindowManagerLibadwaita() {
+    return windowManagerString == windowManagerLibadwaita;
+  }
+
   void updateLasttimeStampUpdateApplicationsFromApi() {
     lastUpdateFromApiTimestamp = DateTime.now().millisecondsSinceEpoch;
   }
@@ -151,6 +169,27 @@ class UserSettingsEntity {
   Future<void> setLanguageCode(String newLanguageCode) async {
     languageCode = newLanguageCode;
     await save();
+  }
+
+  Future<void> setWindowManager(String newWindowManager) async {
+    windowManagerString = newWindowManager;
+
+    await reloadWindowManager();
+
+    await save();
+  }
+
+  reloadWindowManager() async {
+    if (UserSettingsEntity().isWindowManagerLibadwaita()) {
+      await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
+      await windowManager.setAsFrameless();
+    } else {
+      await windowManager.setTitleBarStyle(TitleBarStyle.normal);
+    }
+  }
+
+  String getWindowManager() {
+    return windowManagerString;
   }
 
   Future<void> setUserOverrideLanguageCode(
@@ -252,7 +291,8 @@ class UserSettingsEntity {
           displayApplicationInstalledNumberInPage,
       'flathubApiEnabled': flathubApiEnabled,
       'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp,
-      'displayAppsMode': displayAppsMode
+      'displayAppsMode': displayAppsMode,
+      'windowManager': windowManagerString
     };
 
     File jsonParameterFile = File(jsonUserSettingsPath);

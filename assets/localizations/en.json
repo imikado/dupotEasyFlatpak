@@ -125,5 +125,8 @@
   "parameter_thememode": "Theme",
   "parameter_thememode_system": "Use system theme",
   "parameter_thememode_light": "Use light theme",
-  "parameter_thememode_dark": "Use dark theme"
+  "parameter_thememode_dark": "Use dark theme",
+  "parameter_Window_manager": "Window theme",
+  "parameter_windowManagerLibadwaita": "Gtk Adwaita",
+  "parameter_windowManagerNative": "Native Flutter"
 }

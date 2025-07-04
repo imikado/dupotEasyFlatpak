@@ -74,10 +74,11 @@
 
 
 
-<release date="2025-07-03" version="3.19.1"> 
+<release date="2025-07-03" version="3.19.2"> 
       <description>
         <ul>
           <li>Update window size</li>
+          <li>Add parameter to choose between window theme</li>
         </ul>
       </description>
     </release> 

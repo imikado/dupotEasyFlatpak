@@ -125,5 +125,8 @@
   "parameter_thememode": "السمة",
   "parameter_thememode_system": "استخدام سمة النظام",
   "parameter_thememode_light": "استخدام السمة الفاتحة",
-  "parameter_thememode_dark": "استخدام السمة الداكنة"
+  "parameter_thememode_dark": "استخدام السمة الداكنة",
+  "parameter_Window_manager": "Window theme",
+  "parameter_windowManagerLibadwaita": "Adwaita",
+  "parameter_windowManagerNative": "Native Flutter"
 }
