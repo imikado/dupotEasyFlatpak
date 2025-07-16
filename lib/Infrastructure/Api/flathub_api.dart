@@ -34,6 +34,23 @@ class FlathubApi {
     return true;
   }
 
+  Future<int> getNumberOfNewApplicationFromApi() async {
+    List<String> appStreamIdList = await getRawApplicationList();
+
+    List<String> applicationIdList =
+        await applicationRepository.findAllApplicationIdList();
+
+    int numberOfNewApplicationFromApi = 0;
+
+    for (String appStreamIdLoop in appStreamIdList) {
+      if (!applicationIdList.contains(appStreamIdLoop.toLowerCase())) {
+        numberOfNewApplicationFromApi += 1;
+      }
+    }
+
+    return numberOfNewApplicationFromApi;
+  }
+
   Future<void> load({bool forceUpdateDatabase = false}) async {
     ApplicationRepository applicationRepository = ApplicationRepository();
 

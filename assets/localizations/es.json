@@ -128,5 +128,10 @@
   "parameter_thememode_dark": "Usar tema oscuro",
   "parameter_Window_manager": "Window theme",
   "parameter_windowManagerLibadwaita": "Gtk Adwaita",
-  "parameter_windowManagerNative": "Native Flutter"
+  "parameter_windowManagerNative": "Native Flutter",
+  "Update_database": "Actualización de la base de datos de aplicaciones",
+  "Update_database_from_flathubapi": "Actualización de la base de datos desde Flathub API",
+  "Start_update_application_database": "Iniciar actualización de la base de datos de aplicaciones",
+  "Application_processing": "Actualización de aplicaciones en proceso _numberProcessed_/_numberTotal_",
+  "Application_database_up_to_date": "La base de datos de aplicaciones está actualizada"
 }

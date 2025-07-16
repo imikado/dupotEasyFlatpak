@@ -1,5 +1,7 @@
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:flutter/material.dart';
 
 class MoreActionsView extends StatefulWidget {
@@ -19,13 +21,39 @@ class _MoreActionsViewState extends State<MoreActionsView> {
 
   late Color selectedColor;
 
+  int numberOfNewApplicationFromApi = 0;
+
   @override
   void initState() {
     super.initState();
+
+    loadNumberOfNewApplicationFromApi();
+  }
+
+  @override
+  void didUpdateWidget(covariant MoreActionsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    loadNumberOfNewApplicationFromApi();
+  }
+
+  void loadNumberOfNewApplicationFromApi() async {
+    ApplicationRepository applicationRepository = ApplicationRepository();
+
+    FlathubApi flathubApi =
+        FlathubApi(applicationRepository: applicationRepository);
+
+    int newNumberOfNewApplicationFromApi =
+        await flathubApi.getNumberOfNewApplicationFromApi();
+
+    setState(() {
+      numberOfNewApplicationFromApi = newNumberOfNewApplicationFromApi;
+    });
   }
 
   Widget getLine(Function functionToCall, IconData actionIcon, String label,
-      String summary, String subPage) {
+      String summary, String subPage,
+      {Badge? badgeWidget}) {
     return InkWell(
         borderRadius: BorderRadius.circular(8.0),
         onTap: () => functionToCall(),
@@ -42,14 +70,20 @@ class _MoreActionsViewState extends State<MoreActionsView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          label,
-                          style: TextStyle(
-                              fontSize: 24,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .color),
+                        Row(
+                          children: [
+                            Text(
+                              label,
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge!
+                                      .color),
+                            ),
+                            SizedBox(width: 10),
+                            if (badgeWidget != null) badgeWidget
+                          ],
                         ),
                         Text(
                           summary,
@@ -93,10 +127,17 @@ class _MoreActionsViewState extends State<MoreActionsView> {
             return NavigationEntity.goToMoreUpdateDatabase(
                 handleGoTo: widget.handleGoTo);
           },
-              Icons.download,
+              Icons.update,
               LocalizationApi().tr('Update_database'),
               LocalizationApi().tr('Update_database_from_flathubapi'),
-              NavigationEntity.argumentSubPageUpdateDatabase)
+              NavigationEntity.argumentSubPageUpdateDatabase,
+              badgeWidget: numberOfNewApplicationFromApi > 0
+                  ? Badge(
+                      //textColor: selectedColor,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      label: Text(numberOfNewApplicationFromApi.toString()),
+                    )
+                  : null)
         ]));
   }
 }

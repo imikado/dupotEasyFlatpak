@@ -128,5 +128,10 @@
   "parameter_thememode_dark": "استخدام السمة الداكنة",
   "parameter_Window_manager": "Window theme",
   "parameter_windowManagerLibadwaita": "Adwaita",
-  "parameter_windowManagerNative": "Native Flutter"
+  "parameter_windowManagerNative": "Native Flutter",
+  "Update_database": "تحديث قاعدة بيانات التطبيقات",
+  "Update_database_from_flathubapi": "تحديث قاعدة البيانات من Flathub API",
+  "Start_update_application_database": "بدء تحديث قاعدة بيانات التطبيقات",
+  "Application_processing": "جاري تحديث التطبيقات _numberProcessed_/_numberTotal_",
+  "Application_database_up_to_date": "قاعدة بيانات التطبيقات محدثة"
 }

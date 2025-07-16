@@ -74,7 +74,7 @@
 
 
 
-<release date="2025-07-16" version="3.20.0"> 
+<release date="2025-07-16" version="3.20.1"> 
       <description>
         <ul>
           <li>Modify database update behavior</li>

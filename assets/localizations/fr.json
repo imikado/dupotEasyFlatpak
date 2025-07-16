@@ -129,7 +129,9 @@
   "parameter_Window_manager": "Decoration de fenêtre",
   "parameter_windowManagerLibadwaita": "Gtk Adwaita",
   "parameter_windowManagerNative": "Flutter natif",
+  "Update_database": "Mise à jour de la base de données",
+  "Update_database_from_flathubapi": "Mise à jour à partir de l'api flathub",
   "Start_update_application_database": "Démarrage mise à jour de la base de données d'applications",
-  "Application_processing": "Mise à jour en cours _numberProcessed_/_numberTotal_",
-  "Application_database_up_to_date": "Base de données à jour"
+  "Application_processing": "Mise à jour des informations de l'application _numberProcessed_/_numberTotal_",
+  "Application_database_up_to_date": "La base de données de l'application est à jour"
 }

@@ -129,8 +129,8 @@
   "parameter_Window_manager": "Window theme",
   "parameter_windowManagerLibadwaita": "Gtk Adwaita",
   "parameter_windowManagerNative": "Native Flutter",
-  "Update_database": "Mise à jour de la base de données",
-  "Update_database_from_flathubapi": "Mise à jour à partir de l'api flathub",
+  "Update_database": "Application database update",
+  "Update_database_from_flathubapi": "Database update from flathub api",
   "Start_update_application_database": "Start update application database",
   "Application_processing": "Application update processing _numberProcessed_/_numberTotal_",
   "Application_database_up_to_date": "Application's database is up to date"
