@@ -1,8 +1,6 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_bool_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_string_entity.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubForm/radio_bool_list_subform.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubForm/radio_string_list_subform.dart';
 import 'package:flutter/material.dart';
 

@@ -58,7 +58,7 @@ class _ImportSubviewState extends State<ImportSubview> {
     CommandApi commands = CommandApi();
 
     if (!await commands.doesImportJsonFileExist()) {
-      String importJsonPath = await commands.getImportJsonPath();
+      String importJsonPath = commands.getImportJsonPath();
 
       setState(() {
         stateInstallationOutput = LocalizationApi().trAndReplace(
