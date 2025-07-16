@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 class MoreActionsView extends StatefulWidget {
   final Function handleGoTo;
 
-  const MoreActionsView({super.key, required this.handleGoTo});
+  final String subPage;
+
+  const MoreActionsView(
+      {super.key, required this.handleGoTo, required this.subPage});
 
   @override
   State<MoreActionsView> createState() => _MoreActionsViewState();
@@ -14,18 +17,20 @@ class MoreActionsView extends StatefulWidget {
 class _MoreActionsViewState extends State<MoreActionsView> {
   ScrollController scrollController = ScrollController();
 
+  late Color selectedColor;
+
   @override
   void initState() {
     super.initState();
   }
 
   Widget getLine(Function functionToCall, IconData actionIcon, String label,
-      String summary) {
+      String summary, String subPage) {
     return InkWell(
         borderRadius: BorderRadius.circular(8.0),
         onTap: () => functionToCall(),
         child: Card(
-          color: Theme.of(context).secondaryHeaderColor,
+          color: subPage == widget.subPage ? selectedColor : null,
           child: Column(
             children: [
               Row(
@@ -61,6 +66,8 @@ class _MoreActionsViewState extends State<MoreActionsView> {
 
   @override
   Widget build(BuildContext context) {
+    selectedColor = Theme.of(context).highlightColor;
+
     return Scrollbar(
         interactive: false,
         thumbVisibility: true,
@@ -69,13 +76,27 @@ class _MoreActionsViewState extends State<MoreActionsView> {
           getLine(() {
             return NavigationEntity.goToMoreExport(
                 handleGoTo: widget.handleGoTo);
-          }, Icons.upload, LocalizationApi().tr('Export'),
-              LocalizationApi().tr('Export_installed_apps')),
+          },
+              Icons.upload,
+              LocalizationApi().tr('Export'),
+              LocalizationApi().tr('Export_installed_apps'),
+              NavigationEntity.argumentSubPageExport),
           getLine(() {
             return NavigationEntity.goToMoreImport(
                 handleGoTo: widget.handleGoTo);
-          }, Icons.download, LocalizationApi().tr('Import'),
-              LocalizationApi().tr('Import_installed_apps_from_json'))
+          },
+              Icons.download,
+              LocalizationApi().tr('Import'),
+              LocalizationApi().tr('Import_installed_apps_from_json'),
+              NavigationEntity.argumentSubPageImport),
+          getLine(() {
+            return NavigationEntity.goToMoreUpdateDatabase(
+                handleGoTo: widget.handleGoTo);
+          },
+              Icons.download,
+              LocalizationApi().tr('Update_database'),
+              LocalizationApi().tr('Update_database_from_flathubapi'),
+              NavigationEntity.argumentSubPageUpdateDatabase)
         ]));
   }
 }

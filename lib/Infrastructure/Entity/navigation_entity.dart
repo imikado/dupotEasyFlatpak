@@ -34,6 +34,7 @@ class NavigationEntity {
 
   static const String argumentSubPageExport = 'more_export';
   static const String argumentSubPageImport = 'more_import';
+  static const String argumentSubPageUpdateDatabase = 'updateDatabase';
 
   static const String argumentSubPageBundleDetail = 'bundle_detail';
 
@@ -114,6 +115,12 @@ class NavigationEntity {
   static goToMoreImport({required Function handleGoTo}) {
     handleGoTo(
         page: pageMore, argumentMap: {argumentSubPage: argumentSubPageImport});
+  }
+
+  static goToMoreUpdateDatabase({required Function handleGoTo}) {
+    handleGoTo(
+        page: pageMore,
+        argumentMap: {argumentSubPage: argumentSubPageUpdateDatabase});
   }
 
   static extractArgumentBundleId(Map<String, String> argumentMap) {

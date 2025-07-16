@@ -74,6 +74,17 @@
 
 
 
+<release date="2025-07-16" version="3.20.0"> 
+      <description>
+        <ul>
+          <li>Modify database update behavior</li>
+          <li>Disable automatic update at startup</li>
+          <li>New feature available in "more actions" to force database update</li>
+        </ul>
+      </description>
+    </release> 
+
+
 <release date="2025-07-04" version="3.19.3"> 
       <description>
         <ul>

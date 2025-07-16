@@ -63,7 +63,7 @@ class LocalizationApi {
     String resultTranslation = rawTranslation;
     for (String patternLoop in patternList.keys) {
       resultTranslation =
-          rawTranslation.replaceAll(patternLoop, patternList[patternLoop]!);
+          resultTranslation.replaceAll(patternLoop, patternList[patternLoop]!);
     }
     return resultTranslation;
   }

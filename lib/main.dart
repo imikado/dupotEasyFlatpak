@@ -45,7 +45,11 @@ void main() async {
       }
     }
 
+    print('log directory : ${logDirectory.path}');
     LoggerApi(File(p.join(logDirectory.path, 'application.log')));
+    LoggerApi().info('config directory:${configDirectory.path}');
+    LoggerApi().info('cache directory:${cacheDirectory.path}');
+    LoggerApi().info('icons directory:${iconsCacheDirectory.path}');
 
     bool shouldCopyDb = false;
     bool shouldCopyUserSettings = false;

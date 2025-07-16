@@ -128,5 +128,8 @@
   "parameter_thememode_dark": "Utiliser le thème sombre",
   "parameter_Window_manager": "Decoration de fenêtre",
   "parameter_windowManagerLibadwaita": "Gtk Adwaita",
-  "parameter_windowManagerNative": "Flutter natif"
+  "parameter_windowManagerNative": "Flutter natif",
+  "Start_update_application_database": "Démarrage mise à jour de la base de données d'applications",
+  "Application_processing": "Mise à jour en cours _numberProcessed_/_numberTotal_",
+  "Application_database_up_to_date": "Base de données à jour"
 }

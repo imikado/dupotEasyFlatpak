@@ -59,40 +59,12 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     });
 
     final applicatoinRepository = ApplicationRepository();
-    //await appStreamFactory.create();
 
     LoggerApi().info('Starting flathub load');
     setState(() {
       stateLoadingInfo = LocalizationApi()
           .tr('loading_Should_update_application_list_from_Flathub_api');
     });
-    UserSettingsEntity userSettingsEntity = UserSettingsEntity();
-
-    if (userSettingsEntity.isFlathubApiEnabled() &&
-        userSettingsEntity.shouldUpdateApplicationsFromApi()) {
-      setState(() {
-        stateLoadingInfo = LocalizationApi()
-            .tr('loading_Starting_update_application_list_from_Flathub_api');
-      });
-
-      FlathubApi flathubApi =
-          FlathubApi(applicationRepository: applicatoinRepository);
-      await flathubApi.load();
-
-      userSettingsEntity.updateLasttimeStampUpdateApplicationsFromApi();
-
-      UserSettingsEntity().save();
-
-      setState(() {
-        stateLoadingInfo = LocalizationApi()
-            .tr('loading_Update_application_list_from_Flathub_api_finished');
-      });
-    } else {
-      setState(() {
-        stateLoadingInfo = LocalizationApi().tr(
-            'loading_Last_applications_updates_from_API_is_newer_than_7_days_not_need');
-      });
-    }
 
     LoggerApi().info('Flathub load complete');
 

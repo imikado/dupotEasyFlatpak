@@ -14,6 +14,9 @@ import 'package:path/path.dart' as p;
 class FlathubApi {
   ApplicationRepository applicationRepository;
 
+  int loadTotalNumberOfApplication = 0;
+  int loadNumberOfApplicationProcessed = 0;
+
   FlathubApi({required this.applicationRepository});
 
   Future<bool> updateAppStream(String applicationId) async {
@@ -31,8 +34,12 @@ class FlathubApi {
     return true;
   }
 
-  Future<void> load() async {
+  Future<void> load({bool forceUpdateDatabase = false}) async {
+    ApplicationRepository applicationRepository = ApplicationRepository();
+
     List<String> appStreamIdList = await getRawApplicationList();
+
+    loadTotalNumberOfApplication = appStreamIdList.length;
 
     applicationRepository.connect();
 
@@ -49,6 +56,17 @@ class FlathubApi {
     int limitLoaded = 0;
     for (String appStreamIdLoop in appStreamIdList) {
       if (applicationIdList.contains(appStreamIdLoop.toLowerCase())) {
+        if (forceUpdateDatabase) {
+          await updateAppStream(appStreamIdLoop);
+        } else {
+          ApplicationEntity applicationEntityLoop = await applicationRepository
+              .findApplicationEntityById(appStreamIdLoop);
+
+          if (applicationEntityLoop.lastUpdateIsOlderThan(7)) {
+            await updateAppStream(appStreamIdLoop);
+          }
+        }
+        loadNumberOfApplicationProcessed += 1;
         continue;
       }
 
@@ -77,6 +95,7 @@ class FlathubApi {
         }
       }
       await Future.delayed(const Duration(seconds: 1));
+      loadNumberOfApplicationProcessed += 1;
     }
 
     await applicationRepository.insertApplicationEntityList(appStreamList);

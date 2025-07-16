@@ -16,6 +16,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/override_subvie
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/uninstall_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/update_available_processing_all_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/update_available_processing_subview.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/update_database_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/about_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/application_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/bundles_view.dart';
@@ -215,9 +216,7 @@ class ApplicationState extends State<Application> {
           handleReload: reload,
           handleReloadLanguage: reloadLanguage);
     } else if (pageToLoad == NavigationEntity.pageMore) {
-      return MoreActionsView(
-        handleGoTo: goTo,
-      );
+      return MoreActionsView(handleGoTo: goTo, subPage: getSubPage());
     } else if (pageToLoad == NavigationEntity.pageBundles) {
       return BundlesView(
         handleGoTo: goTo,
@@ -362,6 +361,13 @@ class ApplicationState extends State<Application> {
         handleAddToCart: addToCart,
         handleSaveImportedPermissionOverridedEntity:
             saveImportedPermissionOverridedEntity,
+      );
+    } else if (subPageToLoad ==
+        NavigationEntity.argumentSubPageUpdateDatabase) {
+      return UpdateDatabaseSubview(
+        handleGoToMore: () {
+          NavigationEntity.goToMore(handleGoTo: goTo);
+        },
       );
     } else if (subPageToLoad == NavigationEntity.argumentSubPageBundleDetail) {
       String bundleId =
