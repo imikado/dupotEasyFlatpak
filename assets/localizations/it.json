@@ -133,5 +133,10 @@
   "Update_database_from_flathubapi": "Aggiornamento del database da Flathub API",
   "Start_update_application_database": "Avvio dell'aggiornamento del database delle applicazioni",
   "Application_processing": "Aggiornamento in corso delle applicazioni _numberProcessed_/_numberTotal_",
-  "Application_database_up_to_date": "Il database delle applicazioni è aggiornato"
+  "Application_database_up_to_date": "Il database delle applicazioni è aggiornato",
+  "parameter_default_resolution": "Risoluzione predefinita",
+  "parameter_1100x760": "1100x760",
+  "parameter_1200x800": "1200x800",
+  "parameter_1400x900": "1400x900",
+  "parameter_fullscreen": "Schermo intero"
 }
