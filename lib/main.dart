@@ -124,10 +124,25 @@ void main() async {
 
     await windowManager.ensureInitialized();
 
+    Size defaultResolution = Size(1200, 800);
+    bool defaultFullScreen = false;
+    if (UserSettingsEntity().getDefaultResolution() ==
+        UserSettingsEntity.defaultResolutionFullscreen) {
+      defaultResolution = Size(1100, 760);
+      defaultFullScreen = true;
+    } else {
+      List defaultResolutionList =
+          UserSettingsEntity().getDefaultResolution().split('x');
+
+      defaultResolution = Size(double.parse(defaultResolutionList[0]),
+          double.parse(defaultResolutionList[1]));
+    }
+
     WindowOptions windowOptions = WindowOptions(
-      size: Size(1200, 800),
-      minimumSize: Size(1200, 800),
+      size: defaultResolution,
+      minimumSize: defaultResolution,
       skipTaskbar: false,
+      fullScreen: defaultFullScreen,
       //windowButtonVisibility: true,
       backgroundColor: Colors.transparent,
       titleBarStyle: UserSettingsEntity().isWindowManagerLibadwaita()
@@ -141,8 +156,8 @@ void main() async {
       }
 
       // Force apply size and position
-      await windowManager.setMinimumSize(const Size(1200, 800));
-      await windowManager.setSize(const Size(1200, 800));
+      await windowManager.setMinimumSize(defaultResolution);
+      await windowManager.setSize(defaultResolution);
       await windowManager.center(); // optional: center on screen
 
       await windowManager.show();

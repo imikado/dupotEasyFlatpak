@@ -33,6 +33,12 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
     widget.handleUpdateUserSettings(widget.userSettings);
   }
 
+  updateDefaultResolution(String newDefaultResolution) {
+    widget.userSettings.setDefaultResolution(newDefaultResolution);
+
+    widget.handleUpdateUserSettings(widget.userSettings);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -74,6 +80,33 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
             ],
             value: widget.userSettings.getWindowManager(),
             handleUpdateValue: updateWindowManager),
+      ),
+      ListTile(
+        title: Text(
+          LocalizationApi().tr('parameter_default_resolution'),
+          style: TextStyle(
+              color: Theme.of(context).textTheme.headlineLarge!.color),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: RadioStringListSubform(
+            radioStringEntityList: [
+              RadioStringEntity(
+                  label: 'parameter_1100x760',
+                  value: UserSettingsEntity.defaultResolution1100x760),
+              RadioStringEntity(
+                  label: 'parameter_1200x800',
+                  value: UserSettingsEntity.defaultResolution1200x800),
+              RadioStringEntity(
+                  label: 'parameter_1400x900',
+                  value: UserSettingsEntity.defaultResolution1400x900),
+              RadioStringEntity(
+                  label: 'parameter_fullscreen',
+                  value: UserSettingsEntity.defaultResolutionFullscreen)
+            ],
+            value: widget.userSettings.getDefaultResolution(),
+            handleUpdateValue: updateDefaultResolution),
       )
     ]);
   }

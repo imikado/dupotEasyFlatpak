@@ -15,7 +15,7 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 ];
 
 class UserSettingsEntity {
-  int version = 6;
+  int version = 7;
 
   String jsonUserSettingsPath = '';
 
@@ -37,8 +37,6 @@ class UserSettingsEntity {
   bool displayApplicationInstalledNumberInSideMenu = false;
   bool displayApplicationInstalledNumberInPage = false;
 
-  bool flathubApiEnabled = false; //if we use flathub api
-
   int lastUpdateFromApiTimestamp = 0;
 
   String displayAppsMode = displayModeList;
@@ -48,11 +46,18 @@ class UserSettingsEntity {
 
   String windowManagerString = windowManagerLibadwaita;
 
+  String defaultResolution = defaultResolution1200x800;
+
   late ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.system);
 
   static const String displayModeList = 'displayModeList';
   static const String displayModeGrid = 'displayModeGrid';
   static const String displayModeTable = 'displayModeTable';
+
+  static const String defaultResolution1100x760 = '1100x760';
+  static const String defaultResolution1200x800 = '1200x800';
+  static const String defaultResolution1400x900 = '1400x900';
+  static const String defaultResolutionFullscreen = '0x0';
 
   static final UserSettingsEntity _singleton = UserSettingsEntity._internal();
 
@@ -72,7 +77,6 @@ class UserSettingsEntity {
           'displayApplicationInstalledNumberInSideMenu',
           'displayApplicationInstalledNumberInPage',
           'windowManager'
-          //'flathubApiEnabled'
         ]) {
           if (!jsonParameterObj.containsKey(mandatoryFieldLoop)) {
             throw Exception(
@@ -103,13 +107,13 @@ class UserSettingsEntity {
 
         _singleton.windowManagerString = jsonParameterObj['windowManager'];
 
-        if (jsonParameterObj.containsKey('flathubApiEnabled')) {
-          _singleton.flathubApiEnabled = jsonParameterObj['flathubApiEnabled'];
-        }
-
         if (jsonParameterObj.containsKey('lastUpdateFromApiTimestamp')) {
           _singleton.lastUpdateFromApiTimestamp =
               jsonParameterObj['lastUpdateFromApiTimestamp'];
+        }
+
+        if (jsonParameterObj.containsKey('defaultResolution')) {
+          _singleton.defaultResolution = jsonParameterObj['defaultResolution'];
         }
 
         _singleton.displayAppsMode = jsonParameterObj['displayAppsMode'];
@@ -179,6 +183,14 @@ class UserSettingsEntity {
     await save();
   }
 
+  Future<void> setDefaultResolution(String newDefaultResolution) async {
+    defaultResolution = newDefaultResolution;
+
+    await reloadWindowManager();
+
+    await save();
+  }
+
   reloadWindowManager() async {
     if (UserSettingsEntity().isWindowManagerLibadwaita()) {
       await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
@@ -215,11 +227,6 @@ class UserSettingsEntity {
       bool displayApplicationInstalledNumberInPage) async {
     this.displayApplicationInstalledNumberInPage =
         displayApplicationInstalledNumberInPage;
-    await save();
-  }
-
-  Future<void> setFlathubApiEnabled(bool flathubApiEnabled) async {
-    this.flathubApiEnabled = flathubApiEnabled;
     await save();
   }
 
@@ -261,12 +268,8 @@ class UserSettingsEntity {
     return displayApplicationInstalledNumberInPage;
   }
 
-  bool getFlathubApiEnabled() {
-    return flathubApiEnabled;
-  }
-
-  bool isFlathubApiEnabled() {
-    return getFlathubApiEnabled();
+  String getDefaultResolution() {
+    return defaultResolution;
   }
 
   AppDisplay getDisplayAppsMode() {
@@ -289,10 +292,10 @@ class UserSettingsEntity {
           displayApplicationInstalledNumberInSideMenu,
       'displayApplicationInstalledNumberInPage':
           displayApplicationInstalledNumberInPage,
-      'flathubApiEnabled': flathubApiEnabled,
       'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp,
       'displayAppsMode': displayAppsMode,
-      'windowManager': windowManagerString
+      'windowManager': windowManagerString,
+      'defaultResolution': defaultResolution
     };
 
     File jsonParameterFile = File(jsonUserSettingsPath);

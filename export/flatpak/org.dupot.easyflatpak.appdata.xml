@@ -74,6 +74,14 @@
 
 
 
+<release date="2025-07-18" version="3.20.2"> 
+      <description>
+        <ul>
+          <li>Add feature to define default resolution</li>
+        </ul>
+      </description>
+    </release> 
+
 <release date="2025-07-16" version="3.20.1"> 
       <description>
         <ul>
