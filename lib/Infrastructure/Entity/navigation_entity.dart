@@ -117,12 +117,6 @@ class NavigationEntity {
         page: pageMore, argumentMap: {argumentSubPage: argumentSubPageImport});
   }
 
-  static goToMoreUpdateDatabase({required Function handleGoTo}) {
-    handleGoTo(
-        page: pageMore,
-        argumentMap: {argumentSubPage: argumentSubPageUpdateDatabase});
-  }
-
   static extractArgumentBundleId(Map<String, String> argumentMap) {
     return argumentMap[argumentBundleId];
   }
@@ -239,5 +233,11 @@ class NavigationEntity {
     handleGoTo(page: pageUpdateAvailables, argumentMap: {
       argumentSubPage: argumentSubPageUpdateAvailableProcessingAll,
     });
+  }
+
+  static goToUpdatesAvailablesUpdateDatabase({required Function handleGoTo}) {
+    handleGoTo(
+        page: pageUpdateAvailables,
+        argumentMap: {argumentSubPage: argumentSubPageUpdateDatabase});
   }
 }

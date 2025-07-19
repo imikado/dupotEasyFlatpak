@@ -93,6 +93,9 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
         child: RadioStringListSubform(
             radioStringEntityList: [
               RadioStringEntity(
+                  label: 'parameter_800x600',
+                  value: UserSettingsEntity.defaultResolution800x600),
+              RadioStringEntity(
                   label: 'parameter_1100x760',
                   value: UserSettingsEntity.defaultResolution1100x760),
               RadioStringEntity(

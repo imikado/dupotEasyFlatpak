@@ -26,29 +26,6 @@ class _MoreActionsViewState extends State<MoreActionsView> {
   @override
   void initState() {
     super.initState();
-
-    loadNumberOfNewApplicationFromApi();
-  }
-
-  @override
-  void didUpdateWidget(covariant MoreActionsView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    loadNumberOfNewApplicationFromApi();
-  }
-
-  void loadNumberOfNewApplicationFromApi() async {
-    ApplicationRepository applicationRepository = ApplicationRepository();
-
-    FlathubApi flathubApi =
-        FlathubApi(applicationRepository: applicationRepository);
-
-    int newNumberOfNewApplicationFromApi =
-        await flathubApi.getNumberOfNewApplicationFromApi();
-
-    setState(() {
-      numberOfNewApplicationFromApi = newNumberOfNewApplicationFromApi;
-    });
   }
 
   Widget getLine(Function functionToCall, IconData actionIcon, String label,
@@ -123,21 +100,6 @@ class _MoreActionsViewState extends State<MoreActionsView> {
               LocalizationApi().tr('Import'),
               LocalizationApi().tr('Import_installed_apps_from_json'),
               NavigationEntity.argumentSubPageImport),
-          getLine(() {
-            return NavigationEntity.goToMoreUpdateDatabase(
-                handleGoTo: widget.handleGoTo);
-          },
-              Icons.update,
-              LocalizationApi().tr('Update_database'),
-              LocalizationApi().tr('Update_database_from_flathubapi'),
-              NavigationEntity.argumentSubPageUpdateDatabase,
-              badgeWidget: numberOfNewApplicationFromApi > 0
-                  ? Badge(
-                      //textColor: selectedColor,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      label: Text(numberOfNewApplicationFromApi.toString()),
-                    )
-                  : null)
         ]));
   }
 }

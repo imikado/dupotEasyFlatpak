@@ -5,9 +5,11 @@ import 'package:adwaita/adwaita.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/application.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -123,6 +125,8 @@ void main() async {
     databaseFactory = databaseFactoryFfi;
 
     await windowManager.ensureInitialized();
+
+    FlathubApi(ApplicationRepository());
 
     Size defaultResolution = Size(1200, 800);
     bool defaultFullScreen = false;

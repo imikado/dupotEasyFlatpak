@@ -4,12 +4,12 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
 import 'package:flutter/material.dart';
 
-class UpdateAllButton extends StatelessWidget {
+class UpdateDatabaseButton extends StatelessWidget {
   final Function handle;
   final bool isActive;
   final Widget? badgeWidget;
 
-  const UpdateAllButton(
+  const UpdateDatabaseButton(
       {super.key,
       required this.handle,
       required this.isActive,
@@ -44,14 +44,14 @@ class UpdateAllButton extends StatelessWidget {
                       ));
             },
       label: Row(children: [
-        Text(LocalizationApi().tr('update_all'),
+        Text(LocalizationApi().tr('Update_database_from_flathubapi'),
             style: themeButtonStyle.getButtonTextStyle()),
         SizedBox(
           width: 10,
         ),
         if (badgeWidget != null) badgeWidget!
       ]),
-      icon: Icon(Icons.install_desktop,
+      icon: Icon(Icons.update,
           color: themeButtonStyle.getButtonTextStyle().color),
     );
   }

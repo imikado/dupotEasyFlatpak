@@ -135,6 +135,7 @@
   "Application_processing": "جاري تحديث التطبيقات _numberProcessed_/_numberTotal_",
   "Application_database_up_to_date": "قاعدة بيانات التطبيقات محدثة",
   "parameter_default_resolution": "الدقة الافتراضية",
+  "parameter_800x600": "800x600",
   "parameter_1100x760": "1100x760",
   "parameter_1200x800": "1200x800",
   "parameter_1400x900": "1400x900",

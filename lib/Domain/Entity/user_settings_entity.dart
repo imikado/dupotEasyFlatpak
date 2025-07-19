@@ -54,6 +54,7 @@ class UserSettingsEntity {
   static const String displayModeGrid = 'displayModeGrid';
   static const String displayModeTable = 'displayModeTable';
 
+  static const String defaultResolution800x600 = '800x600';
   static const String defaultResolution1100x760 = '1100x760';
   static const String defaultResolution1200x800 = '1200x800';
   static const String defaultResolution1400x900 = '1400x900';

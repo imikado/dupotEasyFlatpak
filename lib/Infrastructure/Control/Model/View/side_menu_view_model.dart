@@ -1,6 +1,7 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/menu_item_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
@@ -23,6 +24,8 @@ class SideMenuViewModel {
     'System': Icons.system_update_tv,
     'Utility': Icons.build,
   };
+
+  int numberOfNewApplicationFromApi = 0;
 
   Future<List<MenuItemEntity>> getCategoryMenuItemEntityList() async {
     List<String> categoryIdList =
@@ -129,7 +132,7 @@ class SideMenuViewModel {
         badge: await getInstalledAppLabel(),
         icon: Icons.install_desktop));
 
-    if (shouldDisplayUpdateButton()) {
+    if (await shouldDisplayUpdateButton()) {
       menuItemList.add(MenuItemEntity(
           label: 'Updates',
           action: () {
@@ -194,14 +197,22 @@ class SideMenuViewModel {
     return '';
   }
 
-  bool shouldDisplayUpdateButton() {
+  Future<bool> shouldDisplayUpdateButton() async {
+    numberOfNewApplicationFromApi =
+        await FlathubApi().getNumberOfNewApplicationFromApi();
+
     if (CommandApi().getNumberOfUpdates() > 0) {
+      return true;
+    }
+
+    if (numberOfNewApplicationFromApi > 0) {
       return true;
     }
     return false;
   }
 
   String getUpdateAvailableLabel() {
-    return CommandApi().getNumberOfUpdates().toString();
+    return (CommandApi().getNumberOfUpdates() + numberOfNewApplicationFromApi)
+        .toString();
   }
 }

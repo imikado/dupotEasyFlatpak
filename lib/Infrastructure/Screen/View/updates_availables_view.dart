@@ -4,11 +4,13 @@ import 'package:dupot_easy_flatpak/Domain/Entity/application_update_entity.dart'
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/update_all_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/update_button.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/update_database_button.dart';
 import 'package:flutter/material.dart';
 
 class UpdatesAvailablesView extends StatefulWidget {
@@ -30,9 +32,12 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
 
   ScrollController scrollController = ScrollController();
 
+  int numberOfNewApplicationFromApi = 0;
+
   @override
   void initState() {
     loadData();
+    loadNumberOfNewApplicationFromApi();
 
     super.initState();
   }
@@ -68,22 +73,31 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
     });
   }
 
+  void loadNumberOfNewApplicationFromApi() async {
+    int newNumberOfNewApplicationFromApi =
+        await FlathubApi().getNumberOfNewApplicationFromApi();
+
+    setState(() {
+      numberOfNewApplicationFromApi = newNumberOfNewApplicationFromApi;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: stateApplicationUpdateList.isEmpty
-                ? []
-                : [
-                    getUpdateAllButton(),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    getUpdateButton()
-                  ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (numberOfNewApplicationFromApi > 0) getUpdateDatabaseButton(),
+              Spacer(),
+              if (stateApplicationUpdateList.isNotEmpty) getUpdateAllButton(),
+              const SizedBox(
+                width: 10,
+              ),
+              if (stateApplicationUpdateList.isNotEmpty) getUpdateButton()
+            ],
           )),
       Expanded(
           child: ListView(
@@ -176,6 +190,18 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
         ));
   }
 
+  Widget getUpdateDatabaseButton() {
+    return UpdateDatabaseButton(
+        isActive: widget.isMain,
+        handle: () {
+          NavigationEntity.goToUpdatesAvailablesUpdateDatabase(
+              handleGoTo: widget.handleGoTo);
+        },
+        badgeWidget: Badge(
+            backgroundColor: Theme.of(context).primaryColor,
+            label: Text(numberOfNewApplicationFromApi.toString())));
+  }
+
   Widget getUpdateButton() {
     return UpdateButton(
       isActive: widget.isMain,
@@ -206,6 +232,9 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
           handleGoTo: widget.handleGoTo,
         );
       },
+      badgeWidget: Badge(
+          backgroundColor: Theme.of(context).primaryColor,
+          label: Text(CommandApi().getNumberOfUpdates().toString())),
     );
   }
 }

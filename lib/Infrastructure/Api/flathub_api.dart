@@ -12,12 +12,27 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 
 class FlathubApi {
-  ApplicationRepository applicationRepository;
+  ApplicationRepository? applicationRepository;
 
   int loadTotalNumberOfApplication = 0;
   int loadNumberOfApplicationProcessed = 0;
 
-  FlathubApi({required this.applicationRepository});
+  List<String> cacheRawApplicationIdList = [];
+
+  static final FlathubApi _singleton = FlathubApi._internal();
+
+  factory FlathubApi([ApplicationRepository? applicationRepository]) {
+    if (applicationRepository != null) {
+      _singleton.applicationRepository = applicationRepository;
+    }
+    return _singleton;
+  }
+
+  FlathubApi._internal();
+
+  ApplicationRepository getApplicationRepository() {
+    return applicationRepository!;
+  }
 
   Future<bool> updateAppStream(String applicationId) async {
     if (!await applicationExist(applicationId)) {
@@ -27,7 +42,7 @@ class FlathubApi {
     ApplicationEntity appStream =
         await getApplicationEntityFromApi(applicationId);
 
-    await applicationRepository.updateApplicationEntity(appStream);
+    await getApplicationRepository().updateApplicationEntity(appStream);
 
     downloadIcon(appStream, PathApi.getIconsCachePath());
 
@@ -38,7 +53,7 @@ class FlathubApi {
     List<String> appStreamIdList = await getRawApplicationList();
 
     List<String> applicationIdList =
-        await applicationRepository.findAllApplicationIdList();
+        await getApplicationRepository().findAllApplicationIdList();
 
     int numberOfNewApplicationFromApi = 0;
 
@@ -58,13 +73,13 @@ class FlathubApi {
 
     loadTotalNumberOfApplication = appStreamIdList.length;
 
-    applicationRepository.connect();
+    getApplicationRepository().connect();
 
     List<String> categoryList =
-        await applicationRepository.findAllCategoryList();
+        await getApplicationRepository().findAllCategoryList();
 
     List<String> applicationIdList =
-        await applicationRepository.findAllApplicationIdList();
+        await getApplicationRepository().findAllApplicationIdList();
 
     List<ApplicationEntity> appStreamList = [];
     List<ApplicationCategoryEntity> applicationCategoryEntityList = [];
@@ -115,7 +130,7 @@ class FlathubApi {
       loadNumberOfApplicationProcessed += 1;
     }
 
-    await applicationRepository.insertApplicationEntityList(appStreamList);
+    await getApplicationRepository().insertApplicationEntityList(appStreamList);
     await applicationRepository
         .insertApplicationCategoryList(applicationCategoryEntityList);
   }
@@ -135,25 +150,23 @@ class FlathubApi {
   }
 
   Future<List<String>> getRawApplicationList() async {
-    /* var apiContent =
-        await http.get(Uri.parse('https://flathub.org/api/v2/appstream'));
+    if (cacheRawApplicationIdList.isEmpty) {
+      var apiContent = await http.get(
+          Uri.parse('https://flathub.org/api/v2/collection/recently-added'));
 
-    List<dynamic> appStreamIdList = jsonDecode(apiContent.body);
-  */
+      Map<String, dynamic> rawAppApplicationAddedObj =
+          jsonDecode(apiContent.body);
 
-    var apiContent = await http
-        .get(Uri.parse('https://flathub.org/api/v2/collection/recently-added'));
+      List<String> appStreamIdList = [];
+      for (Map<String, dynamic> rawAppApplicationAddedLoop
+          in rawAppApplicationAddedObj['hits']) {
+        appStreamIdList.add(rawAppApplicationAddedLoop['app_id']!);
+      }
 
-    Map<String, dynamic> rawAppApplicationAddedObj =
-        jsonDecode(apiContent.body);
-
-    List<String> appStreamIdList = [];
-    for (Map<String, dynamic> rawAppApplicationAddedLoop
-        in rawAppApplicationAddedObj['hits']) {
-      appStreamIdList.add(rawAppApplicationAddedLoop['app_id']!);
+      cacheRawApplicationIdList = appStreamIdList;
     }
 
-    return appStreamIdList;
+    return cacheRawApplicationIdList;
   }
 
   Future<bool> applicationExist(String appSteamId) async {

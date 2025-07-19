@@ -1,8 +1,10 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_content_and_subcontent.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/bundle_subview.dart';
@@ -365,8 +367,8 @@ class ApplicationState extends State<Application> {
     } else if (subPageToLoad ==
         NavigationEntity.argumentSubPageUpdateDatabase) {
       return UpdateDatabaseSubview(
-        handleGoToMore: () {
-          NavigationEntity.goToMore(handleGoTo: goTo);
+        handleGoToUpdatesAvailables: () {
+          NavigationEntity.goToUpdatesAvailables(handleGoTo: goTo);
         },
       );
     } else if (subPageToLoad == NavigationEntity.argumentSubPageBundleDetail) {

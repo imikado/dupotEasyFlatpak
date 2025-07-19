@@ -9,11 +9,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Card/c
 import 'package:flutter/material.dart';
 
 class UpdateDatabaseSubview extends StatefulWidget {
-  final Function handleGoToMore;
+  final Function handleGoToUpdatesAvailables;
 
   const UpdateDatabaseSubview({
     super.key,
-    required this.handleGoToMore,
+    required this.handleGoToUpdatesAvailables,
   });
 
   @override
@@ -44,8 +44,6 @@ class _UpdateDatabaseSubviewState extends State<UpdateDatabaseSubview> {
       stateInstallationOutput =
           LocalizationApi().tr('Start_update_application_database');
     });
-    FlathubApi flathubApi =
-        FlathubApi(applicationRepository: ApplicationRepository());
 
     // Start periodic progress updater
     Timer? progressTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -54,15 +52,16 @@ class _UpdateDatabaseSubviewState extends State<UpdateDatabaseSubview> {
           'Application_processing',
           {
             '_numberProcessed_':
-                flathubApi.loadNumberOfApplicationProcessed.toString(),
-            '_numberTotal_': flathubApi.loadTotalNumberOfApplication.toString()
+                FlathubApi().loadNumberOfApplicationProcessed.toString(),
+            '_numberTotal_':
+                FlathubApi().loadTotalNumberOfApplication.toString()
           },
         );
       });
     });
 
     // Run the long task
-    await flathubApi.load(forceUpdateDatabase: false);
+    await FlathubApi().load(forceUpdateDatabase: false);
 
     // Cancel the timer when done
     progressTimer.cancel();
@@ -92,7 +91,8 @@ class _UpdateDatabaseSubviewState extends State<UpdateDatabaseSubview> {
               const SizedBox(width: 20),
               stateIsInstalling
                   ? const LinearProgressIndicator()
-                  : CloseSubViewButton(handle: widget.handleGoToMore),
+                  : CloseSubViewButton(
+                      handle: widget.handleGoToUpdatesAvailables),
               const SizedBox(width: 20)
             ],
           ),
