@@ -140,5 +140,6 @@
     "parameter_1100x760": "1100x760",
     "parameter_1200x800": "1200x800",
     "parameter_1400x900": "1400x900",
-    "parameter_fullscreen": "Tela cheia"
+    "parameter_fullscreen": "Tela cheia",
+    "do_you_confirm_flathub_sync": "Você confirma a sincronização com o Flathub ?"
 }

@@ -42,6 +42,14 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(UpdatesAvailablesView oldWidget) {
+    loadData();
+    loadNumberOfNewApplicationFromApi();
+
+    super.didUpdateWidget(oldWidget);
+  }
+
   Future<void> loadData() async {
     Map<String, bool> checkboxList = {};
 

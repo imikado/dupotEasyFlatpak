@@ -39,8 +39,8 @@ class UpdateDatabaseButton extends StatelessWidget {
                         ],
                         title: Text(LocalizationApi().tr('confirmation_title')),
                         contentPadding: const EdgeInsets.all(20.0),
-                        content: Text(
-                            '${LocalizationApi().tr('do_you_confirm_update_all')} ?'),
+                        content: Text(LocalizationApi()
+                            .tr('do_you_confirm_flathub_sync')),
                       ));
             },
       label: Row(children: [

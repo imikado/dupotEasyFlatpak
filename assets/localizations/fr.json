@@ -139,5 +139,6 @@
   "parameter_1100x760": "1100x760",
   "parameter_1200x800": "1200x800",
   "parameter_1400x900": "1400x900",
-  "parameter_fullscreen": "Plein écran"
+  "parameter_fullscreen": "Plein écran",
+  "do_you_confirm_flathub_sync": "Confirmez vous la synchronisation avec flathub api ?"
 }
