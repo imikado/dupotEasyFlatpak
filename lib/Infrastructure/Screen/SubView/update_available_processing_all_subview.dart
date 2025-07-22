@@ -12,10 +12,15 @@ import 'package:flutter/material.dart';
 class UpdateAvailableProcessingAllSubview extends StatefulWidget {
   final Function handleGoTo;
 
-  const UpdateAvailableProcessingAllSubview({
-    super.key,
-    required this.handleGoTo,
-  });
+  //switch menu
+  final Function handleDisableSideMenu;
+  final Function handleEnableSideMenu;
+
+  const UpdateAvailableProcessingAllSubview(
+      {super.key,
+      required this.handleGoTo,
+      required this.handleDisableSideMenu,
+      required this.handleEnableSideMenu});
 
   @override
   State<UpdateAvailableProcessingAllSubview> createState() =>
@@ -37,6 +42,8 @@ class _UpdateAvailableProcessingSubviewState
   }
 
   Future<void> updateAll() async {
+    await widget.handleDisableSideMenu();
+
     CommandApi command = CommandApi();
 
     String commandBin = 'flatpak';
@@ -66,7 +73,9 @@ class _UpdateAvailableProcessingSubviewState
     process.exitCode.then((exitCode) {
       LoggerApi().info('Exit code: $exitCode');
 
-      CommandApi().checkUpdates().then((value) {
+      CommandApi().checkUpdates().then((value) async {
+        await widget.handleEnableSideMenu();
+
         setState(() {
           stateIsInstalling = false;
         });

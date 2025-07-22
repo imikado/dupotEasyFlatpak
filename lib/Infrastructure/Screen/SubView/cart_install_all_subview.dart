@@ -18,13 +18,19 @@ class CartInstallAllSubview extends StatefulWidget {
   final Map<String, List<OverrideFormControl>> overrideSetupListByApplicationId;
   final Function handleSetApplicationLighted;
 
+  //switch menu
+  final Function handleDisableSideMenu;
+  final Function handleEnableSideMenu;
+
   const CartInstallAllSubview(
       {super.key,
       required this.handleGoToApplicationInstalled,
       required this.applicationIdListInCart,
       required this.handleRemoveFromCart,
       required this.overrideSetupListByApplicationId,
-      required this.handleSetApplicationLighted});
+      required this.handleSetApplicationLighted,
+      required this.handleDisableSideMenu,
+      required this.handleEnableSideMenu});
 
   @override
   State<CartInstallAllSubview> createState() =>
@@ -49,6 +55,8 @@ class _InstallationWithRecipeViewState extends State<CartInstallAllSubview> {
   }
 
   Future<void> install() async {
+    await widget.handleDisableSideMenu();
+
     setState(() {
       stateIsInstalling = true;
     });
@@ -96,6 +104,8 @@ class _InstallationWithRecipeViewState extends State<CartInstallAllSubview> {
 
       await widget.handleSetApplicationLighted('');
     }
+
+    await widget.handleEnableSideMenu();
 
     setState(() {
       stateIsInstalling = false;

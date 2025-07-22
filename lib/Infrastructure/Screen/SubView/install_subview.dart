@@ -13,11 +13,17 @@ class InstallSubview extends StatefulWidget {
   final Function handleGoToApplication;
   final String installScope;
 
+  //switch menu
+  final Function handleDisableSideMenu;
+  final Function handleEnableSideMenu;
+
   const InstallSubview(
       {super.key,
       required this.applicationId,
       required this.handleGoToApplication,
-      required this.installScope});
+      required this.installScope,
+      required this.handleDisableSideMenu,
+      required this.handleEnableSideMenu});
 
   @override
   State<InstallSubview> createState() => _InstallSubviewState();
@@ -41,6 +47,8 @@ class _InstallSubviewState extends State<InstallSubview> {
   }
 
   Future<void> install() async {
+    await widget.handleDisableSideMenu();
+
     applicationIdSelected = widget.applicationId;
 
     CommandApi command = CommandApi();
@@ -71,9 +79,11 @@ class _InstallSubviewState extends State<InstallSubview> {
         });
       });
 
-      process.exitCode.then((exitCode) {
+      process.exitCode.then((exitCode) async {
         LoggerApi().info('Exit code: $exitCode');
         CommandApi().loadApplicationInstalledList();
+
+        await widget.handleEnableSideMenu();
 
         setState(() {
           stateIsInstalling = false;

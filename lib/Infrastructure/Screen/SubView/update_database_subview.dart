@@ -11,10 +11,15 @@ import 'package:flutter/material.dart';
 class UpdateDatabaseSubview extends StatefulWidget {
   final Function handleGoToUpdatesAvailables;
 
-  const UpdateDatabaseSubview({
-    super.key,
-    required this.handleGoToUpdatesAvailables,
-  });
+  //switch menu
+  final Function handleDisableSideMenu;
+  final Function handleEnableSideMenu;
+
+  const UpdateDatabaseSubview(
+      {super.key,
+      required this.handleGoToUpdatesAvailables,
+      required this.handleDisableSideMenu,
+      required this.handleEnableSideMenu});
 
   @override
   State<UpdateDatabaseSubview> createState() => _UpdateDatabaseSubviewState();
@@ -40,6 +45,8 @@ class _UpdateDatabaseSubviewState extends State<UpdateDatabaseSubview> {
   }
 
   Future<void> updateDatabase() async {
+    await widget.handleDisableSideMenu();
+
     setState(() {
       stateInstallationOutput =
           LocalizationApi().tr('Start_update_application_database');
@@ -70,6 +77,8 @@ class _UpdateDatabaseSubviewState extends State<UpdateDatabaseSubview> {
       stateInstallationOutput =
           LocalizationApi().tr('Application_database_up_to_date');
     });
+
+    await widget.handleEnableSideMenu();
 
     setState(() {
       stateIsInstalling = false;

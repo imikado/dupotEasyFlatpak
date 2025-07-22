@@ -19,12 +19,17 @@ class InstallWithRecipeSubview extends StatefulWidget {
   final String applicationId;
   final Function handleGoToApplication;
   final String installScope;
+  final Function handleDisableSideMenu;
+
+  final Function handleEnableSideMenu;
 
   const InstallWithRecipeSubview(
       {super.key,
       required this.applicationId,
       required this.handleGoToApplication,
-      required this.installScope});
+      required this.installScope,
+      required this.handleDisableSideMenu,
+      required this.handleEnableSideMenu});
 
   @override
   State<InstallWithRecipeSubview> createState() =>
@@ -116,6 +121,8 @@ class _InstallationWithRecipeViewState extends State<InstallWithRecipeSubview> {
   }
 
   Future<void> install() async {
+    await widget.handleDisableSideMenu();
+
     setState(() {
       stateIsInstalling = true;
     });
@@ -155,6 +162,8 @@ class _InstallationWithRecipeViewState extends State<InstallWithRecipeSubview> {
 
         await overrideControl.save(applicationId, stateOverrideFormControlList);
         await CommandApi().loadApplicationInstalledList();
+
+        await widget.handleEnableSideMenu();
 
         setState(() {
           stateIsInstalling = false;

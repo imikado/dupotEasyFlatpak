@@ -13,10 +13,16 @@ class UpdateAvailableProcessingSubview extends StatefulWidget {
   final Function handleGoTo;
   final List<String> applicationIdSelectedList;
 
+//switch menu
+  final Function handleDisableSideMenu;
+  final Function handleEnableSideMenu;
+
   const UpdateAvailableProcessingSubview(
       {super.key,
       required this.handleGoTo,
-      required this.applicationIdSelectedList});
+      required this.applicationIdSelectedList,
+      required this.handleDisableSideMenu,
+      required this.handleEnableSideMenu});
 
   @override
   State<UpdateAvailableProcessingSubview> createState() =>
@@ -41,8 +47,12 @@ class _UpdateAvailableProcessingSubviewState
   }
 
   Future<void> updateList(List<String> applicationIdSelectedList) async {
+    await widget.handleDisableSideMenu();
+
     await updateSystem(applicationIdSelectedList);
     await updateUser(applicationIdSelectedList);
+
+    await widget.handleEnableSideMenu();
   }
 
   Future<void> updateSystem(List<String> applicationIdSelectedList) async {

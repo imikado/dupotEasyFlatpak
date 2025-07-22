@@ -74,6 +74,17 @@
 
 
 
+
+<release date="2025-07-22" version="3.22.0"> 
+      <description>
+        <ul>
+          <li>Improve side menu blocking during installation/uninstallation</li>
+          <li>Improve screenshot caroussel</li>
+        </ul>
+      </description>
+    </release> 
+
+
 <release date="2025-07-19" version="3.20.4"> 
       <description>
         <ul>

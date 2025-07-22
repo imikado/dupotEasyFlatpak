@@ -13,13 +13,18 @@ class UninstallSubview extends StatefulWidget {
   final Function handleGoToApplication;
   final bool willDeleteAppData;
   final String installScope;
+  //switch menu
+  final Function handleDisableSideMenu;
+  final Function handleEnableSideMenu;
 
   const UninstallSubview(
       {super.key,
       required this.applicationId,
       required this.handleGoToApplication,
       required this.willDeleteAppData,
-      required this.installScope});
+      required this.installScope,
+      required this.handleDisableSideMenu,
+      required this.handleEnableSideMenu});
 
   @override
   State<UninstallSubview> createState() => _InstallSubviewState();
@@ -43,6 +48,8 @@ class _InstallSubviewState extends State<UninstallSubview> {
   }
 
   Future<void> install() async {
+    await widget.handleDisableSideMenu();
+
     applicationIdSelected = widget.applicationId;
 
     CommandApi command = CommandApi();
@@ -75,9 +82,11 @@ class _InstallSubviewState extends State<UninstallSubview> {
         });
       });
 
-      process.exitCode.then((exitCode) {
+      process.exitCode.then((exitCode) async {
         LoggerApi().info('Exit code: $exitCode');
         CommandApi().loadApplicationInstalledList();
+
+        await widget.handleEnableSideMenu();
 
         setState(() {
           stateIsInstalling = false;

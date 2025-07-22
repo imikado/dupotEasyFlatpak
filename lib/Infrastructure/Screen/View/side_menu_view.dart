@@ -13,6 +13,7 @@ class SideMenuView extends StatefulWidget {
   final int interfaceVersion;
   final String searched;
   final int numberOfUpdates;
+  final bool isActive;
 
   const SideMenuView(
       {super.key,
@@ -22,7 +23,8 @@ class SideMenuView extends StatefulWidget {
       required this.interfaceVersion,
       required this.applicationIdListInCart,
       required this.searched,
-      required this.numberOfUpdates});
+      required this.numberOfUpdates,
+      required this.isActive});
 
   @override
   State<SideMenuView> createState() => _SideMenuViewState();
@@ -56,12 +58,7 @@ class _SideMenuViewState extends State<SideMenuView> {
   }
 
   bool isActive() {
-    if (widget.argumentMapSelected
-        .containsKey(NavigationEntity.argumentSubPage)) {
-      return false;
-    }
-
-    return true;
+    return widget.isActive;
   }
 
   @override

@@ -67,6 +67,8 @@ class ApplicationState extends State<Application> {
 
   bool stateHasPrevious = false;
 
+  bool stateMenuEnabled = true;
+
   final FocusNode _focusNode = FocusNode();
 
   final alphanumeric = RegExp(r'^[a-zA-Z0-9]{1}$');
@@ -151,6 +153,22 @@ class ApplicationState extends State<Application> {
               ));
   }
 
+  void enableSideMenu() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        stateMenuEnabled = true;
+      });
+    });
+  }
+
+  void disableSideMenu() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        stateMenuEnabled = false;
+      });
+    });
+  }
+
   String getSubPage() {
     if (stateArgumentMap.containsKey(NavigationEntity.argumentSubPage)) {
       return NavigationEntity.extractArgumentSubPage(stateArgumentMap);
@@ -167,6 +185,7 @@ class ApplicationState extends State<Application> {
       applicationIdListInCart: stateCartApplicationIdList,
       searched: stateSearched,
       numberOfUpdates: CommandApi().getNumberOfUpdates(),
+      isActive: stateMenuEnabled,
     );
   }
 
@@ -274,6 +293,8 @@ class ApplicationState extends State<Application> {
         applicationId: applicationId,
         handleGoToApplication: () => NavigationEntity.gotToApplicationId(
             handleGoTo: goTo, applicationId: applicationId),
+        handleDisableSideMenu: disableSideMenu,
+        handleEnableSideMenu: enableSideMenu,
         installScope:
             NavigationEntity.extractArgumentInstallScope(stateArgumentMap),
       );
@@ -286,6 +307,8 @@ class ApplicationState extends State<Application> {
         applicationId: applicationId,
         handleGoToApplication: () => NavigationEntity.gotToApplicationId(
             handleGoTo: goTo, applicationId: applicationId),
+        handleDisableSideMenu: disableSideMenu,
+        handleEnableSideMenu: enableSideMenu,
         installScope:
             NavigationEntity.extractArgumentInstallScope(stateArgumentMap),
       );
@@ -303,6 +326,8 @@ class ApplicationState extends State<Application> {
           handleGoToApplication: () => NavigationEntity.gotToApplicationId(
               handleGoTo: goTo, applicationId: applicationId),
           willDeleteAppData: willDeleteAppData,
+          handleDisableSideMenu: disableSideMenu,
+          handleEnableSideMenu: enableSideMenu,
           installScope:
               NavigationEntity.extractArgumentInstallScope(stateArgumentMap));
     } else if (subPageToLoad == NavigationEntity.argumentSubPageOverride) {
@@ -319,10 +344,16 @@ class ApplicationState extends State<Application> {
               stateArgumentMap);
       return UpdateAvailableProcessingSubview(
           applicationIdSelectedList: applicationIdSelectedList,
+          handleDisableSideMenu: disableSideMenu,
+          handleEnableSideMenu: enableSideMenu,
           handleGoTo: goTo);
     } else if (subPageToLoad ==
         NavigationEntity.argumentSubPageUpdateAvailableProcessingAll) {
-      return UpdateAvailableProcessingAllSubview(handleGoTo: goTo);
+      return UpdateAvailableProcessingAllSubview(
+        handleGoTo: goTo,
+        handleDisableSideMenu: disableSideMenu,
+        handleEnableSideMenu: enableSideMenu,
+      );
     } else if (subPageToLoad ==
         NavigationEntity.argumentSubPageCartSetupOverride) {
       String applicationId =
@@ -347,6 +378,8 @@ class ApplicationState extends State<Application> {
           handleSetApplicationLighted: setApplicationIdLighted,
           applicationIdListInCart: stateCartApplicationIdList,
           handleRemoveFromCart: removeFromCart,
+          handleDisableSideMenu: disableSideMenu,
+          handleEnableSideMenu: enableSideMenu,
           overrideSetupListByApplicationId:
               stateCartOverrideFormControlListByApplicationId);
     } else if (subPageToLoad == NavigationEntity.argumentSubPageExport) {
@@ -370,6 +403,8 @@ class ApplicationState extends State<Application> {
         handleGoToUpdatesAvailables: () {
           NavigationEntity.goToUpdatesAvailables(handleGoTo: goTo);
         },
+        handleDisableSideMenu: disableSideMenu,
+        handleEnableSideMenu: enableSideMenu,
       );
     } else if (subPageToLoad == NavigationEntity.argumentSubPageBundleDetail) {
       String bundleId =

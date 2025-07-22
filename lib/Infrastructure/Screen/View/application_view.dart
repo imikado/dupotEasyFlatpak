@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
@@ -256,7 +257,10 @@ class _ApplicationViewState extends State<ApplicationView> {
                 if (stateAppStream!.screenshotObjList.isNotEmpty)
                   Padding(
                       padding: const EdgeInsets.all(20),
-                      child: Scrollbar(
+                      child: getScreenshotCaroussel(
+                          stateAppStream!.screenshotObjList)
+                      /*
+                       Scrollbar(
                           interactive: false,
                           thumbVisibility: true,
                           controller: scrollControllerScreenshot,
@@ -278,7 +282,10 @@ class _ApplicationViewState extends State<ApplicationView> {
                                     },
                                     icon: Image.network(
                                         screenshotLoop['preview']));
-                              }).toList())))),
+                              }).toList())))
+                              
+                              */
+                      ),
                 Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -406,6 +413,24 @@ class _ApplicationViewState extends State<ApplicationView> {
                         }).toList()))
               ],
             ));
+  }
+
+  Widget getScreenshotCaroussel(List<dynamic> screenshotObjList) {
+    return CarouselSlider.builder(
+      itemCount: screenshotObjList.length,
+      options: CarouselOptions(
+        autoPlay: false,
+        aspectRatio: 2.0,
+        enlargeCenterPage: true,
+      ),
+      itemBuilder: (context, index, realIdx) {
+        dynamic screenshotLoop = screenshotObjList[index];
+
+        return Center(
+            child: Image.network(screenshotLoop['large'],
+                fit: BoxFit.cover, width: 1000));
+      },
+    );
   }
 
   Widget getOverrideButton(bool isAlreadyInstalled, bool isOverrided) {
