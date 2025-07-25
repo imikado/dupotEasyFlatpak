@@ -14,6 +14,7 @@ class SideMenuView extends StatefulWidget {
   final String searched;
   final int numberOfUpdates;
   final bool isActive;
+  final Function handleSetSearched;
 
   const SideMenuView(
       {super.key,
@@ -24,7 +25,8 @@ class SideMenuView extends StatefulWidget {
       required this.applicationIdListInCart,
       required this.searched,
       required this.numberOfUpdates,
-      required this.isActive});
+      required this.isActive,
+      required this.handleSetSearched});
 
   @override
   State<SideMenuView> createState() => _SideMenuViewState();
@@ -48,6 +50,8 @@ class _SideMenuViewState extends State<SideMenuView> {
 
   final TextEditingController _searchController = TextEditingController();
 
+  final FocusNode _searchFocusNode = FocusNode();
+
   @override
   void initState() {
     loadData(true);
@@ -65,9 +69,17 @@ class _SideMenuViewState extends State<SideMenuView> {
   void didUpdateWidget(covariant SideMenuView oldWidget) {
     loadData(false);
 
-    if (oldWidget.searched != widget.searched) {
+    if (oldWidget.searched != widget.searched &&
+        _searchController.text != widget.searched) {
+      final cursorPosition = _searchController.selection;
+
       _searchController.text = widget.searched;
+
+      _searchController.selection = TextSelection.fromPosition(
+        TextPosition(offset: widget.searched.length),
+      );
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -115,6 +127,12 @@ class _SideMenuViewState extends State<SideMenuView> {
     });
   }
 
+  void requestFocus() {
+    if (mounted) {
+      _searchFocusNode.requestFocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     themeTextStyle = ThemeTextStyle(context: context);
@@ -134,10 +152,10 @@ class _SideMenuViewState extends State<SideMenuView> {
                     ),
                     Expanded(
                       child: TextField(
-                        enableInteractiveSelection: false,
                         enabled: isActive(),
+                        focusNode: _searchFocusNode,
                         showCursor: true,
-                        autofocus: false,
+                        autofocus: true,
                         controller: _searchController,
                         style: Theme.of(context).textTheme.titleSmall,
                         decoration: InputDecoration(
@@ -148,12 +166,28 @@ class _SideMenuViewState extends State<SideMenuView> {
                           fillColor: Colors.transparent,
                           border: InputBorder
                               .none, // visually similar to .collapsed()
+
+                          isDense: false,
+                          suffixIcon: _searchController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.close),
+                                  splashRadius: 16,
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    widget.handleSetSearched('');
+                                    _searchFocusNode.requestFocus();
+                                    if (mounted) {
+                                      setState(() {});
+                                    } // Refresh suffixIcon
+                                  },
+                                )
+                              : null,
                         ),
                         onChanged: (value) {
-                          _searchController.clearComposing();
-
-                          NavigationEntity.goToSearch(
-                              handleGoTo: widget.handleGoTo, search: value);
+                          if (mounted) {
+                            setState(() {}); // So the suffixIcon refreshes
+                          }
+                          widget.handleSetSearched(value);
                         },
                       ),
                     ),

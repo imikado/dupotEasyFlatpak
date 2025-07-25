@@ -100,57 +100,54 @@ class ApplicationState extends State<Application> {
       isMain = false;
     }
 
-    return KeyboardListener(
-        focusNode: _focusNode,
-        autofocus: true,
-        onKeyEvent: (event) {
-          if (statePage == NavigationEntity.pageSearch) {
-            if (event is KeyDownEvent &&
+    if (statePage == NavigationEntity.pageLoading) {
+      return OnlyContentLayout(
+          handleGoTo: goTo,
+          content: LoadingView(handle: () {
+            goToPrevious();
+          }));
+    } else if (statePage == NavigationEntity.pageSearch) {
+      return SideMenuWithContentAndSubContentLayout(
+        menu: getSideMenuView(),
+        content: getContentView(statePage, isMain),
+        subContent: getSubContentView(hasSubContent),
+        hasSubContent: hasSubContent,
+        hasPrevious: stateHasPrevious,
+        handleGoToPrevious: goToPrevious,
+        pageSelected: statePage,
+      );
+    } else {
+      return KeyboardListener(
+          focusNode: _focusNode,
+          autofocus: true,
+          onKeyEvent: (event) {
+            if (getSubPage() == '' &&
+                event is KeyDownEvent &&
                 event.logicalKey.keyLabel.toString().length == 1 &&
                 alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {
-              setState(() {
-                stateSearched = stateSearched +
-                    event.logicalKey.keyLabel.toString().toLowerCase();
-              });
-            } else if (event is KeyDownEvent &&
+              NavigationEntity.goToSearch(
+                  handleGoTo: goTo,
+                  search: stateSearched +
+                      event.logicalKey.keyLabel.toString().toLowerCase());
+            } else if (getSubPage() == '' &&
+                event is KeyDownEvent &&
+                stateSearched.isNotEmpty &&
                 event.logicalKey.keyLabel == "Backspace") {
-              setState(() {
-                stateSearched =
-                    stateSearched.substring(0, stateSearched.length - 1);
-              });
+              NavigationEntity.goToSearch(
+                  handleGoTo: goTo,
+                  search: stateSearched.substring(0, stateSearched.length - 1));
             }
-          } else if (getSubPage() == '' &&
-              event is KeyDownEvent &&
-              event.logicalKey.keyLabel.toString().length == 1 &&
-              alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {
-            NavigationEntity.goToSearch(
-                handleGoTo: goTo,
-                search: stateSearched +
-                    event.logicalKey.keyLabel.toString().toLowerCase());
-          } else if (getSubPage() == '' &&
-              event is KeyDownEvent &&
-              stateSearched.isNotEmpty &&
-              event.logicalKey.keyLabel == "Backspace") {
-            NavigationEntity.goToSearch(
-                handleGoTo: goTo,
-                search: stateSearched.substring(0, stateSearched.length - 1));
-          }
-        },
-        child: (statePage == NavigationEntity.pageLoading)
-            ? OnlyContentLayout(
-                handleGoTo: goTo,
-                content: LoadingView(handle: () {
-                  goToPrevious();
-                }))
-            : SideMenuWithContentAndSubContentLayout(
-                menu: getSideMenuView(),
-                content: getContentView(statePage, isMain),
-                subContent: getSubContentView(hasSubContent),
-                hasSubContent: hasSubContent,
-                hasPrevious: stateHasPrevious,
-                handleGoToPrevious: goToPrevious,
-                pageSelected: statePage,
-              ));
+          },
+          child: SideMenuWithContentAndSubContentLayout(
+            menu: getSideMenuView(),
+            content: getContentView(statePage, isMain),
+            subContent: getSubContentView(hasSubContent),
+            hasSubContent: hasSubContent,
+            hasPrevious: stateHasPrevious,
+            handleGoToPrevious: goToPrevious,
+            pageSelected: statePage,
+          ));
+    }
   }
 
   void enableSideMenu() {
@@ -176,6 +173,12 @@ class ApplicationState extends State<Application> {
     return '';
   }
 
+  void setStateSearched(String searched) {
+    setState(() {
+      stateSearched = searched;
+    });
+  }
+
   Widget getSideMenuView() {
     return SideMenuView(
       interfaceVersion: stateInterfaceVersion,
@@ -185,6 +188,7 @@ class ApplicationState extends State<Application> {
       applicationIdListInCart: stateCartApplicationIdList,
       searched: stateSearched,
       numberOfUpdates: CommandApi().getNumberOfUpdates(),
+      handleSetSearched: setStateSearched,
       isActive: stateMenuEnabled,
     );
   }

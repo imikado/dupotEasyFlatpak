@@ -75,6 +75,14 @@
 
 
 
+<release date="2025-07-25" version="3.22.1"> 
+      <description>
+        <ul>
+          <li>Improve search behavior</li>
+        </ul>
+      </description>
+    </release> 
+
 <release date="2025-07-22" version="3.22.0"> 
       <description>
         <ul>
