@@ -140,5 +140,6 @@
   "parameter_1200x800": "1200x800",
   "parameter_1400x900": "1400x900",
   "parameter_fullscreen": "Plein écran",
-  "do_you_confirm_flathub_sync": "Confirmez vous la synchronisation avec flathub api ?"
+  "do_you_confirm_flathub_sync": "Confirmez vous la synchronisation avec flathub api ?",
+  "Use_flathub_search_api": "Utiliser la recherche api "
 }

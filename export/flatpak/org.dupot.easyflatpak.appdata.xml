@@ -75,6 +75,18 @@
 
 
 
+
+<release date="2025-08-03" version="3.23.0"> 
+      <description>
+        <ul>
+          <li>Add feature so search with flathub api</li>
+          <li>Add parameter to choose when you search if you want to use api or local database </li>
+          <li>Update applications database</li>
+        </ul>
+      </description>
+    </release> 
+
+
 <release date="2025-07-25" version="3.22.2"> 
       <description>
         <ul>

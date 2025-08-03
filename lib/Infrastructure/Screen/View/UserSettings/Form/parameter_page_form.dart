@@ -39,6 +39,12 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
     widget.handleUpdateUserSettings(widget.userSettings);
   }
 
+  setUseFlathubSearchApi(bool useFlathubSearchApi_) {
+    widget.userSettings.setUseFlathubSearchApi(useFlathubSearchApi_);
+
+    widget.handleUpdateUserSettings(widget.userSettings);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -110,7 +116,24 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
             ],
             value: widget.userSettings.getDefaultResolution(),
             handleUpdateValue: updateDefaultResolution),
-      )
+      ),
+      ListTile(
+        title: Text(
+          LocalizationApi().tr('Use_flathub_search_api'),
+          style: TextStyle(
+              color: Theme.of(context).textTheme.headlineLarge!.color),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: RadioBoolListSubform(
+            radioBoolEntityList: [
+              RadioBoolEntity(label: 'Yes', value: true),
+              RadioBoolEntity(label: 'No', value: false)
+            ],
+            radioGroupValue: widget.userSettings.getUseFlathubSearchApi(),
+            handleUpdateValue: setUseFlathubSearchApi),
+      ),
     ]);
   }
 }

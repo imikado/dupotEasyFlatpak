@@ -66,6 +66,63 @@ class FlathubApi {
     return numberOfNewApplicationFromApi;
   }
 
+  Future<void> sync() async {
+    ApplicationRepository applicationRepository = ApplicationRepository();
+
+    List<String> appStreamIdList = await getAllRawApplicationList();
+
+    loadTotalNumberOfApplication = appStreamIdList.length;
+
+    getApplicationRepository().connect();
+
+    List<String> categoryList =
+        await getApplicationRepository().findAllCategoryList();
+
+    List<String> applicationIdList =
+        await getApplicationRepository().findAllApplicationIdList();
+
+    List<ApplicationEntity> appStreamList = [];
+    List<ApplicationCategoryEntity> applicationCategoryEntityList = [];
+
+    // ignore: unused_local_variable
+    int limitLoaded = 0;
+    for (String appStreamIdLoop in appStreamIdList) {
+      if (applicationIdList.contains(appStreamIdLoop.toLowerCase())) {
+        await updateAppStream(appStreamIdLoop);
+
+        loadNumberOfApplicationProcessed += 1;
+        continue;
+      }
+
+      if (appStreamIdLoop.contains('org.freedesktop.platform')) {
+        continue;
+      }
+
+      ApplicationEntity appStream =
+          await getApplicationEntityFromApi(appStreamIdLoop);
+      if (appStream.isEmpty) {
+        appStream.id = appStreamIdLoop;
+      }
+
+      downloadIcon(appStream, PathApi.getIconsCachePath());
+
+      appStreamList.add(appStream);
+
+      for (String categoryLoop in appStream.categoryIdList) {
+        if (categoryList.contains(categoryLoop)) {
+          applicationCategoryEntityList.add(ApplicationCategoryEntity(
+              appstream_id: appStreamIdLoop, category_id: categoryLoop));
+        }
+      }
+      await Future.delayed(const Duration(seconds: 1));
+      loadNumberOfApplicationProcessed += 1;
+    }
+
+    await getApplicationRepository().insertApplicationEntityList(appStreamList);
+    await applicationRepository
+        .insertApplicationCategoryList(applicationCategoryEntityList);
+  }
+
   Future<void> load({bool forceUpdateDatabase = false}) async {
     ApplicationRepository applicationRepository = ApplicationRepository();
 
@@ -147,6 +204,40 @@ class FlathubApi {
 
     await dioDownload.download(httpIconPath,
         p.join(PathApi.getIconsCachePath(), appStream.getAppIcon()));
+  }
+
+  Future<List<String>> getAllRawApplicationList() async {
+    var apiContent =
+        await http.get(Uri.parse('https://flathub.org/api/v2/appstream'));
+
+    List<dynamic> rawAppApplicationList = jsonDecode(apiContent.body);
+
+    List<String> appStreamIdList = [];
+    for (String rawAppApplicationIdSringLoop in rawAppApplicationList) {
+      appStreamIdList.add(rawAppApplicationIdSringLoop);
+    }
+
+    return appStreamIdList;
+  }
+
+  Future<List<String>> getApplicationIdListBySearch(String search) async {
+    var apiContent = await http.post(
+        Uri.parse('https://flathub.org/api/v2/search?locale=en'),
+        headers: <String, String>{
+          "accept": "application/json",
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{'query': search, "filters": []}));
+
+    Map<String, dynamic> rawAppApplicationList = jsonDecode(apiContent.body);
+
+    List<String> appStreamIdList = [];
+    for (Map<String, dynamic> rawAppApplicationIdSringLoop
+        in rawAppApplicationList['hits']) {
+      appStreamIdList.add(rawAppApplicationIdSringLoop['app_id']);
+    }
+
+    return appStreamIdList;
   }
 
   Future<List<String>> getRawApplicationList() async {

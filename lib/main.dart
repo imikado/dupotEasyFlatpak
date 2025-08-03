@@ -21,7 +21,9 @@ import 'package:window_manager/window_manager.dart';
 
 bool isOsDarkMode = false;
 
-void main() async {
+const argSync = 'sync';
+
+void main(List<String> args) async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -127,6 +129,11 @@ void main() async {
     await windowManager.ensureInitialized();
 
     FlathubApi(ApplicationRepository());
+
+    if (args.contains(argSync)) {
+      print('sync');
+      await FlathubApi().sync();
+    }
 
     Size defaultResolution = Size(1200, 800);
     bool defaultFullScreen = false;

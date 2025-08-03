@@ -15,7 +15,7 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 ];
 
 class UserSettingsEntity {
-  int version = 7;
+  int version = 8;
 
   String jsonUserSettingsPath = '';
 
@@ -48,6 +48,8 @@ class UserSettingsEntity {
 
   String defaultResolution = defaultResolution1200x800;
 
+  bool useFlathubSearchApi = false;
+
   late ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.system);
 
   static const String displayModeList = 'displayModeList';
@@ -77,7 +79,8 @@ class UserSettingsEntity {
           'userInstallationScopeEnabled',
           'displayApplicationInstalledNumberInSideMenu',
           'displayApplicationInstalledNumberInPage',
-          'windowManager'
+          'windowManager',
+          'useFlathubSearchApi'
         ]) {
           if (!jsonParameterObj.containsKey(mandatoryFieldLoop)) {
             throw Exception(
@@ -115,6 +118,11 @@ class UserSettingsEntity {
 
         if (jsonParameterObj.containsKey('defaultResolution')) {
           _singleton.defaultResolution = jsonParameterObj['defaultResolution'];
+        }
+
+        if (jsonParameterObj.containsKey('useFlathubSearchApi')) {
+          _singleton.useFlathubSearchApi =
+              jsonParameterObj['useFlathubSearchApi'];
         }
 
         _singleton.displayAppsMode = jsonParameterObj['displayAppsMode'];
@@ -242,6 +250,11 @@ class UserSettingsEntity {
     await save();
   }
 
+  Future<void> setUseFlathubSearchApi(bool useFlathubSearchApi_) async {
+    useFlathubSearchApi = useFlathubSearchApi_;
+    await save();
+  }
+
   String getActiveLanguageCode() {
     return getUserLanguageCode();
   }
@@ -282,6 +295,10 @@ class UserSettingsEntity {
     return AppDisplay.table;
   }
 
+  bool getUseFlathubSearchApi() {
+    return useFlathubSearchApi;
+  }
+
   Future<void> save() async {
     Map<String, dynamic> jsonParameterObj = {
       'version': version,
@@ -296,7 +313,8 @@ class UserSettingsEntity {
       'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp,
       'displayAppsMode': displayAppsMode,
       'windowManager': windowManagerString,
-      'defaultResolution': defaultResolution
+      'defaultResolution': defaultResolution,
+      'useFlathubSearchApi': useFlathubSearchApi
     };
 
     File jsonParameterFile = File(jsonUserSettingsPath);
