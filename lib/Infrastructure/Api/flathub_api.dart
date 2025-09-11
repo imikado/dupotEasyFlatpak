@@ -227,7 +227,10 @@ class FlathubApi {
           "accept": "application/json",
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, dynamic>{'query': search, "filters": []}));
+        body: jsonEncode(<String, dynamic>{'query': search, "filters": [
+           
+          ]
+        }));
 
     Map<String, dynamic> rawAppApplicationList = jsonDecode(apiContent.body);
 

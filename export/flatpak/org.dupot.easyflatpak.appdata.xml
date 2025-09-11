@@ -72,8 +72,15 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
-
-
+ 
+<release date="2025-09-11" version="3.23.1"> 
+      <description>
+        <ul>
+          <li>Enable local database search in place of api search by default</li>
+          <li>Update applications database</li>
+        </ul>
+      </description>
+    </release> 
 
 
 <release date="2025-08-03" version="3.23.0"> 

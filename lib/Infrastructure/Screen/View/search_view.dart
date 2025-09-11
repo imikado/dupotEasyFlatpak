@@ -31,7 +31,7 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   void didUpdateWidget(SearchView oldWidget) {
-    if (oldWidget.searched != widget.searched) {
+    if ((oldWidget.searched != widget.searched) & mounted) {
       loadData();
     }
     super.didUpdateWidget(oldWidget);

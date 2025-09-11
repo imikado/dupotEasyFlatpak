@@ -1,5 +1,5 @@
 {
-    "version": 8,
+    "version": 9,
     "applicationDataPath": "",
     "userOverrideLanguageCode": false,
     "languageCode": "en",
@@ -9,5 +9,5 @@
     "displayApplicationInstalledNumberInPage": false,
     "displayAppsMode": "displayModeList",
     "windowManager": "windowManagerLibadwaita",
-    "useFlathubSearchApi": true
+    "useFlathubSearchApi": false
 }

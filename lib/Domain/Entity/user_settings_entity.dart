@@ -15,7 +15,7 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 ];
 
 class UserSettingsEntity {
-  int version = 8;
+  int version = 9;
 
   String jsonUserSettingsPath = '';
 
