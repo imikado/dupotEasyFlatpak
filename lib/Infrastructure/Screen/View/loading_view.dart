@@ -117,6 +117,9 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
                 'assets/logos/splash.png',
                 width: 200,
               ),
+              const SizedBox(
+                height: 10,
+              ),
               LinearProgressIndicator(
                 value: progressValue,
                 color: Theme.of(context).primaryColorDark,
