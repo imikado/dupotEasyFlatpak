@@ -86,7 +86,8 @@ class _ExportSubviewState extends State<ExportSubview> {
       FlatpakOverrideApplication flatpakOverrideApplication =
           await CommandApi().isApplicationOverrided(applicationIdLoop);
 
-      if (flatpakOverrideApplication.isOverrided) {
+      if (flatpakOverrideApplication.isOverrided &&
+          await RecipeApi().hasApplication(applicationIdLoop)) {
         LoggerApi().info('- - isOverrided');
 
         await overrideControl.loadOverrideConfig(applicationIdLoop);

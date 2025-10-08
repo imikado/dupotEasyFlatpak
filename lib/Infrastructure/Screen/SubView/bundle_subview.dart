@@ -50,9 +50,9 @@ class _BundleSubviewState extends State<BundleSubview> {
           .getInstalledApplicationList()
           .then((List<String> installedApplicationIdList) {
         for (String applicationId in bundleEntity.applicationList) {
-          checkboxList[applicationId] =
-              !installedApplicationIdList.contains(applicationId) &&
-                  !widget.applicationIdListInCart.contains(applicationId);
+          checkboxList[applicationId] = !installedApplicationIdList
+                  .contains(applicationId.toLowerCase()) &&
+              !widget.applicationIdListInCart.contains(applicationId);
         }
 
         ApplicationRepository()
