@@ -57,19 +57,29 @@ class _ExportSubviewState extends State<ExportSubview> {
   }
 
   Future<void> export() async {
+    LoggerApi().info('Start export');
+
     CommandApi commands = CommandApi();
 
     List<String> installedApplicationIdList =
         await commands.getInstalledApplicationList();
 
+    LoggerApi().info(
+        'Get commands.getInstalledApplicationList() (from flatpak), found ${installedApplicationIdList.length} applications');
+
     ApplicationRepository applicationRepository = ApplicationRepository();
     List<ApplicationEntity> applicationEntityList = await applicationRepository
         .findListApplicationEntityByIdList(installedApplicationIdList);
+
+    LoggerApi().info(
+        'Get applicationRepository.findListApplicationEntityByIdList() (from db), found ${applicationEntityList.length} applications');
 
     Map<String, List<PermissionOverridedEntity>>
         overrideSetupListByApplicationId = {};
 
     for (ApplicationEntity applicationEntityLoop in applicationEntityList) {
+      LoggerApi().info('- Processing ${applicationEntityLoop.id}');
+
       OverrideControl overrideControl = OverrideControl();
       String applicationIdLoop = applicationEntityLoop.id;
 
@@ -77,6 +87,8 @@ class _ExportSubviewState extends State<ExportSubview> {
           await CommandApi().isApplicationOverrided(applicationIdLoop);
 
       if (flatpakOverrideApplication.isOverrided) {
+        LoggerApi().info('- - isOverrided');
+
         await overrideControl.loadOverrideConfig(applicationIdLoop);
 
         RecipeEntity recipeLoop =
@@ -95,6 +107,9 @@ class _ExportSubviewState extends State<ExportSubview> {
 
             permissionOverridedEntityList.add(PermissionOverridedEntity(
                 permissionRecipeEntityLoop.type, valueLoop));
+
+            LoggerApi().info(
+                '- - permission type:${permissionRecipeEntityLoop.type}, value:$valueLoop');
           } else if (permissionRecipeEntityLoop.isInstallFlatpakYesNo()) {
           } else if (permissionRecipeEntityLoop.isEnvYesNo()) {
             String valueYesNo = 'no';
@@ -114,6 +129,9 @@ class _ExportSubviewState extends State<ExportSubview> {
                 permissionRecipeEntityLoop.type,
                 permissionRecipeEntityLoop.value,
                 valueYesNo));
+
+            LoggerApi().info(
+                '- - permission type:${permissionRecipeEntityLoop.type}, value:${permissionRecipeEntityLoop.value}, yesNo:$valueYesNo');
           }
         }
 
@@ -125,6 +143,8 @@ class _ExportSubviewState extends State<ExportSubview> {
     }
 
     String data = jsonEncode(overrideSetupListByApplicationId);
+
+    LoggerApi().info('json to export: $data');
 
     String fileWritten = await CommandApi().exportInstalled(data);
 
