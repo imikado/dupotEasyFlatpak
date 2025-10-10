@@ -206,6 +206,55 @@ class FlathubApi {
         p.join(PathApi.getIconsCachePath(), appStream.getAppIcon()));
   }
 
+  Future<List<String>> getCompatApplicationFromApi(String url) async {
+    var apiContent = await http.get(Uri.parse(url));
+
+    List<dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
+
+    List<String> addedApplicationIdList = [];
+    for (Map<String, dynamic> rawAddedApplicationLoop
+        in rawAddedApplicationList) {
+      addedApplicationIdList.add(rawAddedApplicationLoop['flatpakAppId']);
+    }
+
+    return addedApplicationIdList;
+  }
+
+  Future<List<String>> getUpdatedRawApplicationIdList() async {
+    var apiContent = await http.get(Uri.parse(
+        'https://flathub.org/api/v2/collection/recently-updated?page=0&per_page=8&locale=en'));
+
+    Map<String, dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
+
+    List<String> addedApplicationIdList = [];
+    for (Map<String, dynamic> rawAddedApplicationLoop
+        in rawAddedApplicationList['hits']) {
+      addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
+    }
+
+    return addedApplicationIdList;
+  }
+
+  Future<List<String>> getPopularRawApplicationIdList() async {
+    return getCompatApplicationFromApi(
+        'https://flathub.org/api/v2/compat/apps/collection/popular/50');
+  }
+
+  Future<List<String>> getTrendingRawApplicationIdList() async {
+    var apiContent = await http.get(Uri.parse(
+        'https://flathub.org/api/v2/collection/trending?page=0&per_page=8&locale=en'));
+
+    Map<String, dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
+
+    List<String> addedApplicationIdList = [];
+    for (Map<String, dynamic> rawAddedApplicationLoop
+        in rawAddedApplicationList['hits']) {
+      addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
+    }
+
+    return addedApplicationIdList;
+  }
+
   Future<List<String>> getAllRawApplicationList() async {
     var apiContent =
         await http.get(Uri.parse('https://flathub.org/api/v2/appstream'));

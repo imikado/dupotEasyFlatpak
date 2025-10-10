@@ -142,5 +142,8 @@
   "parameter_1400x900": "1400x900",
   "parameter_fullscreen": "Plein écran",
   "do_you_confirm_flathub_sync": "Confirmez vous la synchronisation avec flathub api ?",
-  "Use_flathub_search_api": "Utiliser la recherche api "
+  "Use_flathub_search_api": "Utiliser la recherche api ",
+  "home_trending": "Applications tendance",
+  "home_updated": "Applications récemment mises à jour",
+  "home_popular": "Applications populaires"
 }

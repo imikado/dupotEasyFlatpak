@@ -13,11 +13,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  List<List<ApplicationEntity>> stateAppStreamListList = [];
   List<String> stateCategoryIdList = [];
   String appPath = '';
 
   ScrollController scrollController = ScrollController();
+
+  List<ApplicationEntity> stateUpdatedAppStreamList = [];
+  List<ApplicationEntity> statePopularAppStreamList = [];
+  List<ApplicationEntity> stateTrendingAppStreamList = [];
 
   @override
   void initState() {
@@ -29,34 +32,45 @@ class _HomeViewState extends State<HomeView> {
   Future<void> loadData() async {
     HomeViewModel homeViewModel = HomeViewModel();
 
-    List<List<ApplicationEntity>> appStreamListList =
-        await homeViewModel.getApplicationEntityList();
+    List<ApplicationEntity> updatedApplicationList =
+        await homeViewModel.getUpdatedApplicationEntityListFromApi();
 
-    List<String> categoryIdList = await homeViewModel.getCategoryIdList();
+    List<ApplicationEntity> popularApplicationList =
+        await homeViewModel.getPopularApplicationEntityListFromApi();
+
+    List<ApplicationEntity> trendingApplicationList =
+        await homeViewModel.getTrendingApplicationEntityListFromApi();
 
     setState(() {
-      stateAppStreamListList = appStreamListList;
-      stateCategoryIdList = categoryIdList;
+      stateUpdatedAppStreamList = updatedApplicationList;
+      statePopularAppStreamList = popularApplicationList;
+      stateTrendingAppStreamList = trendingApplicationList;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return stateAppStreamListList.isEmpty
-        ? const LinearProgressIndicator()
-        : Scrollbar(
-            interactive: false,
-            thumbVisibility: true,
-            controller: scrollController,
-            child: ListView.builder(
-                itemCount: stateCategoryIdList.length,
-                controller: scrollController,
-                itemBuilder: (context, index) {
-                  return BlockAppListComponent(
-                      categoryId: stateCategoryIdList[index],
-                      appStreamList: stateAppStreamListList[index],
-                      appPath: appPath,
-                      handleGoTo: widget.handleGoTo);
-                }));
+    return Scrollbar(
+        interactive: false,
+        thumbVisibility: true,
+        controller: scrollController,
+        scrollbarOrientation: ScrollbarOrientation.right,
+        child: ListView(controller: scrollController, children: [
+          BlockAppListComponent(
+              categoryId: 'home_trending',
+              appStreamList: stateTrendingAppStreamList,
+              appPath: appPath,
+              handleGoTo: widget.handleGoTo),
+          BlockAppListComponent(
+              categoryId: 'home_updated',
+              appStreamList: stateUpdatedAppStreamList,
+              appPath: appPath,
+              handleGoTo: widget.handleGoTo),
+          BlockAppListComponent(
+              categoryId: 'home_popular',
+              appStreamList: statePopularAppStreamList,
+              appPath: appPath,
+              handleGoTo: widget.handleGoTo)
+        ]));
   }
 }

@@ -30,7 +30,7 @@ class BlockAppListComponent extends StatelessWidget {
 
       return SizedBox(
           width: 198,
-          height: 122,
+          height: 114,
           child: CardApplicationComponent(
               id: appStreamLoop.id,
               title: appStreamLoop.getName(),
@@ -39,28 +39,22 @@ class BlockAppListComponent extends StatelessWidget {
               handleGoTo: handleGoTo));
     }).toList();
 
-    widgetList.add(SizedBox(
-        width: 170,
-        height: 140,
-        child: IconButton(
-          icon: const Icon(Icons.more_horiz_outlined),
-
-          // icon: Icon(Icons.more),
-          onPressed: () {
-            NavigationEntity.gotToCategoryId(
-                handleGoTo: handleGoTo, categoryId: categoryId);
-          },
-        )));
-
     return Column(
       children: [
-        const SizedBox(height: 20),
-        Text(
-          LocalizationApi().tr(categoryId),
-          style: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            SizedBox(
+              width: 30,
+            ),
+            Text(
+              LocalizationApi().tr(categoryId),
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey),
+            ),
+          ],
         ),
         const SizedBox(height: 10),
         Wrap(children: widgetList),

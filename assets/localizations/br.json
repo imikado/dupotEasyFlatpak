@@ -143,5 +143,8 @@
     "parameter_1400x900": "1400x900",
     "parameter_fullscreen": "Tela cheia",
     "do_you_confirm_flathub_sync": "Você confirma a sincronização com o Flathub ?",
-    "Use_flathub_search_api": "Usar a API de busca do Flathub"
+    "Use_flathub_search_api": "Usar a API de busca do Flathub",
+    "home_trending": "Aplicativos em alta",
+    "home_updated": "Aplicativos atualizados recentemente",
+    "home_popular": "Aplicativos populares"
 }

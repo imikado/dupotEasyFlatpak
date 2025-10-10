@@ -142,5 +142,8 @@
     "parameter_1400x900": "1400x900",
     "parameter_fullscreen": "Ecran complet",
     "do_you_confirm_flathub_sync": "Confirmați sincronizarea cu Flathub ?",
-    "Use_flathub_search_api": "Folosește API de căutare Flathub"
+    "Use_flathub_search_api": "Folosește API de căutare Flathub",
+    "home_trending": "Aplicații în tendințe",
+    "home_updated": "Aplicații actualizate recent",
+    "home_popular": "Aplicații populare"
 }

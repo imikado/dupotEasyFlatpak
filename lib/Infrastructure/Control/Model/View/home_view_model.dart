@@ -1,4 +1,5 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 
 class HomeViewModel {
@@ -23,6 +24,39 @@ class HomeViewModel {
     }
 
     return applicationEntityListList;
+  }
+
+  Future<List<ApplicationEntity>>
+      getUpdatedApplicationEntityListFromApi() async {
+    FlathubApi flathubApi = FlathubApi();
+
+    List<String> applicationIdList =
+        await flathubApi.getUpdatedRawApplicationIdList();
+
+    return await applicationRepository
+        .findListApplicationEntityByIdList(applicationIdList);
+  }
+
+  Future<List<ApplicationEntity>>
+      getPopularApplicationEntityListFromApi() async {
+    FlathubApi flathubApi = FlathubApi();
+
+    List<String> applicationIdList =
+        await flathubApi.getPopularRawApplicationIdList();
+
+    return await applicationRepository
+        .findListApplicationEntityByIdList(applicationIdList);
+  }
+
+  Future<List<ApplicationEntity>>
+      getTrendingApplicationEntityListFromApi() async {
+    FlathubApi flathubApi = FlathubApi();
+
+    List<String> applicationIdList =
+        await flathubApi.getTrendingRawApplicationIdList();
+
+    return await applicationRepository
+        .findListApplicationEntityByIdList(applicationIdList);
   }
 
   Future<List<String>> getCategoryIdList() async {

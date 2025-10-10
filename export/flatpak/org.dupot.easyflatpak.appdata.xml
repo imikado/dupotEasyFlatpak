@@ -75,6 +75,14 @@
 
 
 
+<release date="2025-10-10" version="3.24.0"> 
+      <description>
+        <ul>
+          <li>Improve home page</li>
+        </ul>
+      </description>
+    </release> 
+
 <release date="2025-10-08" version="3.23.4"> 
       <description>
         <ul>
