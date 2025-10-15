@@ -3,7 +3,12 @@
   <id>org.dupot.easyflatpak</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>LGPL-2.1-only</project_license>
-  <name>Easy Flatpak</name>
+  <name>Easyflatpak</name>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#96aff8</color>
+    <color type="primary" scheme_preference="dark">#122355</color>
+  </branding>
 
   <launchable type="desktop-id">org.dupot.easyflatpak.desktop</launchable>
 
@@ -12,7 +17,7 @@
 
     <name>Michael Bertocchi</name>
   </developer>
-  <summary>A simple Flatpak store</summary>
+  <summary>Manage your flatpaks with a simple GUI.</summary>
   <description>
     <p>
     It will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better. 
@@ -74,6 +79,15 @@
   <releases>
 
 
+
+<release date="2025-10-15" version="3.24.1"> 
+      <description>
+        <ul>
+          <li>Improve home page</li>
+          <li>Update application database</li>
+        </ul>
+      </description>
+    </release> 
 
 <release date="2025-10-10" version="3.24.0"> 
       <description>
