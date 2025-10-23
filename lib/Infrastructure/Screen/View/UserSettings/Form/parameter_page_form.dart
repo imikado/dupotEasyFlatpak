@@ -82,7 +82,10 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
                   value: 'windowManagerLibadwaita'),
               RadioStringEntity(
                   label: 'parameter_windowManagerNative',
-                  value: 'windowManagerNative')
+                  value: 'windowManagerNative'),
+              RadioStringEntity(
+                  label: 'parameter_windowManagerNewInterface',
+                  value: 'windowManagerNewInterface')
             ],
             value: widget.userSettings.getWindowManager(),
             handleUpdateValue: updateWindowManager),

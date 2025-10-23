@@ -28,7 +28,9 @@ class ListviewApplicationListComponent extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.0),
               onTap: () {
                 NavigationEntity.gotToApplicationId(
-                    handleGoTo: handleGoTo, applicationId: appStreamLoop.id);
+                    handleGoTo: handleGoTo,
+                    applicationId: appStreamLoop.id,
+                    title: appStreamLoop.name);
               },
               child: Card(
                 color: Theme.of(context).secondaryHeaderColor,

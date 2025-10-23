@@ -2,6 +2,7 @@ import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/menu_item_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
@@ -50,7 +51,9 @@ class SideMenuViewModel {
           label: categoryIdLoop,
           action: () {
             NavigationEntity.gotToCategoryId(
-                handleGoTo: handleGoTo, categoryId: categoryIdLoop);
+              handleGoTo: handleGoTo,
+              categoryId: categoryIdLoop,
+            );
           },
           pageSelected: 'category',
           badge: '',

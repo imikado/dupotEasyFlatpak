@@ -25,7 +25,7 @@ class CardApplicationComponent extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           onTap: () {
             NavigationEntity.gotToApplicationId(
-                handleGoTo: handleGoTo, applicationId: id);
+                handleGoTo: handleGoTo, applicationId: id, title: title);
           },
           child: Card(
               color: Theme.of(context).secondaryHeaderColor,

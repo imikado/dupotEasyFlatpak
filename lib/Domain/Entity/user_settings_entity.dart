@@ -43,6 +43,7 @@ class UserSettingsEntity {
 
   static const String windowManagerNative = 'windowManagerNative';
   static const String windowManagerLibadwaita = 'windowManagerLibadwaita';
+  static const String windowManagerNewInterface = 'windowManagerNewInterface';
 
   String windowManagerString = windowManagerLibadwaita;
 
@@ -153,6 +154,10 @@ class UserSettingsEntity {
 
   bool isWindowManagerLibadwaita() {
     return windowManagerString == windowManagerLibadwaita;
+  }
+
+  bool isWindowManagerNewInterface() {
+    return windowManagerString == windowManagerNewInterface;
   }
 
   void updateLasttimeStampUpdateApplicationsFromApi() {

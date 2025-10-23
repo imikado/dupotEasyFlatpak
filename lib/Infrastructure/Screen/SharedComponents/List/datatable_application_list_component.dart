@@ -64,15 +64,18 @@ class _DatatableApplicationListComponentState
                         '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntityLoop.getAppIcon()}')),
             onTap: () => NavigationEntity.gotToApplicationId(
                 handleGoTo: widget.handleGoTo,
-                applicationId: applicationEntityLoop.id)),
+                applicationId: applicationEntityLoop.id,
+                title: applicationEntityLoop.name)),
         DataCell(Text(applicationEntityLoop.name),
             onTap: () => NavigationEntity.gotToApplicationId(
                 handleGoTo: widget.handleGoTo,
-                applicationId: applicationEntityLoop.id)),
+                applicationId: applicationEntityLoop.id,
+                title: applicationEntityLoop.name)),
         DataCell(Text(applicationEntityLoop.summary),
             onTap: () => NavigationEntity.gotToApplicationId(
                 handleGoTo: widget.handleGoTo,
-                applicationId: applicationEntityLoop.id)),
+                applicationId: applicationEntityLoop.id,
+                title: applicationEntityLoop.name)),
       ]));
     }
     setState(

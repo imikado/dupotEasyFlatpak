@@ -1,10 +1,13 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/new_inteface_with_drawer_and_animation.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_content_and_subcontent.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/bundle_subview.dart';
@@ -69,6 +72,8 @@ class ApplicationState extends State<Application> {
 
   bool stateMenuEnabled = true;
 
+  String stateTitle = '';
+
   final FocusNode _focusNode = FocusNode();
 
   final alphanumeric = RegExp(r'^[a-zA-Z0-9]{1}$');
@@ -117,6 +122,8 @@ class ApplicationState extends State<Application> {
         pageSelected: statePage,
       );
     } else {
+      if (stateTitle.isEmpty) stateTitle = LocalizationApi().tr('Home');
+
       return KeyboardListener(
           focusNode: _focusNode,
           autofocus: true,
@@ -138,15 +145,26 @@ class ApplicationState extends State<Application> {
                   search: stateSearched.substring(0, stateSearched.length - 1));
             }
           },
-          child: SideMenuWithContentAndSubContentLayout(
-            menu: getSideMenuView(),
-            content: getContentView(statePage, isMain),
-            subContent: getSubContentView(hasSubContent),
-            hasSubContent: hasSubContent,
-            hasPrevious: stateHasPrevious,
-            handleGoToPrevious: goToPrevious,
-            pageSelected: statePage,
-          ));
+          child: UserSettingsEntity().isWindowManagerNewInterface()
+              ? NewInterfaceWithDrawerAndAnimation(
+                  title: stateTitle,
+                  menu: getSideMenuView(),
+                  content: getContentView(statePage, isMain),
+                  subContent: getSubContentView(hasSubContent),
+                  hasSubContent: hasSubContent,
+                  hasPrevious: stateHasPrevious,
+                  handleGoToPrevious: goToPrevious,
+                  pageSelected: statePage,
+                )
+              : SideMenuWithContentAndSubContentLayout(
+                  menu: getSideMenuView(),
+                  content: getContentView(statePage, isMain),
+                  subContent: getSubContentView(hasSubContent),
+                  hasSubContent: hasSubContent,
+                  hasPrevious: stateHasPrevious,
+                  handleGoToPrevious: goToPrevious,
+                  pageSelected: statePage,
+                ));
     }
   }
 
@@ -296,7 +314,7 @@ class ApplicationState extends State<Application> {
       return InstallSubview(
         applicationId: applicationId,
         handleGoToApplication: () => NavigationEntity.gotToApplicationId(
-            handleGoTo: goTo, applicationId: applicationId),
+            handleGoTo: goTo, applicationId: applicationId, title: ''),
         handleDisableSideMenu: disableSideMenu,
         handleEnableSideMenu: enableSideMenu,
         installScope:
@@ -310,7 +328,7 @@ class ApplicationState extends State<Application> {
       return InstallWithRecipeSubview(
         applicationId: applicationId,
         handleGoToApplication: () => NavigationEntity.gotToApplicationId(
-            handleGoTo: goTo, applicationId: applicationId),
+            handleGoTo: goTo, applicationId: applicationId, title: ''),
         handleDisableSideMenu: disableSideMenu,
         handleEnableSideMenu: enableSideMenu,
         installScope:
@@ -328,7 +346,7 @@ class ApplicationState extends State<Application> {
       return UninstallSubview(
           applicationId: applicationId,
           handleGoToApplication: () => NavigationEntity.gotToApplicationId(
-              handleGoTo: goTo, applicationId: applicationId),
+              handleGoTo: goTo, applicationId: applicationId, title: ''),
           willDeleteAppData: willDeleteAppData,
           handleDisableSideMenu: disableSideMenu,
           handleEnableSideMenu: enableSideMenu,
@@ -340,7 +358,7 @@ class ApplicationState extends State<Application> {
       return OverrideSubview(
           applicationId: applicationId,
           handleGoToApplication: () => NavigationEntity.gotToApplicationId(
-              handleGoTo: goTo, applicationId: applicationId));
+              handleGoTo: goTo, applicationId: applicationId, title: ''));
     } else if (subPageToLoad ==
         NavigationEntity.argumentSubPageUpdateAvailableProcessing) {
       List<String> applicationIdSelectedList =
@@ -562,6 +580,12 @@ class ApplicationState extends State<Application> {
       statePage = page;
       stateArgumentMap = argumentMap;
       stateBundleIdLighted = bundleIdLighted;
+      if (NavigationEntity.hasArgumentTitle(argumentMap) &&
+          NavigationEntity.extractArgumentTitle(argumentMap)
+              .toString()
+              .isNotEmpty) {
+        stateTitle = NavigationEntity.extractArgumentTitle(argumentMap);
+      }
     });
   }
 }

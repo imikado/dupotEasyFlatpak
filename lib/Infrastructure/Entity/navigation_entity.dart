@@ -1,3 +1,5 @@
+import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
+
 class NavigationEntity {
   static const String pageLoading = 'loading';
   static const String pageHome = 'home';
@@ -45,12 +47,16 @@ class NavigationEntity {
 
   static const String argumentInstallScope = 'installScope';
 
+  static const String argumentTitle = 'title';
+
   static goToCart({required Function handleGoTo}) {
     handleGoTo(page: pageCart, argumentMap: {'': ''});
   }
 
   static goToBundles({required Function handleGoTo}) {
-    handleGoTo(page: pageBundles, argumentMap: {'': ''});
+    handleGoTo(
+        page: pageBundles,
+        argumentMap: {'': '', argumentTitle: LocalizationApi().tr('Bundles')});
   }
 
   static goToBundleDetail(
@@ -80,31 +86,48 @@ class NavigationEntity {
   }
 
   static goToHome({required Function handleGoTo}) {
-    handleGoTo(page: pageHome, argumentMap: {'': ''});
+    handleGoTo(
+        page: pageHome,
+        argumentMap: {'': '', argumentTitle: LocalizationApi().tr('Home')});
   }
 
   static goToSearch({required Function handleGoTo, required String search}) {
-    handleGoTo(page: pageSearch, argumentMap: {argumentSearch: search});
+    handleGoTo(page: pageSearch, argumentMap: {
+      argumentSearch: search,
+      argumentTitle: LocalizationApi().tr('Search')
+    });
   }
 
   static goToAbout({required Function handleGoTo}) {
-    handleGoTo(page: pageAbout, argumentMap: {'': ''});
+    handleGoTo(
+        page: pageAbout,
+        argumentMap: {'': '', argumentTitle: LocalizationApi().tr('About')});
   }
 
   static goToUpdatesAvailables({required Function handleGoTo}) {
-    handleGoTo(page: pageUpdateAvailables, argumentMap: {'': ''});
+    handleGoTo(
+        page: pageUpdateAvailables,
+        argumentMap: {'': '', argumentTitle: LocalizationApi().tr('Updates')});
   }
 
   static goToInstalledApplications({required Function handleGoTo}) {
-    handleGoTo(page: pageInstalledApplication, argumentMap: {'': ''});
+    handleGoTo(page: pageInstalledApplication, argumentMap: {
+      '': '',
+      argumentTitle: LocalizationApi().tr('InstalledApps')
+    });
   }
 
   static goToSettings({required Function handleGoTo}) {
-    handleGoTo(page: pageUserSettings, argumentMap: {'': ''});
+    handleGoTo(
+        page: pageUserSettings,
+        argumentMap: {'': '', argumentTitle: LocalizationApi().tr('Settings')});
   }
 
   static goToMore({required Function handleGoTo}) {
-    handleGoTo(page: pageMore, argumentMap: {'': ''});
+    handleGoTo(page: pageMore, argumentMap: {
+      '': '',
+      argumentTitle: LocalizationApi().tr('More_actions')
+    });
   }
 
   static goToMoreExport({required Function handleGoTo}) {
@@ -146,6 +169,14 @@ class NavigationEntity {
     return argumentMap.containsKey(argumentBundleId);
   }
 
+  static hasArgumentTitle(Map<String, String> argumentMap) {
+    return argumentMap.containsKey(argumentTitle);
+  }
+
+  static extractArgumentTitle(Map<String, String> argumentMap) {
+    return argumentMap[argumentTitle];
+  }
+
   static extractArgumentSearch(Map<String, String> argumentMap) {
     return argumentMap[argumentSearch];
   }
@@ -155,16 +186,27 @@ class NavigationEntity {
   }
 
   static gotToApplicationId(
-      {required Function handleGoTo, required String applicationId}) {
-    handleGoTo(
-        page: pageApplication,
-        argumentMap: {argumentApplicationId: applicationId});
+      {required Function handleGoTo,
+      required String applicationId,
+      required String title}) {
+    handleGoTo(page: pageApplication, argumentMap: {
+      argumentApplicationId: applicationId,
+      argumentTitle: title
+    });
   }
 
-  static gotToCategoryId(
-      {required Function handleGoTo, required String categoryId}) {
-    handleGoTo(
-        page: pageCategory, argumentMap: {argumentCategoryId: categoryId});
+  static tr(String label) {
+    return LocalizationApi().tr(label);
+  }
+
+  static gotToCategoryId({
+    required Function handleGoTo,
+    required String categoryId,
+  }) {
+    handleGoTo(page: pageCategory, argumentMap: {
+      argumentCategoryId: categoryId,
+      argumentTitle: LocalizationApi().tr(categoryId)
+    });
   }
 
   static String getFlatpakScope(bool installUserScope) {

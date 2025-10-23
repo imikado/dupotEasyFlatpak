@@ -109,7 +109,9 @@ class SideMenuWithContentAndSubContentLayoutState
             actions: AdwActions().windowManager,
             start: [],
             body: body)
-        : Scaffold(body: body);
+        : Scaffold(
+            body: body,
+          );
   }
 }
 
