@@ -153,6 +153,24 @@ class ApplicationRepository {
             lastReleaseTimestamp: lastReleaseTimestamp),
     ];
 
+    if (rowList.isEmpty) {
+      return ApplicationEntity(
+          id: id,
+          name: id,
+          summary: 'Summary',
+          httpIcon: '',
+          categoryIdList: [],
+          description: 'local .flatpak',
+          lastUpdate: 0,
+          metadataObj: {},
+          releaseObjList: [],
+          urlObj: {},
+          projectLicense: '',
+          developer_name: 'unknown',
+          screenshotObjList: [],
+          lastReleaseTimestamp: 0);
+    }
+
     return rowList[0];
   }
 
@@ -187,37 +205,69 @@ class ApplicationRepository {
     }
 
     // Query the table for all the dogs.
-    final List<Map<String, Object?>> ApplicationEntityList = await db.rawQuery(
+    final List<
+        Map<String,
+            Object?>> rawApplicationEntityList = await db.rawQuery(
         '''SELECT distinct $constTableApplication.id,$constTableApplication.name,$constTableApplication.summary,$constTableApplication.icon,$constTableApplication.lastUpdate,$constTableApplication.lastReleaseTimestamp from $constTableApplication   
         where LOWER(id) in (${whereApplicationIdStringList.join(',')}) ORDER by name asc''',
         []);
 
-    // Convert the list of each dog's fields into a list of `Dog` objects.
-    return [
-      for (final {
-            'id': id as String,
-            'name': name as String,
-            'summary': summary as String,
-            'icon': icon as String,
-            'lastUpdate': lastUpdate as int,
-            'lastReleaseTimestamp': lastReleaseTimestamp as int
-          } in ApplicationEntityList)
-        ApplicationEntity(
-            id: id,
-            name: name,
-            summary: summary,
-            httpIcon: icon,
+    List<ApplicationEntity> applicationEntityList = [];
+
+    for (final {
+          'id': id as String,
+          'name': name as String,
+          'summary': summary as String,
+          'icon': icon as String,
+          'lastUpdate': lastUpdate as int,
+          'lastReleaseTimestamp': lastReleaseTimestamp as int
+        } in rawApplicationEntityList) {
+      applicationIdList.remove(id);
+      applicationIdList.remove(id.toLowerCase());
+
+      applicationEntityList.add(ApplicationEntity(
+          id: id,
+          name: name,
+          summary: summary,
+          httpIcon: icon,
+          categoryIdList: [],
+          description: '',
+          lastUpdate: lastUpdate,
+          metadataObj: {},
+          releaseObjList: [],
+          urlObj: {},
+          projectLicense: '',
+          developer_name: '',
+          screenshotObjList: [],
+          lastReleaseTimestamp: lastReleaseTimestamp));
+    }
+
+    for (String idLoop in applicationIdList) {
+      if (!idLoop.startsWith('org.freedesktop') &&
+          !idLoop.startsWith('org.winehq.wine.') &&
+          !idLoop.startsWith('org.gtk.gtk3theme') &&
+          !idLoop.startsWith('org.gnome.sdk') &&
+          idLoop.isNotEmpty &&
+          !idLoop.contains('.platform')) {
+        applicationEntityList.add(ApplicationEntity(
+            id: idLoop,
+            name: idLoop,
+            summary: 'local installation',
+            httpIcon: '',
             categoryIdList: [],
             description: '',
-            lastUpdate: lastUpdate,
+            lastUpdate: 0,
             metadataObj: {},
             releaseObjList: [],
             urlObj: {},
             projectLicense: '',
             developer_name: '',
             screenshotObjList: [],
-            lastReleaseTimestamp: lastReleaseTimestamp),
-    ];
+            lastReleaseTimestamp: 0));
+      }
+    }
+
+    return applicationEntityList;
   }
 
   Future<List<ApplicationEntity>> findListApplicationEntityByCategory(

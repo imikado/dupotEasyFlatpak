@@ -64,11 +64,9 @@ class _BundlesViewState extends State<BundlesView> {
             ? Theme.of(context).secondaryHeaderColor
             : Theme.of(context).secondaryHeaderColor,
         child: ListTile(
-          enabled: widget.isMain,
-          onTap: () => widget.isMain
-              ? NavigationEntity.goToBundleDetail(
-                  handleGoTo: widget.handleGoTo, bundleId: bundleEntity.name)
-              : null,
+          // enabled: widget.isMain,
+          onTap: () => NavigationEntity.goToBundleDetail(
+              handleGoTo: widget.handleGoTo, bundleId: bundleEntity.name),
           title: Column(
             children: [
               Row(

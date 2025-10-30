@@ -83,6 +83,119 @@ class _InstallSubviewState extends State<UninstallSubview> {
       });
 
       process.exitCode.then((exitCode) async {
+        if (stateInstallationOutput.contains('No installed refs')) {
+          await uninInstallSystem();
+          return;
+        }
+
+        LoggerApi().info('Exit code: $exitCode');
+        CommandApi().loadApplicationInstalledList();
+
+        await widget.handleEnableSideMenu();
+
+        setState(() {
+          stateIsInstalling = false;
+        });
+      }).catchError((e) {
+        LoggerApi().error('Error starting process: $e');
+      });
+    }).catchError((e) {
+      LoggerApi().error('Error starting process: $e');
+    });
+  }
+
+  Future<void> uninInstallSystem() async {
+    await widget.handleDisableSideMenu();
+
+    applicationIdSelected = widget.applicationId;
+
+    CommandApi command = CommandApi();
+
+    String commandBin = 'flatpak';
+    List<String> commandArgList = [
+      'uninstall',
+      '-y',
+    ];
+    if (widget.willDeleteAppData) {
+      commandArgList.add('--delete-data');
+    }
+    commandArgList.add(applicationIdSelected);
+
+    print(commandArgList);
+
+    Process.start(command.getCommand(commandBin),
+            command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
+        .then((Process process) {
+      process.stdout.transform(utf8.decoder).listen((data) {
+        LoggerApi().info('STDOUT: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.stderr.transform(utf8.decoder).listen((data) {
+        LoggerApi().warning('STDERR: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.exitCode.then((exitCode) async {
+        if (stateInstallationOutput.contains('No installed refs')) {
+          await uninInstallUser();
+          return;
+        }
+
+        LoggerApi().info('Exit code: $exitCode');
+        CommandApi().loadApplicationInstalledList();
+
+        await widget.handleEnableSideMenu();
+
+        setState(() {
+          stateIsInstalling = false;
+        });
+      }).catchError((e) {
+        LoggerApi().error('Error starting process: $e');
+      });
+    }).catchError((e) {
+      LoggerApi().error('Error starting process: $e');
+    });
+  }
+
+  Future<void> uninInstallUser() async {
+    await widget.handleDisableSideMenu();
+
+    applicationIdSelected = widget.applicationId;
+
+    CommandApi command = CommandApi();
+
+    String commandBin = 'flatpak';
+    List<String> commandArgList = ['uninstall', '-y', '--user'];
+    if (widget.willDeleteAppData) {
+      commandArgList.add('--delete-data');
+    }
+    commandArgList.add(applicationIdSelected);
+
+    print(commandArgList);
+
+    Process.start(command.getCommand(commandBin),
+            command.getFlatpakSpawnArgumentList(commandBin, commandArgList))
+        .then((Process process) {
+      process.stdout.transform(utf8.decoder).listen((data) {
+        LoggerApi().info('STDOUT: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.stderr.transform(utf8.decoder).listen((data) {
+        LoggerApi().warning('STDERR: $data');
+        setState(() {
+          stateInstallationOutput = data;
+        });
+      });
+
+      process.exitCode.then((exitCode) async {
         LoggerApi().info('Exit code: $exitCode');
         CommandApi().loadApplicationInstalledList();
 

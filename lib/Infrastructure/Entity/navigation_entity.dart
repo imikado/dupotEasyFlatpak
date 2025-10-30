@@ -1,3 +1,5 @@
+import 'package:path/path.dart' as p;
+
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 
 class NavigationEntity {
@@ -16,6 +18,13 @@ class NavigationEntity {
   static const String pageAbout = 'about';
   static const String pageCart = 'cart';
 
+  static const String pageInstallFlatpakFile = 'installFlatpakFile';
+
+  static const String pageLoadingInstallFlatpakFile =
+      'loadingInstallFlatpakFile';
+
+  static const String argumentFlatpakFile = 'flatpakFile';
+
   static const String argumentApplicationId = 'applicationId';
   static const String argumentCategoryId = 'categoryId';
   static const String argumentBundleId = 'bundleId';
@@ -23,6 +32,9 @@ class NavigationEntity {
   static const String argumentSubPage = 'subPage';
 
   static const String argumentSubPageInstall = 'application_install';
+
+  static const String argumentSubPageInstallFlatpakFile = 'flatpakfile_install';
+
   static const String argumentSubPageInstallWithRecipe =
       'application_installWithRecipe';
   static const String argumentSubPageUninstall = 'application_uninstall';
@@ -185,6 +197,10 @@ class NavigationEntity {
     return argumentMap[argumentInstallScope];
   }
 
+  static extractArgumentFlatpakFile(Map<String, String> argumentMap) {
+    return argumentMap[argumentFlatpakFile];
+  }
+
   static gotToApplicationId(
       {required Function handleGoTo,
       required String applicationId,
@@ -224,6 +240,29 @@ class NavigationEntity {
     handleGoTo(page: pageApplication, argumentMap: {
       argumentApplicationId: applicationId,
       argumentSubPage: argumentSubPageInstall,
+      argumentInstallScope: getFlatpakScope(installUserScope)
+    });
+  }
+
+  static goToAskInstallFlatpakFileToInstall({
+    required Function handleGoTo,
+    required String localApplicationFile,
+  }) {
+    handleGoTo(page: pageInstallFlatpakFile, argumentMap: {
+      localApplicationFile: localApplicationFile,
+      argumentTitle: p.basename(localApplicationFile)
+    });
+  }
+
+  static goToFlatpakFileInstall(
+      {required Function handleGoTo,
+      required String localApplicationFile,
+      required String applicationId,
+      required bool installUserScope}) {
+    handleGoTo(page: pageInstallFlatpakFile, argumentMap: {
+      argumentFlatpakFile: localApplicationFile,
+      argumentApplicationId: applicationId,
+      argumentSubPage: argumentSubPageInstallFlatpakFile,
       argumentInstallScope: getFlatpakScope(installUserScope)
     });
   }

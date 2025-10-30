@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class OnlyContentLayout extends StatefulWidget {
   final Widget content;
   final Function handleGoTo;
+  final Widget menu;
 
   const OnlyContentLayout({
     super.key,
     required this.handleGoTo,
     required this.content,
+    required this.menu,
   });
 
   @override

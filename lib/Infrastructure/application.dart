@@ -1,20 +1,18 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/new_inteface_with_drawer_and_animation.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_content_and_subcontent.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/bundle_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_install_all_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_override_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/export_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/import_subview.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_flatpakfile_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_with_recipe_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/override_subview.dart';
@@ -28,6 +26,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/bundles_view.dart'
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/cart_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/category_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/home_view.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/install_flatpak_file_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/installed_applications_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/loading_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/moreactions_view.dart';
@@ -35,18 +34,24 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/search_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/side_menu_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/updates_availables_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/user_settings_view.dart';
+import 'package:dupot_easy_flatpak/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Application extends StatefulWidget {
-  const Application({super.key});
+  final OpenFilePayload? initialOpenPayload;
+  const Application({super.key, this.initialOpenPayload});
 
   @override
   ApplicationState createState() => ApplicationState();
 }
 
 class ApplicationState extends State<Application> {
+  // Use a unique key that never changes
+  final GlobalKey<SideMenuViewState> _sideMenuKey =
+      GlobalKey<SideMenuViewState>(debugLabel: 'SideMenuViewKey');
+
   String statePage = NavigationEntity.pageLoading;
   Map<String, String> stateArgumentMap = {};
   String stateSearched = '';
@@ -74,15 +79,52 @@ class ApplicationState extends State<Application> {
 
   String stateTitle = '';
 
+  String stateFlatpakToInstall = '';
+
   final FocusNode _focusNode = FocusNode();
 
   final alphanumeric = RegExp(r'^[a-zA-Z0-9]{1}$');
 
+  bool _handledInitialPayload = false;
+
   @override
   void initState() {
-    processInit();
-
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (_handledInitialPayload || !mounted) return;
+      _handledInitialPayload = true;
+
+      final payload = widget.initialOpenPayload;
+      if (payload != null) {
+        await _handleOpenPayload(payload);
+      }
+    });
+  }
+
+  Future<void> _handleOpenPayload(OpenFilePayload payload) async {
+    try {
+      switch (payload.type) {
+        case OpenPayloadType.flatpakBundle:
+          setState(() {
+            stateFlatpakToInstall = payload.value;
+            statePage = NavigationEntity.pageLoadingInstallFlatpakFile;
+          });
+          break;
+        case OpenPayloadType.flatpakRef:
+          LoggerApi().error('Unexpected format: flatpakref');
+          break;
+        case OpenPayloadType.flatpakRepo:
+          LoggerApi().error('Unexpected format: flatpakrepo');
+          break;
+        case OpenPayloadType.urlUnknown:
+          LoggerApi().error('Unexpected format: urlUnknown');
+          break;
+      }
+
+      LoggerApi().error('Unexpected format:');
+    } catch (e) {
+      LoggerApi().error('Open payload error: $e');
+    }
   }
 
   void processInit() async {
@@ -105,67 +147,85 @@ class ApplicationState extends State<Application> {
       isMain = false;
     }
 
-    if (statePage == NavigationEntity.pageLoading) {
-      return OnlyContentLayout(
-          handleGoTo: goTo,
-          content: LoadingView(handle: () {
-            goToPrevious();
-          }));
-    } else if (statePage == NavigationEntity.pageSearch) {
-      return SideMenuWithContentAndSubContentLayout(
-        menu: getSideMenuView(),
-        content: getContentView(statePage, isMain),
-        subContent: getSubContentView(hasSubContent),
-        hasSubContent: hasSubContent,
-        hasPrevious: stateHasPrevious,
-        handleGoToPrevious: goToPrevious,
-        pageSelected: statePage,
-      );
-    } else {
-      if (stateTitle.isEmpty) stateTitle = LocalizationApi().tr('Home');
+    Widget content;
 
-      return KeyboardListener(
-          focusNode: _focusNode,
-          autofocus: true,
-          onKeyEvent: (event) {
-            if (getSubPage() == '' &&
-                event is KeyDownEvent &&
-                event.logicalKey.keyLabel.toString().length == 1 &&
-                alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {
-              NavigationEntity.goToSearch(
-                  handleGoTo: goTo,
-                  search: stateSearched +
-                      event.logicalKey.keyLabel.toString().toLowerCase());
-            } else if (getSubPage() == '' &&
-                event is KeyDownEvent &&
-                stateSearched.isNotEmpty &&
-                event.logicalKey.keyLabel == "Backspace") {
-              NavigationEntity.goToSearch(
-                  handleGoTo: goTo,
-                  search: stateSearched.substring(0, stateSearched.length - 1));
-            }
-          },
-          child: UserSettingsEntity().isWindowManagerNewInterface()
-              ? NewInterfaceWithDrawerAndAnimation(
-                  title: stateTitle,
-                  menu: getSideMenuView(),
-                  content: getContentView(statePage, isMain),
-                  subContent: getSubContentView(hasSubContent),
-                  hasSubContent: hasSubContent,
-                  hasPrevious: stateHasPrevious,
-                  handleGoToPrevious: goToPrevious,
-                  pageSelected: statePage,
-                )
-              : SideMenuWithContentAndSubContentLayout(
-                  menu: getSideMenuView(),
-                  content: getContentView(statePage, isMain),
-                  subContent: getSubContentView(hasSubContent),
-                  hasSubContent: hasSubContent,
-                  hasPrevious: stateHasPrevious,
-                  handleGoToPrevious: goToPrevious,
-                  pageSelected: statePage,
-                ));
+    if (statePage == NavigationEntity.pageLoadingInstallFlatpakFile) {
+      content = LoadingView(handle: () {
+        goToInstallFlatpakFile();
+      });
+    } else if (statePage == NavigationEntity.pageLoading) {
+      content = LoadingView(handle: () {
+        goToPrevious();
+      });
+    } else if (statePage == NavigationEntity.pageSearch) {
+      if (stateTitle.isEmpty) stateTitle = LocalizationApi().tr('Home');
+      content = getContentView(statePage, isMain);
+    } else {
+      content = getContentView(statePage, isMain);
     }
+
+    bool displaySearch = true;
+    if (UserSettingsEntity().isWindowManagerNewInterface()) {
+      displaySearch = false;
+    }
+
+    // Create menu widget with persistent key
+    final menuWidget = SideMenuView(
+      displaySearch: displaySearch,
+      key: _sideMenuKey,
+      pageSelected: statePage,
+      argumentMapSelected: stateArgumentMap,
+      handleGoTo: goTo,
+      applicationIdListInCart: stateCartApplicationIdList,
+      searched: stateSearched,
+      numberOfUpdates: CommandApi().getNumberOfUpdates(),
+      handleSetSearched: setStateSearched,
+      isActive: stateMenuEnabled,
+    );
+
+    return KeyboardListener(
+        focusNode: _focusNode,
+        autofocus: true,
+        onKeyEvent: (event) {
+          if (getSubPage() == '' &&
+              event is KeyDownEvent &&
+              event.logicalKey.keyLabel.toString().length == 1 &&
+              alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {
+            NavigationEntity.goToSearch(
+                handleGoTo: goTo,
+                search: stateSearched +
+                    event.logicalKey.keyLabel.toString().toLowerCase());
+          } else if (getSubPage() == '' &&
+              event is KeyDownEvent &&
+              stateSearched.isNotEmpty &&
+              event.logicalKey.keyLabel == "Backspace") {
+            NavigationEntity.goToSearch(
+                handleGoTo: goTo,
+                search: stateSearched.substring(0, stateSearched.length - 1));
+          }
+        },
+        child: UserSettingsEntity().isWindowManagerNewInterface()
+            ? NewInterfaceWithDrawerAndAnimation(
+                title: stateTitle,
+                menu: menuWidget,
+                searched: stateSearched,
+                content: content,
+                handleSetSearched: setStateSearched,
+                subContent: getSubContentView(hasSubContent),
+                hasSubContent: hasSubContent,
+                hasPrevious: stateHasPrevious,
+                handleGoToPrevious: goToPrevious,
+                pageSelected: statePage,
+              )
+            : SideMenuWithContentAndSubContentLayout(
+                menu: menuWidget,
+                content: content,
+                subContent: getSubContentView(hasSubContent),
+                hasSubContent: hasSubContent,
+                hasPrevious: stateHasPrevious,
+                handleGoToPrevious: goToPrevious,
+                pageSelected: statePage,
+              ));
   }
 
   void enableSideMenu() {
@@ -197,22 +257,17 @@ class ApplicationState extends State<Application> {
     });
   }
 
-  Widget getSideMenuView() {
-    return SideMenuView(
-      interfaceVersion: stateInterfaceVersion,
-      pageSelected: statePage,
-      argumentMapSelected: stateArgumentMap,
-      handleGoTo: goTo,
-      applicationIdListInCart: stateCartApplicationIdList,
-      searched: stateSearched,
-      numberOfUpdates: CommandApi().getNumberOfUpdates(),
-      handleSetSearched: setStateSearched,
-      isActive: stateMenuEnabled,
-    );
-  }
-
   Widget getContentView(String pageToLoad, bool isMain) {
-    if (pageToLoad == NavigationEntity.pageHome) {
+    if (pageToLoad == NavigationEntity.pageInstallFlatpakFile) {
+      return InstallFlatpakFileView(
+        handleGoTo: goTo,
+        localFlatpakPathToInstall: stateFlatpakToInstall,
+        isMain: (!isMain ||
+                stateArgumentMap.containsKey(NavigationEntity.argumentSubPage))
+            ? false
+            : true,
+      );
+    } else if (pageToLoad == NavigationEntity.pageHome) {
       return HomeView(handleGoTo: goTo);
     } else if (pageToLoad == NavigationEntity.pageCategory) {
       String newCategoryId =
@@ -305,7 +360,25 @@ class ApplicationState extends State<Application> {
 
     String subPageToLoad = stateArgumentMap[NavigationEntity.argumentSubPage]!;
 
-    if (subPageToLoad == NavigationEntity.argumentSubPageInstall) {
+    if (subPageToLoad == NavigationEntity.argumentSubPageInstallFlatpakFile) {
+      String flatpakFile =
+          NavigationEntity.extractArgumentFlatpakFile(stateArgumentMap);
+
+      String applicationId =
+          NavigationEntity.extractArgumentApplicationId(stateArgumentMap);
+
+      return InstallFlatpakFileSubview(
+        flatpakId: applicationId,
+        flatpakFile: flatpakFile,
+        handleGoToFlatpakFile: () =>
+            NavigationEntity.goToAskInstallFlatpakFileToInstall(
+                handleGoTo: goTo, localApplicationFile: flatpakFile),
+        installScope:
+            NavigationEntity.extractArgumentInstallScope(stateArgumentMap),
+        handleDisableSideMenu: disableSideMenu,
+        handleEnableSideMenu: enableSideMenu,
+      );
+    } else if (subPageToLoad == NavigationEntity.argumentSubPageInstall) {
       String applicationId =
           NavigationEntity.extractArgumentApplicationId(stateArgumentMap);
 
@@ -525,6 +598,11 @@ class ApplicationState extends State<Application> {
     goTo(page: statePreviousPage, argumentMap: statePreviousPArgumentMap);
   }
 
+  void goToInstallFlatpakFile() {
+    NavigationEntity.goToAskInstallFlatpakFileToInstall(
+        handleGoTo: goTo, localApplicationFile: stateFlatpakToInstall);
+  }
+
   void reload() {
     setState(() {
       stateInterfaceVersion = (stateInterfaceVersion + 1);
@@ -572,7 +650,6 @@ class ApplicationState extends State<Application> {
       NavigationEntity.pageMore,
     ].contains(page)) {
       statePreviousPage = '';
-      //statePreviousPArgumentMap = [];
       stateHasPrevious = false;
     }
 

@@ -10,29 +10,30 @@ class SideMenuView extends StatefulWidget {
   final Map<String, String> argumentMapSelected;
   final Function handleGoTo;
   final List<String> applicationIdListInCart;
-  final int interfaceVersion;
   final String searched;
   final int numberOfUpdates;
   final bool isActive;
   final Function handleSetSearched;
+  final bool displaySearch;
 
   const SideMenuView(
       {super.key,
       required this.pageSelected,
       required this.argumentMapSelected,
       required this.handleGoTo,
-      required this.interfaceVersion,
       required this.applicationIdListInCart,
       required this.searched,
       required this.numberOfUpdates,
       required this.isActive,
-      required this.handleSetSearched});
+      required this.handleSetSearched,
+      required this.displaySearch});
 
   @override
-  State<SideMenuView> createState() => _SideMenuViewState();
+  State<SideMenuView> createState() => SideMenuViewState();
 }
 
-class _SideMenuViewState extends State<SideMenuView> {
+class SideMenuViewState extends State<SideMenuView>
+    with AutomaticKeepAliveClientMixin {
   List<MenuItemEntity> stateCategoryMenuItemList = [];
   List<MenuItemEntity> stateBottomMenuItemList = [];
 
@@ -53,7 +54,11 @@ class _SideMenuViewState extends State<SideMenuView> {
   final FocusNode _searchFocusNode = FocusNode();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
+    print('initState');
     loadData(true);
 
     _searchController.text = widget.searched;
@@ -113,7 +118,8 @@ class _SideMenuViewState extends State<SideMenuView> {
 
     List<MenuItemEntity> searchMenuItemList =
         SideMenuViewModel(handleGoTo: widget.handleGoTo)
-            .getSearchMenuItemEntyList(widget.pageSelected, widget.searched);
+            .getSearchMenuItemEntyList(
+                widget.pageSelected, widget.searched, widget.displaySearch);
     setState(() {
       stateSearchMenuItemList = searchMenuItemList;
     });
@@ -134,69 +140,78 @@ class _SideMenuViewState extends State<SideMenuView> {
   }
 
   @override
+  void dispose() {
+    print('dispose SideMenuView stateId=${identityHashCode(this)}');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     themeTextStyle = ThemeTextStyle(context: context);
 
     return ListView(
       padding: const EdgeInsets.all(8),
       children: [
         if (!isActive()) const Icon(Icons.do_not_touch_rounded),
-        Card(
-            child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Row(
-                  children: [
-                    const Icon(Icons.search),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        enabled: isActive(),
-                        focusNode: _searchFocusNode,
-                        showCursor: true,
-                        autofocus: true,
-                        controller: _searchController,
-                        style: Theme.of(context).textTheme.titleSmall,
-                        decoration: InputDecoration(
-                          hintText: LocalizationApi().tr('Search...'),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 2.0),
-                          filled: true,
-                          fillColor: Colors.transparent,
-                          border: InputBorder
-                              .none, // visually similar to .collapsed()
-
-                          isDense: false,
-                          suffixIcon: _searchController.text.isNotEmpty
-                              ? IconButton(
-                                  icon: const Icon(Icons.close),
-                                  splashRadius: 16,
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    widget.handleSetSearched('');
-                                    _searchFocusNode.requestFocus();
-                                    if (mounted) {
-                                      setState(() {});
-                                    } // Refresh suffixIcon
-                                  },
-                                )
-                              : null,
-                        ),
-                        onChanged: (value) {
-                          if (mounted) {
-                            setState(() {}); // So the suffixIcon refreshes
-                          }
-                          widget.handleSetSearched(value);
-                        },
+        if (widget.displaySearch)
+          Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search),
+                      const SizedBox(
+                        width: 5,
                       ),
-                    ),
-                  ],
-                ))),
+                      Expanded(
+                        child: TextField(
+                          enabled: isActive(),
+                          focusNode: _searchFocusNode,
+                          showCursor: true,
+                          autofocus: true,
+                          controller: _searchController,
+                          style: Theme.of(context).textTheme.titleSmall,
+                          decoration: InputDecoration(
+                            hintText: LocalizationApi().tr('Search...'),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 2.0),
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            border: InputBorder
+                                .none, // visually similar to .collapsed()
+
+                            isDense: false,
+                            suffixIcon: _searchController.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.close),
+                                    splashRadius: 16,
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      widget.handleSetSearched('');
+                                      _searchFocusNode.requestFocus();
+                                      if (mounted) {
+                                        setState(() {});
+                                      } // Refresh suffixIcon
+                                    },
+                                  )
+                                : null,
+                          ),
+                          onChanged: (value) {
+                            if (mounted) {
+                              setState(() {}); // So the suffixIcon refreshes
+                            }
+                            widget.handleSetSearched(value);
+                          },
+                        ),
+                      ),
+                    ],
+                  ))),
         const SizedBox(
           height: 5,
         ),
         Column(
+          key: const PageStorageKey('SideMenuViewList'),
           children: stateCategoryMenuItemList
               .map((menuItemLoop) => getMenuLine(menuItemLoop))
               .toList(),
@@ -223,6 +238,7 @@ class _SideMenuViewState extends State<SideMenuView> {
           height: 28,
         ),
         Column(
+          key: const PageStorageKey('SideMenuViewListBottomMenu'),
           children: stateBottomMenuItemList
               .map((menuItemLoop) => getMenuLine(menuItemLoop))
               .toList(),

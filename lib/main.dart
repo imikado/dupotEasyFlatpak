@@ -19,6 +19,58 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:window_manager/window_manager.dart';
 
+enum OpenPayloadType { flatpakBundle, flatpakRef, flatpakRepo, urlUnknown }
+
+class OpenFilePayload {
+  final OpenPayloadType type;
+  final String value; // path or URL
+  OpenFilePayload(this.type, this.value);
+}
+
+OpenFilePayload? parseOpenPayload(List<String> args) {
+  // Accept both file paths and URLs. If your .desktop uses %u, URLs may arrive.
+  // Filter out flags like 'sync'
+  final candidates =
+      args.where((a) => !a.startsWith('-') && a != argSync).toList();
+  if (candidates.isEmpty) return null;
+
+  // Only handle the first item for now; you can extend to multiple later.
+  final input = candidates.first.trim();
+
+  // URL case (xdg-open may pass http/https)
+  final isUrl = input.startsWith('http://') || input.startsWith('https://');
+
+  if (isUrl) {
+    final uri = Uri.tryParse(input);
+    if (uri == null) return null;
+    // Heuristics: many .flatpakref are http(s) links
+    if (uri.path.endsWith('.flatpakref')) {
+      return OpenFilePayload(OpenPayloadType.flatpakRef, input);
+    }
+    if (uri.path.endsWith('.flatpakrepo')) {
+      return OpenFilePayload(OpenPayloadType.flatpakRepo, input);
+    }
+    if (uri.path.endsWith('.flatpak')) {
+      return OpenFilePayload(OpenPayloadType.flatpakBundle, input);
+    }
+    return OpenFilePayload(OpenPayloadType.urlUnknown, input);
+  }
+
+  // Local file path case
+  final lower = input.toLowerCase();
+  if (lower.endsWith('.flatpak')) {
+    return OpenFilePayload(OpenPayloadType.flatpakBundle, input);
+  }
+  if (lower.endsWith('.flatpakref')) {
+    return OpenFilePayload(OpenPayloadType.flatpakRef, input);
+  }
+  if (lower.endsWith('.flatpakrepo')) {
+    return OpenFilePayload(OpenPayloadType.flatpakRepo, input);
+  }
+
+  return null;
+}
+
 bool isOsDarkMode = false;
 
 const argSync = 'sync';
@@ -175,14 +227,19 @@ void main(List<String> args) async {
       await windowManager.focus();
     });
 
-    runApp(MyApp());
+    final openPayload = parseOpenPayload(args);
+
+    runApp(MyApp(initialOpenPayload: openPayload));
+
+    //runApp(MyApp());
   } on Exception catch (e) {
     LoggerApi().error('Exception: $e');
   }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final OpenFilePayload? initialOpenPayload;
+  const MyApp({super.key, this.initialOpenPayload});
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +260,7 @@ class MyApp extends StatelessWidget {
               ? AdwaitaThemeData.dark()
               : ThemeData.dark(),
           debugShowCheckedModeBanner: false,
-          home: Application(),
+          home: Application(initialOpenPayload: initialOpenPayload),
           themeMode: currentMode,
         );
       },

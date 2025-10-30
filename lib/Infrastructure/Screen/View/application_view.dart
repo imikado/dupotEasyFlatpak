@@ -161,11 +161,13 @@ class _ApplicationViewState extends State<ApplicationView> {
               children: [
                 Row(
                   children: [
-                    if (stateAppStream!.hasAppIcon())
-                      Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Image.file(File(
-                              '${UserSettingsEntity().getApplicationIconsPath()}/${stateAppStream!.getAppIcon()}'))),
+                    Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: stateAppStream!.hasAppIcon()
+                            ? Image.file(File(
+                                '${UserSettingsEntity().getApplicationIconsPath()}/${stateAppStream!.getAppIcon()}'))
+                            : Image.asset('assets/images/no-image.png',
+                                height: 50)),
                     const SizedBox(width: 20),
                     Expanded(
                       child: Column(
@@ -309,46 +311,51 @@ class _ApplicationViewState extends State<ApplicationView> {
                         ),
                       ],
                     )),
-                ListTile(
-                    title: Text(
-                  LocalizationApi().tr('Infos'),
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.headlineLarge!.color),
-                )),
-                Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text("${LocalizationApi().tr('Download_Size')}:",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            const SizedBox(width: 10),
-                            Text(stateAppStream!.getDownloadSize())
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text("${LocalizationApi().tr('Installed_Size')}:",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            const SizedBox(width: 10),
-                            Text(stateAppStream!.getInstalledSize())
-                          ],
-                        )
-                      ],
-                    )),
-                ListTile(
-                    title: Text(
-                  LocalizationApi().tr('Last_releases'),
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.headlineLarge!.color),
-                )),
+                if (stateAppStream!.getDownloadSize() != '-')
+                  ListTile(
+                      title: Text(
+                    LocalizationApi().tr('Infos'),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            Theme.of(context).textTheme.headlineLarge!.color),
+                  )),
+                if (stateAppStream!.getDownloadSize() != '-')
+                  Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text("${LocalizationApi().tr('Download_Size')}:",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 10),
+                              Text(stateAppStream!.getDownloadSize())
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text("${LocalizationApi().tr('Installed_Size')}:",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 10),
+                              Text(stateAppStream!.getInstalledSize())
+                            ],
+                          )
+                        ],
+                      )),
+                if (stateAppStream!.getReleaseObjList().isNotEmpty)
+                  ListTile(
+                      title: Text(
+                    LocalizationApi().tr('Last_releases'),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            Theme.of(context).textTheme.headlineLarge!.color),
+                  )),
                 Padding(
                     padding: const EdgeInsets.only(
                         top: 5, bottom: 5, right: 5, left: 25),
@@ -386,14 +393,16 @@ class _ApplicationViewState extends State<ApplicationView> {
                             ]);
                           }
                         }).toList())),
-                ListTile(
-                    title: Text(
-                  LocalizationApi().tr('Links'),
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.headlineLarge!.color),
-                )),
+                if (stateAppStream!.getUrlObjList().isNotEmpty)
+                  ListTile(
+                      title: Text(
+                    LocalizationApi().tr('Links'),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            Theme.of(context).textTheme.headlineLarge!.color),
+                  )),
                 Padding(
                     padding: const EdgeInsets.only(
                         top: 5, bottom: 5, right: 5, left: 10),

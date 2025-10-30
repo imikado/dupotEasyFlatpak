@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ThemeButtonStyle {
+  static const tagColorAccept = 'accept';
+  static const tagColorDeny = 'deny';
+  static const tagColorDefault = 'default';
+
+  Color colorAccept = Color.fromARGB(255, 20, 107, 7);
+  Color colorDeny = Color.fromARGB(255, 129, 21, 7);
+
+  Color darkColorAccept = Color.fromARGB(255, 18, 107, 4);
+  Color darkColorDeny = Color.fromARGB(255, 131, 21, 6);
+
   BuildContext context;
 
   ThemeButtonStyle({required this.context});
@@ -42,10 +52,11 @@ class ThemeButtonStyle {
     );
   }
 
-  ButtonStyle getButtonStyle() {
+  ButtonStyle getButtonStyle({String tagColor = tagColorDefault}) {
     if (Theme.of(context).brightness == Brightness.dark) {
       return ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).canvasColor,
+          backgroundColor: getDarkAcceptColorOr(
+              tagColor, Theme.of(context).secondaryHeaderColor),
           padding: const EdgeInsets.all(16),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -53,11 +64,34 @@ class ThemeButtonStyle {
     }
 
     return ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor:
+            getAcceptColorOr(tagColor, Theme.of(context).primaryColorDark),
         padding: const EdgeInsets.all(16),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         textStyle: const TextStyle(fontSize: 14, color: Colors.white));
+  }
+
+  Color getAcceptColorOr(String tagColor, Color defaultColor) {
+    if (tagColor == tagColorDefault) {
+      return defaultColor;
+    } else if (tagColor == tagColorAccept) {
+      return colorAccept;
+    } else if (tagColor == tagColorDeny) {
+      return colorDeny;
+    }
+    throw Exception('unexpected tagColor');
+  }
+
+  Color getDarkAcceptColorOr(String tagColor, Color defaultColor) {
+    if (tagColor == tagColorDefault) {
+      return defaultColor;
+    } else if (tagColor == tagColorAccept) {
+      return darkColorAccept;
+    } else if (tagColor == tagColorDeny) {
+      return darkColorDeny;
+    }
+    throw Exception('unexpected tagColor');
   }
 
   ButtonStyle getDialogButtonStyle() {

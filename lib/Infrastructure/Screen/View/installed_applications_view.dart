@@ -44,7 +44,7 @@ class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
     CommandApi commands = CommandApi();
 
     List<String> installedApplicationIdList =
-        await commands.getInstalledApplicationList();
+        await commands.getRawInstalledApplicationList();
 
     ApplicationRepository applicationRepository = ApplicationRepository();
 

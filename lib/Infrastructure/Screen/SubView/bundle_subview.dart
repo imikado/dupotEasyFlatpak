@@ -35,37 +35,15 @@ class _BundleSubviewState extends State<BundleSubview> {
   Map<String, bool> stateCheckboxList = {};
   List<ApplicationEntity> stateApplicationEntityList = [];
 
+  List<String> stateApplicationIdList = [];
+
   final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
 
-    loadData().then((BundleEntity bundleEntity) {
-      Map<String, bool> checkboxList = {};
-
-      CommandApi commandApi = CommandApi();
-
-      commandApi
-          .getInstalledApplicationList()
-          .then((List<String> installedApplicationIdList) {
-        for (String applicationId in bundleEntity.applicationList) {
-          checkboxList[applicationId] = !installedApplicationIdList
-                  .contains(applicationId.toLowerCase()) &&
-              !widget.applicationIdListInCart.contains(applicationId);
-        }
-
-        ApplicationRepository()
-            .findListApplicationEntityByIdList(bundleEntity.applicationList)
-            .then((List<ApplicationEntity> applicationEntityList) {
-          setState(() {
-            stateBundleEntity = bundleEntity;
-            stateCheckboxList = checkboxList;
-            stateApplicationEntityList = applicationEntityList;
-          });
-        });
-      });
-    });
+    loadData();
   }
 
   @override
@@ -76,22 +54,44 @@ class _BundleSubviewState extends State<BundleSubview> {
     }
   }
 
-  Future<BundleEntity> loadData() async {
+  Future<void> loadData() async {
     List<BundleEntity> bundleEntityList =
         await BundleApi().getBundleEntityList();
 
     for (BundleEntity bundleEntityLoop in bundleEntityList) {
       if (bundleEntityLoop.name == widget.bundleId) {
-        return bundleEntityLoop;
+        processBundle(bundleEntityLoop);
       }
     }
+  }
 
-    throw Exception('Unable to find bundleEntity');
+  void processBundle(BundleEntity bundleEntity) async {
+    Map<String, bool> checkboxList = {};
+
+    CommandApi commandApi = CommandApi();
+
+    List<String> installedApplicationIdList =
+        await commandApi.getInstalledApplicationList();
+
+    for (String applicationId in bundleEntity.applicationList) {
+      checkboxList[applicationId] =
+          (!installedApplicationIdList.contains(applicationId.toLowerCase()) &&
+              !widget.applicationIdListInCart.contains(applicationId));
+    }
+
+    List<ApplicationEntity> applicationEntityList =
+        await ApplicationRepository()
+            .findListApplicationEntityByIdList(bundleEntity.applicationList);
+
+    setState(() {
+      stateApplicationEntityList = applicationEntityList;
+      stateCheckboxList = checkboxList;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return stateBundleEntity == null
+    return stateApplicationEntityList.isEmpty
         ? const LinearProgressIndicator()
         : Scrollbar(
             interactive: false,
@@ -117,9 +117,10 @@ class _BundleSubviewState extends State<BundleSubview> {
                               padding: const EdgeInsets.all(20),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: stateBundleEntity!.applicationList
-                                      .map((String applicationIdLoop) =>
-                                          getLine(applicationIdLoop))
+                                  children: stateApplicationEntityList
+                                      .map(
+                                          (ApplicationEntity applicationLoop) =>
+                                              getLine(applicationLoop))
                                       .toList()))))
                 ],
               )
@@ -139,9 +140,8 @@ class _BundleSubviewState extends State<BundleSubview> {
     return null;
   }
 
-  Widget getLine(String applicationId) {
-    ApplicationEntity? applicationEntityFound =
-        getApplicationEntity(applicationId);
+  Widget getLine(ApplicationEntity applicationEntity) {
+    String applicationId = applicationEntity.id;
 
     return Card(
         color: Theme.of(context).secondaryHeaderColor,
@@ -163,13 +163,12 @@ class _BundleSubviewState extends State<BundleSubview> {
             children: [
               Row(
                 children: [
-                  applicationEntityFound == null ||
-                          !applicationEntityFound.hasAppIcon()
+                  !applicationEntity.hasAppIcon()
                       ? Image.asset('assets/images/no-image.png', height: 60)
                       : Image.file(
                           height: 60,
                           File(
-                              '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntityFound.getAppIcon()}')),
+                              '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntity.getAppIcon()}')),
                   const SizedBox(width: 20),
                   Expanded(
                     child: Column(
@@ -177,9 +176,7 @@ class _BundleSubviewState extends State<BundleSubview> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          applicationEntityFound != null
-                              ? applicationEntityFound.getName()
-                              : applicationId,
+                          applicationEntity.getName(),
                           style: TextStyle(
                               fontSize: 20,
                               color: Theme.of(context)
@@ -187,10 +184,7 @@ class _BundleSubviewState extends State<BundleSubview> {
                                   .headlineLarge!
                                   .color),
                         ),
-                        Text(
-                            applicationEntityFound != null
-                                ? applicationEntityFound.getSummary()
-                                : '',
+                        Text(applicationEntity.getSummary(),
                             style: TextStyle(fontSize: 14)),
                       ],
                     ),

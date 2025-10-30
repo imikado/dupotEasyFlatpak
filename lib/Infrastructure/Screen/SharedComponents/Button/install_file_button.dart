@@ -6,22 +6,22 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
 import 'package:flutter/material.dart';
 
-class InstallButton extends StatefulWidget {
-  final ApplicationEntity applicationEntity;
+class InstallFileButton extends StatefulWidget {
+  final String appId;
   final Function handle;
   final bool isActive;
 
-  const InstallButton(
+  const InstallFileButton(
       {super.key,
-      required this.applicationEntity,
+      required this.appId,
       required this.handle,
       required this.isActive});
 
   @override
-  State<InstallButton> createState() => _InstallButtonState();
+  State<InstallFileButton> createState() => _InstallFileButtonState();
 }
 
-class _InstallButtonState extends State<InstallButton> {
+class _InstallFileButtonState extends State<InstallFileButton> {
   bool loaded = false;
 
   @override
@@ -57,7 +57,8 @@ class _InstallButtonState extends State<InstallButton> {
                           DialogConfirmButton(onPressedFunction: () {
                             Navigator.of(context).pop();
 
-                            widget.handle(stateUserInstallationScopeEnabled);
+                            widget.handle(stateUserInstallationScopeEnabled,
+                                widget.appId);
                           })
                         ],
                         title: Text(LocalizationApi().tr('confirmation_title')),
@@ -69,7 +70,7 @@ class _InstallButtonState extends State<InstallButton> {
                                 Row(
                                   children: [
                                     Text(
-                                      '${LocalizationApi().tr('do_you_confirm_installation_of')} ${widget.applicationEntity.getName()} ?',
+                                      '${LocalizationApi().tr('do_you_confirm_installation_of')} ${widget.appId} ?',
                                     ),
                                   ],
                                 ),

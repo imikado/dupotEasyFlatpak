@@ -1,7 +1,5 @@
-import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 import 'package:flutter/material.dart';
 
 class MoreActionsView extends StatefulWidget {

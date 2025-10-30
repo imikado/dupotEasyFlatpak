@@ -130,6 +130,7 @@
   "parameter_Window_manager": "Decoration de fenêtre",
   "parameter_windowManagerLibadwaita": "Gtk Adwaita",
   "parameter_windowManagerNative": "Flutter natif",
+  "parameter_windowManagerNewInterface": "Nouvelle Interface Flutter",
   "Update_database": "Mise à jour Flathub",
   "Update_database_from_flathubapi": "Flathub sync",
   "Start_update_application_database": "Démarrage mise à jour de la base de données d'applications",
@@ -145,5 +146,6 @@
   "Use_flathub_search_api": "Utiliser la recherche api ",
   "home_trending": "Applications tendance",
   "home_updated": "Applications récemment mises à jour",
-  "home_popular": "Applications populaires"
+  "home_popular": "Applications populaires",
+  "installFlatpakWithCaution": "Installez ce fichier flatpak avec prudence"
 }

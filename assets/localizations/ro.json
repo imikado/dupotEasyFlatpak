@@ -130,6 +130,7 @@
     "parameter_Window_manager": "Tema ferestrei",
     "parameter_windowManagerLibadwaita": "Gtk Adwaita",
     "parameter_windowManagerNative": "Native Flutter",
+    "parameter_windowManagerNewInterface": "Noua Interfață Flutter",
     "Update_database": "Sincronizare Flathub",
     "Update_database_from_flathubapi": "Sincronizare Flathub",
     "Start_update_application_database": "Porniți actualizarea bazei de date a aplicației",
@@ -145,5 +146,6 @@
     "Use_flathub_search_api": "Folosește API de căutare Flathub",
     "home_trending": "Aplicații în tendințe",
     "home_updated": "Aplicații actualizate recent",
-    "home_popular": "Aplicații populare"
+    "home_popular": "Aplicații populare",
+    "installFlatpakWithCaution": "Instalează acest fișier flatpak cu prudență"
 }

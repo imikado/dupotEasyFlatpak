@@ -123,7 +123,10 @@ class _UpdateAvailableProcessingSubviewState
             height: 10,
           ),
           if (!stateIsInstalling)
-            Center(child: Text(LocalizationApi().tr('update_finished')))
+            Center(
+                child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Text(LocalizationApi().tr('update_finished'))))
         ],
       ),
     );

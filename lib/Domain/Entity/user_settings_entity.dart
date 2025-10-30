@@ -45,7 +45,7 @@ class UserSettingsEntity {
   static const String windowManagerLibadwaita = 'windowManagerLibadwaita';
   static const String windowManagerNewInterface = 'windowManagerNewInterface';
 
-  String windowManagerString = windowManagerLibadwaita;
+  String windowManagerString = windowManagerNewInterface;
 
   String defaultResolution = defaultResolution1200x800;
 

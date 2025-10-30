@@ -80,6 +80,15 @@
 
 
 
+<release date="2025-10-30" version="3.25.0"> 
+      <description>
+        <ul>
+          <li>Create new interface</li>
+          <li>Add feature to install local flatpak file</li>
+        </ul>
+      </description>
+    </release> 
+
 <release date="2025-10-15" version="3.24.1"> 
       <description>
         <ul>

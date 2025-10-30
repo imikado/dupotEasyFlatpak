@@ -30,7 +30,8 @@ class _UninstallButtonState extends State<UninstallButton> {
     ThemeButtonStyle themeButtonStyle = ThemeButtonStyle(context: context);
 
     return FilledButton.icon(
-      style: themeButtonStyle.getButtonStyle(),
+      style: themeButtonStyle.getButtonStyle(
+          tagColor: ThemeButtonStyle.tagColorDeny),
       onPressed: !widget.isActive
           ? null
           : () {

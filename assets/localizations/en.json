@@ -130,6 +130,7 @@
   "parameter_Window_manager": "Window theme",
   "parameter_windowManagerLibadwaita": "Gtk Adwaita",
   "parameter_windowManagerNative": "Native Flutter",
+  "parameter_windowManagerNewInterface": "New Flutter Interface",
   "Update_database": "Flathub sync",
   "Update_database_from_flathubapi": "Flathub sync",
   "Start_update_application_database": "Start update application database",
@@ -145,5 +146,6 @@
   "Use_flathub_search_api": "Use the flathub search api",
   "home_trending": "Trending applications",
   "home_updated": "Applications recently updated",
-  "home_popular": "Popular applications"
+  "home_popular": "Popular applications",
+  "installFlatpakWithCaution": "Install this flatpak file with caution"
 }

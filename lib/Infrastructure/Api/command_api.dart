@@ -227,10 +227,10 @@ class CommandApi {
         if (RegExp(r'\t').hasMatch(lineLoop)) {
           List<String> lineLoopList = lineLoop.split("\t");
 
-          if (hasApplicationInDatabase(lineLoopList[0])) {
-            applicationInstalledList.add(
-                ApplicationInstalledEntity(lineLoopList[0], lineLoopList[1]));
-          }
+          // if (hasApplicationInDatabase(lineLoopList[0])) {
+          applicationInstalledList.add(
+              ApplicationInstalledEntity(lineLoopList[0], lineLoopList[1]));
+          //}
         }
       }
     }
@@ -242,7 +242,8 @@ class CommandApi {
 
     for (ApplicationInstalledEntity applicationEntityLoop
         in applicationInstalledList) {
-      if (applicationEntityLoop.id == applicationId) {
+      if (applicationEntityLoop.id.toLowerCase() ==
+          applicationId.toLowerCase()) {
         isAlreadyInstalled = true;
         break;
       }
@@ -325,6 +326,29 @@ class CommandApi {
     List<String> lineList = outputString.split('\n');
     for (String lineLoop in lineList) {
       appIdList.add(lineLoop.toLowerCase());
+    }
+
+    return appIdList;
+  }
+
+  Future<List<String>> getRawInstalledApplicationList() async {
+    ProcessResult result =
+        await runProcessSync(flatpakCommand, ['list', '--columns=application']);
+
+    String outputString = result.stdout;
+
+    List<String> appIdList = [];
+    List<String> lineList = outputString.split('\n');
+    for (String lineLoop in lineList) {
+      if (lineLoop.startsWith('org.gnome.Platform') ||
+          lineLoop.startsWith('org.gnome.Sdk') ||
+          lineLoop.startsWith('org.gtk.Gtk3theme') ||
+          lineLoop.startsWith('org.kde.Platform') ||
+          lineLoop.startsWith('org.winehq.Wine.')) {
+        continue;
+      }
+
+      appIdList.add(lineLoop);
     }
 
     return appIdList;
