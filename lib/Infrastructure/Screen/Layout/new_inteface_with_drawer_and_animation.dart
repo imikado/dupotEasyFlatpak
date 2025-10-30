@@ -94,11 +94,7 @@ class NewInterfaceWithDrawerAndAnimationState
   Widget build(BuildContext context) {
     Widget content = Padding(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-      child: Card(
-        elevation: 4,
-        color: Theme.of(context).cardColor,
-        child: widget.content,
-      ),
+      child: widget.content,
     );
 
     return Stack(
@@ -106,9 +102,8 @@ class NewInterfaceWithDrawerAndAnimationState
         Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Expanded(
-                  child: TextField(
+              automaticallyImplyLeading: true,
+              title: TextField(
                 focusNode: _searchFocusNode,
                 showCursor: true,
                 autofocus: true,
@@ -136,7 +131,7 @@ class NewInterfaceWithDrawerAndAnimationState
                   }
                   widget.handleSetSearched(value);
                 },
-              )),
+              ),
               actions: [],
               leading: IconButton(
                 icon: const Icon(Icons.menu),
