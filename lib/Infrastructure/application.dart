@@ -6,6 +6,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/new_inteface_with_drawer_and_animation.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_content_and_subcontent.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/bundle_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_install_all_subview.dart';
@@ -30,6 +31,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/install_flatpak_fi
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/installed_applications_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/loading_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/moreactions_view.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/new_side_menu_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/search_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/side_menu_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/updates_availables_view.dart';
@@ -86,6 +88,8 @@ class ApplicationState extends State<Application> {
   final alphanumeric = RegExp(r'^[a-zA-Z0-9]{1}$');
 
   bool _handledInitialPayload = false;
+
+  bool displaySearch = true;
 
   @override
   void initState() {
@@ -150,13 +154,17 @@ class ApplicationState extends State<Application> {
     Widget content;
 
     if (statePage == NavigationEntity.pageLoadingInstallFlatpakFile) {
-      content = LoadingView(handle: () {
-        goToInstallFlatpakFile();
-      });
+      return OnlyContentLayout(
+          handleGoTo: goTo,
+          content: LoadingView(handle: () {
+            goToInstallFlatpakFile();
+          }));
     } else if (statePage == NavigationEntity.pageLoading) {
-      content = LoadingView(handle: () {
-        goToPrevious();
-      });
+      return OnlyContentLayout(
+          handleGoTo: goTo,
+          content: LoadingView(handle: () {
+            goToPrevious();
+          }));
     } else if (statePage == NavigationEntity.pageSearch) {
       if (stateTitle.isEmpty) stateTitle = LocalizationApi().tr('Home');
       content = getContentView(statePage, isMain);
@@ -164,7 +172,6 @@ class ApplicationState extends State<Application> {
       content = getContentView(statePage, isMain);
     }
 
-    bool displaySearch = true;
     if (UserSettingsEntity().isWindowManagerNewInterface()) {
       displaySearch = false;
     }
@@ -175,6 +182,17 @@ class ApplicationState extends State<Application> {
       key: _sideMenuKey,
       pageSelected: statePage,
       argumentMapSelected: stateArgumentMap,
+      handleGoTo: goTo,
+      applicationIdListInCart: stateCartApplicationIdList,
+      searched: stateSearched,
+      numberOfUpdates: CommandApi().getNumberOfUpdates(),
+      handleSetSearched: setStateSearched,
+      isActive: stateMenuEnabled,
+    );
+
+    final newMenuWidget = NewSideMenuView(
+      displaySearch: displaySearch,
+      key: _sideMenuKey,
       handleGoTo: goTo,
       applicationIdListInCart: stateCartApplicationIdList,
       searched: stateSearched,
@@ -207,7 +225,8 @@ class ApplicationState extends State<Application> {
         child: UserSettingsEntity().isWindowManagerNewInterface()
             ? NewInterfaceWithDrawerAndAnimation(
                 title: stateTitle,
-                menu: menuWidget,
+                handleGoTo: goTo,
+                applicationIdListInCart: stateCartApplicationIdList,
                 searched: stateSearched,
                 content: content,
                 handleSetSearched: setStateSearched,
@@ -252,6 +271,7 @@ class ApplicationState extends State<Application> {
   }
 
   void setStateSearched(String searched) {
+    if (!mounted) return;
     setState(() {
       stateSearched = searched;
     });
@@ -546,6 +566,7 @@ class ApplicationState extends State<Application> {
   void saveImportedPermissionOverridedEntity(
       Map<String, List<PermissionOverridedEntity>>
           importedPermissionOverridedEntityListByApplicationId) {
+    if (!mounted) return;
     setState(() {
       stateImportedPermissionOverridedEntityListByApplicationId =
           importedPermissionOverridedEntityListByApplicationId;
@@ -554,6 +575,7 @@ class ApplicationState extends State<Application> {
 
   void saveCartOverrideSetupForApplicationId(
       String applicationId, List<OverrideFormControl> overrideFormControlList) {
+    if (!mounted) return;
     Map<String, List<OverrideFormControl>>
         cartOverrideFormControlListByApplicationId =
         stateCartOverrideFormControlListByApplicationId;
@@ -568,6 +590,7 @@ class ApplicationState extends State<Application> {
   }
 
   void addToCart(String applicationId) {
+    if (!mounted) return;
     List<String> applicationIdList = stateCartApplicationIdList;
     if (!applicationIdList.contains(applicationId)) {
       applicationIdList.add(applicationId);
@@ -579,6 +602,7 @@ class ApplicationState extends State<Application> {
   }
 
   void removeFromCart(String applicationId) {
+    if (!mounted) return;
     List<String> applicationIdList = stateCartApplicationIdList;
     if (applicationIdList.contains(applicationId)) {
       applicationIdList.remove(applicationId);
@@ -604,12 +628,14 @@ class ApplicationState extends State<Application> {
   }
 
   void reload() {
+    if (!mounted) return;
     setState(() {
       stateInterfaceVersion = (stateInterfaceVersion + 1);
     });
   }
 
   void goTo({required String page, required Map<String, String> argumentMap}) {
+    if (!mounted) return;
     if (NavigationEntity.hasArgumentSearch(argumentMap)) {
       String newSearch = NavigationEntity.extractArgumentSearch(argumentMap);
       if (newSearch != stateSearched) {
@@ -652,7 +678,6 @@ class ApplicationState extends State<Application> {
       statePreviousPage = '';
       stateHasPrevious = false;
     }
-
     setState(() {
       statePage = page;
       stateArgumentMap = argumentMap;
