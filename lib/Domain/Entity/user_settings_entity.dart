@@ -15,7 +15,7 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 ];
 
 class UserSettingsEntity {
-  int version = 9;
+  int version = 14;
 
   String jsonUserSettingsPath = '';
 
@@ -41,15 +41,11 @@ class UserSettingsEntity {
 
   String displayAppsMode = displayModeList;
 
-  static const String windowManagerNative = 'windowManagerNative';
-  static const String windowManagerLibadwaita = 'windowManagerLibadwaita';
-  static const String windowManagerNewInterface = 'windowManagerNewInterface';
-
-  String windowManagerString = windowManagerNewInterface;
-
   String defaultResolution = defaultResolution1200x800;
 
   bool useFlathubSearchApi = false;
+
+  String gamesPath = '';
 
   late ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.system);
 
@@ -80,8 +76,8 @@ class UserSettingsEntity {
           'userInstallationScopeEnabled',
           'displayApplicationInstalledNumberInSideMenu',
           'displayApplicationInstalledNumberInPage',
-          'windowManager',
-          'useFlathubSearchApi'
+          'useFlathubSearchApi',
+          'gamesPath'
         ]) {
           if (!jsonParameterObj.containsKey(mandatoryFieldLoop)) {
             throw Exception(
@@ -110,8 +106,6 @@ class UserSettingsEntity {
         _singleton.displayApplicationInstalledNumberInPage =
             jsonParameterObj['displayApplicationInstalledNumberInPage'];
 
-        _singleton.windowManagerString = jsonParameterObj['windowManager'];
-
         if (jsonParameterObj.containsKey('lastUpdateFromApiTimestamp')) {
           _singleton.lastUpdateFromApiTimestamp =
               jsonParameterObj['lastUpdateFromApiTimestamp'];
@@ -127,6 +121,8 @@ class UserSettingsEntity {
         }
 
         _singleton.displayAppsMode = jsonParameterObj['displayAppsMode'];
+
+        _singleton.gamesPath = jsonParameterObj['gamesPath'];
       }
     }
     return _singleton;
@@ -146,18 +142,6 @@ class UserSettingsEntity {
 
   String getApplicationIconsPath() {
     return PathApi.getIconsCachePath();
-  }
-
-  bool isWindowManagerNative() {
-    return windowManagerString == windowManagerNative;
-  }
-
-  bool isWindowManagerLibadwaita() {
-    return windowManagerString == windowManagerLibadwaita;
-  }
-
-  bool isWindowManagerNewInterface() {
-    return windowManagerString == windowManagerNewInterface;
   }
 
   void updateLasttimeStampUpdateApplicationsFromApi() {
@@ -189,14 +173,6 @@ class UserSettingsEntity {
     await save();
   }
 
-  Future<void> setWindowManager(String newWindowManager) async {
-    windowManagerString = newWindowManager;
-
-    await reloadWindowManager();
-
-    await save();
-  }
-
   Future<void> setDefaultResolution(String newDefaultResolution) async {
     defaultResolution = newDefaultResolution;
 
@@ -205,17 +181,14 @@ class UserSettingsEntity {
     await save();
   }
 
-  reloadWindowManager() async {
-    if (UserSettingsEntity().isWindowManagerLibadwaita()) {
-      await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
-      await windowManager.setAsFrameless();
-    } else {
-      await windowManager.setTitleBarStyle(TitleBarStyle.normal);
-    }
+  Future<void> setGamesPath(String newGamesPath) async {
+    print('set games pat$newGamesPath');
+    gamesPath = newGamesPath;
+    await save();
   }
 
-  String getWindowManager() {
-    return windowManagerString;
+  reloadWindowManager() async {
+    await windowManager.setTitleBarStyle(TitleBarStyle.normal);
   }
 
   Future<void> setUserOverrideLanguageCode(
@@ -304,6 +277,10 @@ class UserSettingsEntity {
     return useFlathubSearchApi;
   }
 
+  String getGamesPath() {
+    return gamesPath;
+  }
+
   Future<void> save() async {
     Map<String, dynamic> jsonParameterObj = {
       'version': version,
@@ -317,9 +294,9 @@ class UserSettingsEntity {
           displayApplicationInstalledNumberInPage,
       'lastUpdateFromApiTimestamp': lastUpdateFromApiTimestamp,
       'displayAppsMode': displayAppsMode,
-      'windowManager': windowManagerString,
       'defaultResolution': defaultResolution,
-      'useFlathubSearchApi': useFlathubSearchApi
+      'useFlathubSearchApi': useFlathubSearchApi,
+      'gamesPath': gamesPath
     };
 
     File jsonParameterFile = File(jsonUserSettingsPath);

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:adwaita/adwaita.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
@@ -208,16 +207,10 @@ void main(List<String> args) async {
       fullScreen: defaultFullScreen,
       //windowButtonVisibility: true,
       backgroundColor: Colors.transparent,
-      titleBarStyle: UserSettingsEntity().isWindowManagerLibadwaita()
-          ? TitleBarStyle.hidden
-          : TitleBarStyle.normal,
+      titleBarStyle: TitleBarStyle.normal,
       title: "Easy flatpak",
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
-      if (UserSettingsEntity().isWindowManagerLibadwaita()) {
-        await windowManager.setAsFrameless();
-      }
-
       // Force apply size and position
       await windowManager.setMinimumSize(defaultResolution);
       await windowManager.setSize(defaultResolution);
@@ -253,12 +246,8 @@ class MyApp extends StatelessWidget {
 
             return virtualWindowFrame(context, child);
           },
-          theme: UserSettingsEntity().isWindowManagerLibadwaita()
-              ? AdwaitaThemeData.light()
-              : ThemeData.light(),
-          darkTheme: UserSettingsEntity().isWindowManagerLibadwaita()
-              ? AdwaitaThemeData.dark()
-              : ThemeData.dark(),
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
           debugShowCheckedModeBanner: false,
           home: Application(initialOpenPayload: initialOpenPayload),
           themeMode: currentMode,

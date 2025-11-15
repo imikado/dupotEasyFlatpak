@@ -11,7 +11,6 @@ class NewInterfaceWithDrawerAndAnimation extends StatefulWidget {
   final bool hasPrevious;
   final Function handleGoToPrevious;
   final String pageSelected;
-  final String title;
   final Function handleSetSearched;
   final String searched;
 
@@ -30,7 +29,6 @@ class NewInterfaceWithDrawerAndAnimation extends StatefulWidget {
     required this.pageSelected,
     required this.handleSetSearched,
     required this.searched,
-    required this.title,
   });
 
   @override
@@ -49,6 +47,9 @@ class NewInterfaceWithDrawerAndAnimationState
   final FocusNode _searchFocusNode = FocusNode();
 
   bool displayMenuSearch = false;
+
+  late AnimationController _controller;
+  late CurvedAnimation _myAnimation;
 
   // Keep one listener to refresh the clear (x) icon
   void _onSearchChanged() {
@@ -166,7 +167,7 @@ class NewInterfaceWithDrawerAndAnimationState
                         onPressed: () => widget.handleGoToPrevious(),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(14),
+                          padding: const EdgeInsets.all(24),
                           elevation: 6,
                         ),
                         label: const Icon(Icons.arrow_back_rounded),
@@ -242,7 +243,6 @@ class NewInterfaceWithDrawerAndAnimationState
     return Stack(children: [
       Scaffold(
           key: _scaffoldKey,
-          // appBar: getAppBar(),
           body: SizedBox.expand(
             child: Stack(
               children: [
@@ -290,7 +290,7 @@ class NewInterfaceWithDrawerAndAnimationState
                       onPressed: () => widget.handleGoToPrevious(),
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(14),
+                        padding: const EdgeInsets.all(24),
                         elevation: 6,
                       ),
                       label: const Icon(Icons.arrow_back_rounded),
@@ -300,6 +300,22 @@ class NewInterfaceWithDrawerAndAnimationState
             ),
           )),
     ]);
+  }
+
+  bool hasPreviousButton() {
+    if (widget.hasPrevious &&
+        !widget.hasSubContent &&
+        widget.pageSelected == NavigationEntity.pageApplication) {
+      return true;
+    }
+    return false;
+  }
+
+  FloatingActionButton getPreviousButton() {
+    return FloatingActionButton(
+      onPressed: () => widget.handleGoToPrevious(),
+      child: Icon(Icons.arrow_back_ios_new_outlined),
+    );
   }
 
   PreferredSizeWidget? getAppBar() {

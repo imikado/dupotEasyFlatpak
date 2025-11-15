@@ -55,10 +55,7 @@ dependencies:
   ini: ^2.1.0
 
   window_manager: any
-  adwaita: any
-  libadwaita: ^2.0.2
-  libadwaita_window_manager: any
-
+ 
   carousel_slider: ^5.1.1 
 
   #dart_rss: ^3.0.3

@@ -209,12 +209,12 @@ class FlathubApi {
   Future<List<String>> getCompatApplicationFromApi(String url) async {
     var apiContent = await http.get(Uri.parse(url));
 
-    List<dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
+    Map<String, dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
 
     List<String> addedApplicationIdList = [];
     for (Map<String, dynamic> rawAddedApplicationLoop
-        in rawAddedApplicationList) {
-      addedApplicationIdList.add(rawAddedApplicationLoop['flatpakAppId']);
+        in rawAddedApplicationList['hits']) {
+      addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
     }
 
     return addedApplicationIdList;
@@ -237,7 +237,7 @@ class FlathubApi {
 
   Future<List<String>> getPopularRawApplicationIdList() async {
     return getCompatApplicationFromApi(
-        'https://flathub.org/api/v2/compat/apps/collection/popular/50');
+        'https://flathub.org/api/v2/collection/popular?page=0&per_page=10&locale=en');
   }
 
   Future<List<String>> getTrendingRawApplicationIdList() async {

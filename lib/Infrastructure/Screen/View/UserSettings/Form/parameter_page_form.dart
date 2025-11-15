@@ -4,6 +4,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_bool_entity.dart'
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/radio_string_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubForm/radio_bool_list_subform.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubForm/radio_string_list_subform.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/SubForm/string_subform%20.dart';
 import 'package:flutter/material.dart';
 
 class ParameterPageForm extends StatefulWidget {
@@ -23,12 +24,6 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
       bool displayNumberOfInstalledAppsInSideMenu) {
     widget.userSettings.setDisplayApplicationInstalledNumberInSideMenu(
         displayNumberOfInstalledAppsInSideMenu);
-
-    widget.handleUpdateUserSettings(widget.userSettings);
-  }
-
-  updateWindowManager(String newWindowManager) {
-    widget.userSettings.setWindowManager(newWindowManager);
 
     widget.handleUpdateUserSettings(widget.userSettings);
   }
@@ -68,30 +63,6 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
       ),
       ListTile(
         title: Text(
-          LocalizationApi().tr('parameter_Window_manager'),
-          style: TextStyle(
-              color: Theme.of(context).textTheme.headlineLarge!.color),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-        child: RadioStringListSubform(
-            radioStringEntityList: [
-              RadioStringEntity(
-                  label: 'parameter_windowManagerLibadwaita',
-                  value: 'windowManagerLibadwaita'),
-              RadioStringEntity(
-                  label: 'parameter_windowManagerNative',
-                  value: 'windowManagerNative'),
-              RadioStringEntity(
-                  label: 'parameter_windowManagerNewInterface',
-                  value: 'windowManagerNewInterface')
-            ],
-            value: widget.userSettings.getWindowManager(),
-            handleUpdateValue: updateWindowManager),
-      ),
-      ListTile(
-        title: Text(
           LocalizationApi().tr('parameter_default_resolution'),
           style: TextStyle(
               color: Theme.of(context).textTheme.headlineLarge!.color),
@@ -120,6 +91,19 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
             value: widget.userSettings.getDefaultResolution(),
             handleUpdateValue: updateDefaultResolution),
       ),
+      ListTile(
+        title: Text(
+          LocalizationApi().tr('Games_path'),
+          style: TextStyle(
+              color: Theme.of(context).textTheme.headlineLarge!.color),
+        ),
+      ),
+      Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: StringSubform(
+            handleUpdateValue: UserSettingsEntity().setGamesPath,
+            value: UserSettingsEntity().getGamesPath(),
+          )),
       ListTile(
         title: Text(
           LocalizationApi().tr('Use_flathub_search_api'),

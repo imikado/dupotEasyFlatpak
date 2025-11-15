@@ -39,33 +39,43 @@
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_home.png</image>
+      <caption>Home page</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_category.png</image>
+      <caption>Category page</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_category_grid.png</image>
+      <caption>Category page displayed as grid</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_installed_applications.png</image>
+      <caption>Installed applications</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_update_availables.png</image>
+      <caption>Updates availables</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_search.png</image>
+      <caption>Search page</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_application_steam.png</image>
+      <caption>Example application view</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_application_steam_confirm_install.png</image>
+      <caption>Confirmation on installation</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_application_steam_install_setup_path.png</image>
+      <caption>Installation form preferences</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/8072faecdb9b79dc0570747fcc4358fceaad94e0/export/screenshots/Screenshot_override_view.png</image>
+      <caption>Overrire application page</caption>
     </screenshot>
 
 
@@ -85,6 +95,7 @@
         <ul>
           <li>Create new interface</li>
           <li>Add feature to install local flatpak file</li>
+          <li>Fix home page api call</li>
         </ul>
       </description>
     </release> 

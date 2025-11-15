@@ -260,34 +260,7 @@ class _ApplicationViewState extends State<ApplicationView> {
                   Padding(
                       padding: const EdgeInsets.all(20),
                       child: getScreenshotCaroussel(
-                          stateAppStream!.screenshotObjList)
-                      /*
-                       Scrollbar(
-                          interactive: false,
-                          thumbVisibility: true,
-                          controller: scrollControllerScreenshot,
-                          child: SingleChildScrollView(
-                              controller: scrollControllerScreenshot,
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                  children: stateAppStream!.screenshotObjList
-                                      .map((screenshotLoop) {
-                                return IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (_) => AlertDialog(
-                                              buttonPadding:
-                                                  const EdgeInsets.all(0),
-                                              content: Image.network(
-                                                  screenshotLoop['large'])));
-                                    },
-                                    icon: Image.network(
-                                        screenshotLoop['preview']));
-                              }).toList())))
-                              
-                              */
-                      ),
+                          stateAppStream!.screenshotObjList)),
                 Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(

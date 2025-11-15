@@ -1,13 +1,9 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
-import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/override_form_control.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/new_inteface_with_drawer_and_animation.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_layout.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/side_menu_with_content_and_subcontent.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/bundle_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_install_all_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_override_subview.dart';
@@ -31,14 +27,11 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/install_flatpak_fi
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/installed_applications_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/loading_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/moreactions_view.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/new_side_menu_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/search_view.dart';
-import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/side_menu_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/updates_availables_view.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/View/user_settings_view.dart';
 import 'package:dupot_easy_flatpak/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Application extends StatefulWidget {
@@ -50,10 +43,6 @@ class Application extends StatefulWidget {
 }
 
 class ApplicationState extends State<Application> {
-  // Use a unique key that never changes
-  final GlobalKey<SideMenuViewState> _sideMenuKey =
-      GlobalKey<SideMenuViewState>(debugLabel: 'SideMenuViewKey');
-
   String statePage = NavigationEntity.pageLoading;
   Map<String, String> stateArgumentMap = {};
   String stateSearched = '';
@@ -78,8 +67,6 @@ class ApplicationState extends State<Application> {
   bool stateHasPrevious = false;
 
   bool stateMenuEnabled = true;
-
-  String stateTitle = '';
 
   String stateFlatpakToInstall = '';
 
@@ -165,86 +152,22 @@ class ApplicationState extends State<Application> {
           content: LoadingView(handle: () {
             goToPrevious();
           }));
-    } else if (statePage == NavigationEntity.pageSearch) {
-      if (stateTitle.isEmpty) stateTitle = LocalizationApi().tr('Home');
-      content = getContentView(statePage, isMain);
     } else {
       content = getContentView(statePage, isMain);
     }
 
-    if (UserSettingsEntity().isWindowManagerNewInterface()) {
-      displaySearch = false;
-    }
-
-    // Create menu widget with persistent key
-    final menuWidget = SideMenuView(
-      displaySearch: displaySearch,
-      key: _sideMenuKey,
+    return NewInterfaceWithDrawerAndAnimation(
+      handleGoTo: goTo,
+      applicationIdListInCart: stateCartApplicationIdList,
+      searched: stateSearched,
+      content: content,
+      handleSetSearched: setStateSearched,
+      subContent: getSubContentView(hasSubContent),
+      hasSubContent: hasSubContent,
+      hasPrevious: stateHasPrevious,
+      handleGoToPrevious: goToPrevious,
       pageSelected: statePage,
-      argumentMapSelected: stateArgumentMap,
-      handleGoTo: goTo,
-      applicationIdListInCart: stateCartApplicationIdList,
-      searched: stateSearched,
-      numberOfUpdates: CommandApi().getNumberOfUpdates(),
-      handleSetSearched: setStateSearched,
-      isActive: stateMenuEnabled,
     );
-
-    final newMenuWidget = NewSideMenuView(
-      displaySearch: displaySearch,
-      key: _sideMenuKey,
-      handleGoTo: goTo,
-      applicationIdListInCart: stateCartApplicationIdList,
-      searched: stateSearched,
-      numberOfUpdates: CommandApi().getNumberOfUpdates(),
-      handleSetSearched: setStateSearched,
-      isActive: stateMenuEnabled,
-    );
-
-    return KeyboardListener(
-        focusNode: _focusNode,
-        autofocus: true,
-        onKeyEvent: (event) {
-          if (getSubPage() == '' &&
-              event is KeyDownEvent &&
-              event.logicalKey.keyLabel.toString().length == 1 &&
-              alphanumeric.hasMatch(event.logicalKey.keyLabel.toString())) {
-            NavigationEntity.goToSearch(
-                handleGoTo: goTo,
-                search: stateSearched +
-                    event.logicalKey.keyLabel.toString().toLowerCase());
-          } else if (getSubPage() == '' &&
-              event is KeyDownEvent &&
-              stateSearched.isNotEmpty &&
-              event.logicalKey.keyLabel == "Backspace") {
-            NavigationEntity.goToSearch(
-                handleGoTo: goTo,
-                search: stateSearched.substring(0, stateSearched.length - 1));
-          }
-        },
-        child: UserSettingsEntity().isWindowManagerNewInterface()
-            ? NewInterfaceWithDrawerAndAnimation(
-                title: stateTitle,
-                handleGoTo: goTo,
-                applicationIdListInCart: stateCartApplicationIdList,
-                searched: stateSearched,
-                content: content,
-                handleSetSearched: setStateSearched,
-                subContent: getSubContentView(hasSubContent),
-                hasSubContent: hasSubContent,
-                hasPrevious: stateHasPrevious,
-                handleGoToPrevious: goToPrevious,
-                pageSelected: statePage,
-              )
-            : SideMenuWithContentAndSubContentLayout(
-                menu: menuWidget,
-                content: content,
-                subContent: getSubContentView(hasSubContent),
-                hasSubContent: hasSubContent,
-                hasPrevious: stateHasPrevious,
-                handleGoToPrevious: goToPrevious,
-                pageSelected: statePage,
-              ));
   }
 
   void enableSideMenu() {
@@ -274,6 +197,7 @@ class ApplicationState extends State<Application> {
     if (!mounted) return;
     setState(() {
       stateSearched = searched;
+      statePage = NavigationEntity.pageSearch;
     });
   }
 
@@ -682,12 +606,6 @@ class ApplicationState extends State<Application> {
       statePage = page;
       stateArgumentMap = argumentMap;
       stateBundleIdLighted = bundleIdLighted;
-      if (NavigationEntity.hasArgumentTitle(argumentMap) &&
-          NavigationEntity.extractArgumentTitle(argumentMap)
-              .toString()
-              .isNotEmpty) {
-        stateTitle = NavigationEntity.extractArgumentTitle(argumentMap);
-      }
     });
   }
 }
