@@ -12,10 +12,12 @@ class DialogConfirmButton extends StatelessWidget {
     ThemeButtonStyle themeButtonStyle = ThemeButtonStyle(context: context);
 
     return FilledButton(
-        style: themeButtonStyle.getDialogButtonStyle(),
-        onPressed: () {
-          onPressedFunction();
-        },
-        child: Text(LocalizationApi().tr('confirm')));
+      style: themeButtonStyle.getDialogButtonStyle(),
+      onPressed: () {
+        onPressedFunction();
+      },
+      child: Text(LocalizationApi().tr('confirm'),
+          style: themeButtonStyle.getButtonTextStyle()),
+    );
   }
 }

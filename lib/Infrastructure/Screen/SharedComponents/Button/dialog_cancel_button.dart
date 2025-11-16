@@ -14,6 +14,7 @@ class DialogCancelButton extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text(LocalizationApi().tr('cancel')));
+        child: Text(LocalizationApi().tr('cancel'),
+            style: themeButtonStyle.getButtonTextStyle()));
   }
 }
