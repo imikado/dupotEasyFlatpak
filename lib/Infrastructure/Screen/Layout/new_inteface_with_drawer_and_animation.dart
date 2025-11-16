@@ -226,13 +226,15 @@ class NewInterfaceWithDrawerAndAnimationState
 
   Widget getMenu() {
     return NewSideMenuView(
-        handleGoTo: widget.handleGoTo,
-        applicationIdListInCart: widget.applicationIdListInCart,
-        searched: widget.searched,
-        numberOfUpdates: CommandApi().getNumberOfUpdates(),
-        isActive: true,
-        handleSetSearched: widget.handleSetSearched,
-        displaySearch: displayMenuSearch);
+      handleGoTo: widget.handleGoTo,
+      applicationIdListInCart: widget.applicationIdListInCart,
+      searched: widget.searched,
+      numberOfUpdates: CommandApi().getNumberOfUpdates(),
+      isActive: true,
+      handleSetSearched: widget.handleSetSearched,
+      displaySearch: displayMenuSearch,
+      handleCloseMenu: _toggleDrawer,
+    );
   }
 
   Widget returnLayoutFull(BuildContext context) {

@@ -148,5 +148,6 @@
     "home_trending": "Aplicativos em alta",
     "home_updated": "Aplicativos atualizados recentemente",
     "home_popular": "Aplicativos populares",
-    "installFlatpakWithCaution": "Instale este arquivo flatpak com cuidado"
+    "installFlatpakWithCaution": "Instale este arquivo flatpak com cuidado",
+    "Games_path": "Caminho dos jogos"
 }

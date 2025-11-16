@@ -11,6 +11,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_reposit
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/update_all_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/update_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/update_database_button.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/Theme/theme_button_style.dart';
 import 'package:flutter/material.dart';
 
 class UpdatesAvailablesView extends StatefulWidget {
@@ -33,6 +34,8 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
   ScrollController scrollController = ScrollController();
 
   int numberOfNewApplicationFromApi = 0;
+
+  late ThemeButtonStyle themeButtonStyle;
 
   @override
   void initState() {
@@ -92,6 +95,8 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
 
   @override
   Widget build(BuildContext context) {
+    themeButtonStyle = ThemeButtonStyle(context: context);
+
     return Column(children: [
       Padding(
           padding: const EdgeInsets.all(10.0),
@@ -207,7 +212,10 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
         },
         badgeWidget: Badge(
             backgroundColor: Theme.of(context).primaryColor,
-            label: Text(numberOfNewApplicationFromApi.toString())));
+            label: Text(
+              numberOfNewApplicationFromApi.toString(),
+              style: themeButtonStyle.getButtonTextStyle(),
+            )));
   }
 
   Widget getUpdateButton() {
@@ -241,8 +249,10 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
         );
       },
       badgeWidget: Badge(
-          backgroundColor: Theme.of(context).primaryColor,
-          label: Text(CommandApi().getNumberOfUpdates().toString())),
+        backgroundColor: Theme.of(context).primaryColor,
+        label: Text(CommandApi().getNumberOfUpdates().toString(),
+            style: themeButtonStyle.getButtonTextStyle()),
+      ),
     );
   }
 }

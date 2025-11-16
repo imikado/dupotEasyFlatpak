@@ -147,5 +147,6 @@
   "home_trending": "Trending applications",
   "home_updated": "Applications recently updated",
   "home_popular": "Popular applications",
-  "installFlatpakWithCaution": "Install this flatpak file with caution"
+  "installFlatpakWithCaution": "Install this flatpak file with caution",
+  "Games_path": "Games path"
 }

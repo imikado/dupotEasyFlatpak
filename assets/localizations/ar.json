@@ -147,5 +147,6 @@
   "home_trending": "التطبيقات الرائجة",
   "home_updated": "التطبيقات التي تم تحديثها مؤخرًا",
   "home_popular": "التطبيقات الشائعة",
-  "installFlatpakWithCaution": "قم بتثبيت ملف الـ Flatpak هذا بحذر"
+  "installFlatpakWithCaution": "قم بتثبيت ملف الـ Flatpak هذا بحذر",
+  "Games_path": "مسار الألعاب"
 }

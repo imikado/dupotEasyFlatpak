@@ -158,6 +158,11 @@ class OverrideControl {
 
       String textValue = recipePermissionLoop.getValue().toString();
 
+      if (recipePermissionLoop.label ==
+          'recipe_indicate_your_game_path_label') {
+        textValue = UserSettingsEntity().getGamesPath();
+      }
+
       overrideFormControlLoop.setValue(textValue);
 
       overrideFormControlLoop.setType(recipePermissionLoop.type);

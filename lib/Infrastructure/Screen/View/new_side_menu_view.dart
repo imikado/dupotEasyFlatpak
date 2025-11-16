@@ -13,6 +13,7 @@ class NewSideMenuView extends StatefulWidget {
   final bool isActive;
   final Function handleSetSearched;
   final bool displaySearch;
+  final Function handleCloseMenu;
 
   const NewSideMenuView(
       {super.key,
@@ -22,7 +23,8 @@ class NewSideMenuView extends StatefulWidget {
       required this.numberOfUpdates,
       required this.isActive,
       required this.handleSetSearched,
-      required this.displaySearch});
+      required this.displaySearch,
+      required this.handleCloseMenu});
 
   @override
   State<NewSideMenuView> createState() => NewSideMenuViewState();
@@ -244,6 +246,9 @@ class NewSideMenuViewState extends State<NewSideMenuView>
                 setState(() {
                   stateMenuSelected = menuItemLoop.label;
                 });
+                if (!widget.displaySearch) {
+                  widget.handleCloseMenu();
+                }
               },
         child: Card(
             color: themeTextStyle.getHeadlineBackgroundColor(isSelected),
