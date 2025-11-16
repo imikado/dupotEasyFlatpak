@@ -134,7 +134,7 @@
     "Update_database": "Sincronizare Flathub",
     "Update_database_from_flathubapi": "Sincronizare Flathub",
     "Start_update_application_database": "Porniți actualizarea bazei de date a aplicației",
-    "Application_processing": "Procesarea actualizării aplicației : _numberProcessed_/_numberTotal_",
+    "Application_processing": "Se procesează _numberProcessed_/_numberTotal_ adăugate recent (din API)\n_numberApplicationsAdded_ aplicație(i) adăugată(e) din _numberTotalApplicationToAdd_",
     "Application_database_up_to_date": "Baza de date a aplicației este actualizată",
     "parameter_default_resolution": "Rezoluție nativă",
     "parameter_800x600": "800x600",

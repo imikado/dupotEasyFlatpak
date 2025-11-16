@@ -17,6 +17,10 @@ class FlathubApi {
   int loadTotalNumberOfApplication = 0;
   int loadNumberOfApplicationProcessed = 0;
 
+  int numberOfApplicationAdded = 0;
+
+  int numberOfApplicationUpdated = 0;
+
   List<String> cacheRawApplicationIdList = [];
 
   static final FlathubApi _singleton = FlathubApi._internal();
@@ -50,7 +54,7 @@ class FlathubApi {
   }
 
   Future<int> getNumberOfNewApplicationFromApi() async {
-    List<String> appStreamIdList = await getRawApplicationList();
+    List<String> appStreamIdList = await getRawRecentApplicationList();
 
     List<String> applicationIdList =
         await getApplicationRepository().findAllApplicationIdList();
@@ -126,7 +130,7 @@ class FlathubApi {
   Future<void> load({bool forceUpdateDatabase = false}) async {
     ApplicationRepository applicationRepository = ApplicationRepository();
 
-    List<String> appStreamIdList = await getRawApplicationList();
+    List<String> appStreamIdList = await getRawRecentApplicationList();
 
     loadTotalNumberOfApplication = appStreamIdList.length;
 
@@ -144,18 +148,8 @@ class FlathubApi {
     // ignore: unused_local_variable
     int limitLoaded = 0;
     for (String appStreamIdLoop in appStreamIdList) {
+      loadNumberOfApplicationProcessed += 1;
       if (applicationIdList.contains(appStreamIdLoop.toLowerCase())) {
-        if (forceUpdateDatabase) {
-          await updateAppStream(appStreamIdLoop);
-        } else {
-          ApplicationEntity applicationEntityLoop = await applicationRepository
-              .findApplicationEntityById(appStreamIdLoop);
-
-          if (applicationEntityLoop.lastUpdateIsOlderThan(7)) {
-            await updateAppStream(appStreamIdLoop);
-          }
-        }
-        loadNumberOfApplicationProcessed += 1;
         continue;
       }
 
@@ -184,7 +178,8 @@ class FlathubApi {
         }
       }
       await Future.delayed(const Duration(seconds: 1));
-      loadNumberOfApplicationProcessed += 1;
+
+      numberOfApplicationAdded += 1;
     }
 
     await getApplicationRepository().insertApplicationEntityList(appStreamList);
@@ -292,7 +287,7 @@ class FlathubApi {
     return appStreamIdList;
   }
 
-  Future<List<String>> getRawApplicationList() async {
+  Future<List<String>> getRawRecentApplicationList() async {
     if (cacheRawApplicationIdList.isEmpty) {
       var apiContent = await http.get(
           Uri.parse('https://flathub.org/api/v2/collection/recently-added'));

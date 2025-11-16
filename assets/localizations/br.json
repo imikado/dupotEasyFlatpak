@@ -135,7 +135,7 @@
     "Update_database": "Atualização Flathub",
     "Update_database_from_flathubapi": "Atualização do banco de dados a partir da Flathub API",
     "Start_update_application_database": "Iniciar atualização do banco de dados de aplicativos",
-    "Application_processing": "Atualização de aplicativos em andamento _numberProcessed_/_numberTotal_",
+    "Application_processing": "Processando _numberProcessed_/_numberTotal_ adicionados recentemente (da API)\n_numberApplicationsAdded_ aplicativo(s) adicionado(s) de _numberTotalApplicationToAdd_",
     "Application_database_up_to_date": "O banco de dados de aplicativos está atualizado",
     "parameter_default_resolution": "Resolução padrão",
     "parameter_800x600": "800x600",

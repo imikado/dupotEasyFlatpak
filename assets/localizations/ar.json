@@ -134,7 +134,7 @@
   "Update_database": "تحديث قاعدة بيانات التطبيقات",
   "Update_database_from_flathubapi": "تحديث قاعدة البيانات من Flathub API",
   "Start_update_application_database": "بدء تحديث قاعدة بيانات التطبيقات",
-  "Application_processing": "جاري تحديث التطبيقات _numberProcessed_/_numberTotal_",
+  "Application_processing": "جاري معالجة _numberProcessed_/_numberTotal_ المضافة حديثًا (من الـ API)\n_numberApplicationsAdded_ تطبيق/تطبيقات مُضافة من أصل _numberTotalApplicationToAdd_",
   "Application_database_up_to_date": "قاعدة بيانات التطبيقات محدثة",
   "parameter_default_resolution": "الدقة الافتراضية",
   "parameter_800x600": "800x600",

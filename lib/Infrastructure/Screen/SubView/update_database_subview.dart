@@ -47,6 +47,9 @@ class _UpdateDatabaseSubviewState extends State<UpdateDatabaseSubview> {
   Future<void> updateDatabase() async {
     await widget.handleDisableSideMenu();
 
+    int numberOfNewApplicationFromApi =
+        await FlathubApi().getNumberOfNewApplicationFromApi();
+
     setState(() {
       stateInstallationOutput =
           LocalizationApi().tr('Start_update_application_database');
@@ -61,7 +64,13 @@ class _UpdateDatabaseSubviewState extends State<UpdateDatabaseSubview> {
             '_numberProcessed_':
                 FlathubApi().loadNumberOfApplicationProcessed.toString(),
             '_numberTotal_':
-                FlathubApi().loadTotalNumberOfApplication.toString()
+                FlathubApi().loadTotalNumberOfApplication.toString(),
+            '_numberApplicationsAdded_':
+                FlathubApi().numberOfApplicationAdded.toString(),
+            '_numberTotalApplicationToAdd_':
+                numberOfNewApplicationFromApi.toString(),
+            '_numberApplicationUpdated_':
+                FlathubApi().numberOfApplicationUpdated.toString()
           },
         );
       });

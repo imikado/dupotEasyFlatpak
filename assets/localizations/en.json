@@ -134,7 +134,7 @@
   "Update_database": "Flathub sync",
   "Update_database_from_flathubapi": "Flathub sync",
   "Start_update_application_database": "Start update application database",
-  "Application_processing": "Application update processing _numberProcessed_/_numberTotal_",
+  "Application_processing": "Processing _numberProcessed_/_numberTotal_ recently added (from api) \n_numberApplicationsAdded_ application(s) added on  _numberTotalApplicationToAdd_",
   "Application_database_up_to_date": "Application's database is up to date",
   "parameter_default_resolution": "Default resolution",
   "parameter_800x600": "800x600",

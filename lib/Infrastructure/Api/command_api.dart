@@ -102,7 +102,7 @@ class CommandApi {
 
   Future<List<ApplicationUpdate>> checkUpdates() async {
     LoggerApi().info('Checking updates');
-    ProcessResult result = await runProcess('flatpak', ['update']);
+    ProcessResult result = await runProcess('flatpak', ['update', '--no-deps']);
     updatesAvailableOutput = result.stdout.toString();
 
     applicationUpdateAvailableList.clear();

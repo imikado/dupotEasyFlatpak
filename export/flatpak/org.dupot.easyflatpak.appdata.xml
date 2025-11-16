@@ -86,6 +86,19 @@
   <releases>
 
 
+
+<release date="2025-11-16" version="3.25.2"> 
+      <description>
+        <ul>
+          <li>Fix color in dark mode</li>
+          <li>Now when you click on the drawer menu, it closes the menu</li>
+          <li>Update application database</li>
+          <li>Fix update page</li>
+        </ul>
+      </description>
+    </release> 
+
+
 <release date="2025-11-16" version="3.25.1"> 
       <description>
         <ul>

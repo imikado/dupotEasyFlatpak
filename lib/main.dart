@@ -76,6 +76,7 @@ const argSync = 'sync';
 
 void main(List<String> args) async {
   try {
+    print(args.toString());
     WidgetsFlutterBinding.ensureInitialized();
 
     await windowManager.ensureInitialized();

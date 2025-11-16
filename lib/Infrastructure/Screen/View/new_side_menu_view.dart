@@ -86,34 +86,31 @@ class NewSideMenuViewState extends State<NewSideMenuView>
   }
 
   void loadData(bool shouldCheckUpdates) async {
+    if (!mounted) {
+      return;
+    }
     List<MenuItemEntity> categoryMenuItemList =
         await SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getCategoryMenuItemEntityList();
 
-    setState(() {
-      stateCategoryMenuItemList = categoryMenuItemList;
-    });
-
     List<MenuItemEntity> cartMenuItemList =
         SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getCartMenuItemEntyList(widget.applicationIdListInCart);
-    setState(() {
-      stateCartMenuItemList = cartMenuItemList;
-    });
 
     List<MenuItemEntity> searchMenuItemList =
         SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getSearchMenuItemEntyListWithoutPage(
                 widget.searched, widget.displaySearch);
-    setState(() {
-      stateSearchMenuItemList = searchMenuItemList;
-    });
 
     List<MenuItemEntity> bottomMenuItemList =
         await SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getBottomMenuItemEntityList(shouldCheckUpdates);
 
     setState(() {
+      stateCategoryMenuItemList = categoryMenuItemList;
+      stateCartMenuItemList = cartMenuItemList;
+      stateSearchMenuItemList = searchMenuItemList;
+
       stateBottomMenuItemList = bottomMenuItemList;
     });
   }
