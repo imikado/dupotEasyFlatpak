@@ -19,13 +19,9 @@
   </developer>
   <summary>Manage your flatpaks with a simple GUI.</summary>
   <description>
-    <p>
-    It will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better. 
-    </p>
-    <p>
-    For example, for Steam, it asks the user to choose a folder where they store their games before installation.
-    And you can setup this games path in the settings page for all applications which need it (steam,lutris, heroic games launcher, bottles)
-    </p>
+    <p>It will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better. </p>
+    <p>For example, for Steam, it asks the user to choose a folder where they store their games before installation.</p>
+    <p>And you can setup this games path in the settings page for all applications which need it (steam,lutris, heroic games launcher, bottles)</p>
     <p>Available in many languages:</p>
     <p>- English</p>
     <p>- Spanish</p>
