@@ -24,6 +24,7 @@
     </p>
     <p>
     For example, for Steam, it asks the user to choose a folder where they store their games before installation.
+    And you can setup this games path in the settings page for all applications which need it (steam,lutris, heroic games launcher, bottles)
     </p>
     <p>Available in many languages:</p>
     <p>- English</p>
