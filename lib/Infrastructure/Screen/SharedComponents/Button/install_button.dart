@@ -50,7 +50,6 @@ class _InstallButtonState extends State<InstallButton> {
                     return StatefulBuilder(
                         builder: (context, StateSetter setState) {
                       return AlertDialog(
-                        backgroundColor: Theme.of(context).secondaryHeaderColor,
                         buttonPadding: const EdgeInsets.all(10),
                         actions: [
                           const DialogCancelButton(),
