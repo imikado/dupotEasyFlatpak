@@ -108,10 +108,7 @@ void main(List<String> args) async {
     LoggerApi().info('cache directory:${cacheDirectory.path}');
     LoggerApi().info('icons directory:${iconsCacheDirectory.path}');
 
-    String applicationVersion =
-        await rootBundle.loadString('assets/version.txt');
-
-    InfoEntity(applicationVersion);
+    String applicationVersion = InfoEntity().version;
 
     bool shouldCopyDb = false;
     bool shouldCopyUserSettings = false;

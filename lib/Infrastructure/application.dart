@@ -263,7 +263,7 @@ class ApplicationState extends State<Application> {
       );
     } else if (pageToLoad == NavigationEntity.pageAbout) {
       return AboutView(
-        version: InfoEntity().getVersion(),
+        version: InfoEntity().version,
       );
     } else if (pageToLoad == NavigationEntity.pageCart) {
       String applicationId = '';

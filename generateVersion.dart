@@ -18,7 +18,8 @@ Future<void> main() async {
   }
 
   // Écrire dans assets/version.txt
-  final outFile = File('assets/version.txt');
+  final outFile = File('lib/Domain/Entity/info_entity.dart');
   outFile.createSync(recursive: true);
-  outFile.writeAsStringSync(version.toString());
+  outFile.writeAsStringSync(
+      "class InfoEntity {\n  String version='${version.toString()}';\n}");
 }
