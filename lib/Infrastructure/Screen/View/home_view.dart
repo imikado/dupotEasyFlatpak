@@ -60,9 +60,9 @@ class _HomeViewState extends State<HomeView> {
           Text(
             LocalizationApi().tr(title),
             style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueGrey),
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

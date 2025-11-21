@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:adwaita/adwaita.dart';
+import 'package:dupot_easy_flatpak/Domain/Entity/info_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
@@ -12,7 +14,6 @@ import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_reposit
 import 'package:dupot_easy_flatpak/Infrastructure/application.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
@@ -107,10 +108,13 @@ void main(List<String> args) async {
     LoggerApi().info('cache directory:${cacheDirectory.path}');
     LoggerApi().info('icons directory:${iconsCacheDirectory.path}');
 
+    String applicationVersion =
+        await rootBundle.loadString('assets/version.txt');
+
+    InfoEntity(applicationVersion);
+
     bool shouldCopyDb = false;
     bool shouldCopyUserSettings = false;
-
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     File buildInstalled = File(PathApi.getBuildConfigPath());
 
@@ -119,11 +123,11 @@ void main(List<String> args) async {
       shouldCopyUserSettings = true;
     } else {
       String buildInfo = buildInstalled.readAsStringSync();
-      if (buildInfo == packageInfo.version) {
+      if (buildInfo == applicationVersion) {
         LoggerApi().info('Build installed is the latest ($buildInfo)');
       } else {
         LoggerApi().info(
-            'Build installed $buildInfo different from current ${packageInfo.version}');
+            'Build installed $buildInfo different from current $applicationVersion');
         shouldCopyDb = true;
       }
     }
@@ -247,8 +251,8 @@ class MyApp extends StatelessWidget {
 
             return virtualWindowFrame(context, child);
           },
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          theme: AdwaitaThemeData.light(),
+          darkTheme: AdwaitaThemeData.dark(),
           debugShowCheckedModeBanner: false,
           home: Application(initialOpenPayload: initialOpenPayload),
           themeMode: currentMode,

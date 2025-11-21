@@ -17,8 +17,7 @@ class AboutView extends StatelessWidget {
         ListTile(
           title: Text(
             LocalizationApi().tr(title),
-            style: TextStyle(
-                color: Theme.of(context).textTheme.headlineLarge!.color),
+            style: TextStyle(),
           ),
         ),
         Padding(

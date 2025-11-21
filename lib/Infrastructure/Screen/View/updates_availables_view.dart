@@ -143,64 +143,60 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
         getApplicationEntity(applicationUpdate.id);
 
     return Card(
-        color: Theme.of(context).secondaryHeaderColor,
         child: CheckboxListTile(
-          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-          onChanged: (bool? value) {
-            Map<String, bool> checkboxList = stateCheckboxList;
+      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+      onChanged: (bool? value) {
+        Map<String, bool> checkboxList = stateCheckboxList;
 
-            checkboxList[applicationUpdate.id] = value!;
+        checkboxList[applicationUpdate.id] = value!;
 
-            setState(() {
-              stateCheckboxList = checkboxList;
-            });
-          },
-          enabled: applicationEntityFound != null,
-          value: stateCheckboxList[applicationUpdate.id],
-          title: Column(
-            spacing: 0,
+        setState(() {
+          stateCheckboxList = checkboxList;
+        });
+      },
+      enabled: applicationEntityFound != null,
+      value: stateCheckboxList[applicationUpdate.id],
+      title: Column(
+        spacing: 0,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  applicationEntityFound == null ||
-                          !applicationEntityFound.hasAppIcon()
-                      ? Image.asset('assets/images/no-image.png', height: 60)
-                      : Image.file(
-                          height: 60,
-                          File(
-                              '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntityFound.getAppIcon()}')),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      spacing: 0,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          applicationEntityFound != null
-                              ? applicationEntityFound.getName()
-                              : applicationUpdate.id,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .color),
-                        ),
-                        Text(
-                            applicationEntityFound != null
-                                ? applicationEntityFound.getSummary()
-                                : '',
-                            style: TextStyle(fontSize: 14)),
-                        Text(applicationUpdate.version,
-                            style: TextStyle(fontSize: 14))
-                      ],
+              applicationEntityFound == null ||
+                      !applicationEntityFound.hasAppIcon()
+                  ? Image.asset('assets/images/no-image.png', height: 60)
+                  : Image.file(
+                      height: 60,
+                      File(
+                          '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntityFound.getAppIcon()}')),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  spacing: 0,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      applicationEntityFound != null
+                          ? applicationEntityFound.getName()
+                          : applicationUpdate.id,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
-                  )
-                ],
-              ),
+                    Text(
+                        applicationEntityFound != null
+                            ? applicationEntityFound.getSummary()
+                            : '',
+                        style: TextStyle(fontSize: 14)),
+                    Text(applicationUpdate.version,
+                        style: TextStyle(fontSize: 14))
+                  ],
+                ),
+              )
             ],
           ),
-        ));
+        ],
+      ),
+    ));
   }
 
   Widget getUpdateDatabaseButton() {

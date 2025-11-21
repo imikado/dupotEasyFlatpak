@@ -33,7 +33,6 @@ class ListviewApplicationListComponent extends StatelessWidget {
                     title: appStreamLoop.name);
               },
               child: Card(
-                color: Theme.of(context).secondaryHeaderColor,
                 child: Column(
                   children: [
                     Row(
@@ -54,11 +53,8 @@ class ListviewApplicationListComponent extends StatelessWidget {
                               Text(
                                 appStreamLoop.getName(),
                                 style: TextStyle(
-                                    fontSize: 24,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge!
-                                        .color),
+                                  fontSize: 24,
+                                ),
                               ),
                               Text(
                                 appStreamLoop.getSummary(),

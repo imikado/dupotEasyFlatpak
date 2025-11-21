@@ -66,9 +66,9 @@ class _ApplicationListContentState extends State<ApplicationListContent> {
                         ((AppDisplay, IconData) shirt) {
                       return ButtonSegment<AppDisplay>(
                           value: shirt.$1,
-                          label: Icon(shirt.$2,
-                              color:
-                                  themeButtonStyle.getButtonTextStyle().color));
+                          label: Icon(
+                            shirt.$2,
+                          ));
                     }).toList(),
                   ),
                   const SizedBox(

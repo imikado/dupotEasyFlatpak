@@ -27,7 +27,6 @@ class UpdateDatabaseButton extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                        backgroundColor: Theme.of(context).secondaryHeaderColor,
                         buttonPadding: const EdgeInsets.all(10),
                         actions: [
                           const DialogCancelButton(),
@@ -51,8 +50,9 @@ class UpdateDatabaseButton extends StatelessWidget {
         ),
         if (badgeWidget != null) badgeWidget!
       ]),
-      icon: Icon(Icons.update,
-          color: themeButtonStyle.getButtonTextStyle().color),
+      icon: Icon(
+        Icons.update,
+      ),
     );
   }
 }

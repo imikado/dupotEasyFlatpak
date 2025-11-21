@@ -20,8 +20,6 @@ class ThemeTextStyle {
   }
 
   Color getHeadlineBackgroundColor(bool isSelected) {
-    return isSelected
-        ? Theme.of(context).secondaryHeaderColor
-        : Colors.transparent;
+    return isSelected ? Theme.of(context).focusColor : Colors.transparent;
   }
 }

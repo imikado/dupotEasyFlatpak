@@ -23,7 +23,6 @@ class InstallAllButton extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                        backgroundColor: Theme.of(context).secondaryHeaderColor,
                         buttonPadding: const EdgeInsets.all(10),
                         actions: [
                           const DialogCancelButton(),

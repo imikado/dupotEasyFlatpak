@@ -50,7 +50,6 @@ class _InstallWithRecipeButtonState extends State<InstallWithRecipeButton> {
                     return StatefulBuilder(
                         builder: (context, StateSetter setState) {
                       return AlertDialog(
-                        backgroundColor: Theme.of(context).secondaryHeaderColor,
                         buttonPadding: const EdgeInsets.all(10),
                         actions: [
                           const DialogCancelButton(),
@@ -82,11 +81,8 @@ class _InstallWithRecipeButtonState extends State<InstallWithRecipeButton> {
                                       LocalizationApi()
                                           .tr('Installation_scope'),
                                       style: TextStyle(
-                                          fontSize: 14,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .headlineLarge!
-                                              .color),
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ),
                                   Padding(

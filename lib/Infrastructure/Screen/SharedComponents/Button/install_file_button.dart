@@ -83,11 +83,8 @@ class _InstallFileButtonState extends State<InstallFileButton> {
                                       LocalizationApi()
                                           .tr('Installation_scope'),
                                       style: TextStyle(
-                                          fontSize: 14,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .headlineLarge!
-                                              .color),
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ),
                                   Padding(

@@ -144,7 +144,7 @@ class NewInterfaceWithDrawerAndAnimationState
                             padding: const EdgeInsets.all(5),
                             child: Card(
                               elevation: 4,
-                              color: Theme.of(context).secondaryHeaderColor,
+                              //    color: Theme.of(context).secondaryHeaderColor,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -205,11 +205,8 @@ class NewInterfaceWithDrawerAndAnimationState
                       translation: Offset(-1 + _drawerController.value, 0),
                       child: Material(
                         elevation: 16,
-                        child: Container(
+                        child: SizedBox(
                           width: 304,
-                          color:
-                              Theme.of(context).drawerTheme.backgroundColor ??
-                                  Theme.of(context).canvasColor,
                           child: getMenu(),
                         ),
                       ),
@@ -253,10 +250,8 @@ class NewInterfaceWithDrawerAndAnimationState
                   children: [
                     Material(
                       elevation: 8,
-                      child: Container(
+                      child: SizedBox(
                         width: 300,
-                        color: Theme.of(context).drawerTheme.backgroundColor ??
-                            Theme.of(context).canvasColor,
                         child: getMenu(),
                       ),
                     ),
@@ -270,7 +265,6 @@ class NewInterfaceWithDrawerAndAnimationState
                           padding: const EdgeInsets.all(5),
                           child: Card(
                             elevation: 4,
-                            color: Theme.of(context).secondaryHeaderColor,
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                               child: widget.subContent,

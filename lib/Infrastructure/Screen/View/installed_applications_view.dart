@@ -98,7 +98,6 @@ class _InstalledApplicationsViewState extends State<InstalledApplicationsView> {
                       value: shirt.$1,
                       label: Icon(
                         shirt.$2,
-                        color: themeButtonStyle.getButtonTextStyle().color,
                       ));
                 }).toList(),
               ),

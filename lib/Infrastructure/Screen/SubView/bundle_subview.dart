@@ -144,56 +144,53 @@ class _BundleSubviewState extends State<BundleSubview> {
     String applicationId = applicationEntity.id;
 
     return Card(
-        color: Theme.of(context).secondaryHeaderColor,
         child: CheckboxListTile(
-          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-          onChanged: (bool? value) {
-            Map<String, bool> checkboxList = stateCheckboxList;
+      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+      onChanged: (bool? value) {
+        Map<String, bool> checkboxList = stateCheckboxList;
 
-            checkboxList[applicationId] = value!;
+        checkboxList[applicationId] = value!;
 
-            setState(() {
-              stateCheckboxList = checkboxList;
-            });
-          },
-          enabled: isEnabledByApplication(applicationId),
-          value: stateCheckboxList[applicationId],
-          title: Column(
-            spacing: 0,
+        setState(() {
+          stateCheckboxList = checkboxList;
+        });
+      },
+      enabled: isEnabledByApplication(applicationId),
+      value: stateCheckboxList[applicationId],
+      title: Column(
+        spacing: 0,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  !applicationEntity.hasAppIcon()
-                      ? Image.asset('assets/images/no-image.png', height: 60)
-                      : Image.file(
-                          height: 60,
-                          File(
-                              '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntity.getAppIcon()}')),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      spacing: 0,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          applicationEntity.getName(),
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .color),
-                        ),
-                        Text(applicationEntity.getSummary(),
-                            style: TextStyle(fontSize: 14)),
-                      ],
+              !applicationEntity.hasAppIcon()
+                  ? Image.asset('assets/images/no-image.png', height: 60)
+                  : Image.file(
+                      height: 60,
+                      File(
+                          '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntity.getAppIcon()}')),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  spacing: 0,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      applicationEntity.getName(),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color:
+                              Theme.of(context).textTheme.headlineLarge!.color),
                     ),
-                  )
-                ],
-              ),
+                    Text(applicationEntity.getSummary(),
+                        style: TextStyle(fontSize: 14)),
+                  ],
+                ),
+              )
             ],
           ),
-        ));
+        ],
+      ),
+    ));
   }
 
   Widget getAddToCartButton() {

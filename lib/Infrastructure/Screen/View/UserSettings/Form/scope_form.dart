@@ -29,8 +29,7 @@ class _ScopeFormState extends State<ScopeForm> {
       ListTile(
         title: Text(
           LocalizationApi().tr('Installation_scope'),
-          style: TextStyle(
-              color: Theme.of(context).textTheme.headlineLarge!.color),
+          style: TextStyle(),
         ),
       ),
       Padding(

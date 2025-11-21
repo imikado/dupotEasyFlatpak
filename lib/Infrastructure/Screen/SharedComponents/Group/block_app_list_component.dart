@@ -50,9 +50,9 @@ class BlockAppListComponent extends StatelessWidget {
             Text(
               LocalizationApi().tr(categoryId),
               style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey),
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

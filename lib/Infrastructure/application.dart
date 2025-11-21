@@ -1,3 +1,4 @@
+import 'package:dupot_easy_flatpak/Domain/Entity/info_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/recipe/permission_overrided_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
@@ -116,11 +117,6 @@ class ApplicationState extends State<Application> {
     } catch (e) {
       LoggerApi().error('Open payload error: $e');
     }
-  }
-
-  void processInit() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version = packageInfo.version;
   }
 
   @override
@@ -267,7 +263,7 @@ class ApplicationState extends State<Application> {
       );
     } else if (pageToLoad == NavigationEntity.pageAbout) {
       return AboutView(
-        version: version,
+        version: InfoEntity().getVersion(),
       );
     } else if (pageToLoad == NavigationEntity.pageCart) {
       String applicationId = '';

@@ -104,8 +104,6 @@ class _CategoryViewState extends State<CategoryView> {
                             value: shirt.$1,
                             label: Icon(
                               shirt.$2,
-                              color:
-                                  themeButtonStyle.getButtonTextStyle().color,
                             ));
                       }).toList(),
                     ),

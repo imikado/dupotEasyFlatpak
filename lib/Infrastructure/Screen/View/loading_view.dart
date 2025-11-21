@@ -106,30 +106,29 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).secondaryHeaderColor,
         body: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 200,
-              ),
-              Image.asset(
-                'assets/logos/splash.png',
-                width: 200,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              LinearProgressIndicator(
-                value: progressValue,
-                color: Theme.of(context).primaryColorDark,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(stateLoadingInfo)
-            ],
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 200,
           ),
-        ));
+          Image.asset(
+            'assets/logos/splash.png',
+            width: 200,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          LinearProgressIndicator(
+            value: progressValue,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(stateLoadingInfo)
+        ],
+      ),
+    ));
   }
 }

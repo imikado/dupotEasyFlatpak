@@ -28,16 +28,14 @@ class CardApplicationComponent extends StatelessWidget {
                 handleGoTo: handleGoTo, applicationId: id, title: title);
           },
           child: Card(
-              color: Theme.of(context).secondaryHeaderColor,
               clipBehavior: Clip.hardEdge,
               child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ListTile(
                   title: Text(
                     title.length > 12 ? '${title.substring(0, 12)}..' : title,
                     style: TextStyle(
-                        fontSize: 18,
-                        color:
-                            Theme.of(context).textTheme.headlineLarge!.color),
+                      fontSize: 18,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -52,7 +50,6 @@ class CardApplicationComponent extends StatelessWidget {
     }
 
     return Card(
-        color: Theme.of(context).secondaryHeaderColor,
         clipBehavior: Clip.hardEdge,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           ListTile(

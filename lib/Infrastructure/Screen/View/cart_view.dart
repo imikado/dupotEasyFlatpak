@@ -165,71 +165,66 @@ class _CartViewState extends State<CartView> {
 
   Widget getLine(ApplicationEntity applicationEntity) {
     return Card(
-        color: widget.applicationId == applicationEntity.id
-            ? Theme.of(context).secondaryHeaderColor
-            : Theme.of(context).secondaryHeaderColor,
         child: ListTile(
-          title: Column(
+      title: Column(
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  !applicationEntity.hasAppIcon()
-                      ? Image.asset('assets/images/no-image.png', height: 60)
-                      : Image.file(
-                          height: 60,
-                          File(
-                              '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntity.getAppIcon()}')),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          applicationEntity.getName(),
-                          style: TextStyle(
-                              fontSize: 26,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .color),
-                        ),
-                        Text(applicationEntity.getSummary()),
-                      ],
+              const SizedBox(width: 10),
+              !applicationEntity.hasAppIcon()
+                  ? Image.asset('assets/images/no-image.png', height: 60)
+                  : Image.file(
+                      height: 60,
+                      File(
+                          '${UserSettingsEntity().getApplicationIconsPath()}/${applicationEntity.getAppIcon()}')),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      applicationEntity.getName(),
+                      style: TextStyle(
+                          fontSize: 26,
+                          color:
+                              Theme.of(context).textTheme.headlineLarge!.color),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      if (stateApplicationRecipeIdList
-                          .contains(applicationEntity.id))
-                        Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                            child: OverrideButton(
-                              applicationEntity: applicationEntity,
-                              handle: () {
-                                NavigationEntity
-                                    .goToCartSetupOverrideForApplicationId(
-                                        handleGoTo: widget.handleGoTo,
-                                        applicationId: applicationEntity.id);
-                              },
-                              isActive: widget.isMain,
-                              hasError: !widget.overrideSetupListByApplicationId
-                                  .containsKey(applicationEntity.id),
-                            )),
-                      RemoveFromCartButton(
+                    Text(applicationEntity.getSummary()),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if (stateApplicationRecipeIdList
+                      .contains(applicationEntity.id))
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        child: OverrideButton(
                           applicationEntity: applicationEntity,
                           handle: () {
-                            widget.handleRemoveFromCart(applicationEntity.id);
+                            NavigationEntity
+                                .goToCartSetupOverrideForApplicationId(
+                                    handleGoTo: widget.handleGoTo,
+                                    applicationId: applicationEntity.id);
                           },
-                          isActive: widget.isMain)
-                    ],
-                  )
+                          isActive: widget.isMain,
+                          hasError: !widget.overrideSetupListByApplicationId
+                              .containsKey(applicationEntity.id),
+                        )),
+                  RemoveFromCartButton(
+                      applicationEntity: applicationEntity,
+                      handle: () {
+                        widget.handleRemoveFromCart(applicationEntity.id);
+                      },
+                      isActive: widget.isMain)
                 ],
-              ),
+              )
             ],
           ),
-        ));
+        ],
+      ),
+    ));
   }
 
   Widget getInstallAllButton() {
