@@ -110,7 +110,7 @@ class NewInterfaceWithDrawerAndAnimationState
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    if (width < 1250) {
+    if (width < 1370) {
       displayMenuSearch = false;
       return returnLayoutWithDrawer(context);
     }
