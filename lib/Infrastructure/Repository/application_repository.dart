@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dupot_easy_flatpak/Domain/Entity/db/apicache_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_category_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
@@ -12,6 +13,7 @@ class ApplicationRepository {
   static const constTableApplication = 'appstream';
   static const constTableCategory = 'category';
   static const constTableApplicationCategory = 'category_appstream';
+  static const constTableApiCache = 'apicache';
 
   late DatabaseFactory database;
   late Database db;
@@ -76,6 +78,30 @@ class ApplicationRepository {
         await db.query(constTableCategory);
 
     return [for (final {'id': id as String} in rawCategoryList) id];
+  }
+
+  Future<ApiCacheEntity> findApiCacheById(String id) async {
+    final db = await getDb();
+    final List<Map<String, Object?>> rawApiCacheList = await db.rawQuery(
+        'SELECT id,content FROM $constTableApiCache WHERE id=?', [id]);
+
+    for (final {'id': id as String, 'content': content as String}
+        in rawApiCacheList) {
+      return ApiCacheEntity(id: id, content: content);
+    }
+    ApiCacheEntity emptyApiCache = ApiCacheEntity(id: '', content: '');
+    emptyApiCache.setEmpty();
+    return emptyApiCache;
+  }
+
+  Future<void> updateApiCacheById(ApiCacheEntity apiCacheEntity) async {
+    final db = await getDb();
+    await db.update(
+      constTableApiCache,
+      apiCacheEntity.toMap(),
+      where: 'id = ?',
+      whereArgs: [apiCacheEntity.id],
+    );
   }
 
   Future<List<ApplicationEntity>> findAllApplicationEntity() async {
@@ -512,13 +538,13 @@ class ApplicationRepository {
   }
 
   Future<bool> updateApplicationEntity(
-      ApplicationEntity ApplicationEntity) async {
+      ApplicationEntity applicationEntity) async {
     final db = await getDb();
     db.update(
       constTableApplication,
-      ApplicationEntity.toMap(),
+      applicationEntity.toMap(),
       where: 'id = ?',
-      whereArgs: [ApplicationEntity.id],
+      whereArgs: [applicationEntity.id],
     );
 
     return true;

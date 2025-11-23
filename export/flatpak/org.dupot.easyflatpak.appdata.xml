@@ -109,6 +109,14 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+<release date="2025-11-23" version="3.27.0"> 
+      <description>
+        <ul>
+          <li>Add home page api cache</li>
+          <li>Update application page if last update from api is older than 7 days</li>
+        </ul>
+      </description>
+    </release> 
 
 <release date="2025-11-21" version="3.26.0"> 
       <description>

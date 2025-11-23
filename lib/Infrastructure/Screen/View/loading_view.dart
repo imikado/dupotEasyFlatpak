@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dupot_easy_flatpak/Domain/Entity/db/apicache_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
@@ -58,7 +61,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       progressValue = 0.20;
     });
 
-    final applicatoinRepository = ApplicationRepository();
+    final applicationRepository = ApplicationRepository();
 
     LoggerApi().info('Starting flathub load');
     setState(() {
@@ -83,7 +86,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     }
 
     List<String> dbApplicationIdList =
-        await applicatoinRepository.findAllApplicationIdList();
+        await applicationRepository.findAllApplicationIdList();
 
     setState(() {
       stateLoadingInfo =
@@ -95,6 +98,50 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       progressValue = 0.8;
     });
     await CommandApi().checkUpdates();
+
+    FlathubApi flathubApi = FlathubApi();
+
+    setState(() {
+      stateLoadingInfo =
+          LocalizationApi().tr('loading_recently_update_from_api');
+    });
+
+    //recently updated
+    List<String> recentlyUpdatedApplicationIdList =
+        await flathubApi.getUpdatedRawApplicationIdList();
+
+    ApiCacheEntity recentlyUpdatedApiCacheEntity = ApiCacheEntity(
+        id: 'recentlyUpdatedApi',
+        content: jsonEncode(recentlyUpdatedApplicationIdList));
+
+    await applicationRepository
+        .updateApiCacheById(recentlyUpdatedApiCacheEntity);
+
+    setState(() {
+      stateLoadingInfo = LocalizationApi().tr('loading_popular_from_api');
+    });
+
+    //popular
+    List<String> popularApplicationIdList =
+        await flathubApi.getPopularRawApplicationIdList();
+
+    ApiCacheEntity popularApiCacheEntity = ApiCacheEntity(
+        id: 'popularApi', content: jsonEncode(popularApplicationIdList));
+
+    await applicationRepository.updateApiCacheById(popularApiCacheEntity);
+
+    setState(() {
+      stateLoadingInfo = LocalizationApi().tr('loading_trending_from_api');
+    });
+
+    //trending
+    List<String> trendingApplicationIdList =
+        await flathubApi.getTrendingRawApplicationIdList();
+
+    ApiCacheEntity trendingApiCacheEntity = ApiCacheEntity(
+        id: 'trendingApi', content: jsonEncode(trendingApplicationIdList));
+
+    await applicationRepository.updateApiCacheById(trendingApiCacheEntity);
 
     setState(() {
       progressValue = 1;

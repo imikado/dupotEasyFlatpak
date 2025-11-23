@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dupot_easy_flatpak/Domain/Entity/db/apicache_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
@@ -28,10 +31,13 @@ class HomeViewModel {
 
   Future<List<ApplicationEntity>>
       getUpdatedApplicationEntityListFromApi() async {
-    FlathubApi flathubApi = FlathubApi();
+    ApiCacheEntity apiCacheEntity =
+        await applicationRepository.findApiCacheById('recentlyUpdatedApi');
 
     List<String> applicationIdList =
-        await flathubApi.getUpdatedRawApplicationIdList();
+        (jsonDecode(apiCacheEntity.content) as List)
+            .map((e) => e.toString())
+            .toList();
 
     return await applicationRepository
         .findListApplicationEntityByIdList(applicationIdList);
@@ -39,10 +45,13 @@ class HomeViewModel {
 
   Future<List<ApplicationEntity>>
       getPopularApplicationEntityListFromApi() async {
-    FlathubApi flathubApi = FlathubApi();
+    ApiCacheEntity apiCacheEntity =
+        await applicationRepository.findApiCacheById('popularApi');
 
     List<String> applicationIdList =
-        await flathubApi.getPopularRawApplicationIdList();
+        (jsonDecode(apiCacheEntity.content) as List)
+            .map((e) => e.toString())
+            .toList();
 
     return await applicationRepository
         .findListApplicationEntityByIdList(applicationIdList);
@@ -50,10 +59,13 @@ class HomeViewModel {
 
   Future<List<ApplicationEntity>>
       getTrendingApplicationEntityListFromApi() async {
-    FlathubApi flathubApi = FlathubApi();
+    ApiCacheEntity apiCacheEntity =
+        await applicationRepository.findApiCacheById('trendingApi');
 
     List<String> applicationIdList =
-        await flathubApi.getTrendingRawApplicationIdList();
+        (jsonDecode(apiCacheEntity.content) as List)
+            .map((e) => e.toString())
+            .toList();
 
     return await applicationRepository
         .findListApplicationEntityByIdList(applicationIdList);

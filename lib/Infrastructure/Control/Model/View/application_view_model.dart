@@ -1,5 +1,6 @@
 import 'package:dupot_easy_flatpak/Domain/Entity/db/application_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/command_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flathub_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
 
@@ -7,8 +8,16 @@ class ApplicationViewModel {
   Future<ApplicationEntity> getApplicationEntity(String appId) async {
     ApplicationRepository appStreamFactory = ApplicationRepository();
 
-    ApplicationEntity applicationEntity =
-        await appStreamFactory.findApplicationEntityById(appId);
+    ApplicationEntity applicationEntity;
+
+    applicationEntity = await appStreamFactory.findApplicationEntityById(appId);
+
+    if (applicationEntity.lastUpdateIsOlderThan(7)) {
+      await FlathubApi().updateAppStream(appId);
+
+      applicationEntity =
+          await appStreamFactory.findApplicationEntityById(appId);
+    }
 
     applicationEntity.isAlreadyInstalled = await checkAlreadyInstalled(appId);
     if (applicationEntity.isAlreadyInstalled) {
