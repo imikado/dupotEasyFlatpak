@@ -22,6 +22,8 @@
     <p>It will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better. </p>
     <p>For example, for Steam, it asks the user to choose a folder where they store their games before installation.</p>
     <p>And you can setup this games path in the settings page for all applications which need it (steam,lutris, heroic games launcher, bottles)</p>
+    <p>Bundles are available to install multiple applications in same time</p>
+    <p>You can install your local .flatpak files stored in Downloads directory (application is not allowed to access your other directories)</p>
     <p>Available in many languages:</p>
     <p>- English</p>
     <p>- Spanish</p>
@@ -30,7 +32,7 @@
     <p>- Brazilian</p>
     <p>- Arabic</p>
     <p>- Romanian</p>
-    
+        
    </description>
 
   <screenshots>
