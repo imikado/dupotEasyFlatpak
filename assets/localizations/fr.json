@@ -148,5 +148,8 @@
   "home_updated": "Applications récemment mises à jour",
   "home_popular": "Applications populaires",
   "installFlatpakWithCaution": "Installez ce fichier flatpak avec prudence",
-  "Games_path": "Répertoire de jeux"
+  "Games_path": "Répertoire de jeux",
+  "loading_recently_update_from_api": "chargement des applications récemment mises à jour depuis l'API",
+  "loading_popular_from_api": "chargement des applications populaires depuis l'API",
+  "loading_trending_from_api": "chargement des applications tendance depuis l'API"
 }

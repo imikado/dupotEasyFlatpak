@@ -148,5 +148,8 @@
   "home_updated": "Aplicaciones actualizadas recientemente",
   "home_popular": "Aplicaciones populares",
   "installFlatpakWithCaution": "Instala este archivo flatpak con precaución",
-  "Games_path": "Ruta de los juegos"
+  "Games_path": "Ruta de los juegos",
+  "loading_recently_update_from_api": "cargando aplicaciones actualizadas recientemente desde la API",
+  "loading_popular_from_api": "cargando aplicaciones populares desde la API",
+  "loading_trending_from_api": "cargando aplicaciones en tendencia desde la API"
 }

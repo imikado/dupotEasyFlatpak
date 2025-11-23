@@ -148,5 +148,8 @@
   "home_updated": "التطبيقات التي تم تحديثها مؤخرًا",
   "home_popular": "التطبيقات الشائعة",
   "installFlatpakWithCaution": "قم بتثبيت ملف الـ Flatpak هذا بحذر",
-  "Games_path": "مسار الألعاب"
+  "Games_path": "مسار الألعاب",
+  "loading_recently_update_from_api": "جاري تحميل التطبيقات التي تم تحديثها مؤخرًا من واجهة البرمجة",
+  "loading_popular_from_api": "جاري تحميل التطبيقات الشائعة من واجهة البرمجة",
+  "loading_trending_from_api": "جاري تحميل التطبيقات الرائجة من واجهة البرمجة"
 }

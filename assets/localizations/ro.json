@@ -148,5 +148,8 @@
     "home_updated": "Aplicații actualizate recent",
     "home_popular": "Aplicații populare",
     "installFlatpakWithCaution": "Instalează acest fișier flatpak cu prudență",
-    "Games_path": "Calea jocurilor"
+    "Games_path": "Calea jocurilor",
+    "loading_recently_update_from_api": "se încarcă aplicațiile actualizate recent din API",
+    "loading_popular_from_api": "se încarcă aplicațiile populare din API",
+    "loading_trending_from_api": "se încarcă aplicațiile în tendințe din API"
 }
