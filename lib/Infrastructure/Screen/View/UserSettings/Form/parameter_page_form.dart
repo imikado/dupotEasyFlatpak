@@ -42,6 +42,9 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    String customResolution = '${size.width.toInt()}x${size.height.toInt()}';
+
     return Column(children: [
       ListTile(
         title: Text(
@@ -86,7 +89,11 @@ class _ParameterPageFormState extends State<ParameterPageForm> {
                   value: UserSettingsEntity.defaultResolution1400x900),
               RadioStringEntity(
                   label: 'parameter_fullscreen',
-                  value: UserSettingsEntity.defaultResolutionFullscreen)
+                  value: UserSettingsEntity.defaultResolutionFullscreen),
+              RadioStringEntity(
+                  label: customResolution,
+                  value: customResolution,
+                  translate: false)
             ],
             value: widget.userSettings.getDefaultResolution(),
             handleUpdateValue: updateDefaultResolution),

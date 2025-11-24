@@ -114,6 +114,7 @@
         <ul>
           <li>Add home page api cache</li>
           <li>Update application page if last update from api is older than 7 days</li>
+          <li>Add feature to store custom window size</li>
         </ul>
       </description>
     </release> 

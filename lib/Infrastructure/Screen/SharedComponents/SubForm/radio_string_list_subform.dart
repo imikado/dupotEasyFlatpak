@@ -24,7 +24,9 @@ class RadioStringListSubform extends StatelessWidget {
                 titleTextStyle: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).textTheme.headlineLarge!.color),
-                title: Text(LocalizationApi().tr(radioStringEntityLoop.label)),
+                title: Text(radioStringEntityLoop.translate
+                    ? LocalizationApi().tr(radioStringEntityLoop.label)
+                    : radioStringEntityLoop.label),
                 leading: Radio<String>(
                   value: radioStringEntityLoop.value,
                   groupValue: value,

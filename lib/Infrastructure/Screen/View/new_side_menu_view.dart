@@ -106,6 +106,7 @@ class NewSideMenuViewState extends State<NewSideMenuView>
         await SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getBottomMenuItemEntityList(shouldCheckUpdates);
 
+    if (!mounted) return;
     setState(() {
       stateCategoryMenuItemList = categoryMenuItemList;
       stateCartMenuItemList = cartMenuItemList;

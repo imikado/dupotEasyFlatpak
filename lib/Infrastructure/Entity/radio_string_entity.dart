@@ -1,5 +1,7 @@
 class RadioStringEntity {
   String label;
   String value;
-  RadioStringEntity({required this.label, required this.value});
+  bool translate;
+  RadioStringEntity(
+      {required this.label, required this.value, this.translate = true});
 }
