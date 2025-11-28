@@ -383,8 +383,13 @@ class FlathubApi {
     }
 
     Map<String, String> rawUrls = {};
-    if (rawAppStream.containsKey('urls')) {
-      rawUrls = Map<String, String>.from(rawAppStream['urls'] as Map);
+
+    final urls = rawAppStream['urls'];
+    if (urls is Map) {
+      rawUrls = {
+        for (final entry in urls.entries)
+          if (entry.value != null) entry.key.toString(): entry.value.toString(),
+      };
     }
 
     List<Map<String, dynamic>> rawReleaseObjList = [];

@@ -109,6 +109,14 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+<release date="2025-11-28" version="3.27.1"> 
+      <description>
+        <ul>
+          <li>Bug fix when display application</li>
+        </ul>
+      </description>
+    </release> 
+
 <release date="2025-11-23" version="3.27.0"> 
       <description>
         <ul>
