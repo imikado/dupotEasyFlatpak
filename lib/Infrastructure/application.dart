@@ -8,6 +8,7 @@ import 'package:dupot_easy_flatpak/Infrastructure/Screen/Layout/only_content_lay
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/bundle_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_install_all_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/cart_override_subview.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/downgrade_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/export_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/import_subview.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SubView/install_flatpakfile_subview.dart';
@@ -330,6 +331,22 @@ class ApplicationState extends State<Application> {
             handleGoTo: goTo, applicationId: applicationId, title: ''),
         handleDisableSideMenu: disableSideMenu,
         handleEnableSideMenu: enableSideMenu,
+        installScope:
+            NavigationEntity.extractArgumentInstallScope(stateArgumentMap),
+      );
+    } else if (subPageToLoad == NavigationEntity.argumentSubPageDowngrade) {
+      String applicationId =
+          NavigationEntity.extractArgumentApplicationId(stateArgumentMap);
+
+      removeFromCart(applicationId);
+
+      return DowngradeSubview(
+        applicationId: applicationId,
+        handleGoToApplication: () => NavigationEntity.gotToApplicationId(
+            handleGoTo: goTo, applicationId: applicationId, title: ''),
+        handleDisableSideMenu: disableSideMenu,
+        handleEnableSideMenu: enableSideMenu,
+        commit: NavigationEntity.extractArgumentCommit(stateArgumentMap),
         installScope:
             NavigationEntity.extractArgumentInstallScope(stateArgumentMap),
       );

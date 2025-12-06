@@ -5,8 +5,10 @@ import 'package:dupot_easy_flatpak/Domain/Entity/application_installed_entity.da
 import 'package:dupot_easy_flatpak/Domain/Entity/application_update_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/flatpak_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Entity/flatpak_history_entry.dart';
 
 class CommandApi {
   static const String flatpakCommand = 'flatpak';
@@ -78,6 +80,26 @@ class CommandApi {
       appIdList.add(applicationUpdateLoop.id.toLowerCase());
     }
     return appIdList;
+  }
+
+  Future<List<FlatpakHistoryEntry>> getPreviousVersionListByAppId(
+      bool isScopeUser, String appId) async {
+    String scope = '--system';
+    if (isScopeUser) {
+      scope = '--user';
+    }
+
+    ProcessResult result = await runProcess(
+        'flatpak', ['remote-info', '--log', scope, 'flathub', appId]);
+    String output = result.stdout.toString();
+
+    List<FlatpakHistoryEntry> flatpakHistoryList =
+        FlatpakApi().parseFlatpakHistory(output);
+
+    if (flatpakHistoryList.length > 20) {
+      return flatpakHistoryList.sublist(0, 20);
+    }
+    return flatpakHistoryList;
   }
 
   Future<String> updateFlatpak(String appId) async {
@@ -260,6 +282,29 @@ class CommandApi {
       return true;
     }
     return false;
+  }
+
+  Future<String> getCommitForApplication(String applicationId) async {
+    ProcessResult result =
+        await runProcessSync(flatpakCommand, ['info', applicationId]);
+
+    String output = result.stdout.toString();
+
+    final lines = output.split('\n');
+
+    for (final rawLine in lines) {
+      final line = rawLine.trim();
+
+      // Match lines like:
+      // Commit: 8cb0232...
+      // Commit: 03ba9b5...
+      if (line.startsWith("Commit:")) {
+        // extract everything after "Commit:"
+        final commit = line.replaceFirst("Commit:", "").trim();
+        if (commit.isNotEmpty) return commit;
+      }
+    }
+    return '';
   }
 
   Future<FlatpakOverrideApplication> isApplicationOverrided(

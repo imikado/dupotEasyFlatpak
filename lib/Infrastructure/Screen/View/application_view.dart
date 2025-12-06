@@ -7,12 +7,14 @@ import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Model/View/application_view_model.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/navigation_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/add_to_cart_button.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/downgrade_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/install_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/install_with_recipe_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/override_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/remove_from_cart_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/run_button.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/uninstall_button.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/loading.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -71,6 +73,14 @@ class ApplicationView extends StatefulWidget {
         handleGoTo: handleGoTo,
         applicationId: applicationIdSelected,
         willDeleteAppData: willDeleteAppData,
+        installUserScope: installUserScope);
+  }
+
+  void goToDowngrade(String commit, bool installUserScope) {
+    NavigationEntity.goToApplicationDowngrade(
+        handleGoTo: handleGoTo,
+        applicationId: applicationIdSelected,
+        commit: commit,
         installUserScope: installUserScope);
   }
 
@@ -137,6 +147,26 @@ class _ApplicationViewState extends State<ApplicationView> {
     setState(() {
       stateAppStream = appStream;
     });
+
+    updateData(appStream);
+  }
+
+  Future<void> updateData(ApplicationEntity applicationEntityFound) async {
+    ApplicationEntity appStreamUpdate = await ApplicationViewModel()
+        .updateDataForApplicationIfNeeded(applicationEntityFound);
+
+    if (!mounted) {
+      return;
+    }
+
+    applicationEntityFound.releaseObjList = appStreamUpdate.releaseObjList;
+    applicationEntityFound.description = appStreamUpdate.description;
+    applicationEntityFound.summary = appStreamUpdate.summary;
+    applicationEntityFound.metadataObj = appStreamUpdate.metadataObj;
+
+    setState(() {
+      stateAppStream = applicationEntityFound;
+    });
   }
 
   ButtonStyle getButtonStyle(BuildContext context) {
@@ -151,7 +181,7 @@ class _ApplicationViewState extends State<ApplicationView> {
   @override
   Widget build(BuildContext context) {
     return stateAppStream == null
-        ? const LinearProgressIndicator()
+        ? LoadingComponent()
         : Scrollbar(
             interactive: false,
             thumbVisibility: true,
@@ -237,6 +267,11 @@ class _ApplicationViewState extends State<ApplicationView> {
                                 height: 2,
                               ),
                               getRunButton(stateAppStream!.isAlreadyInstalled),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              getDowngradeButton(
+                                  stateAppStream!.isAlreadyInstalled),
                               const SizedBox(
                                 height: 2,
                               ),
@@ -470,6 +505,16 @@ class _ApplicationViewState extends State<ApplicationView> {
   Widget getRunButton(bool isAlreadyInstalled) {
     return isAlreadyInstalled
         ? RunButton(applicationEntity: stateAppStream!, isActive: widget.isMain)
+        : const SizedBox();
+  }
+
+  Widget getDowngradeButton(bool isAlreadyInstalled) {
+    return isAlreadyInstalled
+        ? DowngradeButton(
+            applicationEntity: stateAppStream!,
+            handle: widget.goToDowngrade,
+            isActive: widget.isMain,
+            scopeUser: stateAppStream!.isScopeUser)
         : const SizedBox();
   }
 

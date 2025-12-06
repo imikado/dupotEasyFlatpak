@@ -151,5 +151,8 @@
     "Games_path": "Calea jocurilor",
     "loading_recently_update_from_api": "se încarcă aplicațiile actualizate recent din API",
     "loading_popular_from_api": "se încarcă aplicațiile populare din API",
-    "loading_trending_from_api": "se încarcă aplicațiile în tendințe din API"
+    "loading_trending_from_api": "se încarcă aplicațiile în tendințe din API",
+    "downgrade": "Retrogradează",
+    "downgrade_version_title": "Retrogradează la versiunea",
+    "choose_version_to_downgrade": "Alege versiunea la care să retrogradezi"
 }

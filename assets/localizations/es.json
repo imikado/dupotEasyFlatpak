@@ -151,5 +151,8 @@
   "Games_path": "Ruta de los juegos",
   "loading_recently_update_from_api": "cargando aplicaciones actualizadas recientemente desde la API",
   "loading_popular_from_api": "cargando aplicaciones populares desde la API",
-  "loading_trending_from_api": "cargando aplicaciones en tendencia desde la API"
+  "loading_trending_from_api": "cargando aplicaciones en tendencia desde la API",
+  "downgrade": "Revertir",
+  "downgrade_version_title": "Revertir a la versión",
+  "choose_version_to_downgrade": "Elija la versión a revertir"
 }

@@ -103,7 +103,6 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (numberOfNewApplicationFromApi > 0) getUpdateDatabaseButton(),
               Spacer(),
               if (stateApplicationUpdateList.isNotEmpty) getUpdateAllButton(),
               const SizedBox(

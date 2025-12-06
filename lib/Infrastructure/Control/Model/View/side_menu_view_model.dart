@@ -234,7 +234,6 @@ class SideMenuViewModel {
   }
 
   String getUpdateAvailableLabel() {
-    return (CommandApi().getNumberOfUpdates() + numberOfNewApplicationFromApi)
-        .toString();
+    return (CommandApi().getNumberOfUpdates()).toString();
   }
 }

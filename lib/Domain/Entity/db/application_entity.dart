@@ -176,6 +176,14 @@ class ApplicationEntity {
     return releaseMapList;
   }
 
+  String getLastVersionId() {
+    for (dynamic rawReleaseObjLoop in releaseObjList) {
+      return rawReleaseObjLoop['version'];
+    }
+
+    return '';
+  }
+
   List<Map<String, String>> getUrlObjList() {
     List<Map<String, String>> urlObjList = [];
 

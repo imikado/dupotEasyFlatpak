@@ -151,5 +151,8 @@
   "Games_path": "Répertoire de jeux",
   "loading_recently_update_from_api": "chargement des applications récemment mises à jour depuis l'API",
   "loading_popular_from_api": "chargement des applications populaires depuis l'API",
-  "loading_trending_from_api": "chargement des applications tendance depuis l'API"
+  "loading_trending_from_api": "chargement des applications tendance depuis l'API",
+  "downgrade": "Rétrograder",
+  "downgrade_version_title": "Rétrograder vers la version",
+  "choose_version_to_downgrade": "Choisissez la version à rétrograder"
 }

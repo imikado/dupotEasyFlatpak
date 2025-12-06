@@ -151,5 +151,8 @@
   "Games_path": "Games path",
   "loading_recently_update_from_api": "loading recently updated applications from api",
   "loading_popular_from_api": "loading popular applications from api",
-  "loading_trending_from_api": "loading trending applications from api"
+  "loading_trending_from_api": "loading trending applications from api",
+  "downgrade": "Downgrade",
+  "downgrade_version_title": "Downgrade to version",
+  "choose_version_to_downgrade": "Choose version to downgrade"
 }

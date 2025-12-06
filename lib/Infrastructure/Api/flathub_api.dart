@@ -22,6 +22,9 @@ class FlathubApi {
   int numberOfApplicationUpdated = 0;
 
   List<String> cacheRawApplicationIdList = [];
+  List<String> cacheRawRecentApplicationIdList = [];
+  List<String> cacheRawTrendingApplicationIdList = [];
+  List<String> cacheRawPopularApplicationIdList = [];
 
   static final FlathubApi _singleton = FlathubApi._internal();
 
@@ -45,6 +48,26 @@ class FlathubApi {
 
     ApplicationEntity appStream =
         await getApplicationEntityFromApi(applicationId);
+
+    await getApplicationRepository().updateApplicationEntity(appStream);
+
+    downloadIcon(appStream, PathApi.getIconsCachePath());
+
+    return true;
+  }
+
+  Future<bool> updateAppStreamIfLastVesionIsDifferent(
+      String applicationId, String lastVersionId) async {
+    if (!await applicationExist(applicationId)) {
+      return false;
+    }
+
+    ApplicationEntity appStream =
+        await getApplicationEntityFromApi(applicationId);
+
+    if (appStream.getLastVersionId() == lastVersionId) {
+      return true;
+    }
 
     await getApplicationRepository().updateApplicationEntity(appStream);
 
@@ -201,67 +224,90 @@ class FlathubApi {
         p.join(PathApi.getIconsCachePath(), appStream.getAppIcon()));
   }
 
-  Future<List<String>> getCompatApplicationFromApi(String url) async {
-    var apiContent = await http.get(Uri.parse(url));
-
-    Map<String, dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
-
-    List<String> addedApplicationIdList = [];
-    for (Map<String, dynamic> rawAddedApplicationLoop
-        in rawAddedApplicationList['hits']) {
-      addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
-    }
-
-    return addedApplicationIdList;
-  }
-
   Future<List<String>> getUpdatedRawApplicationIdList() async {
-    var apiContent = await http.get(Uri.parse(
-        'https://flathub.org/api/v2/collection/recently-updated?page=0&per_page=8&locale=en'));
+    try {
+      var apiContent = await http.get(Uri.parse(
+          'https://flathub.org/api/v2/collection/recently-updated?page=0&per_page=8&locale=en'));
 
-    Map<String, dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
+      Map<String, dynamic> rawAddedApplicationList =
+          jsonDecode(apiContent.body);
 
-    List<String> addedApplicationIdList = [];
-    for (Map<String, dynamic> rawAddedApplicationLoop
-        in rawAddedApplicationList['hits']) {
-      addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
+      List<String> addedApplicationIdList = [];
+      for (Map<String, dynamic> rawAddedApplicationLoop
+          in rawAddedApplicationList['hits']) {
+        addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
+      }
+
+      return addedApplicationIdList;
+    } catch (_) {
+      return [];
     }
-
-    return addedApplicationIdList;
   }
 
   Future<List<String>> getPopularRawApplicationIdList() async {
-    return getCompatApplicationFromApi(
-        'https://flathub.org/api/v2/collection/popular?page=0&per_page=10&locale=en');
+    if (cacheRawPopularApplicationIdList.isEmpty) {
+      try {
+        var apiContent = await http.get(Uri.parse(
+            'https://flathub.org/api/v2/collection/popular?page=0&per_page=10&locale=en'));
+
+        Map<String, dynamic> rawAddedApplicationList =
+            jsonDecode(apiContent.body);
+
+        List<String> addedApplicationIdList = [];
+        for (Map<String, dynamic> rawAddedApplicationLoop
+            in rawAddedApplicationList['hits']) {
+          addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
+        }
+
+        cacheRawPopularApplicationIdList = addedApplicationIdList;
+      } catch (_) {
+        cacheRawPopularApplicationIdList = [];
+      }
+    }
+
+    return cacheRawPopularApplicationIdList;
   }
 
   Future<List<String>> getTrendingRawApplicationIdList() async {
-    var apiContent = await http.get(Uri.parse(
-        'https://flathub.org/api/v2/collection/trending?page=0&per_page=8&locale=en'));
+    if (cacheRawTrendingApplicationIdList.isEmpty) {
+      try {
+        var apiContent = await http.get(Uri.parse(
+            'https://flathub.org/api/v2/collection/trending?page=0&per_page=8&locale=en'));
 
-    Map<String, dynamic> rawAddedApplicationList = jsonDecode(apiContent.body);
+        Map<String, dynamic> rawAddedApplicationList =
+            jsonDecode(apiContent.body);
 
-    List<String> addedApplicationIdList = [];
-    for (Map<String, dynamic> rawAddedApplicationLoop
-        in rawAddedApplicationList['hits']) {
-      addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
+        List<String> addedApplicationIdList = [];
+        for (Map<String, dynamic> rawAddedApplicationLoop
+            in rawAddedApplicationList['hits']) {
+          addedApplicationIdList.add(rawAddedApplicationLoop['app_id']);
+        }
+
+        cacheRawTrendingApplicationIdList = addedApplicationIdList;
+      } catch (_) {
+        cacheRawTrendingApplicationIdList = [];
+      }
     }
 
-    return addedApplicationIdList;
+    return cacheRawTrendingApplicationIdList;
   }
 
   Future<List<String>> getAllRawApplicationList() async {
-    var apiContent =
-        await http.get(Uri.parse('https://flathub.org/api/v2/appstream'));
+    try {
+      var apiContent =
+          await http.get(Uri.parse('https://flathub.org/api/v2/appstream'));
 
-    List<dynamic> rawAppApplicationList = jsonDecode(apiContent.body);
+      List<dynamic> rawAppApplicationList = jsonDecode(apiContent.body);
 
-    List<String> appStreamIdList = [];
-    for (String rawAppApplicationIdSringLoop in rawAppApplicationList) {
-      appStreamIdList.add(rawAppApplicationIdSringLoop);
+      List<String> appStreamIdList = [];
+      for (String rawAppApplicationIdSringLoop in rawAppApplicationList) {
+        appStreamIdList.add(rawAppApplicationIdSringLoop);
+      }
+
+      return appStreamIdList;
+    } catch (_) {
+      return [];
     }
-
-    return appStreamIdList;
   }
 
   Future<List<String>> getApplicationIdListBySearch(String search) async {
@@ -288,23 +334,27 @@ class FlathubApi {
   }
 
   Future<List<String>> getRawRecentApplicationList() async {
-    if (cacheRawApplicationIdList.isEmpty) {
-      var apiContent = await http.get(
-          Uri.parse('https://flathub.org/api/v2/collection/recently-added'));
+    if (cacheRawRecentApplicationIdList.isEmpty) {
+      try {
+        var apiContent = await http.get(
+            Uri.parse('https://flathub.org/api/v2/collection/recently-added'));
 
-      Map<String, dynamic> rawAppApplicationAddedObj =
-          jsonDecode(apiContent.body);
+        Map<String, dynamic> rawAppApplicationAddedObj =
+            jsonDecode(apiContent.body);
 
-      List<String> appStreamIdList = [];
-      for (Map<String, dynamic> rawAppApplicationAddedLoop
-          in rawAppApplicationAddedObj['hits']) {
-        appStreamIdList.add(rawAppApplicationAddedLoop['app_id']!);
+        List<String> appStreamIdList = [];
+        for (Map<String, dynamic> rawAppApplicationAddedLoop
+            in rawAppApplicationAddedObj['hits']) {
+          appStreamIdList.add(rawAppApplicationAddedLoop['app_id']!);
+        }
+
+        cacheRawRecentApplicationIdList = appStreamIdList;
+      } catch (_) {
+        cacheRawRecentApplicationIdList = [];
       }
-
-      cacheRawApplicationIdList = appStreamIdList;
     }
 
-    return cacheRawApplicationIdList;
+    return cacheRawRecentApplicationIdList;
   }
 
   Future<bool> applicationExist(String appSteamId) async {
@@ -319,144 +369,152 @@ class FlathubApi {
 
   Future<ApplicationEntity> getApplicationEntityFromApi(
       String appSteamId) async {
-    var apiContent = await http
-        .get(Uri.parse('https://flathub.org/api/v2/appstream/$appSteamId'));
+    try {
+      var apiContent = await http
+          .get(Uri.parse('https://flathub.org/api/v2/appstream/$appSteamId'));
 
-    if (apiContent.statusCode == 404) {
+      if (apiContent.statusCode == 404) {
+        return ApplicationEntity.generateEmpty();
+      }
+
+      Map<String, dynamic> rawAppStream = jsonDecode(apiContent.body);
+
+      var apiSummaryContent = await http
+          .get(Uri.parse('https://flathub.org/api/v2/summary/$appSteamId'));
+
+      Map<String, dynamic> rawAppSummary = jsonDecode(apiSummaryContent.body);
+
+      List<String> categoryList = [];
+      if (rawAppStream.containsKey('categories')) {
+        categoryList = List<String>.from(rawAppStream['categories'] as List);
+      }
+
+      String icon = '';
+      if (rawAppStream.containsKey('icon') && rawAppStream['icon'] != null) {
+        icon = rawAppStream['icon'];
+      }
+
+      Map<String, dynamic> metadataObj = {};
+      if (rawAppStream.containsKey('metadata') &&
+          rawAppStream['metadata'] != '') {
+        Map<String, dynamic> rawMetadata =
+            Map<String, dynamic>.from(rawAppStream['metadata'] as Map);
+
+        bool flathubVerified = false;
+        if (rawMetadata.containsKey('flathub::verification::verified') &&
+            rawMetadata['flathub::verification::verified'] == 'true') {
+          flathubVerified = true;
+        }
+
+        metadataObj['flathub_verified'] = flathubVerified;
+
+        if (rawAppSummary.containsKey('download_size')) {
+          metadataObj['download_size'] = rawAppSummary['download_size'];
+        }
+        if (rawAppSummary.containsKey('installed_size')) {
+          metadataObj['installed_size'] = rawAppSummary['installed_size'];
+        }
+
+        if (rawMetadata.containsKey('flathub::verification::method')) {
+          String method = rawMetadata['flathub::verification::method'];
+
+          if (method == 'website') {
+            metadataObj['flathub_verified_url'] =
+                'https://${rawMetadata['flathub::verification::website']}';
+
+            metadataObj['flathub_verified_label'] =
+                rawMetadata['flathub::verification::website'];
+          } else if (method == 'login_provider') {
+            metadataObj['flathub_verified_url'] =
+                'https://${rawMetadata['flathub::verification::login_provider']}.com/${rawMetadata['flathub::verification::login_name']}';
+
+            metadataObj['flathub_verified_label'] =
+                '@${rawMetadata['flathub::verification::login_name']} on ${rawMetadata['flathub::verification::login_provider']}';
+          }
+        }
+      }
+
+      Map<String, String> rawUrls = {};
+
+      final urls = rawAppStream['urls'];
+      if (urls is Map) {
+        rawUrls = {
+          for (final entry in urls.entries)
+            if (entry.value != null)
+              entry.key.toString(): entry.value.toString(),
+        };
+      }
+
+      List<Map<String, dynamic>> rawReleaseObjList = [];
+      if (rawAppStream.containsKey('releases')) {
+        rawReleaseObjList =
+            List<Map<String, dynamic>>.from(rawAppStream['releases'] as List);
+      }
+
+      int lastReleaseTimestamp = 0;
+      for (Map<String, dynamic> rawReleaseObjLoop in rawReleaseObjList) {
+        if (rawReleaseObjLoop.containsKey('timestamp') &&
+            rawReleaseObjLoop['timestamp'] != null &&
+            int.parse(rawReleaseObjLoop['timestamp']) > lastReleaseTimestamp) {
+          lastReleaseTimestamp = int.parse(rawReleaseObjLoop['timestamp']);
+        }
+      }
+
+      // ignore: non_constant_identifier_names
+      String developer_name = '';
+      if (rawAppStream.containsKey('developer_name')) {
+        developer_name = rawAppStream['developer_name'];
+      }
+
+      String projectLicense = '';
+      if (rawAppStream.containsKey('project_license')) {
+        projectLicense = rawAppStream['project_license'];
+      }
+
+      List<Map<String, String>> screenshotObjList = [];
+      if (rawAppStream.containsKey('screenshots')) {
+        List<Map<String, dynamic>> rawScreenshotList =
+            List<Map<String, dynamic>>.from(
+                rawAppStream['screenshots'] as List);
+
+        for (Map<String, dynamic> rawScreenshotLoop in rawScreenshotList) {
+          if (rawScreenshotLoop.containsKey('sizes')) {
+            Map<String, String> screenshotLoop = {};
+            for (Map<String, dynamic> rawSizeLoop
+                in rawScreenshotLoop['sizes']) {
+              if (int.parse(rawSizeLoop['width']) < 600) {
+                screenshotLoop['preview'] = rawSizeLoop['src'];
+              }
+              if (int.parse(rawSizeLoop['width']) > 700) {
+                screenshotLoop['large'] = rawSizeLoop['src'];
+              }
+            }
+
+            if (screenshotLoop.containsKey('preview') &&
+                screenshotLoop.containsKey('large')) {
+              screenshotObjList.add(screenshotLoop);
+            }
+          }
+        }
+      }
+
+      return ApplicationEntity(
+          id: rawAppStream['id'],
+          name: rawAppStream['name'],
+          summary: rawAppStream['summary'],
+          httpIcon: icon,
+          categoryIdList: categoryList,
+          description: rawAppStream['description'],
+          lastUpdate: DateTime.now().millisecondsSinceEpoch,
+          metadataObj: metadataObj,
+          urlObj: rawUrls,
+          releaseObjList: rawReleaseObjList,
+          projectLicense: projectLicense,
+          developer_name: developer_name,
+          screenshotObjList: screenshotObjList,
+          lastReleaseTimestamp: lastReleaseTimestamp);
+    } catch (_) {
       return ApplicationEntity.generateEmpty();
     }
-
-    Map<String, dynamic> rawAppStream = jsonDecode(apiContent.body);
-
-    var apiSummaryContent = await http
-        .get(Uri.parse('https://flathub.org/api/v2/summary/$appSteamId'));
-
-    Map<String, dynamic> rawAppSummary = jsonDecode(apiSummaryContent.body);
-
-    List<String> categoryList = [];
-    if (rawAppStream.containsKey('categories')) {
-      categoryList = List<String>.from(rawAppStream['categories'] as List);
-    }
-
-    String icon = '';
-    if (rawAppStream.containsKey('icon') && rawAppStream['icon'] != null) {
-      icon = rawAppStream['icon'];
-    }
-
-    Map<String, dynamic> metadataObj = {};
-    if (rawAppStream.containsKey('metadata')) {
-      Map<String, dynamic> rawMetadata =
-          Map<String, dynamic>.from(rawAppStream['metadata'] as Map);
-
-      bool flathubVerified = false;
-      if (rawMetadata.containsKey('flathub::verification::verified') &&
-          rawMetadata['flathub::verification::verified'] == 'true') {
-        flathubVerified = true;
-      }
-
-      metadataObj['flathub_verified'] = flathubVerified;
-
-      if (rawAppSummary.containsKey('download_size')) {
-        metadataObj['download_size'] = rawAppSummary['download_size'];
-      }
-      if (rawAppSummary.containsKey('installed_size')) {
-        metadataObj['installed_size'] = rawAppSummary['installed_size'];
-      }
-
-      if (rawMetadata.containsKey('flathub::verification::method')) {
-        String method = rawMetadata['flathub::verification::method'];
-
-        if (method == 'website') {
-          metadataObj['flathub_verified_url'] =
-              'https://${rawMetadata['flathub::verification::website']}';
-
-          metadataObj['flathub_verified_label'] =
-              rawMetadata['flathub::verification::website'];
-        } else if (method == 'login_provider') {
-          metadataObj['flathub_verified_url'] =
-              'https://${rawMetadata['flathub::verification::login_provider']}.com/${rawMetadata['flathub::verification::login_name']}';
-
-          metadataObj['flathub_verified_label'] =
-              '@${rawMetadata['flathub::verification::login_name']} on ${rawMetadata['flathub::verification::login_provider']}';
-        }
-      }
-    }
-
-    Map<String, String> rawUrls = {};
-
-    final urls = rawAppStream['urls'];
-    if (urls is Map) {
-      rawUrls = {
-        for (final entry in urls.entries)
-          if (entry.value != null) entry.key.toString(): entry.value.toString(),
-      };
-    }
-
-    List<Map<String, dynamic>> rawReleaseObjList = [];
-    if (rawAppStream.containsKey('releases')) {
-      rawReleaseObjList =
-          List<Map<String, dynamic>>.from(rawAppStream['releases'] as List);
-    }
-
-    int lastReleaseTimestamp = 0;
-    for (Map<String, dynamic> rawReleaseObjLoop in rawReleaseObjList) {
-      if (rawReleaseObjLoop.containsKey('timestamp') &&
-          rawReleaseObjLoop['timestamp'] != null &&
-          int.parse(rawReleaseObjLoop['timestamp']) > lastReleaseTimestamp) {
-        lastReleaseTimestamp = int.parse(rawReleaseObjLoop['timestamp']);
-      }
-    }
-
-    // ignore: non_constant_identifier_names
-    String developer_name = '';
-    if (rawAppStream.containsKey('developer_name')) {
-      developer_name = rawAppStream['developer_name'];
-    }
-
-    String projectLicense = '';
-    if (rawAppStream.containsKey('project_license')) {
-      projectLicense = rawAppStream['project_license'];
-    }
-
-    List<Map<String, String>> screenshotObjList = [];
-    if (rawAppStream.containsKey('screenshots')) {
-      List<Map<String, dynamic>> rawScreenshotList =
-          List<Map<String, dynamic>>.from(rawAppStream['screenshots'] as List);
-
-      for (Map<String, dynamic> rawScreenshotLoop in rawScreenshotList) {
-        if (rawScreenshotLoop.containsKey('sizes')) {
-          Map<String, String> screenshotLoop = {};
-          for (Map<String, dynamic> rawSizeLoop in rawScreenshotLoop['sizes']) {
-            if (int.parse(rawSizeLoop['width']) < 600) {
-              screenshotLoop['preview'] = rawSizeLoop['src'];
-            }
-            if (int.parse(rawSizeLoop['width']) > 700) {
-              screenshotLoop['large'] = rawSizeLoop['src'];
-            }
-          }
-
-          if (screenshotLoop.containsKey('preview') &&
-              screenshotLoop.containsKey('large')) {
-            screenshotObjList.add(screenshotLoop);
-          }
-        }
-      }
-    }
-
-    return ApplicationEntity(
-        id: rawAppStream['id'],
-        name: rawAppStream['name'],
-        summary: rawAppStream['summary'],
-        httpIcon: icon,
-        categoryIdList: categoryList,
-        description: rawAppStream['description'],
-        lastUpdate: DateTime.now().millisecondsSinceEpoch,
-        metadataObj: metadataObj,
-        urlObj: rawUrls,
-        releaseObjList: rawReleaseObjList,
-        projectLicense: projectLicense,
-        developer_name: developer_name,
-        screenshotObjList: screenshotObjList,
-        lastReleaseTimestamp: lastReleaseTimestamp);
   }
 }

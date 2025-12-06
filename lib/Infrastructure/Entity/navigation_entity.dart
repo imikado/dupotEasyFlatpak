@@ -38,6 +38,7 @@ class NavigationEntity {
   static const String argumentSubPageInstallWithRecipe =
       'application_installWithRecipe';
   static const String argumentSubPageUninstall = 'application_uninstall';
+  static const String argumentSubPageDowngrade = 'application_downgrade';
   static const String argumentSubPageOverride = 'application_override';
   static const String argumentSubPageUpdateAvailableProcessing =
       'updatesAvailables_processing';
@@ -51,6 +52,7 @@ class NavigationEntity {
   static const String argumentSubPageUpdateDatabase = 'updateDatabase';
 
   static const String argumentSubPageBundleDetail = 'bundle_detail';
+  static const String argumentCommit = 'commit';
 
   static const String argumentApplicationIdSelectedList =
       'application_id_selected_list';
@@ -160,6 +162,10 @@ class NavigationEntity {
     return argumentMap[argumentApplicationId];
   }
 
+  static extractArgumentCommit(Map<String, String> argumentMap) {
+    return argumentMap[argumentCommit];
+  }
+
   static extractArgumentCategoryId(Map<String, String> argumentMap) {
     return argumentMap[argumentCategoryId];
   }
@@ -233,6 +239,14 @@ class NavigationEntity {
     return installScope;
   }
 
+  static String getFlatpakUpdateScope(bool installUserScope) {
+    String installScope = '';
+    if (installUserScope) {
+      installScope = '-u';
+    }
+    return installScope;
+  }
+
   static goToApplicationInstall(
       {required Function handleGoTo,
       required String applicationId,
@@ -241,6 +255,19 @@ class NavigationEntity {
       argumentApplicationId: applicationId,
       argumentSubPage: argumentSubPageInstall,
       argumentInstallScope: getFlatpakScope(installUserScope)
+    });
+  }
+
+  static goToApplicationDowngrade(
+      {required Function handleGoTo,
+      required String applicationId,
+      required bool installUserScope,
+      required String commit}) {
+    handleGoTo(page: pageApplication, argumentMap: {
+      argumentApplicationId: applicationId,
+      argumentSubPage: argumentSubPageDowngrade,
+      argumentCommit: commit,
+      argumentInstallScope: getFlatpakUpdateScope(installUserScope)
     });
   }
 

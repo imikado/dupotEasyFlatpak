@@ -151,5 +151,8 @@
   "Games_path": "Percorso dei giochi",
   "loading_recently_update_from_api": "caricamento delle applicazioni aggiornate di recente dall'API",
   "loading_popular_from_api": "caricamento delle applicazioni popolari dall'API",
-  "loading_trending_from_api": "caricamento delle applicazioni di tendenza dall'API"
+  "loading_trending_from_api": "caricamento delle applicazioni di tendenza dall'API",
+  "downgrade": "Ripristina",
+  "downgrade_version_title": "Ripristina alla versione",
+  "choose_version_to_downgrade": "Scegli la versione da ripristinare"
 }

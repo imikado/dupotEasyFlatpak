@@ -151,5 +151,8 @@
   "Games_path": "مسار الألعاب",
   "loading_recently_update_from_api": "جاري تحميل التطبيقات التي تم تحديثها مؤخرًا من واجهة البرمجة",
   "loading_popular_from_api": "جاري تحميل التطبيقات الشائعة من واجهة البرمجة",
-  "loading_trending_from_api": "جاري تحميل التطبيقات الرائجة من واجهة البرمجة"
+  "loading_trending_from_api": "جاري تحميل التطبيقات الرائجة من واجهة البرمجة",
+  "downgrade": "الرجوع إلى إصدار سابق",
+  "downgrade_version_title": "الرجوع إلى الإصدار",
+  "choose_version_to_downgrade": "اختر الإصدار للرجوع إليه"
 }

@@ -12,13 +12,6 @@ class ApplicationViewModel {
 
     applicationEntity = await appStreamFactory.findApplicationEntityById(appId);
 
-    if (applicationEntity.lastUpdateIsOlderThan(7)) {
-      await FlathubApi().updateAppStream(appId);
-
-      applicationEntity =
-          await appStreamFactory.findApplicationEntityById(appId);
-    }
-
     applicationEntity.isAlreadyInstalled = await checkAlreadyInstalled(appId);
     if (applicationEntity.isAlreadyInstalled) {
       applicationEntity.isScopeUser = await isInstalledInUserScope(appId);
@@ -27,6 +20,25 @@ class ApplicationViewModel {
     applicationEntity.isOverrided = await checkIsOverrided(appId);
 
     applicationEntity.hasRecipe = await checkHasRecipe(appId);
+
+    return applicationEntity;
+  }
+
+  Future<ApplicationEntity> updateDataForApplicationIfNeeded(
+      ApplicationEntity applicationEntity) async {
+    String appId = applicationEntity.id;
+
+    ApplicationRepository appStreamFactory = ApplicationRepository();
+
+    if (applicationEntity.lastUpdateIsOlderThan(7)) {
+      String lastVersionId = applicationEntity.getLastVersionId();
+
+      await FlathubApi()
+          .updateAppStreamIfLastVesionIsDifferent(appId, lastVersionId);
+
+      applicationEntity =
+          await appStreamFactory.findApplicationEntityById(appId);
+    }
 
     return applicationEntity;
   }
