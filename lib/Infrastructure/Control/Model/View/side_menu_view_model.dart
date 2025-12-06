@@ -124,14 +124,8 @@ class SideMenuViewModel {
     return menuItemList;
   }
 
-  Future<List<MenuItemEntity>> getBottomMenuItemEntityList(
-      bool shouldCheckUpdates) async {
-    if (shouldCheckUpdates) {
-      await CommandApi().checkUpdates();
-    }
-
+  Future<List<MenuItemEntity>> getMiddleMenuItemEntityList() async {
     List<MenuItemEntity> menuItemList = [];
-
     menuItemList.add(MenuItemEntity(
         label: 'Bundles',
         action: () {
@@ -144,27 +138,11 @@ class SideMenuViewModel {
         categoryIdSelected: '',
         icon: Icons.add_box));
 
-    menuItemList.add(MenuItemEntity(
-        label: 'InstalledApps',
-        action: () {
-          NavigationEntity.goToInstalledApplications(handleGoTo: handleGoTo);
-        },
-        pageSelected: NavigationEntity.pageInstalledApplication,
-        categoryIdSelected: '',
-        badge: await getInstalledAppLabel(),
-        icon: Icons.install_desktop));
+    return menuItemList;
+  }
 
-    if (await shouldDisplayUpdateButton()) {
-      menuItemList.add(MenuItemEntity(
-          label: 'Updates',
-          action: () {
-            NavigationEntity.goToUpdatesAvailables(handleGoTo: handleGoTo);
-          },
-          pageSelected: NavigationEntity.pageUpdateAvailables,
-          categoryIdSelected: '',
-          badge: getUpdateAvailableLabel(),
-          icon: Icons.notifications));
-    }
+  Future<List<MenuItemEntity>> getEndMenuItemEntityList() async {
+    List<MenuItemEntity> menuItemList = [];
 
     menuItemList.add(MenuItemEntity(
         label: 'Settings',
@@ -201,6 +179,39 @@ class SideMenuViewModel {
         categoryIdSelected: '',
         badge: '',
         icon: Icons.help));
+
+    return menuItemList;
+  }
+
+  Future<List<MenuItemEntity>> getBottomMenuItemEntityList(
+      bool shouldCheckUpdates) async {
+    if (shouldCheckUpdates) {
+      await CommandApi().checkUpdates();
+    }
+
+    List<MenuItemEntity> menuItemList = [];
+
+    menuItemList.add(MenuItemEntity(
+        label: 'InstalledApps',
+        action: () {
+          NavigationEntity.goToInstalledApplications(handleGoTo: handleGoTo);
+        },
+        pageSelected: NavigationEntity.pageInstalledApplication,
+        categoryIdSelected: '',
+        badge: await getInstalledAppLabel(),
+        icon: Icons.install_desktop));
+
+    if (await shouldDisplayUpdateButton()) {
+      menuItemList.add(MenuItemEntity(
+          label: 'Updates',
+          action: () {
+            NavigationEntity.goToUpdatesAvailables(handleGoTo: handleGoTo);
+          },
+          pageSelected: NavigationEntity.pageUpdateAvailables,
+          categoryIdSelected: '',
+          badge: getUpdateAvailableLabel(),
+          icon: Icons.notifications));
+    }
 
     return menuItemList;
   }

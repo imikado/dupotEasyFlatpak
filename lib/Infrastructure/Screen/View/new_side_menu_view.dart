@@ -38,6 +38,10 @@ class NewSideMenuViewState extends State<NewSideMenuView>
   List<MenuItemEntity> stateCartMenuItemList = [];
   List<MenuItemEntity> stateSearchMenuItemList = [];
 
+  List<MenuItemEntity> stateEndMenuItemList = [];
+
+  List<MenuItemEntity> stateMiddleMenuItemList = [];
+
   int stateNumberOfUpdates = 0;
 
   ScrollController scrollController = ScrollController();
@@ -93,14 +97,29 @@ class NewSideMenuViewState extends State<NewSideMenuView>
         await SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getCategoryMenuItemEntityList();
 
+    List<MenuItemEntity> endMenuItemList =
+        await SideMenuViewModel(handleGoTo: widget.handleGoTo)
+            .getEndMenuItemEntityList();
+
+    List<MenuItemEntity> middleMenuItemList =
+        await SideMenuViewModel(handleGoTo: widget.handleGoTo)
+            .getMiddleMenuItemEntityList();
+
+    if (!mounted) return;
+    setState(() {
+      stateCategoryMenuItemList = categoryMenuItemList;
+      stateEndMenuItemList = endMenuItemList;
+      stateMiddleMenuItemList = middleMenuItemList;
+    });
+
     List<MenuItemEntity> cartMenuItemList =
         SideMenuViewModel(handleGoTo: widget.handleGoTo)
             .getCartMenuItemEntyList(widget.applicationIdListInCart);
 
-    List<MenuItemEntity> searchMenuItemList =
-        SideMenuViewModel(handleGoTo: widget.handleGoTo)
-            .getSearchMenuItemEntyListWithoutPage(
-                widget.searched, widget.displaySearch);
+    if (!mounted) return;
+    setState(() {
+      stateCartMenuItemList = cartMenuItemList;
+    });
 
     List<MenuItemEntity> bottomMenuItemList =
         await SideMenuViewModel(handleGoTo: widget.handleGoTo)
@@ -108,10 +127,6 @@ class NewSideMenuViewState extends State<NewSideMenuView>
 
     if (!mounted) return;
     setState(() {
-      stateCategoryMenuItemList = categoryMenuItemList;
-      stateCartMenuItemList = cartMenuItemList;
-      stateSearchMenuItemList = searchMenuItemList;
-
       stateBottomMenuItemList = bottomMenuItemList;
     });
   }
@@ -220,11 +235,19 @@ class NewSideMenuViewState extends State<NewSideMenuView>
           height: 28,
         ),
         Column(
+            children: stateMiddleMenuItemList
+                .map((menuItemLoop) => getMenuLine(menuItemLoop))
+                .toList()),
+        Column(
           key: const PageStorageKey('SideMenuViewListBottomMenu'),
           children: stateBottomMenuItemList
               .map((menuItemLoop) => getMenuLine(menuItemLoop))
               .toList(),
         ),
+        Column(
+            children: stateEndMenuItemList
+                .map((menuItemLoop) => getMenuLine(menuItemLoop))
+                .toList())
       ],
     );
   }
