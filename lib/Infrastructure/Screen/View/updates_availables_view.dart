@@ -40,7 +40,6 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
   @override
   void initState() {
     loadData();
-    loadNumberOfNewApplicationFromApi();
 
     super.initState();
   }
@@ -48,7 +47,6 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
   @override
   void didUpdateWidget(UpdatesAvailablesView oldWidget) {
     loadData();
-    loadNumberOfNewApplicationFromApi();
 
     super.didUpdateWidget(oldWidget);
   }
@@ -81,15 +79,6 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
 
       stateApplicationUpdateList = distinctApplicationUpdateList;
       stateApplicationEntityList = applicationEntityList;
-    });
-  }
-
-  void loadNumberOfNewApplicationFromApi() async {
-    int newNumberOfNewApplicationFromApi =
-        await FlathubApi().getNumberOfNewApplicationFromApi();
-
-    setState(() {
-      numberOfNewApplicationFromApi = newNumberOfNewApplicationFromApi;
     });
   }
 
@@ -196,21 +185,6 @@ class _UpdatesAvailablesViewState extends State<UpdatesAvailablesView> {
         ],
       ),
     ));
-  }
-
-  Widget getUpdateDatabaseButton() {
-    return UpdateDatabaseButton(
-        isActive: widget.isMain,
-        handle: () {
-          NavigationEntity.goToUpdatesAvailablesUpdateDatabase(
-              handleGoTo: widget.handleGoTo);
-        },
-        badgeWidget: Badge(
-            backgroundColor: Theme.of(context).primaryColor,
-            label: Text(
-              numberOfNewApplicationFromApi.toString(),
-              style: themeButtonStyle.getButtonTextStyle(),
-            )));
   }
 
   Widget getUpdateButton() {

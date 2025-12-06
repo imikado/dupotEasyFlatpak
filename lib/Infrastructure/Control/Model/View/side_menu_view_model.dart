@@ -220,16 +220,10 @@ class SideMenuViewModel {
   }
 
   Future<bool> shouldDisplayUpdateButton() async {
-    numberOfNewApplicationFromApi =
-        await FlathubApi().getNumberOfNewApplicationFromApi();
-
     if (CommandApi().getNumberOfUpdates() > 0) {
       return true;
     }
 
-    if (numberOfNewApplicationFromApi > 0) {
-      return true;
-    }
     return false;
   }
 
