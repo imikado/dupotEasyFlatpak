@@ -73,7 +73,7 @@ class _BundlesViewState extends State<BundlesView> {
                 children: [
                   const SizedBox(width: 10),
                   Image.asset(height: 60, bundleEntity.icon),
-                  const SizedBox(width: 20),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

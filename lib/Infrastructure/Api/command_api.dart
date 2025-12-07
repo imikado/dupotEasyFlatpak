@@ -8,6 +8,7 @@ import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/flatpak_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/path_api.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Api/recipe_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Entity/flatpak_history_entry.dart';
 
 class CommandApi {
@@ -18,6 +19,7 @@ class CommandApi {
   List<ApplicationUpdate> applicationUpdateAvailableList = [];
   List<String> dbApplicationIdList = [];
   List<ApplicationInstalledEntity> applicationInstalledList = [];
+  List<String> recipeList = [];
 
   static final CommandApi _singleton = CommandApi._internal();
 
@@ -32,6 +34,17 @@ class CommandApi {
 
   bool isInsideFlatpak() {
     return settingsObj.useFlatpakSpawn();
+  }
+
+  Future<bool> checkHasRecipe(String applicationId) async {
+    if (recipeList.isEmpty) {
+      recipeList = await RecipeApi().getApplicationList();
+    }
+
+    if (recipeList.contains(applicationId.toLowerCase())) {
+      return true;
+    }
+    return false;
   }
 
   Future<bool> isOsDarkMode() async {
@@ -237,8 +250,8 @@ class CommandApi {
   }
 
   Future<void> loadApplicationInstalledList() async {
-    ProcessResult result =
-        await runProcess('flatpak', ['list', '--columns=application,version']);
+    ProcessResult result = await runProcess(
+        'flatpak', ['list', '--columns=application,version,installation']);
     String applicationInstalledOutput = result.stdout.toString();
 
     applicationInstalledList.clear();
@@ -249,17 +262,20 @@ class CommandApi {
         if (RegExp(r'\t').hasMatch(lineLoop)) {
           List<String> lineLoopList = lineLoop.split("\t");
 
-          // if (hasApplicationInDatabase(lineLoopList[0])) {
-          applicationInstalledList.add(
-              ApplicationInstalledEntity(lineLoopList[0], lineLoopList[1]));
+          bool isScopeUserLoop = false;
+          if (lineLoopList[2] == 'user') {
+            isScopeUserLoop = true;
+          }
+
+          applicationInstalledList.add(ApplicationInstalledEntity(
+              lineLoopList[0], lineLoopList[1], isScopeUserLoop));
           //}
         }
       }
     }
   }
 
-  Future<FlatpakApplication> isApplicationAlreadyInstalled(
-      String applicationId) async {
+  FlatpakApplication isApplicationAlreadyInstalled(String applicationId) {
     var isAlreadyInstalled = false;
 
     for (ApplicationInstalledEntity applicationEntityLoop
@@ -274,14 +290,22 @@ class CommandApi {
     return FlatpakApplication(isAlreadyInstalled, '');
   }
 
-  Future<bool> isApplicationInstalledInScopeUser(String applicationId) async {
-    ProcessResult result =
-        await runProcessSync(flatpakCommand, ['info', applicationId]);
-
-    if (result.stdout.toString().contains('Installation: user')) {
-      return true;
+  ApplicationInstalledEntity getApplicationInstalledById(String applicationId) {
+    for (ApplicationInstalledEntity applicationEntityLoop
+        in applicationInstalledList) {
+      if (applicationEntityLoop.id.toLowerCase() ==
+          applicationId.toLowerCase()) {
+        return applicationEntityLoop;
+      }
     }
-    return false;
+    throw Exception(
+        'Error when try to find installed application by id: $applicationId');
+  }
+
+  bool isApplicationInstalledInScopeUser(String applicationId) {
+    ApplicationInstalledEntity applicationInstalledFound =
+        getApplicationInstalledById(applicationId);
+    return applicationInstalledFound.isScopeUser;
   }
 
   Future<String> getCommitForApplication(String applicationId) async {

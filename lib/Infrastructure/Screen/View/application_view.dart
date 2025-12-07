@@ -103,6 +103,7 @@ class _ApplicationViewState extends State<ApplicationView> {
   String applicationIdSelected = '';
 
   String appPath = '';
+  bool stateLoaded = false;
 
   final ScrollController scrollController = ScrollController();
 
@@ -127,7 +128,7 @@ class _ApplicationViewState extends State<ApplicationView> {
   Future<void> updateAlreadyInstalled() async {
     ApplicationEntity appStream = stateAppStream!;
     appStream.isAlreadyInstalled =
-        await ApplicationViewModel().checkAlreadyInstalled(appStream.id);
+        ApplicationViewModel().checkAlreadyInstalled(appStream.id);
 
     setState(() {
       stateAppStream = appStream;
@@ -166,6 +167,7 @@ class _ApplicationViewState extends State<ApplicationView> {
 
     setState(() {
       stateAppStream = applicationEntityFound;
+      stateLoaded = true;
     });
   }
 
@@ -248,34 +250,62 @@ class _ApplicationViewState extends State<ApplicationView> {
                         ? const SizedBox()
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              getOverrideButton(
-                                  stateAppStream!.isAlreadyInstalled,
-                                  stateAppStream!.hasRecipe),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              getAddToCartButton(
-                                  stateAppStream!.isAlreadyInstalled),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              getInstallButton(
-                                  stateAppStream!.isAlreadyInstalled,
-                                  stateAppStream!.hasRecipe),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              getRunButton(stateAppStream!.isAlreadyInstalled),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              getDowngradeButton(
-                                  stateAppStream!.isAlreadyInstalled),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                            ],
+                            children: !stateLoaded
+                                ? [
+                                    getAddToCartButton(
+                                        stateAppStream!.isAlreadyInstalled),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    getInstallButton(
+                                        stateAppStream!.isAlreadyInstalled,
+                                        stateAppStream!.hasRecipe),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    getRunButton(
+                                        stateAppStream!.isAlreadyInstalled),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    getOverrideButton(
+                                        stateAppStream!.isAlreadyInstalled,
+                                        stateAppStream!.hasRecipe),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    if (stateAppStream!.isAlreadyInstalled)
+                                      LoadingComponent()
+                                  ]
+                                : [
+                                    getAddToCartButton(
+                                        stateAppStream!.isAlreadyInstalled),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    getInstallButton(
+                                        stateAppStream!.isAlreadyInstalled,
+                                        stateAppStream!.hasRecipe),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    getRunButton(
+                                        stateAppStream!.isAlreadyInstalled),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    getOverrideButton(
+                                        stateAppStream!.isAlreadyInstalled,
+                                        stateAppStream!.hasRecipe),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    getDowngradeButton(
+                                        stateAppStream!.isAlreadyInstalled),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                  ],
                           ),
                     const SizedBox(width: 20)
                   ],

@@ -12,13 +12,10 @@ class ApplicationViewModel {
 
     applicationEntity = await appStreamFactory.findApplicationEntityById(appId);
 
-    applicationEntity.isAlreadyInstalled = await checkAlreadyInstalled(appId);
+    applicationEntity.isAlreadyInstalled = checkAlreadyInstalled(appId);
     if (applicationEntity.isAlreadyInstalled) {
-      applicationEntity.isScopeUser = await isInstalledInUserScope(appId);
+      applicationEntity.isScopeUser = isInstalledInUserScope(appId);
     }
-
-    applicationEntity.isOverrided = await checkIsOverrided(appId);
-
     applicationEntity.hasRecipe = await checkHasRecipe(appId);
 
     return applicationEntity;
@@ -40,6 +37,8 @@ class ApplicationViewModel {
           await appStreamFactory.findApplicationEntityById(appId);
     }
 
+    //applicationEntity.isOverrided = await checkIsOverrided(appId);
+
     return applicationEntity;
   }
 
@@ -51,22 +50,18 @@ class ApplicationViewModel {
   }
 
   Future<bool> checkHasRecipe(String applicationId) async {
-    List<String> recipeList = await RecipeApi().getApplicationList();
-    if (recipeList.contains(applicationId.toLowerCase())) {
-      return true;
-    }
-    return false;
+    return await CommandApi().checkHasRecipe(applicationId);
   }
 
-  Future<bool> checkAlreadyInstalled(String applicationId) async {
+  bool checkAlreadyInstalled(String applicationId) {
     FlatpakApplication result =
-        await CommandApi().isApplicationAlreadyInstalled(applicationId);
+        CommandApi().isApplicationAlreadyInstalled(applicationId);
 
     return result.isInstalled;
   }
 
-  Future<bool> isInstalledInUserScope(String applicationId) async {
-    return await CommandApi().isApplicationInstalledInScopeUser(applicationId);
+  bool isInstalledInUserScope(String applicationId) {
+    return CommandApi().isApplicationInstalledInScopeUser(applicationId);
   }
 
   Future<bool> checkIsOverrided(String applicationId) async {

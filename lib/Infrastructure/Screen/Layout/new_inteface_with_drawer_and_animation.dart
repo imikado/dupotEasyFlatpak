@@ -110,7 +110,7 @@ class NewInterfaceWithDrawerAndAnimationState
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    if (width < 1370) {
+    if (width < 1370 || width < 1600 && widget.hasSubContent) {
       displayMenuSearch = false;
       return returnLayoutWithDrawer(context);
     }
@@ -260,7 +260,7 @@ class NewInterfaceWithDrawerAndAnimationState
                         : Expanded(flex: 2, child: content),
                     if (widget.hasSubContent)
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: Padding(
                           padding: const EdgeInsets.all(5),
                           child: Card(
