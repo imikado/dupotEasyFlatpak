@@ -115,7 +115,7 @@ class FlathubApi {
     int limitLoaded = 0;
     for (String appStreamIdLoop in appStreamIdList) {
       if (applicationIdList.contains(appStreamIdLoop.toLowerCase())) {
-        await updateAppStream(appStreamIdLoop);
+        //await updateAppStream(appStreamIdLoop);
 
         loadNumberOfApplicationProcessed += 1;
         continue;
