@@ -20,6 +20,8 @@ class ApplicationRepository {
   bool isDbConnected = false;
   late String dbPath;
 
+  //insert into apicache values ('recentlyUpdatedApi','{}'),('popularApi','{}'),('trendingApi','{}');
+
   Future<void> init() async {
     dbPath = PathApi.getDbCachePath();
   }
