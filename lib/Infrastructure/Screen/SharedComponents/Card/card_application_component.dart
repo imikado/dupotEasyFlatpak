@@ -31,13 +31,17 @@ class CardApplicationComponent extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 ListTile(
-                  title: Text(
-                    title.length > 12 ? '${title.substring(0, 12)}..' : title,
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  title: Tooltip(
+                      message: title,
+                      child: Text(
+                        title.length > 12
+                            ? '${title.substring(0, 12)}..'
+                            : title,
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
                 ),
                 SizedBox(
                   height: 5,
@@ -53,13 +57,15 @@ class CardApplicationComponent extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           ListTile(
-            title: Text(
-              title.length > 8 ? '${title.substring(0, 8)}...' : title,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).textTheme.headlineLarge!.color),
-              textAlign: TextAlign.center,
-            ),
+            title: Tooltip(
+                message: title,
+                child: Text(
+                  title.length > 8 ? '${title.substring(0, 8)}...' : title,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).textTheme.headlineLarge!.color),
+                  textAlign: TextAlign.center,
+                )),
           ),
           Expanded(
               child: Image.asset(

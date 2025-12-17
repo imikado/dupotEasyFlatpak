@@ -111,6 +111,15 @@
 
 
 
+  <release date="2025-12-17" version="3.29.2"> 
+      <description>
+        <ul>
+          <li>Api bug fix</li>
+          <li>Add tooltip on cards</li>
+        </ul>
+      </description>
+    </release> 
+
   <release date="2025-12-07" version="3.29.1"> 
       <description>
         <ul>

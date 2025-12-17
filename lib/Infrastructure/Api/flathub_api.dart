@@ -188,6 +188,7 @@ class FlathubApi {
       if (appStream.isEmpty) {
         appStream.id = appStreamIdLoop;
         LoggerApi().warning('App not found on api');
+        continue;
       }
 
       downloadIcon(appStream, PathApi.getIconsCachePath());
@@ -200,7 +201,7 @@ class FlathubApi {
               appstream_id: appStreamIdLoop, category_id: categoryLoop));
         }
       }
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 10));
 
       numberOfApplicationAdded += 1;
     }

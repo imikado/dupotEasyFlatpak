@@ -69,6 +69,8 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
           .tr('loading_Should_update_application_list_from_Flathub_api');
     });
 
+    await FlathubApi().load();
+
     LoggerApi().info('Flathub load complete');
 
     setState(() {
