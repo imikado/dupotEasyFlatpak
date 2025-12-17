@@ -67,12 +67,24 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
     });
 
     LoggerApi().info('Starting flathub load');
-    setState(() {
-      stateLoadingInfo = LocalizationApi()
-          .tr('loading_Should_update_application_list_from_Flathub_api');
 
-      stateDisplayChoiceUpdate = true;
-    });
+    final applicationRepository = ApplicationRepository();
+
+    ApiCacheEntity parametersRow =
+        await applicationRepository.findApiCacheById('parameters');
+    Map<String, dynamic> parametersObj = jsonDecode(parametersRow.content);
+    int lastApiSyncTimeStamp = parametersObj['lastApiSyncTimeStamp'];
+
+    if (UserSettingsEntity().shouldSyncApi(lastApiSyncTimeStamp)) {
+      setState(() {
+        stateLoadingInfo = LocalizationApi()
+            .tr('loading_Should_update_application_list_from_Flathub_api');
+
+        stateDisplayChoiceUpdate = true;
+      });
+    } else {
+      processNext();
+    }
   }
 
   Future<void> processNext() async {
