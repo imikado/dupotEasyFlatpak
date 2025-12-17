@@ -8,6 +8,8 @@ import 'package:dupot_easy_flatpak/Infrastructure/Api/localization_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Api/logger_api.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Control/Process/update_from_flathub_process.dart';
 import 'package:dupot_easy_flatpak/Infrastructure/Repository/application_repository.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/choice_no_button.dart';
+import 'package:dupot_easy_flatpak/Infrastructure/Screen/SharedComponents/Button/choice_yes_button.dart';
 import 'package:flutter/material.dart';
 
 class LoadingView extends StatefulWidget {
@@ -25,6 +27,9 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
   double progressValue = 0.0;
 
   String stateLoadingInfo = '';
+  bool stateDisplayChoiceUpdate = false;
+
+  bool shouldSyncFromApi = false;
 
   @override
   void initState() {
@@ -40,7 +45,7 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
 
     await LocalizationApi().load();
     setState(() {
-      progressValue = 0.8;
+      progressValue = 0.15;
     });
 
     setState(() {
@@ -61,18 +66,34 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
       progressValue = 0.20;
     });
 
-    final applicationRepository = ApplicationRepository();
-
     LoggerApi().info('Starting flathub load');
     setState(() {
       stateLoadingInfo = LocalizationApi()
           .tr('loading_Should_update_application_list_from_Flathub_api');
+
+      stateDisplayChoiceUpdate = true;
     });
+  }
 
-    await FlathubApi().load();
+  Future<void> processNext() async {
+    final applicationRepository = ApplicationRepository();
 
-    LoggerApi().info('Flathub load complete');
+    setState(() {
+      stateLoadingInfo = LocalizationApi()
+          .tr('loading_Starting_update_application_list_from_Flathub_api');
+    });
+    if (shouldSyncFromApi) {
+      await FlathubApi().getRawRecentApplicationList();
+      setState(() {
+        progressValue = 0.30;
+      });
 
+      await FlathubApi().load();
+
+      LoggerApi().info('Flathub load complete');
+    } else {
+      LoggerApi().info('Flathub sync skipped');
+    }
     setState(() {
       progressValue = 0.50;
     });
@@ -108,42 +129,56 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
           LocalizationApi().tr('loading_recently_update_from_api');
     });
 
-    //recently updated
-    List<String> recentlyUpdatedApplicationIdList =
-        await flathubApi.getUpdatedRawApplicationIdList();
+    if (shouldSyncFromApi) {
+      //recently updated
+      List<String> recentlyUpdatedApplicationIdList =
+          await flathubApi.getUpdatedRawApplicationIdList();
 
-    ApiCacheEntity recentlyUpdatedApiCacheEntity = ApiCacheEntity(
-        id: 'recentlyUpdatedApi',
-        content: jsonEncode(recentlyUpdatedApplicationIdList));
+      ApiCacheEntity recentlyUpdatedApiCacheEntity = ApiCacheEntity(
+          id: 'recentlyUpdatedApi',
+          content: jsonEncode(recentlyUpdatedApplicationIdList));
 
-    await applicationRepository
-        .updateApiCacheById(recentlyUpdatedApiCacheEntity);
+      await applicationRepository
+          .updateApiCacheById(recentlyUpdatedApiCacheEntity);
+    }
 
     setState(() {
       stateLoadingInfo = LocalizationApi().tr('loading_popular_from_api');
     });
 
-    //popular
-    List<String> popularApplicationIdList =
-        await flathubApi.getPopularRawApplicationIdList();
+    if (shouldSyncFromApi) {
+      //popular
+      List<String> popularApplicationIdList =
+          await flathubApi.getPopularRawApplicationIdList();
 
-    ApiCacheEntity popularApiCacheEntity = ApiCacheEntity(
-        id: 'popularApi', content: jsonEncode(popularApplicationIdList));
+      ApiCacheEntity popularApiCacheEntity = ApiCacheEntity(
+          id: 'popularApi', content: jsonEncode(popularApplicationIdList));
 
-    await applicationRepository.updateApiCacheById(popularApiCacheEntity);
+      await applicationRepository.updateApiCacheById(popularApiCacheEntity);
+    }
 
     setState(() {
       stateLoadingInfo = LocalizationApi().tr('loading_trending_from_api');
     });
 
-    //trending
-    List<String> trendingApplicationIdList =
-        await flathubApi.getTrendingRawApplicationIdList();
+    if (shouldSyncFromApi) {
+      //trending
+      List<String> trendingApplicationIdList =
+          await flathubApi.getTrendingRawApplicationIdList();
 
-    ApiCacheEntity trendingApiCacheEntity = ApiCacheEntity(
-        id: 'trendingApi', content: jsonEncode(trendingApplicationIdList));
+      ApiCacheEntity trendingApiCacheEntity = ApiCacheEntity(
+          id: 'trendingApi', content: jsonEncode(trendingApplicationIdList));
 
-    await applicationRepository.updateApiCacheById(trendingApiCacheEntity);
+      await applicationRepository.updateApiCacheById(trendingApiCacheEntity);
+    }
+
+    if (shouldSyncFromApi) {
+      await applicationRepository.updateApiCacheById(ApiCacheEntity(
+          id: 'parameters',
+          content: jsonEncode({
+            'lastApiSyncTimeStamp': UserSettingsEntity().getTodayTimeStamp()
+          })));
+    }
 
     setState(() {
       progressValue = 1;
@@ -169,13 +204,36 @@ class _LoadingView extends State<LoadingView> with TickerProviderStateMixin {
             height: 10,
           ),
           LinearProgressIndicator(
+            minHeight: 20,
             value: progressValue,
             color: Theme.of(context).primaryColorDark,
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
           ),
           SizedBox(
             height: 10,
           ),
-          Text(stateLoadingInfo)
+          Text(stateLoadingInfo),
+          SizedBox(
+            height: 30,
+          ),
+          if (stateDisplayChoiceUpdate)
+            Row(
+              children: [
+                Spacer(),
+                ChoiceNoButton(handle: () {
+                  stateDisplayChoiceUpdate = false;
+                  shouldSyncFromApi = false;
+                  processNext();
+                }),
+                SizedBox(width: 20),
+                ChoiceYesButton(handle: () {
+                  stateDisplayChoiceUpdate = false;
+                  shouldSyncFromApi = true;
+                  processNext();
+                }),
+                Spacer()
+              ],
+            )
         ],
       ),
     ));

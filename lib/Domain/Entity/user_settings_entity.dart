@@ -15,7 +15,7 @@ const List<(AppDisplay, IconData)> appDisplayOptions = <(AppDisplay, IconData)>[
 ];
 
 class UserSettingsEntity {
-  int version = 14;
+  int version = 15;
 
   String jsonUserSettingsPath = '';
 
@@ -44,6 +44,8 @@ class UserSettingsEntity {
   String defaultResolution = defaultResolution1200x800;
 
   bool useFlathubSearchApi = false;
+
+  int syncApiIfOlderThanNDays = 7;
 
   String gamesPath = '';
 
@@ -304,5 +306,18 @@ class UserSettingsEntity {
     jsonParameterFile.writeAsStringSync(encoder.convert(
       jsonParameterObj,
     ));
+  }
+
+  int getTodayTimeStamp() {
+    return DateTime.now().millisecondsSinceEpoch;
+  }
+
+  bool shouldSyncApi(int lastApiUpdateTimeStamp) {
+    int deltaDays = syncApiIfOlderThanNDays * 86400000;
+
+    if ((lastApiUpdateTimeStamp + deltaDays) < getTodayTimeStamp()) {
+      return true;
+    }
+    return false;
   }
 }

@@ -201,7 +201,6 @@ class FlathubApi {
               appstream_id: appStreamIdLoop, category_id: categoryLoop));
         }
       }
-      await Future.delayed(const Duration(milliseconds: 10));
 
       numberOfApplicationAdded += 1;
     }
@@ -337,6 +336,7 @@ class FlathubApi {
   Future<List<String>> getRawRecentApplicationList() async {
     if (cacheRawRecentApplicationIdList.isEmpty) {
       try {
+        print('Load https://flathub.org/api/v2/collection/recently-added');
         var apiContent = await http.get(
             Uri.parse('https://flathub.org/api/v2/collection/recently-added'));
 
