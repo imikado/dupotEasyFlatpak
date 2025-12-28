@@ -24,6 +24,7 @@
     <p>And you can setup this games path in the settings page for all applications which need it (steam,lutris, heroic games launcher, bottles)</p>
     <p>Bundles are available to install multiple applications in same time</p>
     <p>You can install your local .flatpak files stored in Downloads directory (application is not allowed to access your other directories)</p>
+    <p>You can downgrade an application version</p>
     <p>Available in many languages:</p>
     <p>- English</p>
     <p>- Spanish</p>
@@ -110,6 +111,15 @@
   <releases>
 
 
+
+  <release date="2025-12-28" version="3.29.4"> 
+      <description>
+        <ul>
+          <li>Bug keeping user settings</li>
+          <li>Database update</li>
+        </ul>
+      </description>
+    </release> 
 
   <release date="2025-12-17" version="3.29.3"> 
       <description>

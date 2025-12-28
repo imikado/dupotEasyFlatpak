@@ -103,6 +103,7 @@ void main(List<String> args) async {
     }
 
     print('log directory : ${logDirectory.path}');
+    print('db directory : ${PathApi.getCachePath()}');
     LoggerApi(File(p.join(logDirectory.path, 'application.log')));
     LoggerApi().info('config directory:${configDirectory.path}');
     LoggerApi().info('cache directory:${cacheDirectory.path}');
@@ -160,6 +161,7 @@ void main(List<String> args) async {
           'json/userSettings.json', PathApi.getConfigPath());
     }
 
+    print('load userSettings file from "${userSettingsFile.path}"');
     UserSettingsEntity userSettings = UserSettingsEntity(userSettingsFile.path);
 
     if (userSettings.userOverrideLanguageCode) {
