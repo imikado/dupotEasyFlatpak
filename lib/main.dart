@@ -208,25 +208,29 @@ void main(List<String> args) async {
       size: defaultResolution,
       minimumSize: defaultResolution,
       skipTaskbar: false,
-      fullScreen: defaultFullScreen,
-      //windowButtonVisibility: true,
+      fullScreen: false,
+      windowButtonVisibility: true,
       backgroundColor: Colors.transparent,
       titleBarStyle: TitleBarStyle.normal,
       title: "Easy flatpak",
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       // Force apply size and position
-      await windowManager.setMinimumSize(defaultResolution);
+      //await windowManager.setMinimumSize(defaultResolution);
       await windowManager.setSize(defaultResolution);
       await windowManager.center(); // optional: center on screen
 
       await windowManager.show();
       await windowManager.focus();
+
+      if (defaultFullScreen) {
+        await windowManager.maximize();
+      }
+
+      final openPayload = parseOpenPayload(args);
+
+      runApp(MyApp(initialOpenPayload: openPayload));
     });
-
-    final openPayload = parseOpenPayload(args);
-
-    runApp(MyApp(initialOpenPayload: openPayload));
 
     //runApp(MyApp());
   } on Exception catch (e) {
