@@ -1,3 +1,3 @@
 class InfoEntity {
-  String version='3.29.4';
+  String version='3.29.5';
 }

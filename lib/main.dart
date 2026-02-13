@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:adwaita/adwaita.dart';
+import 'package:dupot_easy_flatpak/Theme/adwaita_theme.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/info_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/settings_entity.dart';
 import 'package:dupot_easy_flatpak/Domain/Entity/user_settings_entity.dart';
