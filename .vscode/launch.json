@@ -5,15 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib/main.dart"
-        },
-        {
             "name": "dupotEasyFlatpak",
             "request": "launch",
-            "type": "dart"
+            "type": "debugpy",
+            "program": "${workspaceFolder}/src/main.py",
+            "cwd": "${workspaceFolder}/src",
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "name": "dupotEasyFlatpak (profile mode)",

@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=false
-Name=Easy flatpak
-Exec=dupot_easy_flatpak %u
-Icon=dupot_easy_flatpak
-Categories=Utility;
