@@ -1,21 +1,46 @@
 class AppstreamLongEntity:
 
-    def __init__(self, id: str, name: str, summary: str, icon: str,
-                 project_license: str, category_id_list: str, description: str,
-                 metadata_obj: str, url_obj: str, release_obj_list: str,
-                 last_update: int, developer_name: str, screenshot_list: str,
-                 last_release_timestamp: int):
-        self.id = id
-        self.name = name
-        self.summary = summary
-        self.icon = icon
-        self.project_license = project_license
-        self.category_id_list = category_id_list
-        self.description = description
-        self.metadata_obj = metadata_obj
-        self.url_obj = url_obj
-        self.release_obj_list = release_obj_list
-        self.last_update = last_update
-        self.developer_name = developer_name
-        self.screenshot_list = screenshot_list
-        self.last_release_timestamp = last_release_timestamp
+    id: str
+    name: str
+    summary: str
+    icon: str
+    project_license: str
+    category_id_list: str
+    description: str
+    metadata_obj: str
+    url_obj: str
+    release_obj_list: str
+    last_update: int
+    developer_name: str
+    screenshot_list: str
+    last_release_timestamp: int
+
+    # maps entity field name -> DB column name
+    _db_column_map = {
+        'id': 'id',
+        'name': 'name',
+        'summary': 'summary',
+        'icon': 'icon',
+        'project_license': 'projectLicense',
+        'category_id_list': 'categoryIdList',
+        'description': 'description',
+        'metadata_obj': 'metadataObj',
+        'url_obj': 'urlObj',
+        'release_obj_list': 'releaseObjList',
+        'last_update': 'lastUpdate',
+        'developer_name': 'developer_name',
+        'screenshot_list': 'screenshotList',
+        'last_release_timestamp': 'lastReleaseTimestamp',
+    }
+
+    def __init__(self, row={}):
+        if row == {}:
+            return
+        for field in self._db_column_map:
+            setattr(self, field, row[field])
+
+    def get_select_columns(self) -> str:
+        return ', '.join(
+            f'{col} AS {field}' if col != field else col
+            for field, col in self._db_column_map.items()
+        )

@@ -3,6 +3,7 @@ import gi
 from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
+from infrastructure.ui.appstream_ui import AppstreamPage
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -32,8 +33,6 @@ class MainWindow(Adw.ApplicationWindow):
         home_page = self._create_home_page()
         self.navigation_view.push(home_page)
 
-        self.navigation_view.connect('popped', self._on_page_popped)
-
         # Handle close request to prompt for unsaved changes
         self.connect('close-request', self._on_close_request)
 
@@ -59,7 +58,8 @@ class MainWindow(Adw.ApplicationWindow):
         pref_group_trending_apps = Adw.PreferencesGroup()
         pref_group_trending_apps.set_title(_('Trending apps'))
         
-        get_home_content_uc = GetHomeContentUC(ApiCacheRepository(),AppstreamRepository(),FlathubApi())
+        appstream_repository = AppstreamRepository()
+        get_home_content_uc = GetHomeContentUC(ApiCacheRepository(), appstream_repository, FlathubApi())
         trending_application_list = get_home_content_uc.get_trending_appstream_list()
 
         flow_box = Gtk.FlowBox()
@@ -93,6 +93,7 @@ class MainWindow(Adw.ApplicationWindow):
 
             button = Gtk.Button()
             button.set_child(hbox)
+            button.connect('clicked', self._on_app_clicked, trending_applcation_loop.id, appstream_repository)
             flow_box.append(button)
 
         pref_group_trending_apps.add(flow_box)
@@ -108,8 +109,12 @@ class MainWindow(Adw.ApplicationWindow):
 
         return toolbar_view
     
-    def _on_page_popped(self, _navigation_view, _page):
-        self.save_button.set_sensitive(self._remote_domain.need_to_save())
+    def _on_app_clicked(self, _button, app_id: str, appstream_repository: AppstreamRepository):
+        app = appstream_repository.get_by_id(app_id)
+        if app:
+            self.navigation_view.push(AppstreamPage(app))
+
+    
 
     def _on_close_request(self, _window):
      

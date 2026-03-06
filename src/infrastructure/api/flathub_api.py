@@ -8,7 +8,7 @@ class FlathubApi(FlathubApiContract):
 
     _BASE_URL = "https://flathub.org/api/v2"
 
-    def get_trending_apps(self, page: int = 0, per_page: int = 8, locale: str = "en") -> list:
+    def get_trending_apps(self, page: int = 0, per_page: int = 12, locale: str = "en") -> list:
         url = f"{self._BASE_URL}/collection/trending?page={page}&per_page={per_page}&locale={locale}"
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())

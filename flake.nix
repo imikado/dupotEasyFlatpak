@@ -25,16 +25,21 @@
             pkgs.gobject-introspection
             pkgs.glib
             pkgs.cairo
+            pkgs.webkitgtk_6_0
+            pkgs.libsoup_3
           ];
 
           shellHook = ''
-            export GI_TYPELIB_PATH="${pkgs.gtk4}/lib/girepository-1.0:${pkgs.libadwaita}/lib/girepository-1.0:${pkgs.glib.out}/lib/girepository-1.0:${pkgs.pango.out}/lib/girepository-1.0:${pkgs.gdk-pixbuf}/lib/girepository-1.0:${pkgs.graphene}/lib/girepository-1.0:${pkgs.harfbuzz}/lib/girepository-1.0:${pkgs.gobject-introspection}/lib/girepository-1.0"
+            export GI_TYPELIB_PATH="${pkgs.gtk4}/lib/girepository-1.0:${pkgs.libadwaita}/lib/girepository-1.0:${pkgs.glib.out}/lib/girepository-1.0:${pkgs.pango.out}/lib/girepository-1.0:${pkgs.gdk-pixbuf}/lib/girepository-1.0:${pkgs.graphene}/lib/girepository-1.0:${pkgs.harfbuzz}/lib/girepository-1.0:${pkgs.gobject-introspection}/lib/girepository-1.0:${pkgs.webkitgtk_6_0}/lib/girepository-1.0:${pkgs.libsoup_3}/lib/girepository-1.0"
             export PYTHONPATH="${pythonEnv}/${python.sitePackages}"
+
+            export WEBKIT_DISABLE_DMABUF_RENDERER=1
 
             # Write .env for VSCode so it doesn't depend on process inheritance
             cat > .env <<EOF
             GI_TYPELIB_PATH=$GI_TYPELIB_PATH
             PYTHONPATH=$PYTHONPATH
+            WEBKIT_DISABLE_DMABUF_RENDERER=1
             EOF
 
             echo "Python GTK4/Libadwaita development environment"
