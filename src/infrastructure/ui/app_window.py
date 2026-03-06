@@ -1,5 +1,8 @@
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
 import gi
+from infrastructure.api.flathub_api import FlathubApi
+from infrastructure.repository.api_cache_repository import ApiCacheRepository
+from infrastructure.repository.appstream_repository import AppstreamRepository
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -56,8 +59,8 @@ class MainWindow(Adw.ApplicationWindow):
         pref_group_trending_apps = Adw.PreferencesGroup()
         pref_group_trending_apps.set_title(_('Trending apps'))
         
-        get_home_content_uc= GetHomeContentUC()  
-        trending_application_list = get_home_content_uc.get_trending_list()
+        get_home_content_uc = GetHomeContentUC(ApiCacheRepository(),AppstreamRepository(),FlathubApi())
+        trending_application_list = get_home_content_uc.get_trending_appstream_list()
 
         flow_box = Gtk.FlowBox()
         flow_box.set_selection_mode(Gtk.SelectionMode.NONE)

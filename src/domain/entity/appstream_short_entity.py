@@ -1,4 +1,4 @@
-class ApplicationEntity:
+class AppstreamShortEntity:
 
     def __init__(self,id,name,icon,summary):
         self.id=id
