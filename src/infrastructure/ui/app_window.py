@@ -70,8 +70,9 @@ class MainWindow(Adw.ApplicationWindow):
         for trending_applcation_loop in trending_application_list:
             hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
 
-            icon_name = trending_applcation_loop.icon.removesuffix('.png')
-            image = Gtk.Image.new_from_icon_name(icon_name)
+            icon_name = trending_applcation_loop.getIcon()
+            
+            image = Gtk.Image.new_from_file(icon_name)
             image.set_pixel_size(48)
             hbox.append(image)
 

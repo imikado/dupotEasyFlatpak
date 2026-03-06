@@ -1,3 +1,5 @@
+import os
+
 class AppstreamShortEntity:
 
     def __init__(self,id,name,icon,summary):
@@ -15,6 +17,6 @@ class AppstreamShortEntity:
     
 
     def getIcon(self)->str:
-        return '~/.data/Icons/{self.icon}'
+        return os.path.expanduser(f'~/.data/Icons/{self.id.lower()}.png')
 
     pass
