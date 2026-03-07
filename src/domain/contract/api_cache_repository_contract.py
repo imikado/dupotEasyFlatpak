@@ -7,7 +7,7 @@ class ApiCacheRepositoryContract(ABC):
 
     ID_TRENDING='trendingApi'
     ID_POPULAR='popularApi'
-    ID=RECENTLY_UPD='recentlyUpdatedApi'
+    ID_RECENTLY_UPD='recentlyUpdatedApi'
 
     @abstractmethod
     def get_by_id(self, id: str) -> ApiCacheEntity | None:

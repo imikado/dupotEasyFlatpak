@@ -25,11 +25,40 @@ class GetHomeContentUC:
         if len(app_id_list_in_cache):
             return self._appstream_repository.get_by_id_list(app_id_list_in_cache)
         
-        app_id_list_in_api = self._flathub_api.get_trending_apps
+        app_id_list_in_api = self._flathub_api.get_trending_apps()
         if len(app_id_list_in_api):
             self.update_app_id_list_in_cache(api_cache_id,app_id_list_in_api)
 
             return self._appstream_repository.get_by_id_list(app_id_list_in_api)
+
+    def get_popular_appstream_list(self)->list[AppstreamShortEntity]:
+
+        api_cache_id=ApiCacheRepositoryContract.ID_POPULAR
+
+        app_id_list_in_cache=self.get_app_id_list_in_cache(api_cache_id)
+        if len(app_id_list_in_cache):
+            return self._appstream_repository.get_by_id_list(app_id_list_in_cache)
+        
+        app_id_list_in_api = self._flathub_api.get_popular_apps()
+        if len(app_id_list_in_api):
+            self.update_app_id_list_in_cache(api_cache_id,app_id_list_in_api)
+
+            return self._appstream_repository.get_by_id_list(app_id_list_in_api)
+        
+    def get_updated_appstream_list(self)->list[AppstreamShortEntity]:
+
+        api_cache_id=ApiCacheRepositoryContract.ID_RECENTLY_UPD
+
+        app_id_list_in_cache=self.get_app_id_list_in_cache(api_cache_id)
+        if len(app_id_list_in_cache):
+            return self._appstream_repository.get_by_id_list(app_id_list_in_cache)
+        
+        app_id_list_in_api = self._flathub_api.get_updated_apps()
+        if len(app_id_list_in_api):
+            self.update_app_id_list_in_cache(api_cache_id,app_id_list_in_api)
+
+            return self._appstream_repository.get_by_id_list(app_id_list_in_api)
+
 
 
     def get_app_id_list_in_cache(self,cache_id)->list:

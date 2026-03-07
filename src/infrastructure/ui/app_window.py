@@ -54,61 +54,87 @@ class MainWindow(Adw.ApplicationWindow):
         pref_page_home = Adw.PreferencesPage()
         pref_page_home.set_title(_('Home'))
 
-        # First group
+
+        appstream_repository = AppstreamRepository()
+
+        get_home_content_uc = GetHomeContentUC(ApiCacheRepository(), appstream_repository, FlathubApi())
+
+        #trending
+        trending_application_list = get_home_content_uc.get_trending_appstream_list()
+        flow_box = self._get_application_list_widget(trending_application_list, appstream_repository)
+
         pref_group_trending_apps = Adw.PreferencesGroup()
         pref_group_trending_apps.set_title(_('Trending apps'))
-        
-        appstream_repository = AppstreamRepository()
-        get_home_content_uc = GetHomeContentUC(ApiCacheRepository(), appstream_repository, FlathubApi())
-        trending_application_list = get_home_content_uc.get_trending_appstream_list()
-
-        flow_box = Gtk.FlowBox()
-        flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        flow_box.set_max_children_per_line(6)
-        flow_box.set_homogeneous(True)
-
-        for trending_applcation_loop in trending_application_list:
-            hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-
-            icon_name = trending_applcation_loop.getIcon()
-            
-            image = Gtk.Image.new_from_file(icon_name)
-            image.set_pixel_size(48)
-            hbox.append(image)
-
-            text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
-            text_box.set_valign(Gtk.Align.CENTER)
-
-            title_label = Gtk.Label(label=trending_applcation_loop.getName())
-            title_label.set_halign(Gtk.Align.START)
-            title_label.add_css_class('title')
-            text_box.append(title_label)
-
-            summary_label = Gtk.Label(label=trending_applcation_loop.getSummary())
-            summary_label.set_halign(Gtk.Align.START)
-            summary_label.add_css_class('caption')
-            text_box.append(summary_label)
-
-            hbox.append(text_box)
-
-            button = Gtk.Button()
-            button.set_child(hbox)
-            button.connect('clicked', self._on_app_clicked, trending_applcation_loop.id, appstream_repository)
-            flow_box.append(button)
-
         pref_group_trending_apps.add(flow_box)
 
-        
+        pref_page_home.add(pref_group_trending_apps)
 
-         
+
+        #popular
+        popular_application_list = get_home_content_uc.get_popular_appstream_list()
+        flow_box = self._get_application_list_widget(popular_application_list, appstream_repository)
+
+        pref_group_trending_apps = Adw.PreferencesGroup()
+        pref_group_trending_apps.set_title(_('Popular apps'))
+        pref_group_trending_apps.add(flow_box)
 
         pref_page_home.add(pref_group_trending_apps)
+
+        #updated
+        popular_application_list = get_home_content_uc.get_updated_appstream_list()
+        flow_box = self._get_application_list_widget(popular_application_list, appstream_repository)
+
+        pref_group_trending_apps = Adw.PreferencesGroup()
+        pref_group_trending_apps.set_title(_('Recently updated apps'))
+        pref_group_trending_apps.add(flow_box)
+
+        pref_page_home.add(pref_group_trending_apps)
+
+
+
         toolbar_view.set_content(pref_page_home)
 
 
 
         return toolbar_view
     
+    def _get_application_list_widget(self, application_list, appstream_repository):
+        flow_box = Gtk.FlowBox()
+        flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        flow_box.set_max_children_per_line(6)
+        flow_box.set_min_children_per_line(3)
+        flow_box.set_homogeneous(True)
+        flow_box.set_row_spacing(8)
+        flow_box.set_column_spacing(8)
+
+        for app in application_list:
+            card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            card.set_halign(Gtk.Align.CENTER)
+            card.set_margin_top(12)
+            card.set_margin_bottom(12)
+            card.set_margin_start(8)
+            card.set_margin_end(8)
+
+            image = Gtk.Image.new_from_file(app.getIcon())
+            image.set_pixel_size(64)
+            image.set_halign(Gtk.Align.CENTER)
+            card.append(image)
+
+            title_label = Gtk.Label(label=app.getName())
+            title_label.set_halign(Gtk.Align.CENTER)
+            title_label.set_wrap(True)
+            title_label.set_max_width_chars(12)
+            title_label.add_css_class('caption')
+            card.append(title_label)
+
+            button = Gtk.Button()
+            button.add_css_class('card')
+            button.set_child(card)
+            button.connect('clicked', self._on_app_clicked, app.id, appstream_repository)
+            flow_box.append(button)
+
+        return flow_box
+
     def _on_app_clicked(self, _button, app_id: str, appstream_repository: AppstreamRepository):
         app = appstream_repository.get_by_id(app_id)
         if app:
