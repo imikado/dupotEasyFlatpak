@@ -11,14 +11,11 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw
 
 
-
 class MainWindow(Adw.ApplicationWindow):
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-       
         self.set_title("Nix Samba")
         self.set_default_size(800, 600)
 
@@ -34,13 +31,10 @@ class MainWindow(Adw.ApplicationWindow):
         self.navigation_view.push(home_page)
 
         # Handle close request to prompt for unsaved changes
-        self.connect('close-request', self._on_close_request)
+        self.connect("close-request", self._on_close_request)
 
-        
-
-     
     def _create_home_page(self):
-        page = Adw.NavigationPage.new(self._create_home_content(), _('Nix Samba'))
+        page = Adw.NavigationPage.new(self._create_home_content(), _("Nix Samba"))
         return page
 
     def _create_home_content(self):
@@ -52,52 +46,54 @@ class MainWindow(Adw.ApplicationWindow):
 
         # Create preferences page
         pref_page_home = Adw.PreferencesPage()
-        pref_page_home.set_title(_('Home'))
-
+        pref_page_home.set_title(_("Home"))
 
         appstream_repository = AppstreamRepository()
 
-        get_home_content_uc = GetHomeContentUC(ApiCacheRepository(), appstream_repository, FlathubApi())
+        get_home_content_uc = GetHomeContentUC(
+            ApiCacheRepository(), appstream_repository, FlathubApi()
+        )
 
-        #trending
+        # trending
         trending_application_list = get_home_content_uc.get_trending_appstream_list()
-        flow_box = self._get_application_list_widget(trending_application_list, appstream_repository)
+        flow_box = self._get_application_list_widget(
+            trending_application_list, appstream_repository
+        )
 
         pref_group_trending_apps = Adw.PreferencesGroup()
-        pref_group_trending_apps.set_title(_('Trending apps'))
+        pref_group_trending_apps.set_title(_("Trending apps"))
         pref_group_trending_apps.add(flow_box)
 
         pref_page_home.add(pref_group_trending_apps)
 
-
-        #popular
+        # popular
         popular_application_list = get_home_content_uc.get_popular_appstream_list()
-        flow_box = self._get_application_list_widget(popular_application_list, appstream_repository)
+        flow_box = self._get_application_list_widget(
+            popular_application_list, appstream_repository
+        )
 
         pref_group_trending_apps = Adw.PreferencesGroup()
-        pref_group_trending_apps.set_title(_('Popular apps'))
+        pref_group_trending_apps.set_title(_("Popular apps"))
         pref_group_trending_apps.add(flow_box)
 
         pref_page_home.add(pref_group_trending_apps)
 
-        #updated
+        # updated
         popular_application_list = get_home_content_uc.get_updated_appstream_list()
-        flow_box = self._get_application_list_widget(popular_application_list, appstream_repository)
+        flow_box = self._get_application_list_widget(
+            popular_application_list, appstream_repository
+        )
 
         pref_group_trending_apps = Adw.PreferencesGroup()
-        pref_group_trending_apps.set_title(_('Recently updated apps'))
+        pref_group_trending_apps.set_title(_("Recently updated apps"))
         pref_group_trending_apps.add(flow_box)
 
         pref_page_home.add(pref_group_trending_apps)
-
-
 
         toolbar_view.set_content(pref_page_home)
 
-
-
         return toolbar_view
-    
+
     def _get_application_list_widget(self, application_list, appstream_repository):
         flow_box = Gtk.FlowBox()
         flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
@@ -124,29 +120,30 @@ class MainWindow(Adw.ApplicationWindow):
             title_label.set_halign(Gtk.Align.CENTER)
             title_label.set_wrap(True)
             title_label.set_max_width_chars(12)
-            title_label.add_css_class('caption')
+            title_label.add_css_class("caption")
             card.append(title_label)
 
             button = Gtk.Button()
-            button.add_css_class('card')
+            button.add_css_class("card")
             button.set_child(card)
-            button.connect('clicked', self._on_app_clicked, app.id, appstream_repository)
+            button.connect(
+                "clicked", self._on_app_clicked, app.id, appstream_repository
+            )
             flow_box.append(button)
 
         return flow_box
 
-    def _on_app_clicked(self, _button, app_id: str, appstream_repository: AppstreamRepository):
+    def _on_app_clicked(
+        self, _button, app_id: str, appstream_repository: AppstreamRepository
+    ):
         app = appstream_repository.get_by_id(app_id)
         if app:
             self.navigation_view.push(AppstreamPage(app))
 
-    
-
     def _on_close_request(self, _window):
-     
+
         return False  # Allow window to close
 
-     
 
 class AppWindow(Adw.Application):
     def __init__(self):

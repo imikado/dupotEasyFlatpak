@@ -17,20 +17,20 @@ class AppstreamLongEntity:
 
     # maps entity field name -> DB column name
     _db_column_map = {
-        'id': 'id',
-        'name': 'name',
-        'summary': 'summary',
-        'icon': 'icon',
-        'project_license': 'projectLicense',
-        'category_id_list': 'categoryIdList',
-        'description': 'description',
-        'metadata_obj': 'metadataObj',
-        'url_obj': 'urlObj',
-        'release_obj_list': 'releaseObjList',
-        'last_update': 'lastUpdate',
-        'developer_name': 'developer_name',
-        'screenshot_list': 'screenshotList',
-        'last_release_timestamp': 'lastReleaseTimestamp',
+        "id": "id",
+        "name": "name",
+        "summary": "summary",
+        "icon": "icon",
+        "project_license": "projectLicense",
+        "category_id_list": "categoryIdList",
+        "description": "description",
+        "metadata_obj": "metadataObj",
+        "url_obj": "urlObj",
+        "release_obj_list": "releaseObjList",
+        "last_update": "lastUpdate",
+        "developer_name": "developer_name",
+        "screenshot_list": "screenshotList",
+        "last_release_timestamp": "lastReleaseTimestamp",
     }
 
     def __init__(self, row={}):
@@ -40,7 +40,7 @@ class AppstreamLongEntity:
             setattr(self, field, row[field])
 
     def get_select_columns(self) -> str:
-        return ', '.join(
-            f'{col} AS {field}' if col != field else col
+        return ", ".join(
+            f"{col} AS {field}" if col != field else col
             for field, col in self._db_column_map.items()
         )

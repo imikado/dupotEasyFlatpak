@@ -34,19 +34,19 @@ class AppstreamPage(Adw.NavigationPage):
         info_box.set_margin_top(12)
         info_box.set_margin_bottom(12)
 
-        icon_path = os.path.expanduser(f'~/.data/Icons/{app.id.lower()}.png')
+        icon_path = os.path.expanduser(f"~/.data/Icons/{app.id.lower()}.png")
         image = Gtk.Image.new_from_file(icon_path)
         image.set_pixel_size(96)
         info_box.append(image)
 
         name_label = Gtk.Label(label=app.name)
-        name_label.add_css_class('title-1')
+        name_label.add_css_class("title-1")
         name_label.set_halign(Gtk.Align.CENTER)
         info_box.append(name_label)
 
         if app.developer_name:
             dev_label = Gtk.Label(label=app.developer_name)
-            dev_label.add_css_class('dim-label')
+            dev_label.add_css_class("dim-label")
             dev_label.set_halign(Gtk.Align.CENTER)
             info_box.append(dev_label)
 
@@ -63,11 +63,11 @@ class AppstreamPage(Adw.NavigationPage):
 
         # Details group
         details_group = Adw.PreferencesGroup()
-        details_group.set_title(_('Details'))
+        details_group.set_title(_("Details"))
 
         if app.project_license:
             row = Adw.ActionRow()
-            row.set_title(_('License'))
+            row.set_title(_("License"))
             row.set_subtitle(app.project_license)
             details_group.add(row)
 
@@ -78,14 +78,28 @@ class AppstreamPage(Adw.NavigationPage):
             description_group.set_title("Description")
 
             markup = app.description
-            markup = re.sub(r'<li>(.*?)</li>', lambda m: '• ' + m.group(1).strip() + '\n', markup, flags=re.DOTALL)
-            markup = re.sub(r'<p>(.*?)</p>', lambda m: m.group(1).strip() + '\n', markup, flags=re.DOTALL)
-            markup = re.sub(r'<em>(.*?)</em>', r'<i>\1</i>', markup, flags=re.DOTALL)
-            markup = re.sub(r'<strong>(.*?)</strong>', r'<b>\1</b>', markup, flags=re.DOTALL)
-            markup = re.sub(r'<code>(.*?)</code>', r'<tt>\1</tt>', markup, flags=re.DOTALL)
-            markup = re.sub(r'<[^>]+>', '', markup)
-            markup = re.sub(r'[ \t]+', ' ', markup)
-            markup = re.sub(r'\n ', '\n', markup)
+            markup = re.sub(
+                r"<li>(.*?)</li>",
+                lambda m: "• " + m.group(1).strip() + "\n",
+                markup,
+                flags=re.DOTALL,
+            )
+            markup = re.sub(
+                r"<p>(.*?)</p>",
+                lambda m: m.group(1).strip() + "\n",
+                markup,
+                flags=re.DOTALL,
+            )
+            markup = re.sub(r"<em>(.*?)</em>", r"<i>\1</i>", markup, flags=re.DOTALL)
+            markup = re.sub(
+                r"<strong>(.*?)</strong>", r"<b>\1</b>", markup, flags=re.DOTALL
+            )
+            markup = re.sub(
+                r"<code>(.*?)</code>", r"<tt>\1</tt>", markup, flags=re.DOTALL
+            )
+            markup = re.sub(r"<[^>]+>", "", markup)
+            markup = re.sub(r"[ \t]+", " ", markup)
+            markup = re.sub(r"\n ", "\n", markup)
             markup = markup.strip()
 
             label = Gtk.Label(label=markup)
@@ -104,10 +118,6 @@ class AppstreamPage(Adw.NavigationPage):
 
             pref_page.add(description_group)
 
-                 
-         
         toolbar_view.set_content(pref_page)
 
         return toolbar_view
-
-     

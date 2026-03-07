@@ -5,7 +5,15 @@ import os
 class DatabaseApi:
 
     _DB_PATH = os.path.normpath(
-        os.path.join(os.path.dirname(__file__), '..', '..', '..', 'assets', 'db', 'flathub_database.db')
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "..",
+            "..",
+            "assets",
+            "db",
+            "flathub_database.db",
+        )
     )
     _instance = None
 

@@ -12,16 +12,21 @@ class AppstreamRepository(AppstreamRepositoryContract):
 
     def get_by_id(self, id: str) -> AppstreamLongEntity | None:
         rows = self._db.execute(
-            f'SELECT {AppstreamLongEntity().get_select_columns()} FROM appstream WHERE id = ?', (id,)
+            f"SELECT {AppstreamLongEntity().get_select_columns()} FROM appstream WHERE id = ?",
+            (id,),
         )
         if not rows:
             return None
         row = rows[0]
-        return AppstreamLongEntity(row )
+        return AppstreamLongEntity(row)
 
     def get_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
-        placeholders = ','.join('?' * len(ids))
+        placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f'SELECT id, name, icon, summary FROM appstream WHERE id IN ({placeholders})', tuple(ids)
+            f"SELECT id, name, icon, summary FROM appstream WHERE id IN ({placeholders})",
+            tuple(ids),
         )
-        return [AppstreamShortEntity(row['id'], row['name'], row['icon'], row['summary']) for row in rows]
+        return [
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            for row in rows
+        ]
