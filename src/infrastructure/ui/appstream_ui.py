@@ -1,19 +1,11 @@
 import os
 import re
-os.environ["WEBKIT_DISABLE_COMPOSITING_MODE"] = "1" 
-# Fixes process crashes in sandboxed or specific driver environments
-os.environ["WEBKIT_DISABLE_SANDBOX_THIS_IS_DANGEROUS"] = "1"
-# Prevents a specific GTK4 DMA buffer bug
-os.environ["WEBKIT_DISABLE_DMABUF_RENDERER"] = "1"
 import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-gi.require_version("WebKit", "6.0")
 
-# Disable the sandbox to see if it's a process communication issue
-
-from gi.repository import Gtk, Adw, WebKit, Gdk
+from gi.repository import Gtk, Adw
 
 from domain.entity.appstream_long_entity import AppstreamLongEntity
 
@@ -85,28 +77,31 @@ class AppstreamPage(Adw.NavigationPage):
             description_group = Adw.PreferencesGroup()
             description_group.set_title("Description")
 
-            clean_text = self.format_appstream_to_pango(app.description) 
-            
-            label = Gtk.Label(label=clean_text)
-    
-            # Enable HTML-like parsing
+            markup = app.description
+            markup = re.sub(r'<li>(.*?)</li>', lambda m: '• ' + m.group(1).strip() + '\n', markup, flags=re.DOTALL)
+            markup = re.sub(r'<p>(.*?)</p>', lambda m: m.group(1).strip() + '\n', markup, flags=re.DOTALL)
+            markup = re.sub(r'<em>(.*?)</em>', r'<i>\1</i>', markup, flags=re.DOTALL)
+            markup = re.sub(r'<strong>(.*?)</strong>', r'<b>\1</b>', markup, flags=re.DOTALL)
+            markup = re.sub(r'<code>(.*?)</code>', r'<tt>\1</tt>', markup, flags=re.DOTALL)
+            markup = re.sub(r'<[^>]+>', '', markup)
+            markup = re.sub(r'[ \t]+', ' ', markup)
+            markup = re.sub(r'\n ', '\n', markup)
+            markup = markup.strip()
+
+            label = Gtk.Label(label=markup)
             label.set_use_markup(True)
-            
-            # UI Styling
             label.set_wrap(True)
-            label.set_xalign(0)  # Left align
-            label.set_selectable(True) # Allow users to copy the text
-            
-            # Add some padding so it doesn't touch the edges of the row
-            label.set_margin_start(16)
-            label.set_margin_end(16)
-            label.set_margin_top(12)
-            label.set_margin_bottom(12)
+            label.set_justify(Gtk.Justification.LEFT)
+            label.set_xalign(0)
+            label.set_margin_start(12)
+            label.set_margin_end(12)
+            label.set_margin_top(8)
+            label.set_margin_bottom(8)
 
             desc_row = Adw.PreferencesRow()
             desc_row.set_child(label)
             description_group.add(desc_row)
-            
+
             pref_page.add(description_group)
 
                  
@@ -115,24 +110,4 @@ class AppstreamPage(Adw.NavigationPage):
 
         return toolbar_view
 
-    def format_appstream_to_pango(self,html_text):
-        if not html_text:
-            return ""
-        
-        # 1. Replace <li> with a bullet point and </li> with a newline
-        text = html_text.replace("<li>", "  • ").replace("</li>", "\n")
-        
-        # 2. Replace <p>, <ul>, and </ul> with newlines
-        text = re.sub(r'</?p>|<ul>|</ul>', '\n', text)
-        
-        # 3. Handle bold/italic (Appstream uses <em> and <strong>, Pango uses <i> and <b>)
-        text = text.replace("<em>", "<i>").replace("</em>", "</i>")
-        text = text.replace("<strong>", "<b>").replace("</strong>", "</b>")
-        
-        # 4. Strip any other remaining tags (like <html> or <body>)
-        text = re.sub(r'<[^>]+>', '', text)
-        
-        # 5. Clean up excessive newlines
-        text = re.sub(r'\n\s*\n', '\n\n', text).strip()
-        
-        return text
+     
