@@ -34,8 +34,7 @@ class AppstreamPage(Adw.NavigationPage):
         info_box.set_margin_top(12)
         info_box.set_margin_bottom(12)
 
-        icon_path = os.path.expanduser(f"~/.data/Icons/{app.id.lower()}.png")
-        image = Gtk.Image.new_from_file(icon_path)
+        image = Gtk.Image.new_from_file(app.getIcon())
         image.set_pixel_size(96)
         info_box.append(image)
 

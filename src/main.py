@@ -38,9 +38,7 @@ def main():
     data_path = path_conf.get_data_path()
     print(f"data path is {data_path}")
 
-    application_version_entity = ApplicationVersionEntity(
-        system_api, path_conf.get_installed_version_path()
-    )
+    application_version_entity = ApplicationVersionEntity(system_api)
     if not application_version_entity.is_current_version():
 
         print("not current version, will install ")
@@ -72,7 +70,7 @@ def main():
 
         icons_directory_path = path_conf.get_icons_path()
         if system_api.file_exists(icons_directory_path):
-            system_api.remove_file(icons_directory_path)
+            system_api.remove_directory(icons_directory_path)
 
         system_api.unzip_archive_to(icons_archive_path, path_conf.get_data_path())
 

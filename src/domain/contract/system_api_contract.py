@@ -24,5 +24,9 @@ class SystemApiContract(ABC):
         pass
 
     @abstractmethod
+    def remove_directory(self, path: str):
+        pass
+
+    @abstractmethod
     def unzip_archive_to(self, archive_path: str, path_to: str):
         pass

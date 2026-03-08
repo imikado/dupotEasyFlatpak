@@ -29,6 +29,9 @@ class SystemApi(SystemApiContract):
     def remove_file(self, path: str):
         os.remove(path)
 
+    def remove_directory(self, path: str):
+        shutil.rmtree(path)
+
     def execute(self, params: list):
         subprocess.Popen(params)
 
