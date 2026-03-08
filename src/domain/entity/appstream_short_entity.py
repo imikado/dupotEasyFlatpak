@@ -1,5 +1,7 @@
 import os
 
+from domain.conf.path_conf import PathConf
+
 
 class AppstreamShortEntity:
 
@@ -17,6 +19,6 @@ class AppstreamShortEntity:
         return self.summary
 
     def getIcon(self) -> str:
-        return os.path.expanduser(f"~/.data/Icons/{self.id.lower()}.png")
+        return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
 
     pass

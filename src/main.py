@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
 
+from domain.conf.path_conf import PathConf
+from domain.entity.application_version_entity import ApplicationVersionEntity
+from infrastructure.api.system_api import SystemApi
 from infrastructure.ui.app_window import AppWindow
+from gi.repository import GLib
 
 import gettext
 
 
+class PathToCopy:
+
+    def __init__(self, path_from: str, path_to: str):
+        self.path_from = path_from
+        self.path_to = path_to
+        pass
+
+
 def main():
     # Set the local directory
-    appname = "nix-samba"
+    appname = "Easy flatpak"
     localedir = "./infrastructure/locales"
 
     # Set up Gettext
@@ -17,6 +29,52 @@ def main():
 
     # Create the "magic" function
     en_i18n.install()
+
+    system_api = SystemApi()
+
+    path_conf = PathConf()
+    path_conf.set_data_path(GLib.get_user_data_dir())
+
+    data_path = path_conf.get_data_path()
+    print(f"data path is {data_path}")
+
+    application_version_entity = ApplicationVersionEntity(
+        system_api, path_conf.get_installed_version_path()
+    )
+    if not application_version_entity.is_current_version():
+
+        print("not current version, will install ")
+
+        if not system_api.file_exists(data_path):
+            system_api.create_dir(data_path)
+
+        icons_archive_path = path_conf.get_icons_archive_path()
+        if system_api.file_exists(icons_archive_path):
+            system_api.remove_file(icons_archive_path)
+
+        file_path_to_copy_list = [
+            PathToCopy(
+                path_conf.get_asset_database_path(),
+                path_conf.get_database_path(),
+            ),
+            PathToCopy(
+                path_conf.get_asset_application_version_path(),
+                path_conf.get_installed_version_path(),
+            ),
+            PathToCopy(
+                path_conf.get_asset_icons_archive_path(),
+                icons_archive_path,
+            ),
+        ]
+
+        for path_to_copy_loop in file_path_to_copy_list:
+            system_api.copy_file(path_to_copy_loop.path_from, path_to_copy_loop.path_to)
+
+        icons_directory_path = path_conf.get_icons_path()
+        if system_api.file_exists(icons_directory_path):
+            system_api.remove_file(icons_directory_path)
+
+        system_api.unzip_archive_to(icons_archive_path, path_conf.get_data_path())
 
     app = AppWindow()
     app.run(None)
