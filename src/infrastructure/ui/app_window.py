@@ -18,8 +18,8 @@ class MainWindow(Adw.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.set_title("Nix Samba")
-        self.set_default_size(900, 600)
+        self.set_title("Easy flatpak")
+        self.set_default_size(1000, 800)
 
         self._toast_overlay = Adw.ToastOverlay()
         self.set_content(self._toast_overlay)
@@ -105,6 +105,8 @@ class MainWindow(Adw.ApplicationWindow):
         flow.set_homogeneous(True)
         flow.set_row_spacing(8)
         flow.set_column_spacing(8)
+        flow.set_margin_top(25)
+        flow.set_margin_bottom(25)
 
         for category in CategoryRepository().get_all():
             icon_name = category_icons.get(
