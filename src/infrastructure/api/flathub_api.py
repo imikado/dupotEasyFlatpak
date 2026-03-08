@@ -27,7 +27,7 @@ class FlathubApi(FlathubApiContract):
     def get_updated_apps(
         self, page: int = 0, per_page: int = 12, locale: str = "en"
     ) -> list:
-        url = f"{self._BASE_URL}/collection/updated?page={page}&per_page={per_page}&locale={locale}"
+        url = f"{self._BASE_URL}/collection/recently-updated?page={page}&per_page={per_page}&locale={locale}"
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return [hit["app_id"] for hit in data.get("hits", [])]

@@ -9,6 +9,12 @@ class ApiCacheRepositoryContract(ABC):
     ID_POPULAR = "popularApi"
     ID_RECENTLY_UPD = "recentlyUpdatedApi"
 
+    ID_PARAMETERS = "parameters"
+
     @abstractmethod
     def get_by_id(self, id: str) -> ApiCacheEntity | None:
+        pass
+
+    @abstractmethod
+    def update_by_id(self, id: str, content_value: any) -> ApiCacheEntity | None:
         pass

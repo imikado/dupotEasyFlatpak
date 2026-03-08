@@ -15,8 +15,8 @@ class ApiCacheRepository(ApiCacheRepositoryContract):
         rows = self._db.execute("SELECT id,content FROM apicache WHERE id = ?", (id,))
         return ApiCacheEntity(rows[0]["id"], rows[0]["content"]) if rows else None
 
-    def update_by_id(self, id: str, app_id_list: list[str]) -> ApiCacheEntity | None:
+    def update_by_id(self, id: str, content_value: any) -> ApiCacheEntity | None:
         self._db.execute(
             "UPDATE apicache SET content = ? WHERE id = ?",
-            (json.dumps(app_id_list), id),
+            (json.dumps(content_value), id),
         )

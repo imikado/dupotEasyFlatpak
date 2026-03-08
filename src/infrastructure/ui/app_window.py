@@ -1,6 +1,7 @@
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
 import gi
 from infrastructure.api.flathub_api import FlathubApi
+from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.appstream_ui import AppstreamPage
@@ -51,7 +52,7 @@ class MainWindow(Adw.ApplicationWindow):
         appstream_repository = AppstreamRepository()
 
         get_home_content_uc = GetHomeContentUC(
-            ApiCacheRepository(), appstream_repository, FlathubApi()
+            ApiCacheRepository(), appstream_repository, FlathubApi(), SystemApi()
         )
 
         # trending
