@@ -45,7 +45,7 @@ class SystemApi(SystemApiContract):
         shutil.copy(path_from, path_to)
 
     def get_datetime_current_timestamp(self) -> int:
-        return time.time()
+        return int(time.time() * 1000)
 
     def unzip_archive_to(self, archive_path: str, path_to: str):
         with zipfile.ZipFile(archive_path, "r") as zip_ref:

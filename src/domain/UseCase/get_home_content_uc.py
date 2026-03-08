@@ -31,6 +31,7 @@ class GetHomeContentUC:
 
     def load(self):
         if self.should_sync_from_api():
+            print("sync from api")
 
             app_id_list_in_api = self._flathub_api.get_trending_apps()
             if len(app_id_list_in_api):
@@ -54,6 +55,8 @@ class GetHomeContentUC:
             parameters_object = api_cache_parameters.update_home_api_updated_timestamp(
                 self.get_current_timestamp()
             )
+
+            print(parameters_object)
 
             self.update_parameters_in_cache(parameters_object)
 

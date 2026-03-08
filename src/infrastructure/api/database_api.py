@@ -24,6 +24,7 @@ class DatabaseApi:
     def execute(self, query: str, params: tuple = ()) -> list:
         cursor = self._connection.cursor()
         cursor.execute(query, params)
+        self._connection.commit()
         return cursor.fetchall()
 
     def close(self):
