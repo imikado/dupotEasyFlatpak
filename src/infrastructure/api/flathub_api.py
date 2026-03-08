@@ -9,7 +9,7 @@ class FlathubApi(FlathubApiContract):
     _BASE_URL = "https://flathub.org/api/v2"
 
     def get_trending_apps(
-        self, page: int = 0, per_page: int = 12, locale: str = "en"
+        self, page: int = 0, per_page: int = 20, locale: str = "en"
     ) -> list:
         url = f"{self._BASE_URL}/collection/trending?page={page}&per_page={per_page}&locale={locale}"
         with urllib.request.urlopen(url) as response:
@@ -17,7 +17,7 @@ class FlathubApi(FlathubApiContract):
         return [hit["app_id"] for hit in data.get("hits", [])]
 
     def get_popular_apps(
-        self, page: int = 0, per_page: int = 12, locale: str = "en"
+        self, page: int = 0, per_page: int = 20, locale: str = "en"
     ) -> list:
         url = f"{self._BASE_URL}/collection/popular?page={page}&per_page={per_page}&locale={locale}"
         with urllib.request.urlopen(url) as response:
@@ -25,7 +25,7 @@ class FlathubApi(FlathubApiContract):
         return [hit["app_id"] for hit in data.get("hits", [])]
 
     def get_updated_apps(
-        self, page: int = 0, per_page: int = 12, locale: str = "en"
+        self, page: int = 0, per_page: int = 20, locale: str = "en"
     ) -> list:
         url = f"{self._BASE_URL}/collection/recently-updated?page={page}&per_page={per_page}&locale={locale}"
         with urllib.request.urlopen(url) as response:

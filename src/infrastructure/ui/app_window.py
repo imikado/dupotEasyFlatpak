@@ -4,6 +4,7 @@ from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
+from infrastructure.repository.category_repository import CategoryRepository
 from infrastructure.ui.appstream_ui import AppstreamPage
 
 gi.require_version("Gtk", "4.0")
@@ -18,7 +19,7 @@ class MainWindow(Adw.ApplicationWindow):
         super().__init__(*args, **kwargs)
 
         self.set_title("Nix Samba")
-        self.set_default_size(800, 600)
+        self.set_default_size(900, 600)
 
         self._toast_overlay = Adw.ToastOverlay()
         self.set_content(self._toast_overlay)
@@ -35,19 +36,13 @@ class MainWindow(Adw.ApplicationWindow):
         self.connect("close-request", self._on_close_request)
 
     def _create_home_page(self):
-        page = Adw.NavigationPage.new(self._create_home_content(), _("Nix Samba"))
+        page = Adw.NavigationPage.new(self._create_home_content(), _("Easy flatpak"))
         return page
 
     def _create_home_content(self):
-        # Create toolbar view with header bar
         toolbar_view = Adw.ToolbarView()
         header_bar = Adw.HeaderBar()
-
         toolbar_view.add_top_bar(header_bar)
-
-        # Create preferences page
-        pref_page_home = Adw.PreferencesPage()
-        pref_page_home.set_title(_("Home"))
 
         appstream_repository = AppstreamRepository()
 
@@ -55,50 +50,82 @@ class MainWindow(Adw.ApplicationWindow):
             ApiCacheRepository(), appstream_repository, FlathubApi(), SystemApi()
         )
 
-        # trending
-        trending_application_list = get_home_content_uc.get_trending_appstream_list()
-        flow_box = self._get_application_list_widget(
-            trending_application_list, appstream_repository
-        )
+        tab_view = Adw.TabView()
+        tab_bar = Adw.TabBar()
 
-        pref_group_trending_apps = Adw.PreferencesGroup()
-        pref_group_trending_apps.set_title(_("Trending apps"))
-        pref_group_trending_apps.add(flow_box)
+        tab_bar.set_view(tab_view)
 
-        pref_page_home.add(pref_group_trending_apps)
+        tabs = [
+            (_("Trending"), get_home_content_uc.get_trending_appstream_list()),
+            (_("Popular"), get_home_content_uc.get_popular_appstream_list()),
+            (_("Updated"), get_home_content_uc.get_updated_appstream_list()),
+        ]
 
-        # popular
-        popular_application_list = get_home_content_uc.get_popular_appstream_list()
-        flow_box = self._get_application_list_widget(
-            popular_application_list, appstream_repository
-        )
+        for title, app_list in tabs:
+            scroll = Gtk.ScrolledWindow()
+            scroll.set_vexpand(True)
+            scroll.set_hexpand(True)
+            scroll.set_child(
+                self._get_application_list_widget(app_list, appstream_repository)
+            )
+            page = tab_view.add_page(scroll)
+            page.set_title(title)
 
-        pref_group_trending_apps = Adw.PreferencesGroup()
-        pref_group_trending_apps.set_title(_("Popular apps"))
-        pref_group_trending_apps.add(flow_box)
+        tab_view.connect("close-page", lambda _view, _page: True)
+        tab_view.set_vexpand(True)
+        tab_view.set_hexpand(True)
 
-        pref_page_home.add(pref_group_trending_apps)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        box.append(tab_bar)
+        box.append(tab_view)
 
-        # updated
-        popular_application_list = get_home_content_uc.get_updated_appstream_list()
-        flow_box = self._get_application_list_widget(
-            popular_application_list, appstream_repository
-        )
-
-        pref_group_trending_apps = Adw.PreferencesGroup()
-        pref_group_trending_apps.set_title(_("Recently updated apps"))
-        pref_group_trending_apps.add(flow_box)
-
-        pref_page_home.add(pref_group_trending_apps)
-
-        toolbar_view.set_content(pref_page_home)
+        toolbar_view.set_content(box)
+        toolbar_view.add_bottom_bar(self._create_category_bar())
 
         return toolbar_view
+
+    def _create_category_bar(self):
+        category_icons = {
+            "AudioVideo": "audio-x-generic-symbolic",
+            "Development": "applications-development-symbolic",
+            "Education": "applications-education-symbolic",
+            "Game": "applications-games-symbolic",
+            "Graphics": "applications-graphics-symbolic",
+            "Network": "network-workgroup-symbolic",
+            "Office": "applications-office-symbolic",
+            "Science": "applications-science-symbolic",
+            "System": "applications-system-symbolic",
+            "Utility": "applications-utilities-symbolic",
+        }
+
+        flow = Gtk.FlowBox()
+        flow.set_selection_mode(Gtk.SelectionMode.NONE)
+        flow.set_max_children_per_line(10)
+        flow.set_min_children_per_line(3)
+        flow.set_homogeneous(True)
+        flow.set_row_spacing(8)
+        flow.set_column_spacing(8)
+
+        for category in CategoryRepository().get_all():
+            icon_name = category_icons.get(
+                category, "application-x-executable-symbolic"
+            )
+
+            btn_content = Adw.ButtonContent()
+            btn_content.set_label(_(category))
+            btn_content.set_icon_name(icon_name)
+
+            btn = Gtk.Button()
+            btn.set_child(btn_content)
+            btn.add_css_class("pill")
+            flow.append(btn)
+
+        return flow
 
     def _get_application_list_widget(self, application_list, appstream_repository):
         flow_box = Gtk.FlowBox()
         flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        flow_box.set_max_children_per_line(6)
+        flow_box.set_max_children_per_line(10)
         flow_box.set_min_children_per_line(3)
         flow_box.set_homogeneous(True)
         flow_box.set_row_spacing(8)
@@ -123,6 +150,16 @@ class MainWindow(Adw.ApplicationWindow):
             title_label.set_max_width_chars(12)
             title_label.add_css_class("caption")
             card.append(title_label)
+
+            summary_label = Gtk.Label(label=app.getSummary())
+            summary_label.set_halign(Gtk.Align.CENTER)
+            summary_label.set_wrap(True)
+            summary_label.set_max_width_chars(16)
+            summary_label.set_lines(2)
+            summary_label.set_ellipsize(3)  # PANGO_ELLIPSIZE_END
+            summary_label.add_css_class("caption")
+            summary_label.add_css_class("dim-label")
+            card.append(summary_label)
 
             button = Gtk.Button()
             button.add_css_class("card")
