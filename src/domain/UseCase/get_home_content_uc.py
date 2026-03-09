@@ -65,7 +65,7 @@ class GetHomeContentUC:
     def get_app_from_cache_by_id_list(self, api_cache_id) -> list[AppstreamShortEntity]:
         app_id_list_in_cache = self.get_app_id_list_in_cache(api_cache_id)
         if len(app_id_list_in_cache):
-            return self._appstream_repository.get_by_id_list(app_id_list_in_cache)
+            return self._appstream_repository.get_list_by_id_list(app_id_list_in_cache)
 
         return []
 

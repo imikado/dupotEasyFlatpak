@@ -6,6 +6,8 @@ from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.category_repository import CategoryRepository
 from infrastructure.ui.appstream_ui import AppstreamPage
+from infrastructure.ui.category_list_ui import CategoryListPage
+from infrastructure.ui.search_list_ui import SearchListPage
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -46,14 +48,24 @@ class MainWindow(Adw.ApplicationWindow):
 
         appstream_repository = AppstreamRepository()
 
+        search_entry = Gtk.SearchEntry()
+        search_entry.set_placeholder_text(_("Search…"))
+        search_entry.set_hexpand(True)
+        header_bar.set_title_widget(search_entry)
+        search_entry.connect("search-changed", self._on_search, appstream_repository)
+
         get_home_content_uc = GetHomeContentUC(
             ApiCacheRepository(), appstream_repository, FlathubApi(), SystemApi()
         )
 
-        tab_view = Adw.TabView()
-        tab_bar = Adw.TabBar()
+        stack = Gtk.Stack()
+        stack.set_vexpand(True)
+        stack.set_hexpand(True)
+        stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
 
-        tab_bar.set_view(tab_view)
+        stack_switcher = Gtk.StackSwitcher()
+        stack_switcher.set_stack(stack)
+        stack_switcher.set_halign(Gtk.Align.CENTER)
 
         tabs = [
             (_("Trending"), get_home_content_uc.get_trending_appstream_list()),
@@ -68,23 +80,18 @@ class MainWindow(Adw.ApplicationWindow):
             scroll.set_child(
                 self._get_application_list_widget(app_list, appstream_repository)
             )
-            page = tab_view.add_page(scroll)
-            page.set_title(title)
-
-        tab_view.connect("close-page", lambda _view, _page: True)
-        tab_view.set_vexpand(True)
-        tab_view.set_hexpand(True)
+            stack.add_titled(scroll, title.lower(), title)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        box.append(tab_bar)
-        box.append(tab_view)
+        box.append(stack_switcher)
+        box.append(stack)
 
         toolbar_view.set_content(box)
-        toolbar_view.add_bottom_bar(self._create_category_bar())
+        toolbar_view.add_bottom_bar(self._create_category_bar(appstream_repository))
 
         return toolbar_view
 
-    def _create_category_bar(self):
+    def _create_category_bar(self, appstream_repository: AppstreamRepository):
         category_icons = {
             "AudioVideo": "audio-x-generic-symbolic",
             "Development": "applications-development-symbolic",
@@ -120,6 +127,7 @@ class MainWindow(Adw.ApplicationWindow):
             btn = Gtk.Button()
             btn.set_child(btn_content)
             btn.add_css_class("pill")
+            btn.connect("clicked", self._on_category_clicked, category, appstream_repository)
             flow.append(btn)
 
         return flow
@@ -172,6 +180,17 @@ class MainWindow(Adw.ApplicationWindow):
             flow_box.append(button)
 
         return flow_box
+
+    def _on_search(self, entry: Gtk.SearchEntry, appstream_repository: AppstreamRepository):
+        query = entry.get_text().strip()
+        if len(query) >= 3:
+            if not isinstance(self.navigation_view.get_visible_page(), SearchListPage):
+                self.navigation_view.push(SearchListPage(query, appstream_repository))
+
+    def _on_category_clicked(
+        self, _button, category: str, appstream_repository: AppstreamRepository
+    ):
+        self.navigation_view.push(CategoryListPage(category, appstream_repository))
 
     def _on_app_clicked(
         self, _button, app_id: str, appstream_repository: AppstreamRepository

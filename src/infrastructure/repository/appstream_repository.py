@@ -20,11 +20,29 @@ class AppstreamRepository(AppstreamRepositoryContract):
         row = rows[0]
         return AppstreamLongEntity(row)
 
-    def get_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
+    def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
             f"SELECT id, name, icon, summary FROM appstream WHERE id IN ({placeholders})",
             tuple(ids),
+        )
+        return [
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            for row in rows
+        ]
+
+    def get_list_by_category_id(self, category_id: str) -> list[AppstreamShortEntity]:
+        rows = self._db.execute(
+            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%'",
+        )
+        return [
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            for row in rows
+        ]
+
+    def get_list_by_seach(self, search: str) -> list[AppstreamShortEntity]:
+        rows = self._db.execute(
+            f"SELECT id, name, icon, summary FROM appstream WHERE name like '%{search}%' or summary like '%{search}%'",
         )
         return [
             AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
