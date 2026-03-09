@@ -3,7 +3,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import GLib, Gtk, Adw
+from gi.repository import Adw, GLib, Gtk
 
 from domain.UseCase.get_category_content_uc import GetCategoryContentUc
 from infrastructure.repository.appstream_repository import AppstreamRepository
@@ -26,13 +26,13 @@ class CategoryListPage(Adw.NavigationPage):
         toolbar_view = Adw.ToolbarView()
         toolbar_view.add_top_bar(Adw.HeaderBar())
 
-        self._flow_box = Gtk.FlowBox()
+        self._flow_box = Gtk.ListBox()
         self._flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        self._flow_box.set_max_children_per_line(10)
-        self._flow_box.set_min_children_per_line(3)
-        self._flow_box.set_homogeneous(True)
-        self._flow_box.set_row_spacing(8)
-        self._flow_box.set_column_spacing(8)
+        self._flow_box.add_css_class("boxed-list")
+        self._flow_box.set_margin_top(12)
+        self._flow_box.set_margin_bottom(12)
+        self._flow_box.set_margin_start(12)
+        self._flow_box.set_margin_end(12)
 
         scroll = Gtk.ScrolledWindow()
         scroll.set_vexpand(True)
@@ -57,40 +57,18 @@ class CategoryListPage(Adw.NavigationPage):
         batch, self._pending = self._pending[:BATCH_SIZE], self._pending[BATCH_SIZE:]
 
         for app in batch:
-            card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            card.set_halign(Gtk.Align.CENTER)
-            card.set_margin_top(12)
-            card.set_margin_bottom(12)
-            card.set_margin_start(8)
-            card.set_margin_end(8)
+            row = Adw.ActionRow()
+            row.set_title(app.getName())
+            row.set_subtitle(app.getSummary())
+            row.set_activatable(True)
 
-            image = Gtk.Image.new_from_file(app.getIcon())
-            image.set_pixel_size(64)
-            image.set_halign(Gtk.Align.CENTER)
-            card.append(image)
+            icon = Gtk.Image.new_from_file(app.getIcon())
+            icon.set_pixel_size(48)
+            row.add_prefix(icon)
 
-            title_label = Gtk.Label(label=app.getName())
-            title_label.set_halign(Gtk.Align.CENTER)
-            title_label.set_wrap(True)
-            title_label.set_max_width_chars(12)
-            title_label.add_css_class("caption")
-            card.append(title_label)
-
-            summary_label = Gtk.Label(label=app.getSummary())
-            summary_label.set_halign(Gtk.Align.CENTER)
-            summary_label.set_wrap(True)
-            summary_label.set_max_width_chars(16)
-            summary_label.set_lines(2)
-            summary_label.set_ellipsize(3)  # PANGO_ELLIPSIZE_END
-            summary_label.add_css_class("caption")
-            summary_label.add_css_class("dim-label")
-            card.append(summary_label)
-
-            button = Gtk.Button()
-            button.add_css_class("card")
-            button.set_child(card)
-            button.connect("clicked", self._on_app_clicked, app.id)
-            self._flow_box.append(button)
+            row.add_suffix(Gtk.Image.new_from_icon_name("go-next-symbolic"))
+            row.connect("activated", self._on_app_clicked, app.id)
+            self._flow_box.append(row)
 
         return GLib.SOURCE_CONTINUE
 

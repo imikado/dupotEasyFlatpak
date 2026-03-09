@@ -12,7 +12,10 @@ from infrastructure.ui.search_list_ui import SearchListPage
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw
+import subprocess
+import threading
+
+from gi.repository import GLib, Gio, Gtk, Adw
 
 
 class MainWindow(Adw.ApplicationWindow):
@@ -45,6 +48,80 @@ class MainWindow(Adw.ApplicationWindow):
         toolbar_view = Adw.ToolbarView()
         header_bar = Adw.HeaderBar()
         toolbar_view.add_top_bar(header_bar)
+
+        menu = Gio.Menu()
+        menu.append(_("Parameters"), "win.parameters")
+        menu.append(_("Import / Export"), "win.import_export")
+        menu.append(_("About"), "win.about")
+
+        menu_button = Gtk.MenuButton()
+        menu_button.set_icon_name("open-menu-symbolic")
+        menu_button.set_menu_model(menu)
+        header_bar.pack_end(menu_button)
+
+        for name, callback in [
+            ("parameters", self._on_menu_parameters),
+            ("import_export", self._on_menu_import_export),
+            ("about", self._on_menu_about),
+        ]:
+            action = Gio.SimpleAction.new(name, None)
+            action.connect("activate", callback)
+            self.add_action(action)
+
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_string("""
+            .update-badge {
+                background-color: @destructive_bg_color;
+                color: @destructive_fg_color;
+                border-radius: 999px;
+                font-size: 0.7em;
+                font-weight: bold;
+                min-width: 16px;
+                min-height: 16px;
+                padding: 0px 2px;
+            }
+        """)
+        Gtk.StyleContext.add_provider_for_display(
+            self.get_display(),
+            css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+        )
+
+        update_btn = Gtk.Button()
+        update_btn.set_icon_name("software-update-available-symbolic")
+        update_btn.set_tooltip_text(_("Available updates"))
+
+        badge_label = Gtk.Label()
+        badge_label.add_css_class("update-badge")
+        badge_label.set_halign(Gtk.Align.END)
+        badge_label.set_valign(Gtk.Align.START)
+        badge_label.set_margin_end(-6)
+        badge_label.set_margin_top(-4)
+        badge_label.set_visible(False)
+
+        overlay = Gtk.Overlay()
+        overlay.set_child(update_btn)
+        overlay.add_overlay(badge_label)
+        overlay.set_visible(False)
+        header_bar.pack_start(overlay)
+
+        def _fetch_updates():
+            result = subprocess.run(
+                ["flatpak", "remote-ls", "--updates"],
+                capture_output=True, text=True,
+            )
+            count = len([l for l in result.stdout.splitlines() if l.strip()])
+
+            def _apply():
+                if count > 0:
+                    badge_label.set_label(str(count))
+                    badge_label.set_visible(True)
+                    overlay.set_visible(True)
+                return GLib.SOURCE_REMOVE
+
+            GLib.idle_add(_apply)
+
+        threading.Thread(target=_fetch_updates, daemon=True).start()
 
         appstream_repository = AppstreamRepository()
 
@@ -135,53 +212,47 @@ class MainWindow(Adw.ApplicationWindow):
         return flow
 
     def _get_application_list_widget(self, application_list, appstream_repository):
-        flow_box = Gtk.FlowBox()
-        flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        flow_box.set_max_children_per_line(10)
-        flow_box.set_min_children_per_line(3)
-        flow_box.set_homogeneous(True)
-        flow_box.set_row_spacing(8)
-        flow_box.set_column_spacing(8)
+        list_box = Gtk.ListBox()
+        list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        list_box.add_css_class("boxed-list")
+        list_box.set_margin_top(12)
+        list_box.set_margin_bottom(12)
+        list_box.set_margin_start(12)
+        list_box.set_margin_end(12)
 
         for app in application_list:
-            card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-            card.set_halign(Gtk.Align.CENTER)
-            card.set_margin_top(12)
-            card.set_margin_bottom(12)
-            card.set_margin_start(8)
-            card.set_margin_end(8)
+            row = Adw.ActionRow()
+            row.set_title(app.getName())
+            row.set_subtitle(app.getSummary())
+            row.set_activatable(True)
 
-            image = Gtk.Image.new_from_file(app.getIcon())
-            image.set_pixel_size(64)
-            image.set_halign(Gtk.Align.CENTER)
-            card.append(image)
+            icon = Gtk.Image.new_from_file(app.getIcon())
+            icon.set_pixel_size(48)
+            row.add_prefix(icon)
 
-            title_label = Gtk.Label(label=app.getName())
-            title_label.set_halign(Gtk.Align.CENTER)
-            title_label.set_wrap(True)
-            title_label.set_max_width_chars(12)
-            title_label.add_css_class("caption")
-            card.append(title_label)
+            row.add_suffix(Gtk.Image.new_from_icon_name("go-next-symbolic"))
+            row.connect("activated", self._on_app_clicked, app.id, appstream_repository)
+            list_box.append(row)
 
-            summary_label = Gtk.Label(label=app.getSummary())
-            summary_label.set_halign(Gtk.Align.CENTER)
-            summary_label.set_wrap(True)
-            summary_label.set_max_width_chars(16)
-            summary_label.set_lines(2)
-            summary_label.set_ellipsize(3)  # PANGO_ELLIPSIZE_END
-            summary_label.add_css_class("caption")
-            summary_label.add_css_class("dim-label")
-            card.append(summary_label)
+        return list_box
 
-            button = Gtk.Button()
-            button.add_css_class("card")
-            button.set_child(card)
-            button.connect(
-                "clicked", self._on_app_clicked, app.id, appstream_repository
-            )
-            flow_box.append(button)
+    def _on_menu_parameters(self, _action, _param):
+        dialog = Adw.MessageDialog.new(self, _("Parameters"), _("Not yet implemented."))
+        dialog.add_response("close", _("Close"))
+        dialog.present()
 
-        return flow_box
+    def _on_menu_import_export(self, _action, _param):
+        dialog = Adw.MessageDialog.new(self, _("Import / Export"), _("Not yet implemented."))
+        dialog.add_response("close", _("Close"))
+        dialog.present()
+
+    def _on_menu_about(self, _action, _param):
+        about = Adw.AboutDialog.new()
+        about.set_application_name("Easy Flatpak")
+        about.set_version("1.0")
+        about.set_developer_name("dupot")
+        about.set_license_type(Gtk.License.GPL_3_0)
+        about.present(self)
 
     def _on_search(
         self, entry: Gtk.SearchEntry, appstream_repository: AppstreamRepository
