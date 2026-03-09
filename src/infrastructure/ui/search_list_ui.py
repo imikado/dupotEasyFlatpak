@@ -45,7 +45,11 @@ class SearchListPage(Adw.NavigationPage):
         toolbar_view.set_content(scroll)
 
         search_entry.connect("search-changed", self._on_search_changed)
-        self.connect("shown", lambda _: search_entry.grab_focus())
+        def _focus_end(_page):
+            search_entry.grab_focus()
+            search_entry.set_position(-1)
+
+        self.connect("shown", _focus_end)
         self._reload(query)
 
         return toolbar_view

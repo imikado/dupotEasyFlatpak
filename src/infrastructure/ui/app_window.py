@@ -127,7 +127,9 @@ class MainWindow(Adw.ApplicationWindow):
             btn = Gtk.Button()
             btn.set_child(btn_content)
             btn.add_css_class("pill")
-            btn.connect("clicked", self._on_category_clicked, category, appstream_repository)
+            btn.connect(
+                "clicked", self._on_category_clicked, category, appstream_repository
+            )
             flow.append(btn)
 
         return flow
@@ -181,9 +183,11 @@ class MainWindow(Adw.ApplicationWindow):
 
         return flow_box
 
-    def _on_search(self, entry: Gtk.SearchEntry, appstream_repository: AppstreamRepository):
+    def _on_search(
+        self, entry: Gtk.SearchEntry, appstream_repository: AppstreamRepository
+    ):
         query = entry.get_text().strip()
-        if len(query) >= 3:
+        if len(query) > 2:
             if not isinstance(self.navigation_view.get_visible_page(), SearchListPage):
                 self.navigation_view.push(SearchListPage(query, appstream_repository))
 

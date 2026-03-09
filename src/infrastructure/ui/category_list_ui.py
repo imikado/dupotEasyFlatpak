@@ -3,10 +3,12 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw
+from gi.repository import GLib, Gtk, Adw
 
 from domain.UseCase.get_category_content_uc import GetCategoryContentUc
 from infrastructure.repository.appstream_repository import AppstreamRepository
+
+BATCH_SIZE = 20
 
 
 class CategoryListPage(Adw.NavigationPage):
@@ -15,24 +17,46 @@ class CategoryListPage(Adw.NavigationPage):
         super().__init__()
         self.set_title(_(category))
         self._appstream_repository = appstream_repository
+        self._flow_box = None
+        self._pending = []
+        self._idle_id = None
         self.set_child(self._build(category))
 
     def _build(self, category: str) -> Gtk.Widget:
         toolbar_view = Adw.ToolbarView()
         toolbar_view.add_top_bar(Adw.HeaderBar())
 
+        self._flow_box = Gtk.FlowBox()
+        self._flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        self._flow_box.set_max_children_per_line(10)
+        self._flow_box.set_min_children_per_line(3)
+        self._flow_box.set_homogeneous(True)
+        self._flow_box.set_row_spacing(8)
+        self._flow_box.set_column_spacing(8)
+
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_vexpand(True)
+        scroll.set_hexpand(True)
+        scroll.set_child(self._flow_box)
+
+        toolbar_view.set_content(scroll)
+
         uc = GetCategoryContentUc(self._appstream_repository)
-        app_list = uc.get_app_list_by_category_id(category)
+        self._pending = list(uc.get_app_list_by_category_id(category))
+        self._idle_id = GLib.idle_add(self._append_batch)
 
-        flow_box = Gtk.FlowBox()
-        flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        flow_box.set_max_children_per_line(10)
-        flow_box.set_min_children_per_line(3)
-        flow_box.set_homogeneous(True)
-        flow_box.set_row_spacing(8)
-        flow_box.set_column_spacing(8)
+        self.connect("hidden", self._cancel_pending)
 
-        for app in app_list:
+        return toolbar_view
+
+    def _append_batch(self) -> bool:
+        if not self._pending:
+            self._idle_id = None
+            return GLib.SOURCE_REMOVE
+
+        batch, self._pending = self._pending[:BATCH_SIZE], self._pending[BATCH_SIZE:]
+
+        for app in batch:
             card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
             card.set_halign(Gtk.Align.CENTER)
             card.set_margin_top(12)
@@ -66,15 +90,15 @@ class CategoryListPage(Adw.NavigationPage):
             button.add_css_class("card")
             button.set_child(card)
             button.connect("clicked", self._on_app_clicked, app.id)
-            flow_box.append(button)
+            self._flow_box.append(button)
 
-        scroll = Gtk.ScrolledWindow()
-        scroll.set_vexpand(True)
-        scroll.set_hexpand(True)
-        scroll.set_child(flow_box)
+        return GLib.SOURCE_CONTINUE
 
-        toolbar_view.set_content(scroll)
-        return toolbar_view
+    def _cancel_pending(self, _page):
+        if self._idle_id is not None:
+            GLib.source_remove(self._idle_id)
+            self._idle_id = None
+            self._pending = []
 
     def _on_app_clicked(self, _button, app_id: str):
         from infrastructure.ui.appstream_ui import AppstreamPage
