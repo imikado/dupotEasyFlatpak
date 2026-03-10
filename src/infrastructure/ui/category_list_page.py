@@ -7,6 +7,7 @@ from gi.repository import Adw, GLib, Gtk
 
 from domain.UseCase.get_category_content_uc import GetCategoryContentUc
 from infrastructure.repository.appstream_repository import AppstreamRepository
+from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 
 BATCH_SIZE = 20
 
@@ -17,7 +18,7 @@ class CategoryListPage(Adw.NavigationPage):
         super().__init__()
         self.set_title(_(category))
         self._appstream_repository = appstream_repository
-        self._flow_box = None
+        self._grid = None
         self._pending = []
         self._idle_id = None
         self.set_child(self._build(category))
@@ -26,18 +27,12 @@ class CategoryListPage(Adw.NavigationPage):
         toolbar_view = Adw.ToolbarView()
         toolbar_view.add_top_bar(Adw.HeaderBar())
 
-        self._flow_box = Gtk.ListBox()
-        self._flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        self._flow_box.add_css_class("boxed-list")
-        self._flow_box.set_margin_top(12)
-        self._flow_box.set_margin_bottom(12)
-        self._flow_box.set_margin_start(12)
-        self._flow_box.set_margin_end(12)
+        self._grid = AppListGridShared()
 
         scroll = Gtk.ScrolledWindow()
         scroll.set_vexpand(True)
         scroll.set_hexpand(True)
-        scroll.set_child(self._flow_box)
+        scroll.set_child(self._grid.get_widget())
 
         toolbar_view.set_content(scroll)
 
@@ -57,18 +52,7 @@ class CategoryListPage(Adw.NavigationPage):
         batch, self._pending = self._pending[:BATCH_SIZE], self._pending[BATCH_SIZE:]
 
         for app in batch:
-            row = Adw.ActionRow()
-            row.set_title(app.getName())
-            row.set_subtitle(app.getSummary())
-            row.set_activatable(True)
-
-            icon = Gtk.Image.new_from_file(app.getIcon())
-            icon.set_pixel_size(48)
-            row.add_prefix(icon)
-
-            row.add_suffix(Gtk.Image.new_from_icon_name("go-next-symbolic"))
-            row.connect("activated", self._on_app_clicked, app.id)
-            self._flow_box.append(row)
+            self._grid.append(app, self._on_app_clicked)
 
         return GLib.SOURCE_CONTINUE
 
@@ -79,7 +63,7 @@ class CategoryListPage(Adw.NavigationPage):
             self._pending = []
 
     def _on_app_clicked(self, _button, app_id: str):
-        from infrastructure.ui.appstream_ui import AppstreamPage
+        from infrastructure.ui.appstream_page import AppstreamPage
 
         app = self._appstream_repository.get_by_id(app_id)
         if app:

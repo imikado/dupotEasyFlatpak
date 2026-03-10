@@ -5,9 +5,10 @@ from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.category_repository import CategoryRepository
-from infrastructure.ui.appstream_ui import AppstreamPage
-from infrastructure.ui.category_list_ui import CategoryListPage
-from infrastructure.ui.search_list_ui import SearchListPage
+from infrastructure.ui.appstream_page import AppstreamPage
+from infrastructure.ui.category_list_page import CategoryListPage
+from infrastructure.ui.search_list_page import SearchListPage
+from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -69,7 +70,8 @@ class MainWindow(Adw.ApplicationWindow):
             self.add_action(action)
 
         css_provider = Gtk.CssProvider()
-        css_provider.load_from_string("""
+        css_provider.load_from_string(
+            """
             .update-badge {
                 background-color: @destructive_bg_color;
                 color: @destructive_fg_color;
@@ -80,7 +82,8 @@ class MainWindow(Adw.ApplicationWindow):
                 min-height: 16px;
                 padding: 0px 2px;
             }
-        """)
+        """
+        )
         Gtk.StyleContext.add_provider_for_display(
             self.get_display(),
             css_provider,
@@ -108,7 +111,8 @@ class MainWindow(Adw.ApplicationWindow):
         def _fetch_updates():
             result = subprocess.run(
                 ["flatpak", "remote-ls", "--updates"],
-                capture_output=True, text=True,
+                capture_output=True,
+                text=True,
             )
             count = len([l for l in result.stdout.splitlines() if l.strip()])
 
@@ -212,29 +216,10 @@ class MainWindow(Adw.ApplicationWindow):
         return flow
 
     def _get_application_list_widget(self, application_list, appstream_repository):
-        list_box = Gtk.ListBox()
-        list_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        list_box.add_css_class("boxed-list")
-        list_box.set_margin_top(12)
-        list_box.set_margin_bottom(12)
-        list_box.set_margin_start(12)
-        list_box.set_margin_end(12)
-
+        grid = AppListGridShared()
         for app in application_list:
-            row = Adw.ActionRow()
-            row.set_title(app.getName())
-            row.set_subtitle(app.getSummary())
-            row.set_activatable(True)
-
-            icon = Gtk.Image.new_from_file(app.getIcon())
-            icon.set_pixel_size(48)
-            row.add_prefix(icon)
-
-            row.add_suffix(Gtk.Image.new_from_icon_name("go-next-symbolic"))
-            row.connect("activated", self._on_app_clicked, app.id, appstream_repository)
-            list_box.append(row)
-
-        return list_box
+            grid.append(app, self._on_app_clicked, appstream_repository)
+        return grid.get_widget()
 
     def _on_menu_parameters(self, _action, _param):
         dialog = Adw.MessageDialog.new(self, _("Parameters"), _("Not yet implemented."))
@@ -242,7 +227,9 @@ class MainWindow(Adw.ApplicationWindow):
         dialog.present()
 
     def _on_menu_import_export(self, _action, _param):
-        dialog = Adw.MessageDialog.new(self, _("Import / Export"), _("Not yet implemented."))
+        dialog = Adw.MessageDialog.new(
+            self, _("Import / Export"), _("Not yet implemented.")
+        )
         dialog.add_response("close", _("Close"))
         dialog.present()
 
