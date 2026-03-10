@@ -11,7 +11,7 @@ def _make_app_card(app, on_click, *on_click_args) -> Gtk.Button:
     button.connect("clicked", on_click, app.id, *on_click_args)
 
     box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-    box.add_css_class("card")
+    # box.add_css_class("card")
     box.set_size_request(120, -1)
     box.set_margin_top(4)
     box.set_margin_bottom(4)

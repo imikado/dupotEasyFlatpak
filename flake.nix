@@ -14,6 +14,7 @@
         pythonEnv = python.withPackages (ps: [
           ps.pygobject3
           ps.pycairo
+          ps.pillow
         ]);
       in
       {
