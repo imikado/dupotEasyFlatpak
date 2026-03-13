@@ -1,4 +1,4 @@
-from domain.entity.permission_to_override_entity import PermissionToOverrideEntity
+from domain.entity.permission_override_entity import PermissionOverrideEntity
 
 
 class RecipeEntity:
@@ -8,7 +8,7 @@ class RecipeEntity:
     title: str
     description: str
     flatpak: str
-    _flatpak_permission_to_override_list: list[PermissionToOverrideEntity]
+    _flatpak_permission_to_override_list: list[PermissionOverrideEntity]
 
     def __init__(self, raw_obj: object):
 
@@ -22,8 +22,8 @@ class RecipeEntity:
                 self.FIELD_PERMISSION_TO_OVERRIDE_LIST
             ]:
                 self._flatpak_permission_to_override_list.append(
-                    PermissionToOverrideEntity(permission_to_override_loop)
+                    PermissionOverrideEntity(permission_to_override_loop)
                 )
 
-    def get_permission_to_override_list(self) -> list[PermissionToOverrideEntity]:
+    def get_permission_to_override_list(self) -> list[PermissionOverrideEntity]:
         return self._flatpak_permission_to_override_list

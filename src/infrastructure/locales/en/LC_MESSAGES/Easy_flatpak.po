@@ -1,0 +1,120 @@
+# English translations for Easy flatpak
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+# --- General actions ---
+msgid "Install"
+msgstr "Install"
+
+msgid "Install with recipe"
+msgstr "Install with recipe"
+
+msgid "Install for current user only"
+msgstr "Install for current user only"
+
+msgid "Uninstall"
+msgstr "Uninstall"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Please wait…"
+msgstr "Please wait…"
+
+# --- App detail page ---
+msgid "Details"
+msgstr "Details"
+
+msgid "License"
+msgstr "License"
+
+msgid "Download Size"
+msgstr "Download Size"
+
+msgid "Installed Size"
+msgstr "Installed Size"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Screenshots"
+msgstr "Screenshots"
+
+msgid "Release History"
+msgstr "Release History"
+
+msgid "Permissions"
+msgstr "Permissions"
+
+# --- Navigation / window ---
+msgid "Easy flatpak"
+msgstr "Easy flatpak"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Categories"
+msgstr "Categories"
+
+msgid "Bundles"
+msgstr "Bundles"
+
+msgid "Installed"
+msgstr "Installed"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "Parameters"
+msgstr "Parameters"
+
+msgid "Import / Export"
+msgstr "Import / Export"
+
+msgid "About"
+msgstr "About"
+
+msgid "Available updates"
+msgstr "Available updates"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Search…"
+msgstr "Search…"
+
+# --- Home sections ---
+msgid "Trending"
+msgstr "Trending"
+
+msgid "Popular"
+msgstr "Popular"
+
+msgid "Updated"
+msgstr "Updated"
+
+# --- Misc ---
+msgid "Not yet implemented"
+msgstr "Not yet implemented"
+
+msgid "Not yet implemented."
+msgstr "Not yet implemented."
+
+# --- Recipe permission labels ---
+msgid "recipe_share_your_home_label"
+msgstr "For information: should allow discord to access your home directory (let it set up)"
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indicate directory path where you store your games"
+
+msgid "recipe_should_installMangoHud"
+msgstr "Install MangoHud"
+
+msgid "recipe_enable_mangohud"
+msgstr "Enable MangoHud"

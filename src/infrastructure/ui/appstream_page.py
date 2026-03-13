@@ -14,6 +14,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw, GLib, Gdk
 
 from domain.entity.appstream_long_entity import AppstreamLongEntity
+from infrastructure.ui.appstream.install_dialog import InstallDialog
 
 
 def _webp_to_png(data: bytes) -> bytes:
@@ -280,47 +281,7 @@ class AppstreamPage(Adw.NavigationPage):
             return
 
         # --- Install: show confirm dialog ---
-        dialog = Adw.AlertDialog()
-        dialog.set_heading(_("Install"))
-
-        form_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        form_box.set_margin_top(8)
-
-        user_scope_row = None
-        permission_rows = []  # list of (SwitchRow, PermissionToOverrideEntity)
-
-        if not has_recipe:
-            scope_group = Adw.PreferencesGroup()
-            user_scope_row = Adw.SwitchRow()
-            user_scope_row.set_title(_("Install for current user only"))
-            scope_group.add(user_scope_row)
-            form_box.append(scope_group)
-        else:
-            permissions = self._get_recipe_content.get_permission_to_override_list_by_id(app_id)
-            if permissions:
-                perm_group = Adw.PreferencesGroup()
-                perm_group.set_title(_("Permissions"))
-                for perm in permissions:
-                    row = Adw.SwitchRow()
-                    row.set_title(_(perm.label))
-                    row.set_active(True)
-                    perm_group.add(row)
-                    permission_rows.append((row, perm))
-                form_box.append(perm_group)
-
-        dialog.set_extra_child(form_box)
-        dialog.add_response("cancel", _("Cancel"))
-        dialog.add_response("install", _("Install"))
-        dialog.set_response_appearance("install", Adw.ResponseAppearance.SUGGESTED)
-        dialog.set_default_response("install")
-        dialog.set_close_response("cancel")
-
-        def on_response(_dialog, response):
-            if response != "install":
-                return
-            user_scope = user_scope_row.get_active() if user_scope_row else False
-            active_permissions = [perm for row, perm in permission_rows if row.get_active()]
-
+        def on_confirm(user_scope, active_permissions):
             btn.set_sensitive(False)
             btn.set_label(_("Please wait…"))
 
@@ -330,13 +291,18 @@ class AppstreamPage(Adw.NavigationPage):
                     self._flatpak_cmd("install", "flathub", app_id, "-y", *flags),
                     capture_output=True,
                 )
-                for perm in active_permissions:
-                    if perm.type == "filesystem_noprompt":
+                for perm, value in active_permissions:
+                    if perm.is_filesystem():
                         subprocess.run(
                             self._flatpak_cmd(
                                 "override", "--user", app_id,
-                                f"--filesystem={perm.value}",
+                                f"--filesystem={value}",
                             ),
+                            capture_output=True,
+                        )
+                    elif perm.is_install_flatpak_yes_no():
+                        subprocess.run(
+                            self._flatpak_cmd("install", "flathub", perm.get_value(), "-y"),
                             capture_output=True,
                         )
                 result = subprocess.run(
@@ -346,7 +312,7 @@ class AppstreamPage(Adw.NavigationPage):
 
             threading.Thread(target=run_install, daemon=True).start()
 
-        dialog.connect("response", on_response)
+        dialog = InstallDialog(app_id, has_recipe, self._get_recipe_content, on_confirm)
         dialog.present(self)
 
     def _build_screenshots_section(self, app: AppstreamLongEntity):

@@ -19,7 +19,7 @@ class PathToCopy:
 
 def main():
     # Set the local directory
-    appname = "Easy flatpak"
+    appname = "Easy_flatpak"
     localedir = "./infrastructure/locales"
 
     # Set up Gettext

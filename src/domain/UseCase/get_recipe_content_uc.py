@@ -1,5 +1,5 @@
 from domain.contract.recipe_repository_contract import RecipeRepositoryContract
-from domain.entity.permission_to_override_entity import PermissionToOverrideEntity
+from domain.entity.permission_override_entity import PermissionOverrideEntity
 from infrastructure.api.system_api import SystemApi
 
 
@@ -17,7 +17,7 @@ class GetRecipeContentUc:
 
     def get_permission_to_override_list_by_id(
         self, id: str
-    ) -> list[PermissionToOverrideEntity]:
+    ) -> list[PermissionOverrideEntity]:
         recipe = self._recipe_repository.get_by_id(id)
 
         return recipe.get_permission_to_override_list()
