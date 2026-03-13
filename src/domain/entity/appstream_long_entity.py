@@ -1,6 +1,7 @@
 import json
 
 from domain.conf.path_conf import PathConf
+from domain.entity.release_entity import ReleaseEntity
 from domain.entity.screenshot_entity import ScreenshotEntity
 
 
@@ -31,6 +32,7 @@ class AppstreamLongEntity:
     _flathub_verified_label: str
     _download_size: int
     _installed_size: int
+    _release_obj_list: list[ReleaseEntity]
 
     # maps entity field name -> DB column name
     _db_column_map = {
@@ -58,6 +60,7 @@ class AppstreamLongEntity:
 
         self.load_screenshot_list()
         self.load_metadata_obj()
+        self.load_release_obj_list()
 
     def get_select_columns(self) -> str:
         return ", ".join(
@@ -94,6 +97,14 @@ class AppstreamLongEntity:
         if self.FIELD_INSTALLED_SIZE in raw_obj:
             self._installed_size = raw_obj[self.FIELD_INSTALLED_SIZE]
 
+    def load_release_obj_list(self):
+        raw_obj_list = json.loads(self.release_obj_list)
+        self._release_obj_list = []
+        for raw_obj_loop in raw_obj_list:
+            self._release_obj_list.append(
+                ReleaseEntity(raw_obj_loop["timestamp"], raw_obj_loop["version"])
+            )
+
     def get_download_size(self) -> str:
         return self.format_mb(self._download_size)
 
@@ -108,6 +119,9 @@ class AppstreamLongEntity:
 
     def get_screenshot_list(self) -> list[ScreenshotEntity]:
         return self._screenshot_obj_list
+
+    def get_release_list(self) -> list[ReleaseEntity]:
+        return self._release_obj_list
 
     @staticmethod
     def format_mb(size: int) -> str:

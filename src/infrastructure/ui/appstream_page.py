@@ -1,4 +1,5 @@
 import re
+import subprocess
 import threading
 import urllib.request
 import gi
@@ -99,6 +100,14 @@ class AppstreamPage(Adw.NavigationPage):
             summary_label.set_wrap(True)
             info_box.append(summary_label)
 
+        install_btn = Gtk.Button()
+        install_btn.set_halign(Gtk.Align.CENTER)
+        install_btn.set_margin_top(8)
+        install_btn.set_sensitive(False)
+        install_btn.connect("clicked", self._on_install_clicked, app.id)
+        info_box.append(install_btn)
+        self._check_install_state(install_btn, app.id)
+
         header_row = Adw.PreferencesRow()
         header_row.set_child(info_box)
         header_group.add(header_row)
@@ -196,11 +205,57 @@ class AppstreamPage(Adw.NavigationPage):
             description_group.add(desc_row)
             details_clamp_box.append(description_group)
 
+        releases_widget = self._build_releases_section(app)
+        if releases_widget:
+            details_clamp_box.append(releases_widget)
+
         page_box.append(details_clamp)
 
-        toolbar_view.set_content(outer_scroll)
+        self._screenshot_overlay_host = Gtk.Overlay()
+        self._screenshot_overlay_host.set_child(outer_scroll)
+        toolbar_view.set_content(self._screenshot_overlay_host)
 
         return toolbar_view
+
+    @staticmethod
+    def _flatpak_cmd(*args) -> list:
+        import os
+        prefix = ["flatpak-spawn", "--host"] if os.path.exists("/.flatpak-info") else []
+        return prefix + ["flatpak"] + list(args)
+
+    def _check_install_state(self, btn: Gtk.Button, app_id: str):
+        def check():
+            result = subprocess.run(self._flatpak_cmd("info", app_id), capture_output=True)
+            installed = result.returncode == 0
+            GLib.idle_add(self._apply_install_state, btn, installed)
+
+        threading.Thread(target=check, daemon=True).start()
+
+    def _apply_install_state(self, btn: Gtk.Button, installed: bool):
+        btn.set_sensitive(True)
+        if installed:
+            btn.set_label(_("Uninstall"))
+            btn.remove_css_class("suggested-action")
+            btn.add_css_class("destructive-action")
+        else:
+            btn.set_label(_("Install"))
+            btn.remove_css_class("destructive-action")
+            btn.add_css_class("suggested-action")
+
+    def _on_install_clicked(self, btn: Gtk.Button, app_id: str):
+        installed = btn.has_css_class("destructive-action")
+        btn.set_sensitive(False)
+        btn.set_label(_("Please wait…"))
+
+        def run():
+            if installed:
+                subprocess.run(self._flatpak_cmd("uninstall", app_id, "-y"), capture_output=True)
+            else:
+                subprocess.run(self._flatpak_cmd("install", "flathub", app_id, "-y"), capture_output=True)
+            result = subprocess.run(self._flatpak_cmd("info", app_id), capture_output=True)
+            GLib.idle_add(self._apply_install_state, btn, result.returncode == 0)
+
+        threading.Thread(target=run, daemon=True).start()
 
     def _build_screenshots_section(self, app: AppstreamLongEntity):
         try:
@@ -232,7 +287,8 @@ class AppstreamPage(Adw.NavigationPage):
         hbox.set_margin_start(8)
         hbox.set_margin_end(8)
 
-        for screenshot in screenshots:
+        large_urls = [s.large for s in screenshots]
+        for idx, screenshot in enumerate(screenshots):
             btn = Gtk.Button()
             btn.add_css_class("flat")
 
@@ -243,7 +299,7 @@ class AppstreamPage(Adw.NavigationPage):
             btn.set_child(picture)
 
             self._load_image_async(picture, screenshot.preview)
-            btn.connect("clicked", self._on_screenshot_clicked, screenshot.large)
+            btn.connect("clicked", self._on_screenshot_clicked, large_urls, idx)
             hbox.append(btn)
 
         scroll.set_child(hbox)
@@ -270,14 +326,50 @@ class AppstreamPage(Adw.NavigationPage):
 
         threading.Thread(target=fetch, daemon=True).start()
 
-    def _on_screenshot_clicked(self, _btn, url: str):
-        dialog = Adw.Dialog()
-        dialog.set_title("")
-        dialog.set_content_width(900)
-        dialog.set_content_height(600)
+    def _on_screenshot_clicked(self, _btn, urls: list, index: int):
+        state = {"index": index}
 
-        toolbar_view = Adw.ToolbarView()
-        toolbar_view.add_top_bar(Adw.HeaderBar())
+        # Dark backdrop — clicking it closes the viewer
+        backdrop = Gtk.Box()
+        backdrop.set_hexpand(True)
+        backdrop.set_vexpand(True)
+        backdrop_css = Gtk.CssProvider()
+        backdrop_css.load_from_string(
+            ".ss-backdrop { background-color: rgba(0,0,0,0.85); }"
+        )
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(), backdrop_css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+        backdrop.add_css_class("ss-backdrop")
+
+        viewer_overlay = Gtk.Overlay()
+        viewer_overlay.set_hexpand(True)
+        viewer_overlay.set_vexpand(True)
+        viewer_overlay.set_focusable(True)
+        viewer_overlay.set_child(backdrop)
+
+        def close_viewer():
+            self._screenshot_overlay_host.remove_overlay(viewer_overlay)
+
+        backdrop_gesture = Gtk.GestureClick()
+        backdrop_gesture.connect("pressed", lambda *_: close_viewer())
+        backdrop.add_controller(backdrop_gesture)
+
+        key_ctrl = Gtk.EventControllerKey()
+        def on_key(_ctrl, keyval, _keycode, _mod):
+            if keyval == Gdk.KEY_Escape:
+                close_viewer()
+                return True
+            return False
+        key_ctrl.connect("key-pressed", on_key)
+        viewer_overlay.add_controller(key_ctrl)
+
+        # Centered content card
+        content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        content_box.set_halign(Gtk.Align.CENTER)
+        content_box.set_valign(Gtk.Align.CENTER)
+        content_box.set_size_request(900, 600)
+        content_box.add_css_class("card")
 
         picture = Gtk.Picture()
         picture.set_content_fit(Gtk.ContentFit.CONTAIN)
@@ -289,26 +381,85 @@ class AppstreamPage(Adw.NavigationPage):
         spinner.set_halign(Gtk.Align.CENTER)
         spinner.set_valign(Gtk.Align.CENTER)
 
-        overlay = Gtk.Overlay()
-        overlay.set_child(picture)
-        overlay.add_overlay(spinner)
+        prev_btn = Gtk.Button.new_from_icon_name("go-previous-symbolic")
+        prev_btn.add_css_class("circular")
+        prev_btn.add_css_class("osd")
+        prev_btn.set_valign(Gtk.Align.CENTER)
+        prev_btn.set_halign(Gtk.Align.START)
+        prev_btn.set_margin_start(12)
+        prev_btn.set_visible(len(urls) > 1)
 
-        toolbar_view.set_content(overlay)
-        dialog.set_child(toolbar_view)
-        dialog.present(self)
+        next_btn = Gtk.Button.new_from_icon_name("go-next-symbolic")
+        next_btn.add_css_class("circular")
+        next_btn.add_css_class("osd")
+        next_btn.set_valign(Gtk.Align.CENTER)
+        next_btn.set_halign(Gtk.Align.END)
+        next_btn.set_margin_end(12)
+        next_btn.set_visible(len(urls) > 1)
 
-        def fetch():
-            try:
-                data = urllib.request.urlopen(url).read()
-                png_bytes = _webp_to_png(data)
-                def apply():
-                    texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(png_bytes))
-                    picture.set_paintable(texture)
-                    spinner.set_spinning(False)
-                    spinner.set_visible(False)
-                GLib.idle_add(apply)
-            except Exception:
-                GLib.idle_add(spinner.set_spinning, False)
-                GLib.idle_add(spinner.set_visible, False)
+        inner_overlay = Gtk.Overlay()
+        inner_overlay.set_vexpand(True)
+        inner_overlay.set_hexpand(True)
+        inner_overlay.set_child(picture)
+        inner_overlay.add_overlay(spinner)
+        inner_overlay.add_overlay(prev_btn)
+        inner_overlay.add_overlay(next_btn)
+        content_box.append(inner_overlay)
 
-        threading.Thread(target=fetch, daemon=True).start()
+        viewer_overlay.add_overlay(content_box)
+
+        def load_image(url):
+            spinner.set_visible(True)
+            spinner.set_spinning(True)
+            picture.set_paintable(None)
+
+            def fetch():
+                try:
+                    data = urllib.request.urlopen(url).read()
+                    png_bytes = _webp_to_png(data)
+                    def apply():
+                        texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(png_bytes))
+                        picture.set_paintable(texture)
+                        spinner.set_spinning(False)
+                        spinner.set_visible(False)
+                    GLib.idle_add(apply)
+                except Exception:
+                    GLib.idle_add(spinner.set_spinning, False)
+                    GLib.idle_add(spinner.set_visible, False)
+
+            threading.Thread(target=fetch, daemon=True).start()
+
+        def on_prev(_btn):
+            state["index"] = (state["index"] - 1) % len(urls)
+            load_image(urls[state["index"]])
+
+        def on_next(_btn):
+            state["index"] = (state["index"] + 1) % len(urls)
+            load_image(urls[state["index"]])
+
+        prev_btn.connect("clicked", on_prev)
+        next_btn.connect("clicked", on_next)
+
+        self._screenshot_overlay_host.add_overlay(viewer_overlay)
+        viewer_overlay.grab_focus()
+        load_image(urls[index])
+
+    def _build_releases_section(self, app: AppstreamLongEntity):
+        try:
+            releases = app.get_release_list()
+        except Exception:
+            return None
+
+        if not releases:
+            return None
+
+        group = Adw.PreferencesGroup()
+        group.set_title(_("Release History"))
+
+        for release in releases[:10]:
+            row = Adw.ActionRow()
+            row.set_title(release.version)
+            row.set_subtitle(release.datetime)
+            group.add(row)
+
+        return group

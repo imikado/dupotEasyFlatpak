@@ -18,5 +18,11 @@ class AppstreamRepositoryContract(ABC):
         pass
 
     @abstractmethod
+    def get_list_by_category_id_and_search(
+        self, category_id: str, search: str
+    ) -> list[AppstreamShortEntity]:
+        pass
+
+    @abstractmethod
     def get_list_by_seach(self, search: str) -> list[AppstreamShortEntity]:
         pass

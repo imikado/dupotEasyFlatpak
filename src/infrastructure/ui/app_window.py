@@ -102,11 +102,11 @@ class MainWindow(Adw.ApplicationWindow):
         badge_label.set_margin_top(-4)
         badge_label.set_visible(False)
 
-        overlay = Gtk.Overlay()
-        overlay.set_child(update_btn)
-        overlay.add_overlay(badge_label)
-        overlay.set_visible(False)
-        header_bar.pack_start(overlay)
+        update_overlay = Gtk.Overlay()
+        update_overlay.set_child(update_btn)
+        update_overlay.add_overlay(badge_label)
+        update_overlay.set_visible(False)
+        header_bar.pack_start(update_overlay)
 
         def _fetch_updates():
             result = subprocess.run(
@@ -120,7 +120,7 @@ class MainWindow(Adw.ApplicationWindow):
                 if count > 0:
                     badge_label.set_label(str(count))
                     badge_label.set_visible(True)
-                    overlay.set_visible(True)
+                    update_overlay.set_visible(True)
                 return GLib.SOURCE_REMOVE
 
             GLib.idle_add(_apply)
@@ -129,12 +129,62 @@ class MainWindow(Adw.ApplicationWindow):
 
         appstream_repository = AppstreamRepository()
 
+        # --- Top-level ViewStack (Home / Bundles / Installed / Pending) ---
+        view_stack = Adw.ViewStack()
+        view_stack.set_vexpand(True)
+        view_stack.set_hexpand(True)
+
+        view_switcher = Adw.ViewSwitcher()
+        view_switcher.set_stack(view_stack)
+        view_switcher.set_policy(Adw.ViewSwitcherPolicy.WIDE)
+        header_bar.set_title_widget(view_switcher)
+
+        # Home page content
+        home_box = self._build_home_page(appstream_repository)
+        view_stack.add_titled_with_icon(home_box, "home", _("Home"), "go-home-symbolic")
+
+        # Categories tab
+        categories_scroll = Gtk.ScrolledWindow()
+        categories_scroll.set_vexpand(True)
+        categories_scroll.set_hexpand(True)
+        categories_scroll.set_child(self._create_category_bar(appstream_repository))
+        view_stack.add_titled_with_icon(categories_scroll, "categories", _("Categories"), "view-app-grid-symbolic")
+
+        for page_name, page_key, page_icon in [
+            (_("Bundles"), "bundles", "folder-symbolic"),
+            (_("Installed"), "installed", "drive-harddisk-symbolic"),
+            (_("Pending"), "pending", "emblem-downloads-symbolic"),
+        ]:
+            placeholder = Gtk.Label(label=_("Not yet implemented"))
+            placeholder.set_vexpand(True)
+            placeholder.set_hexpand(True)
+            placeholder.add_css_class("dim-label")
+            view_stack.add_titled_with_icon(placeholder, page_key, page_name, page_icon)
+
+        # Search bar (centered, ~70% width) above the view stack
         search_entry = Gtk.SearchEntry()
         search_entry.set_placeholder_text(_("Search…"))
         search_entry.set_hexpand(True)
-        header_bar.set_title_widget(search_entry)
-        search_entry.connect("search-changed", self._on_search, appstream_repository)
 
+        focus_ctrl = Gtk.EventControllerFocus()
+        focus_ctrl.connect("enter", self._on_search_focus, appstream_repository)
+        search_entry.add_controller(focus_ctrl)
+
+        search_clamp = Adw.Clamp()
+        search_clamp.set_maximum_size(700)
+        search_clamp.set_margin_top(12)
+        search_clamp.set_margin_bottom(18)
+        search_clamp.set_child(search_entry)
+
+        content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        content_box.append(search_clamp)
+        content_box.append(view_stack)
+
+        toolbar_view.set_content(content_box)
+
+        return toolbar_view
+
+    def _build_home_page(self, appstream_repository: AppstreamRepository) -> Gtk.Widget:
         get_home_content_uc = GetHomeContentUC(
             ApiCacheRepository(), appstream_repository, FlathubApi(), SystemApi()
         )
@@ -163,14 +213,29 @@ class MainWindow(Adw.ApplicationWindow):
             )
             stack.add_titled(scroll, title.lower(), title)
 
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         box.append(stack_switcher)
         box.append(stack)
 
-        toolbar_view.set_content(box)
-        toolbar_view.add_bottom_bar(self._create_category_bar(appstream_repository))
+        return box
 
-        return toolbar_view
+    def _on_categories_clicked(self, _btn):
+        self.navigation_view.push(self._build_categories_page(AppstreamRepository()))
+
+    def _build_categories_page(
+        self, appstream_repository: AppstreamRepository
+    ) -> Adw.NavigationPage:
+        toolbar_view = Adw.ToolbarView()
+        toolbar_view.add_top_bar(Adw.HeaderBar())
+
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_vexpand(True)
+        scroll.set_hexpand(True)
+        scroll.set_child(self._create_category_bar(appstream_repository))
+        toolbar_view.set_content(scroll)
+
+        page = Adw.NavigationPage.new(toolbar_view, _("Categories"))
+        return page
 
     def _create_category_bar(self, appstream_repository: AppstreamRepository):
         category_icons = {
@@ -209,7 +274,11 @@ class MainWindow(Adw.ApplicationWindow):
             btn.set_child(btn_content)
             btn.add_css_class("pill")
             btn.connect(
-                "clicked", self._on_category_clicked, category, appstream_repository
+                "clicked",
+                self._on_category_clicked,
+                category,
+                icon_name,
+                appstream_repository,
             )
             flow.append(btn)
 
@@ -241,18 +310,20 @@ class MainWindow(Adw.ApplicationWindow):
         about.set_license_type(Gtk.License.GPL_3_0)
         about.present(self)
 
-    def _on_search(
-        self, entry: Gtk.SearchEntry, appstream_repository: AppstreamRepository
-    ):
-        query = entry.get_text().strip()
-        if len(query) > 2:
-            if not isinstance(self.navigation_view.get_visible_page(), SearchListPage):
-                self.navigation_view.push(SearchListPage(query, appstream_repository))
+    def _on_search_focus(self, _ctrl, appstream_repository: AppstreamRepository):
+        if not isinstance(self.navigation_view.get_visible_page(), SearchListPage):
+            self.navigation_view.push(SearchListPage("", appstream_repository))
 
     def _on_category_clicked(
-        self, _button, category: str, appstream_repository: AppstreamRepository
+        self,
+        _button,
+        category: str,
+        icon_name: str,
+        appstream_repository: AppstreamRepository,
     ):
-        self.navigation_view.push(CategoryListPage(category, appstream_repository))
+        self.navigation_view.push(
+            CategoryListPage(category, icon_name, appstream_repository)
+        )
 
     def _on_app_clicked(
         self, _button, app_id: str, appstream_repository: AppstreamRepository

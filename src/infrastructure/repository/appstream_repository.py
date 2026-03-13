@@ -40,9 +40,29 @@ class AppstreamRepository(AppstreamRepositoryContract):
             for row in rows
         ]
 
+    def get_list_by_category_id_and_search(
+        self, category_id: str, search: str
+    ) -> list[AppstreamShortEntity]:
+        rows = self._db.execute(
+            f"""SELECT id, name, icon, summary,
+                CASE WHEN name LIKE '%{search}%' THEN 1 ELSE 2 END AS priority
+                FROM appstream
+                WHERE categoryIdList LIKE '%{category_id}%'
+                AND (name LIKE '%{search}%' OR summary LIKE '%{search}%')
+                ORDER BY priority""",
+        )
+        return [
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            for row in rows
+        ]
+
     def get_list_by_seach(self, search: str) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary FROM appstream WHERE name like '%{search}%' or summary like '%{search}%'",
+            f"""SELECT id, name, icon, summary,
+                CASE WHEN name LIKE '%{search}%' THEN 1 ELSE 2 END AS priority
+                FROM appstream
+                WHERE name LIKE '%{search}%' OR summary LIKE '%{search}%'
+                ORDER BY priority""",
         )
         return [
             AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])

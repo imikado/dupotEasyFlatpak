@@ -14,3 +14,9 @@ class GetCategoryContentUc:
     def get_app_list_by_category_id(self, id: str) -> list[AppstreamShortEntity]:
 
         return self._appstream_repository.get_list_by_category_id(id)
+
+    def get_app_list_by_category_id_and_search(
+        self, id: str, search: str
+    ) -> list[AppstreamShortEntity]:
+
+        return self._appstream_repository.get_list_by_category_id_and_search(id, search)
