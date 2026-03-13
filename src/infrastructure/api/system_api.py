@@ -1,4 +1,5 @@
 from genericpath import exists
+import json
 import shutil
 import subprocess
 import tempfile
@@ -53,3 +54,13 @@ class SystemApi(SystemApiContract):
     def unzip_archive_to(self, archive_path: str, path_to: str):
         with zipfile.ZipFile(archive_path, "r") as zip_ref:
             zip_ref.extractall(path_to)
+
+    def read_json_file_obj(self, path: str) -> object:
+        return self._load_json_file(path)
+
+    def read_json_file_str_list(self, path: str) -> list[str]:
+        return self._load_json_file(path)
+
+    def _load_json_file(self, path: str) -> any:
+        with open(path, "r") as file:
+            return json.load(file)

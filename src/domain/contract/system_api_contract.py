@@ -30,3 +30,11 @@ class SystemApiContract(ABC):
     @abstractmethod
     def unzip_archive_to(self, archive_path: str, path_to: str):
         pass
+
+    @abstractmethod
+    def read_json_file_obj(self, path: str) -> object:
+        pass
+
+    @abstractmethod
+    def read_json_file_str_list(self, path: str) -> list[str]:
+        pass

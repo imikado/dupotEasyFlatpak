@@ -2,7 +2,10 @@ import re
 import subprocess
 import threading
 import urllib.request
+from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 import gi
+from infrastructure.api.system_api import SystemApi
+from infrastructure.repository.recipe_repository import RecipeRepository
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
@@ -16,6 +19,7 @@ from domain.entity.appstream_long_entity import AppstreamLongEntity
 def _webp_to_png(data: bytes) -> bytes:
     import io
     from PIL import Image
+
     img = Image.open(io.BytesIO(data)).convert("RGBA")
     buf = io.BytesIO()
     img.save(buf, format="PNG")
@@ -23,6 +27,8 @@ def _webp_to_png(data: bytes) -> bytes:
 
 
 class AppstreamPage(Adw.NavigationPage):
+
+    _get_recipe_content: GetRecipeContentUc
 
     def __init__(self, app: AppstreamLongEntity):
         super().__init__()
@@ -40,6 +46,8 @@ class AppstreamPage(Adw.NavigationPage):
 
     def _build(self, app: AppstreamLongEntity) -> Gtk.Widget:
 
+        self._get_recipe_content = GetRecipeContentUc(RecipeRepository())
+
         toolbar_view = Adw.ToolbarView()
         toolbar_view.add_top_bar(Adw.HeaderBar())
 
@@ -49,7 +57,6 @@ class AppstreamPage(Adw.NavigationPage):
 
         page_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         outer_scroll.set_child(page_box)
-
 
         # --- Header: icon + name + developer + summary (clamped) ---
         header_group = Adw.PreferencesGroup()
@@ -104,9 +111,12 @@ class AppstreamPage(Adw.NavigationPage):
         install_btn.set_halign(Gtk.Align.CENTER)
         install_btn.set_margin_top(8)
         install_btn.set_sensitive(False)
-        install_btn.connect("clicked", self._on_install_clicked, app.id)
+
+        has_recipe = self._get_recipe_content.has_recipe(app.id)
+
+        install_btn.connect("clicked", self._on_install_clicked, app.id, has_recipe)
         info_box.append(install_btn)
-        self._check_install_state(install_btn, app.id)
+        self._check_install_state(install_btn, app.id, has_recipe)
 
         header_row = Adw.PreferencesRow()
         header_row.set_child(info_box)
@@ -220,42 +230,124 @@ class AppstreamPage(Adw.NavigationPage):
     @staticmethod
     def _flatpak_cmd(*args) -> list:
         import os
+
         prefix = ["flatpak-spawn", "--host"] if os.path.exists("/.flatpak-info") else []
         return prefix + ["flatpak"] + list(args)
 
-    def _check_install_state(self, btn: Gtk.Button, app_id: str):
+    def _check_install_state(self, btn: Gtk.Button, app_id: str, has_recipe: bool):
         def check():
-            result = subprocess.run(self._flatpak_cmd("info", app_id), capture_output=True)
+            result = subprocess.run(
+                self._flatpak_cmd("info", app_id), capture_output=True
+            )
             installed = result.returncode == 0
-            GLib.idle_add(self._apply_install_state, btn, installed)
+
+            GLib.idle_add(self._apply_install_state, btn, installed, has_recipe)
 
         threading.Thread(target=check, daemon=True).start()
 
-    def _apply_install_state(self, btn: Gtk.Button, installed: bool):
+    def _apply_install_state(self, btn: Gtk.Button, installed: bool, has_recipe: bool):
         btn.set_sensitive(True)
         if installed:
             btn.set_label(_("Uninstall"))
             btn.remove_css_class("suggested-action")
             btn.add_css_class("destructive-action")
         else:
-            btn.set_label(_("Install"))
+            if has_recipe:
+                btn_label = _("Install with recipe")
+            else:
+                btn_label = _("Install")
+
+            btn.set_label(btn_label)
+
             btn.remove_css_class("destructive-action")
             btn.add_css_class("suggested-action")
 
-    def _on_install_clicked(self, btn: Gtk.Button, app_id: str):
+    def _on_install_clicked(self, btn: Gtk.Button, app_id: str, has_recipe: bool):
         installed = btn.has_css_class("destructive-action")
-        btn.set_sensitive(False)
-        btn.set_label(_("Please wait…"))
 
-        def run():
-            if installed:
-                subprocess.run(self._flatpak_cmd("uninstall", app_id, "-y"), capture_output=True)
-            else:
-                subprocess.run(self._flatpak_cmd("install", "flathub", app_id, "-y"), capture_output=True)
-            result = subprocess.run(self._flatpak_cmd("info", app_id), capture_output=True)
-            GLib.idle_add(self._apply_install_state, btn, result.returncode == 0)
+        if installed:
+            btn.set_sensitive(False)
+            btn.set_label(_("Please wait…"))
+            def run_uninstall():
+                subprocess.run(
+                    self._flatpak_cmd("uninstall", app_id, "-y"), capture_output=True
+                )
+                result = subprocess.run(
+                    self._flatpak_cmd("info", app_id), capture_output=True
+                )
+                GLib.idle_add(self._apply_install_state, btn, result.returncode == 0, has_recipe)
+            threading.Thread(target=run_uninstall, daemon=True).start()
+            return
 
-        threading.Thread(target=run, daemon=True).start()
+        # --- Install: show confirm dialog ---
+        dialog = Adw.AlertDialog()
+        dialog.set_heading(_("Install"))
+
+        form_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        form_box.set_margin_top(8)
+
+        user_scope_row = None
+        permission_rows = []  # list of (SwitchRow, PermissionToOverrideEntity)
+
+        if not has_recipe:
+            scope_group = Adw.PreferencesGroup()
+            user_scope_row = Adw.SwitchRow()
+            user_scope_row.set_title(_("Install for current user only"))
+            scope_group.add(user_scope_row)
+            form_box.append(scope_group)
+        else:
+            permissions = self._get_recipe_content.get_permission_to_override_list_by_id(app_id)
+            if permissions:
+                perm_group = Adw.PreferencesGroup()
+                perm_group.set_title(_("Permissions"))
+                for perm in permissions:
+                    row = Adw.SwitchRow()
+                    row.set_title(_(perm.label))
+                    row.set_active(True)
+                    perm_group.add(row)
+                    permission_rows.append((row, perm))
+                form_box.append(perm_group)
+
+        dialog.set_extra_child(form_box)
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("install", _("Install"))
+        dialog.set_response_appearance("install", Adw.ResponseAppearance.SUGGESTED)
+        dialog.set_default_response("install")
+        dialog.set_close_response("cancel")
+
+        def on_response(_dialog, response):
+            if response != "install":
+                return
+            user_scope = user_scope_row.get_active() if user_scope_row else False
+            active_permissions = [perm for row, perm in permission_rows if row.get_active()]
+
+            btn.set_sensitive(False)
+            btn.set_label(_("Please wait…"))
+
+            def run_install():
+                flags = ["--user"] if user_scope else []
+                subprocess.run(
+                    self._flatpak_cmd("install", "flathub", app_id, "-y", *flags),
+                    capture_output=True,
+                )
+                for perm in active_permissions:
+                    if perm.type == "filesystem_noprompt":
+                        subprocess.run(
+                            self._flatpak_cmd(
+                                "override", "--user", app_id,
+                                f"--filesystem={perm.value}",
+                            ),
+                            capture_output=True,
+                        )
+                result = subprocess.run(
+                    self._flatpak_cmd("info", app_id), capture_output=True
+                )
+                GLib.idle_add(self._apply_install_state, btn, result.returncode == 0, has_recipe)
+
+            threading.Thread(target=run_install, daemon=True).start()
+
+        dialog.connect("response", on_response)
+        dialog.present(self)
 
     def _build_screenshots_section(self, app: AppstreamLongEntity):
         try:
@@ -314,13 +406,16 @@ class AppstreamPage(Adw.NavigationPage):
                 print(f"[img] fetched {len(data)} bytes from {url}")
                 png_bytes = _webp_to_png(data)
                 print(f"[img] converted to png: {len(png_bytes)} bytes")
+
                 def apply():
                     texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(png_bytes))
                     picture.set_paintable(texture)
                     print(f"[img] applied texture to picture")
+
                 GLib.idle_add(apply)
             except Exception as e:
                 import traceback
+
                 print(f"[img] ERROR: {e}")
                 traceback.print_exc()
 
@@ -338,7 +433,9 @@ class AppstreamPage(Adw.NavigationPage):
             ".ss-backdrop { background-color: rgba(0,0,0,0.85); }"
         )
         Gtk.StyleContext.add_provider_for_display(
-            Gdk.Display.get_default(), backdrop_css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            Gdk.Display.get_default(),
+            backdrop_css,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
         backdrop.add_css_class("ss-backdrop")
 
@@ -356,11 +453,13 @@ class AppstreamPage(Adw.NavigationPage):
         backdrop.add_controller(backdrop_gesture)
 
         key_ctrl = Gtk.EventControllerKey()
+
         def on_key(_ctrl, keyval, _keycode, _mod):
             if keyval == Gdk.KEY_Escape:
                 close_viewer()
                 return True
             return False
+
         key_ctrl.connect("key-pressed", on_key)
         viewer_overlay.add_controller(key_ctrl)
 
@@ -417,11 +516,13 @@ class AppstreamPage(Adw.NavigationPage):
                 try:
                     data = urllib.request.urlopen(url).read()
                     png_bytes = _webp_to_png(data)
+
                     def apply():
                         texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(png_bytes))
                         picture.set_paintable(texture)
                         spinner.set_spinning(False)
                         spinner.set_visible(False)
+
                     GLib.idle_add(apply)
                 except Exception:
                     GLib.idle_add(spinner.set_spinning, False)
