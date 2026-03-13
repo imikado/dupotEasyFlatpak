@@ -24,11 +24,27 @@ class SearchListPage(Adw.NavigationPage):
         toolbar_view = Adw.ToolbarView()
 
         header_bar = Adw.HeaderBar()
+        title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        title_box.set_halign(Gtk.Align.CENTER)
+        title_icon = Gtk.Image.new_from_icon_name("system-search-symbolic")
+        title_label = Gtk.Label(label=_("Search"))
+        title_label.add_css_class("heading")
+        title_box.append(title_icon)
+        title_box.append(title_label)
+        header_bar.set_title_widget(title_box)
+        toolbar_view.add_top_bar(header_bar)
+
         search_entry = Gtk.SearchEntry()
         search_entry.set_text(query)
         search_entry.set_hexpand(True)
-        header_bar.set_title_widget(search_entry)
-        toolbar_view.add_top_bar(header_bar)
+
+        search_clamp = Adw.Clamp()
+        search_clamp.set_maximum_size(700)
+        search_clamp.set_margin_top(12)
+        search_clamp.set_margin_bottom(12)
+        search_clamp.set_margin_start(12)
+        search_clamp.set_margin_end(12)
+        search_clamp.set_child(search_entry)
 
         self._grid = AppListGridShared()
 
@@ -37,7 +53,11 @@ class SearchListPage(Adw.NavigationPage):
         scroll.set_hexpand(True)
         scroll.set_child(self._grid.get_widget())
 
-        toolbar_view.set_content(scroll)
+        content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        content_box.append(search_clamp)
+        content_box.append(scroll)
+
+        toolbar_view.set_content(content_box)
 
         search_entry.connect("search-changed", self._on_search_changed)
 

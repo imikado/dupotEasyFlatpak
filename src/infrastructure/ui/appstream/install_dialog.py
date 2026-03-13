@@ -28,16 +28,16 @@ class InstallDialog(Adw.AlertDialog):
         form_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         form_box.set_margin_top(8)
 
-        self._user_scope_row = None
         self._permission_rows = []  # list of (widget, PermissionOverrideEntity)
 
-        if not has_recipe:
-            scope_group = Adw.PreferencesGroup()
-            self._user_scope_row = Adw.SwitchRow()
-            self._user_scope_row.set_title(_("Install for current user only"))
-            scope_group.add(self._user_scope_row)
-            form_box.append(scope_group)
-        else:
+        # Scope switch — always shown
+        scope_group = Adw.PreferencesGroup()
+        self._user_scope_row = Adw.SwitchRow()
+        self._user_scope_row.set_title(_("Install for current user only"))
+        scope_group.add(self._user_scope_row)
+        form_box.append(scope_group)
+
+        if has_recipe:
             permissions = get_recipe_content.get_permission_to_override_list_by_id(
                 app_id
             )
@@ -76,14 +76,13 @@ class InstallDialog(Adw.AlertDialog):
         user_scope = (
             self._user_scope_row.get_active() if self._user_scope_row else False
         )
-        # active_permissions: list of (PermissionOverrideEntity, value: str | None)
-        active_permissions = []
+        active_permission_list = []
         for row, perm in self._permission_rows:
             if perm.is_filesystem():
                 value = row.get_text().strip()
                 if value:
-                    active_permissions.append((perm, value))
+                    active_permission_list.append((perm, value))
             elif perm.is_install_flatpak_yes_no():
                 if row.get_active():
-                    active_permissions.append((perm, None))
-        self._on_confirm(user_scope, active_permissions)
+                    active_permission_list.append((perm, None))
+        self._on_confirm(user_scope, active_permission_list)

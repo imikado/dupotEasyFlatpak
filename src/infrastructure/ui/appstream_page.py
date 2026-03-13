@@ -14,6 +14,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw, GLib, Gdk
 
 from domain.entity.appstream_long_entity import AppstreamLongEntity
+from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.appstream.install_dialog import InstallDialog
 
 
@@ -115,7 +116,9 @@ class AppstreamPage(Adw.NavigationPage):
 
         has_recipe = self._get_recipe_content.has_recipe(app.id)
 
-        install_btn.connect("clicked", self._on_install_clicked, app.id, has_recipe)
+        install_btn.connect(
+            "clicked", self._on_install_clicked, app.id, app.name, has_recipe
+        )
         info_box.append(install_btn)
         self._check_install_state(install_btn, app.id, has_recipe)
 
@@ -228,6 +231,14 @@ class AppstreamPage(Adw.NavigationPage):
 
         return toolbar_view
 
+    def _navigate_home(self):
+        nav = self.get_parent()
+        if isinstance(nav, Adw.NavigationView):
+            stack = nav.get_navigation_stack()
+            if stack.get_n_items() > 1:
+                nav.pop_to_page(stack.get_item(0))
+        return GLib.SOURCE_REMOVE
+
     @staticmethod
     def _flatpak_cmd(*args) -> list:
         import os
@@ -263,12 +274,15 @@ class AppstreamPage(Adw.NavigationPage):
             btn.remove_css_class("destructive-action")
             btn.add_css_class("suggested-action")
 
-    def _on_install_clicked(self, btn: Gtk.Button, app_id: str, has_recipe: bool):
+    def _on_install_clicked(
+        self, btn: Gtk.Button, app_id: str, app_name: str, has_recipe: bool
+    ):
         installed = btn.has_css_class("destructive-action")
 
         if installed:
             btn.set_sensitive(False)
             btn.set_label(_("Please wait…"))
+
             def run_uninstall():
                 subprocess.run(
                     self._flatpak_cmd("uninstall", app_id, "-y"), capture_output=True
@@ -276,39 +290,59 @@ class AppstreamPage(Adw.NavigationPage):
                 result = subprocess.run(
                     self._flatpak_cmd("info", app_id), capture_output=True
                 )
-                GLib.idle_add(self._apply_install_state, btn, result.returncode == 0, has_recipe)
+                GLib.idle_add(
+                    self._apply_install_state, btn, result.returncode == 0, has_recipe
+                )
+
             threading.Thread(target=run_uninstall, daemon=True).start()
             return
 
         # --- Install: show confirm dialog ---
-        def on_confirm(user_scope, active_permissions):
+        def on_confirm(user_scope, active_permission_list):
             btn.set_sensitive(False)
             btn.set_label(_("Please wait…"))
 
-            def run_install():
-                flags = ["--user"] if user_scope else []
-                subprocess.run(
-                    self._flatpak_cmd("install", "flathub", app_id, "-y", *flags),
-                    capture_output=True,
+            queue_item = InstallQueueService().enqueue(app_id, app_name)
+            GLib.idle_add(self._navigate_home)
+
+            def _stream(cmd):
+                process = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
                 )
-                for perm, value in active_permissions:
+                for line in process.stdout:
+                    GLib.idle_add(queue_item.append_output, line)
+                process.wait()
+
+            def run_install():
+                flags = ["--user"] if user_scope else ["--system"]
+                _stream(self._flatpak_cmd("install", "flathub", app_id, "-y", *flags))
+                for perm, value in active_permission_list:
                     if perm.is_filesystem():
-                        subprocess.run(
+                        _stream(
                             self._flatpak_cmd(
-                                "override", "--user", app_id,
+                                "override",
+                                "--user",
+                                app_id,
                                 f"--filesystem={value}",
-                            ),
-                            capture_output=True,
+                            )
                         )
                     elif perm.is_install_flatpak_yes_no():
-                        subprocess.run(
-                            self._flatpak_cmd("install", "flathub", perm.get_value(), "-y"),
-                            capture_output=True,
+                        _stream(
+                            self._flatpak_cmd(
+                                "install", "flathub", perm.get_value(), "-y", *flags
+                            )
                         )
                 result = subprocess.run(
                     self._flatpak_cmd("info", app_id), capture_output=True
                 )
-                GLib.idle_add(self._apply_install_state, btn, result.returncode == 0, has_recipe)
+                final_status = "done" if result.returncode == 0 else "failed"
+                GLib.idle_add(queue_item.set_status, final_status)
+                GLib.idle_add(
+                    self._apply_install_state, btn, result.returncode == 0, has_recipe
+                )
 
             threading.Thread(target=run_install, daemon=True).start()
 
@@ -369,14 +403,11 @@ class AppstreamPage(Adw.NavigationPage):
         def fetch():
             try:
                 data = urllib.request.urlopen(url).read()
-                print(f"[img] fetched {len(data)} bytes from {url}")
                 png_bytes = _webp_to_png(data)
-                print(f"[img] converted to png: {len(png_bytes)} bytes")
 
                 def apply():
                     texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(png_bytes))
                     picture.set_paintable(texture)
-                    print(f"[img] applied texture to picture")
 
                 GLib.idle_add(apply)
             except Exception as e:

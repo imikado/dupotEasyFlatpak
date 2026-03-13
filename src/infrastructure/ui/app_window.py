@@ -7,6 +7,9 @@ from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.category_repository import CategoryRepository
 from infrastructure.ui.appstream_page import AppstreamPage
 from infrastructure.ui.category_list_page import CategoryListPage
+from infrastructure.service.install_queue_service import InstallQueueService
+from infrastructure.ui.installed_page import InstalledPage
+from infrastructure.ui.pending_list_page import PendingPage
 from infrastructure.ui.search_list_page import SearchListPage
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 
@@ -90,6 +93,25 @@ class MainWindow(Adw.ApplicationWindow):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
 
+        pending_badge_css = Gtk.CssProvider()
+        pending_badge_css.load_from_string(
+            """
+            indicatorbin > label.badge,
+            indicatorbin label.badge,
+            viewswitcherbutton label.badge,
+            viewswitcher label.badge {
+                background-color: #8b0000;
+                color: white;
+                border-radius: 9999px;
+            }
+        """
+        )
+        Gtk.StyleContext.add_provider_for_display(
+            self.get_display(),
+            pending_badge_css,
+            Gtk.STYLE_PROVIDER_PRIORITY_USER,
+        )
+
         update_btn = Gtk.Button()
         update_btn.set_icon_name("software-update-available-symbolic")
         update_btn.set_tooltip_text(_("Available updates"))
@@ -148,12 +170,12 @@ class MainWindow(Adw.ApplicationWindow):
         categories_scroll.set_vexpand(True)
         categories_scroll.set_hexpand(True)
         categories_scroll.set_child(self._create_category_bar(appstream_repository))
-        view_stack.add_titled_with_icon(categories_scroll, "categories", _("Categories"), "view-app-grid-symbolic")
+        view_stack.add_titled_with_icon(
+            categories_scroll, "categories", _("Categories"), "view-app-grid-symbolic"
+        )
 
         for page_name, page_key, page_icon in [
             (_("Bundles"), "bundles", "folder-symbolic"),
-            (_("Installed"), "installed", "drive-harddisk-symbolic"),
-            (_("Pending"), "pending", "emblem-downloads-symbolic"),
         ]:
             placeholder = Gtk.Label(label=_("Not yet implemented"))
             placeholder.set_vexpand(True)
@@ -161,14 +183,53 @@ class MainWindow(Adw.ApplicationWindow):
             placeholder.add_css_class("dim-label")
             view_stack.add_titled_with_icon(placeholder, page_key, page_name, page_icon)
 
+        installed_page = InstalledPage(
+            appstream_repository,
+            lambda p: self.navigation_view.push(p),
+        )
+        view_stack.add_titled_with_icon(
+            installed_page, "installed", _("Installed"), "drive-harddisk-symbolic"
+        )
+
+        queue_service = InstallQueueService()
+        pending_page = PendingPage(
+            queue_service,
+            lambda p: self.navigation_view.push(p),
+        )
+        pending_stack_page = view_stack.add_titled_with_icon(
+            pending_page, "pending", _("Pending"), "emblem-downloads-symbolic"
+        )
+
+        def _update_pending_badge():
+            count = sum(
+                1 for item in queue_service.get_all() if item.status == "installing"
+            )
+            pending_stack_page.set_badge_number(count)
+
+        def _on_queue_changed():
+            items = queue_service.get_all()
+            if items:
+                item = items[-1]
+                item.subscribe_status(lambda _s: _update_pending_badge())
+                toast = Adw.Toast.new(
+                    _("{name} is installing — track progress in Pending").format(
+                        name=item.app_name
+                    )
+                )
+                toast.set_timeout(1)
+                self._toast_overlay.add_toast(toast)
+            _update_pending_badge()
+
+        queue_service.subscribe_changes(_on_queue_changed)
+
         # Search bar (centered, ~70% width) above the view stack
         search_entry = Gtk.SearchEntry()
         search_entry.set_placeholder_text(_("Search…"))
         search_entry.set_hexpand(True)
 
-        focus_ctrl = Gtk.EventControllerFocus()
-        focus_ctrl.connect("enter", self._on_search_focus, appstream_repository)
-        search_entry.add_controller(focus_ctrl)
+        search_entry.connect(
+            "search-changed", self._on_search_focus, appstream_repository
+        )
 
         search_clamp = Adw.Clamp()
         search_clamp.set_maximum_size(700)
@@ -253,26 +314,64 @@ class MainWindow(Adw.ApplicationWindow):
 
         flow = Gtk.FlowBox()
         flow.set_selection_mode(Gtk.SelectionMode.NONE)
-        flow.set_max_children_per_line(10)
-        flow.set_min_children_per_line(3)
-        flow.set_homogeneous(True)
-        flow.set_row_spacing(8)
-        flow.set_column_spacing(8)
-        flow.set_margin_top(25)
-        flow.set_margin_bottom(25)
+        flow.set_max_children_per_line(5)
+        flow.set_min_children_per_line(2)
+        flow.set_homogeneous(False)
+        flow.set_row_spacing(12)
+        flow.set_column_spacing(12)
+        flow.set_margin_top(24)
+        flow.set_margin_bottom(24)
+        flow.set_margin_start(24)
+        flow.set_margin_end(24)
+        flow.set_halign(Gtk.Align.CENTER)
 
         for category in CategoryRepository().get_all():
             icon_name = category_icons.get(
                 category, "application-x-executable-symbolic"
             )
 
-            btn_content = Adw.ButtonContent()
-            btn_content.set_label(_(category))
-            btn_content.set_icon_name(icon_name)
+            card_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+            card_box.add_css_class("card")
+            card_box.set_size_request(220, 160)
+            card_box.set_halign(Gtk.Align.CENTER)
+            card_box.set_valign(Gtk.Align.CENTER)
+
+            apps = appstream_repository.get_summary_list_by_category_id(category)
+
+            for row_apps in [apps[:4], apps[4:8]]:
+                if not row_apps:
+                    break
+                row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+                row_box.set_halign(Gtk.Align.CENTER)
+                row_box.set_margin_start(16)
+                row_box.set_margin_end(16)
+                for app in row_apps:
+                    app_icon = Gtk.Image.new_from_file(app.getIcon())
+                    app_icon.set_pixel_size(36)
+                    row_box.append(app_icon)
+                card_box.append(row_box)
+
+            card_box.get_first_child().set_margin_top(16)
+
+            # Category name + symbolic icon
+            footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+            footer_box.set_halign(Gtk.Align.CENTER)
+            footer_box.set_margin_top(14)
+            footer_box.set_margin_bottom(16)
+
+            cat_icon = Gtk.Image.new_from_icon_name(icon_name)
+            cat_icon.set_pixel_size(16)
+            footer_box.append(cat_icon)
+
+            label = Gtk.Label(label=_(category))
+            label.add_css_class("heading")
+            footer_box.append(label)
+
+            card_box.append(footer_box)
 
             btn = Gtk.Button()
-            btn.set_child(btn_content)
-            btn.add_css_class("pill")
+            btn.add_css_class("flat")
+            btn.set_child(card_box)
             btn.connect(
                 "clicked",
                 self._on_category_clicked,
@@ -310,9 +409,13 @@ class MainWindow(Adw.ApplicationWindow):
         about.set_license_type(Gtk.License.GPL_3_0)
         about.present(self)
 
-    def _on_search_focus(self, _ctrl, appstream_repository: AppstreamRepository):
+    def _on_search_focus(
+        self, entry: Gtk.SearchEntry, appstream_repository: AppstreamRepository
+    ):
         if not isinstance(self.navigation_view.get_visible_page(), SearchListPage):
-            self.navigation_view.push(SearchListPage("", appstream_repository))
+            self.navigation_view.push(
+                SearchListPage(entry.get_text(), appstream_repository)
+            )
 
     def _on_category_clicked(
         self,

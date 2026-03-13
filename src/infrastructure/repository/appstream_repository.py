@@ -68,3 +68,14 @@ class AppstreamRepository(AppstreamRepositoryContract):
             AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
             for row in rows
         ]
+
+    def get_summary_list_by_category_id(
+        self, category_id: str
+    ) -> list[AppstreamShortEntity]:
+        rows = self._db.execute(
+            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%' LIMIT 10",
+        )
+        return [
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            for row in rows
+        ]

@@ -118,3 +118,6 @@ msgstr "Install MangoHud"
 
 msgid "recipe_enable_mangohud"
 msgstr "Enable MangoHud"
+
+msgid "Installing…"
+msgstr "Installing…"

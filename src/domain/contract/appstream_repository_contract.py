@@ -26,3 +26,9 @@ class AppstreamRepositoryContract(ABC):
     @abstractmethod
     def get_list_by_seach(self, search: str) -> list[AppstreamShortEntity]:
         pass
+
+    @abstractmethod
+    def get_summary_list_by_category_id(
+        self, category_id: str
+    ) -> list[AppstreamShortEntity]:
+        pass
