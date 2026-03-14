@@ -1,5 +1,6 @@
-{
-    "Gaming": {
+[
+    {
+        "id": "Gaming",
         "icon": "assets/bundles/Gaming.png",
         "applicationList": [
             "com.valvesoftware.Steam",
@@ -10,7 +11,8 @@
             "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
         ]
     },
-    "Graphic_design": {
+    {
+        "id": "Graphic_design",
         "icon": "assets/bundles/Graphic_design.png",
         "applicationList": [
             "org.kde.kdenlive",
@@ -22,7 +24,8 @@
             "org.inkscape.Inkscape"
         ]
     },
-    "Software_development": {
+    {
+        "id": "Software_development",
         "icon": "assets/bundles/Software_development.png",
         "applicationList": [
             "com.visualstudio.code",
@@ -33,4 +36,4 @@
             "org.sqlitebrowser.sqlitebrowser"
         ]
     }
-}
+]

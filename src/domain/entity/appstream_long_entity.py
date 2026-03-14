@@ -68,6 +68,9 @@ class AppstreamLongEntity:
             for field, col in self._db_column_map.items()
         )
 
+    def getName(self) -> str:
+        return self.name
+
     def getIcon(self) -> str:
         return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
 

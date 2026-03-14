@@ -1,5 +1,3 @@
-import os
-import subprocess
 import threading
 
 import gi
@@ -9,13 +7,9 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Adw, GLib
 
+from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
-
-
-def _flatpak_cmd(*args) -> list:
-    prefix = ["flatpak-spawn", "--host"] if os.path.exists("/.flatpak-info") else []
-    return prefix + ["flatpak"] + list(args)
 
 
 class InstalledPage(Gtk.Box):
@@ -24,6 +18,7 @@ class InstalledPage(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self._appstream_repository = appstream_repository
         self._push_fn = push_fn
+        self._flatpak_api = FlatpakApi()
 
         self._stack = Gtk.Stack()
         self._stack.set_vexpand(True)
@@ -52,12 +47,7 @@ class InstalledPage(Gtk.Box):
         threading.Thread(target=self._load, daemon=True).start()
 
     def _load(self):
-        result = subprocess.run(
-            _flatpak_cmd("list", "--app", "--columns=application"),
-            capture_output=True,
-            text=True,
-        )
-        ids = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+        ids = self._flatpak_api.get_installed_app_id_list()
         GLib.idle_add(self._apply, ids)
 
     def _apply(self, ids: list):

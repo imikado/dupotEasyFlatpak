@@ -6,6 +6,7 @@ from typing import Callable, List
 class InstallQueueItem:
     app_id: str
     app_name: str
+    scope: str = "user"
     status: str = "installing"
     output_lines: List[str] = field(default_factory=list)
     _output_callbacks: List[Callable] = field(default_factory=list)
@@ -46,8 +47,8 @@ class InstallQueueService:
             cls._instance._change_callbacks = []
         return cls._instance
 
-    def enqueue(self, app_id: str, app_name: str) -> InstallQueueItem:
-        item = InstallQueueItem(app_id=app_id, app_name=app_name)
+    def enqueue(self, app_id: str, app_name: str, scope: str = "user") -> InstallQueueItem:
+        item = InstallQueueItem(app_id=app_id, app_name=app_name, scope=scope)
         self._items.append(item)
         for cb in list(self._change_callbacks):
             cb()

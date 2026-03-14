@@ -10,11 +10,13 @@ class PathConf:
     ID_JSON_PATH = "json"
     ID_ARCHIVE_PATH = "archive"
     ID_RECIPES_PATH = "recipes"
+    ID_BUNDLES_PATH = "bundles"
 
     INSTALLED_VERSION_FILENAME = "installed_version.json"
     DATABASE_FILENAME = "flathub_database.db"
     ICON_PATH = "icons"
     ICON_ARCHIVE = "icons.zip"
+    BUNDLES = "bundles.json"
 
     def __new__(cls):
         if cls._instance is None:
@@ -47,6 +49,11 @@ class PathConf:
 
     def get_asset_recipes_path(self) -> str:
         return self.get_path_list_join([self.get_asset_path(), self.ID_RECIPES_PATH])
+
+    def get_asset_bundles_path(self) -> str:
+        return self.get_path_list_join(
+            [self.get_asset_path(), self.ID_BUNDLES_PATH, self.BUNDLES]
+        )
 
     # user
     def set_data_path(self, data_path):

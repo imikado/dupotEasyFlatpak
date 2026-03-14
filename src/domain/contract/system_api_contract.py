@@ -38,3 +38,7 @@ class SystemApiContract(ABC):
     @abstractmethod
     def read_json_file_str_list(self, path: str) -> list[str]:
         pass
+
+    @abstractmethod
+    def read_json_file_obj_list(self, path: str) -> list[object]:
+        pass

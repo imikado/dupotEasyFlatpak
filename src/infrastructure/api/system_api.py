@@ -61,6 +61,9 @@ class SystemApi(SystemApiContract):
     def read_json_file_str_list(self, path: str) -> list[str]:
         return self._load_json_file(path)
 
+    def read_json_file_obj_list(self, path: str) -> list[object]:
+        return self._load_json_file(path)
+
     def _load_json_file(self, path: str) -> any:
         with open(path, "r") as file:
             return json.load(file)

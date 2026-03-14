@@ -2,6 +2,7 @@
     "title": "Discord",
     "description": "Discord",
     "flatpak": "com.discordapp.Discord",
+    "hidden": true,
     "flatpakPermissionToOverrideList": [
         {
             "label": "recipe_share_your_home_label",

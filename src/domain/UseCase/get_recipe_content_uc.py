@@ -15,6 +15,9 @@ class GetRecipeContentUc:
     def has_recipe(self, id: str) -> bool:
         return self._recipe_repository.has_id(id)
 
+    def is_hidden(self, id: str) -> bool:
+        return self._recipe_repository.get_by_id(id).is_hidden()
+
     def get_permission_to_override_list_by_id(
         self, id: str
     ) -> list[PermissionOverrideEntity]:
