@@ -291,7 +291,7 @@ class BundleDetailPage(Adw.NavigationPage):
         dialog.present(self)
 
     def _flatpak_cmd(self, *args) -> list:
-        prefix = ["flatpak-spawn", "--host"] if os.environ.get("FLATPAK_ID") else []
+        prefix = ["flatpak-spawn", "--host", "--directory=/"] if os.environ.get("FLATPAK_ID") else []
         return prefix + ["flatpak"] + list(args)
 
     def _on_install_clicked(self, _btn):

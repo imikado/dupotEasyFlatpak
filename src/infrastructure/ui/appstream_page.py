@@ -246,7 +246,7 @@ class AppstreamPage(Adw.NavigationPage):
     def _flatpak_cmd(*args) -> list:
         import os
 
-        prefix = ["flatpak-spawn", "--host"] if os.environ.get("FLATPAK_ID") else []
+        prefix = ["flatpak-spawn", "--host", "--directory=/"] if os.environ.get("FLATPAK_ID") else []
         return prefix + ["flatpak"] + list(args)
 
     def _check_install_state(self, btn: Gtk.Button, app_id: str, has_recipe: bool):
