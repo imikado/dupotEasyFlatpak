@@ -7,7 +7,7 @@ from domain.contract.flatpak_api_contract import FlatpakApiContract
 class FlatpakApi(FlatpakApiContract):
 
     def _cmd(self, *args) -> list:
-        prefix = ["flatpak-spawn", "--host"] if os.path.exists("/.flatpak-info") else []
+        prefix = ["flatpak-spawn", "--host"] if os.environ.get("FLATPAK_ID") else []
         return prefix + ["flatpak"] + list(args)
 
     def get_installed_app_id_list(self) -> list[str]:

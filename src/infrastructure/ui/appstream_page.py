@@ -19,13 +19,16 @@ from infrastructure.ui.appstream.install_dialog import InstallDialog
 
 
 def _webp_to_png(data: bytes) -> bytes:
-    import io
-    from PIL import Image
+    from gi.repository import GdkPixbuf
 
-    img = Image.open(io.BytesIO(data)).convert("RGBA")
-    buf = io.BytesIO()
-    img.save(buf, format="PNG")
-    return buf.getvalue()
+    loader = GdkPixbuf.PixbufLoader.new()
+    loader.write(data)
+    loader.close()
+    pixbuf = loader.get_pixbuf()
+    ok, png_bytes = pixbuf.save_to_bufferv("png", [], [])
+    if not ok:
+        raise RuntimeError("GdkPixbuf failed to encode PNG")
+    return bytes(png_bytes)
 
 
 class AppstreamPage(Adw.NavigationPage):
@@ -243,7 +246,7 @@ class AppstreamPage(Adw.NavigationPage):
     def _flatpak_cmd(*args) -> list:
         import os
 
-        prefix = ["flatpak-spawn", "--host"] if os.path.exists("/.flatpak-info") else []
+        prefix = ["flatpak-spawn", "--host"] if os.environ.get("FLATPAK_ID") else []
         return prefix + ["flatpak"] + list(args)
 
     def _check_install_state(self, btn: Gtk.Button, app_id: str, has_recipe: bool):

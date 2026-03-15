@@ -135,7 +135,7 @@ class MainWindow(Adw.ApplicationWindow):
         header_bar.pack_start(update_overlay)
 
         def _fetch_updates():
-            prefix = ["flatpak-spawn", "--host"] if os.path.exists("/.flatpak-info") else []
+            prefix = ["flatpak-spawn", "--host"] if os.environ.get("FLATPAK_ID") else []
             result = subprocess.run(
                 prefix + ["flatpak", "remote-ls", "--updates"],
                 capture_output=True,
