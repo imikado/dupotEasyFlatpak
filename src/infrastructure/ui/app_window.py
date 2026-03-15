@@ -19,6 +19,7 @@ from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
+import os
 import subprocess
 import threading
 
@@ -134,8 +135,9 @@ class MainWindow(Adw.ApplicationWindow):
         header_bar.pack_start(update_overlay)
 
         def _fetch_updates():
+            prefix = ["flatpak-spawn", "--host"] if os.path.exists("/.flatpak-info") else []
             result = subprocess.run(
-                ["flatpak", "remote-ls", "--updates"],
+                prefix + ["flatpak", "remote-ls", "--updates"],
                 capture_output=True,
                 text=True,
             )
