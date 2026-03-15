@@ -47,3 +47,8 @@ class FlathubApi(FlathubApiContract):
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return data.get("hits", [])
+
+    def get_appstream_by_id(self, id: str) -> object:
+        url = f"{self._BASE_URL}/appstream/{id}"
+        with urllib.request.urlopen(url) as response:
+            return json.loads(response.read().decode())

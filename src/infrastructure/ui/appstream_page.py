@@ -14,6 +14,8 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw, GLib, Gdk
 
 from domain.entity.appstream_long_entity import AppstreamLongEntity
+from infrastructure.api.flathub_api import FlathubApi
+from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.appstream.install_dialog import InstallDialog
 
@@ -50,6 +52,18 @@ class AppstreamPage(Adw.NavigationPage):
         self.set_child(self._build(app))
 
     def _build(self, app: AppstreamLongEntity) -> Gtk.Widget:
+
+        if app.should_update(SystemApi().get_datetime_current_timestamp()):
+            def _fetch_and_update():
+                try:
+                    raw_obj = FlathubApi().get_appstream_by_id(app.id)
+                    AppstreamRepository().update_from_raw_object_with_id(app.id, raw_obj)
+                    refreshed = AppstreamRepository().get_by_id(app.id)
+                    if refreshed:
+                        GLib.idle_add(lambda: self._refresh(refreshed))
+                except Exception as e:
+                    print(f"[appstream update] ERROR: {e}")
+            threading.Thread(target=_fetch_and_update, daemon=True).start()
 
         self._get_recipe_content = GetRecipeContentUc(RecipeRepository())
 
@@ -246,7 +260,11 @@ class AppstreamPage(Adw.NavigationPage):
     def _flatpak_cmd(*args) -> list:
         import os
 
-        prefix = ["flatpak-spawn", "--host", "--directory=/"] if os.environ.get("FLATPAK_ID") else []
+        prefix = (
+            ["flatpak-spawn", "--host", "--directory=/"]
+            if os.environ.get("FLATPAK_ID")
+            else []
+        )
         return prefix + ["flatpak"] + list(args)
 
     def _check_install_state(self, btn: Gtk.Button, app_id: str, has_recipe: bool):
@@ -544,6 +562,11 @@ class AppstreamPage(Adw.NavigationPage):
         self._screenshot_overlay_host.add_overlay(viewer_overlay)
         viewer_overlay.grab_focus()
         load_image(urls[index])
+
+    def _refresh(self, app: AppstreamLongEntity):
+        self.set_title(app.name)
+        self.set_child(self._build(app))
+        return GLib.SOURCE_REMOVE
 
     def _build_releases_section(self, app: AppstreamLongEntity):
         try:

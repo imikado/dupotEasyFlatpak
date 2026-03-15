@@ -7,6 +7,8 @@ from domain.entity.screenshot_entity import ScreenshotEntity
 
 class AppstreamLongEntity:
 
+    LAST_UPDATE_MAX_DAYS = 7
+
     FIELD_FLATHUB_VERIFIED = "flathub_verified"
     FIELD_FLATHUB_VERIFIED_LABEL = "flathub_verified_label"
     FIELD_DOWNLOAD_SIZE = "download_size"
@@ -130,3 +132,10 @@ class AppstreamLongEntity:
     def format_mb(size: int) -> str:
         value = size / 1000000
         return f"{value:.1f} MB"
+
+    def should_update(self, current_timestamp) -> bool:
+        if (
+            self.last_update + self.LAST_UPDATE_MAX_DAYS * 60 * 60 * 24
+        ) < current_timestamp:
+            return True
+        return False

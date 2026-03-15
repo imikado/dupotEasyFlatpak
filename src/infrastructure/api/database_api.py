@@ -14,7 +14,7 @@ class DatabaseApi:
             path_conf = PathConf()
 
             cls._instance = super().__new__(cls)
-            cls._instance._connection = sqlite3.connect(path_conf.get_database_path())
+            cls._instance._connection = sqlite3.connect(path_conf.get_database_path(), check_same_thread=False)
             cls._instance._connection.row_factory = sqlite3.Row
         return cls._instance
 

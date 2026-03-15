@@ -36,3 +36,7 @@ class AppstreamRepositoryContract(ABC):
     @abstractmethod
     def insert_from_raw_object(self, raw_obj: object):
         pass
+
+    @abstractmethod
+    def update_from_raw_object_with_id(self, id: str, raw_obj: object):
+        pass

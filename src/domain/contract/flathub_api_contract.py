@@ -32,3 +32,7 @@ class FlathubApiContract(ABC):
         self, page: int = 0, per_page: int = 50, locale: str = "en"
     ) -> list[object]:
         pass
+
+    @abstractmethod
+    def get_appstream_by_id(self, id: str) -> object:
+        pass
