@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
 from domain.entity.application_version_entity import ApplicationVersionEntity
+from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
+from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.app_window import AppWindow
 from gi.repository import GLib
 
@@ -41,7 +44,7 @@ def main():
     application_version_entity = ApplicationVersionEntity(system_api)
     if not application_version_entity.is_current_version():
 
-        print("not current version, will install ")
+        print("not current version, will install 2")
 
         if not system_api.file_exists(data_path):
             system_api.create_dir(data_path)
@@ -73,6 +76,11 @@ def main():
             system_api.remove_directory(icons_directory_path)
 
         system_api.unzip_archive_to(icons_archive_path, path_conf.get_data_path())
+
+        update_database_from_api = UpdateDatabaseFromApiUc(
+            FlathubApi(), AppstreamRepository(), SystemApi()
+        )
+        update_database_from_api.process()
 
     app = AppWindow()
     app.run(None)

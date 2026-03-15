@@ -67,3 +67,7 @@ class SystemApi(SystemApiContract):
     def _load_json_file(self, path: str) -> any:
         with open(path, "r") as file:
             return json.load(file)
+
+    def download_remote_file_to(self, remote_path: str, local_path: str):
+        import urllib.request
+        urllib.request.urlretrieve(remote_path, local_path)

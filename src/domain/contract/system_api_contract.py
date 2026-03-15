@@ -42,3 +42,7 @@ class SystemApiContract(ABC):
     @abstractmethod
     def read_json_file_obj_list(self, path: str) -> list[object]:
         pass
+
+    @abstractmethod
+    def download_remote_file_to(self, remote_path: str, local_path: str):
+        pass

@@ -31,3 +31,19 @@ class FlathubApi(FlathubApiContract):
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return [hit["app_id"] for hit in data.get("hits", [])]
+
+    def get_added_apps(
+        self, page: int = 0, per_page: int = 20, locale: str = "en"
+    ) -> list:
+        url = f"{self._BASE_URL}/collection/recently-added?page={page}&per_page={per_page}&locale={locale}"
+        with urllib.request.urlopen(url) as response:
+            data = json.loads(response.read().decode())
+        return [hit["app_id"] for hit in data.get("hits", [])]
+
+    def get_added_appstreams(
+        self, page: int = 0, per_page: int = 50, locale: str = "en"
+    ) -> list[object]:
+        url = f"{self._BASE_URL}/collection/recently-added?page={page}&per_page={per_page}&locale={locale}"
+        with urllib.request.urlopen(url) as response:
+            data = json.loads(response.read().decode())
+        return data.get("hits", [])

@@ -32,3 +32,7 @@ class AppstreamRepositoryContract(ABC):
         self, category_id: str
     ) -> list[AppstreamShortEntity]:
         pass
+
+    @abstractmethod
+    def insert_from_raw_object(self, raw_obj: object):
+        pass

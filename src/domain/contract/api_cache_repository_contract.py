@@ -8,6 +8,7 @@ class ApiCacheRepositoryContract(ABC):
     ID_TRENDING = "trendingApi"
     ID_POPULAR = "popularApi"
     ID_RECENTLY_UPD = "recentlyUpdatedApi"
+    ID_RECENTLY_ADDED = "recentlyAddedApi"
 
     ID_PARAMETERS = "parameters"
 

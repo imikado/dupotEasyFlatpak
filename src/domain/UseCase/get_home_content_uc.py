@@ -51,6 +51,12 @@ class GetHomeContentUC:
                     ApiCacheRepositoryContract.ID_RECENTLY_UPD, app_id_list_in_api
                 )
 
+            app_id_list_in_api = self._flathub_api.get_added_apps()
+            if len(app_id_list_in_api):
+                self.update_app_id_list_in_cache(
+                    ApiCacheRepositoryContract.ID_RECENTLY_ADDED, app_id_list_in_api
+                )
+
             api_cache_parameters = self.get_entity_in_cache()
             parameters_object = api_cache_parameters.update_home_api_updated_timestamp(
                 self.get_current_timestamp()
@@ -61,6 +67,24 @@ class GetHomeContentUC:
             self.update_parameters_in_cache(parameters_object)
 
         pass
+
+    def store_missing_added_apps(self):
+
+        recently_app_id_list = self._flathub_api.get_added_apps()
+
+        app_id_list_already_stored = []
+
+        appstream_list_already_stored = self._appstream_repository.get_list_by_id_list(
+            recently_app_id_list
+        )
+        for appstream_loop in appstream_list_already_stored:
+            app_id_list_already_stored.append(appstream_loop.id)
+
+        missing_app_id_list = []
+
+        for recently_id_loop in recently_app_id_list:
+            if recently_id_loop not in app_id_list_already_stored:
+                missing_app_id_list.append(recently_id_loop)
 
     def get_app_from_cache_by_id_list(self, api_cache_id) -> list[AppstreamShortEntity]:
         app_id_list_in_cache = self.get_app_id_list_in_cache(api_cache_id)
@@ -83,6 +107,12 @@ class GetHomeContentUC:
 
         return self.get_app_from_cache_by_id_list(
             ApiCacheRepositoryContract.ID_RECENTLY_UPD
+        )
+
+    def get_added_appstream_list(self) -> list[AppstreamShortEntity]:
+
+        return self.get_app_from_cache_by_id_list(
+            ApiCacheRepositoryContract.ID_RECENTLY_ADDED
         )
 
     def get_app_id_list_in_cache(self, cache_id) -> list:

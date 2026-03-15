@@ -135,13 +135,21 @@ class MainWindow(Adw.ApplicationWindow):
         header_bar.pack_start(update_overlay)
 
         def _fetch_updates():
-            prefix = ["flatpak-spawn", "--host", "--directory=/"] if os.environ.get("FLATPAK_ID") else []
-            result = subprocess.run(
-                prefix + ["flatpak", "remote-ls", "--updates"],
-                capture_output=True,
-                text=True,
-            )
-            count = len([l for l in result.stdout.splitlines() if l.strip()])
+            try:
+                prefix = (
+                    ["flatpak-spawn", "--host", "--directory=/"]
+                    if os.environ.get("FLATPAK_ID")
+                    else []
+                )
+                result = subprocess.run(
+                    prefix + ["flatpak", "remote-ls", "--updates"],
+                    capture_output=True,
+                    text=True,
+                )
+                count = len([l for l in result.stdout.splitlines() if l.strip()])
+            except Exception as e:
+                print(f"[updates] ERROR: {e}")
+                return
 
             def _apply():
                 if count > 0:
@@ -152,7 +160,7 @@ class MainWindow(Adw.ApplicationWindow):
 
             GLib.idle_add(_apply)
 
-        threading.Thread(target=_fetch_updates, daemon=True).start()
+        # threading.Thread(target=_fetch_updates, daemon=True).start()
 
         appstream_repository = AppstreamRepository()
 
@@ -264,9 +272,10 @@ class MainWindow(Adw.ApplicationWindow):
         stack_switcher.set_halign(Gtk.Align.CENTER)
 
         tabs = [
-            (_("Trending"), get_home_content_uc.get_trending_appstream_list()),
-            (_("Popular"), get_home_content_uc.get_popular_appstream_list()),
+            (_("New"), get_home_content_uc.get_added_appstream_list()),
             (_("Updated"), get_home_content_uc.get_updated_appstream_list()),
+            (_("Trending"), get_home_content_uc.get_trending_appstream_list()),
+            (_("Popular2"), get_home_content_uc.get_popular_appstream_list()),
         ]
 
         for title, app_list in tabs:
@@ -443,7 +452,9 @@ class MainWindow(Adw.ApplicationWindow):
             btn = Gtk.Button()
             btn.add_css_class("flat")
             btn.set_child(card_box)
-            btn.connect("clicked", self._on_bundle_clicked, bundle, appstream_repository)
+            btn.connect(
+                "clicked", self._on_bundle_clicked, bundle, appstream_repository
+            )
             flow.append(btn)
 
         return flow

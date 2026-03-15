@@ -1,3 +1,5 @@
+import json
+
 from domain.contract.appstream_repository_contract import AppstreamRepositoryContract
 from domain.entity.appstream_long_entity import AppstreamLongEntity
 from domain.entity.appstream_short_entity import AppstreamShortEntity
@@ -79,3 +81,51 @@ class AppstreamRepository(AppstreamRepositoryContract):
             AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
             for row in rows
         ]
+
+    def insert_from_raw_object(self, raw_obj: object):
+
+        id = raw_obj["app_id"]
+        name = raw_obj["name"]
+        summary = raw_obj["summary"]
+        project_license = raw_obj["project_license"]
+        icon = raw_obj["icon"]
+        category_id_list = [raw_obj["main_categories"]]
+        developer_name = raw_obj["developer_name"]
+
+        metadata_obj = {"verification_verified": raw_obj["verification_verified"]}
+
+        self._db.execute(
+            """
+                INSERT INTO appstream 
+                (
+                id,
+                name,
+                summary,
+                icon,
+                projectLicense,
+                categoryIdList,
+                description,
+                metadataObj,
+                releaseObjList,
+                lastUpdate,
+                developer_name,
+                screenshotList,
+                lastReleaseTimestamp) values (?,?,?,?,?,?,?,?,?,?,?,?,?) """,
+            (
+                id,
+                name,
+                summary,
+                icon,
+                project_license,
+                json.dumps(category_id_list),
+                "",
+                json.dumps(metadata_obj),
+                "[]",
+                0,
+                developer_name,
+                "[]",
+                0,
+            ),
+        )
+
+        pass
