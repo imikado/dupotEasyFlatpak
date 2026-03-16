@@ -4,6 +4,7 @@ import threading
 import urllib.request
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 import gi
+from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.recipe_repository import RecipeRepository
 
@@ -14,7 +15,6 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw, GLib, Gdk
 
 from domain.entity.appstream_long_entity import AppstreamLongEntity
-from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.appstream.install_dialog import InstallDialog
@@ -54,15 +54,19 @@ class AppstreamPage(Adw.NavigationPage):
     def _build(self, app: AppstreamLongEntity) -> Gtk.Widget:
 
         if app.should_update(SystemApi().get_datetime_current_timestamp()):
+
             def _fetch_and_update():
                 try:
                     raw_obj = FlathubApi().get_appstream_by_id(app.id)
-                    AppstreamRepository().update_from_raw_object_with_id(app.id, raw_obj)
+                    AppstreamRepository().update_from_raw_object_with_id(
+                        app.id, raw_obj
+                    )
                     refreshed = AppstreamRepository().get_by_id(app.id)
                     if refreshed:
                         GLib.idle_add(lambda: self._refresh(refreshed))
                 except Exception as e:
                     print(f"[appstream update] ERROR: {e}")
+
             threading.Thread(target=_fetch_and_update, daemon=True).start()
 
         self._get_recipe_content = GetRecipeContentUc(RecipeRepository())
@@ -256,23 +260,10 @@ class AppstreamPage(Adw.NavigationPage):
                 nav.pop_to_page(stack.get_item(0))
         return GLib.SOURCE_REMOVE
 
-    @staticmethod
-    def _flatpak_cmd(*args) -> list:
-        import os
-
-        prefix = (
-            ["flatpak-spawn", "--host", "--directory=/"]
-            if os.environ.get("FLATPAK_ID")
-            else []
-        )
-        return prefix + ["flatpak"] + list(args)
-
     def _check_install_state(self, btn: Gtk.Button, app_id: str, has_recipe: bool):
         def check():
-            result = subprocess.run(
-                self._flatpak_cmd("info", app_id), capture_output=True
-            )
-            installed = result.returncode == 0
+
+            installed = FlatpakApi().is_app_id_installed(app_id)
 
             GLib.idle_add(self._apply_install_state, btn, installed, has_recipe)
 
@@ -305,12 +296,11 @@ class AppstreamPage(Adw.NavigationPage):
             btn.set_label(_("Please wait…"))
 
             def run_uninstall():
-                subprocess.run(
-                    self._flatpak_cmd("uninstall", app_id, "-y"), capture_output=True
-                )
-                result = subprocess.run(
-                    self._flatpak_cmd("info", app_id), capture_output=True
-                )
+                flatpak_api = FlatpakApi()
+
+                flatpak_api.uninstall_by_id(app_id)
+                result = flatpak_api.get_info_by_id(app_id)
+
                 GLib.idle_add(
                     self._apply_install_state, btn, result.returncode == 0, has_recipe
                 )
@@ -338,27 +328,17 @@ class AppstreamPage(Adw.NavigationPage):
                 process.wait()
 
             def run_install():
+
+                flatpak_api = FlatpakApi()
+
                 flags = ["--user"] if user_scope else ["--system"]
-                _stream(self._flatpak_cmd("install", "flathub", app_id, "-y", *flags))
+                _stream(flatpak_api.get_install_call(app_id, *flags))
                 for perm, value in active_permission_list:
                     if perm.is_filesystem():
-                        _stream(
-                            self._flatpak_cmd(
-                                "override",
-                                "--user",
-                                app_id,
-                                f"--filesystem={value}",
-                            )
-                        )
+                        _stream(flatpak_api.get_override_filesystem_call(app_id, value))
                     elif perm.is_install_flatpak_yes_no():
-                        _stream(
-                            self._flatpak_cmd(
-                                "install", "flathub", perm.get_value(), "-y", *flags
-                            )
-                        )
-                result = subprocess.run(
-                    self._flatpak_cmd("info", app_id), capture_output=True
-                )
+                        _stream(flatpak_api.get_install_call(perm.get_value(), *flags))
+                result = flatpak_api.get_info_by_id(app_id)
                 final_status = "done" if result.returncode == 0 else "failed"
                 GLib.idle_add(queue_item.set_status, final_status)
                 GLib.idle_add(

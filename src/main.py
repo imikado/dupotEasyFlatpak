@@ -44,7 +44,7 @@ def main():
     application_version_entity = ApplicationVersionEntity(system_api)
     if not application_version_entity.is_current_version():
 
-        print("not current version, will install 2")
+        print("not current version, will install v2026-03-16 22:38")
 
         if not system_api.file_exists(data_path):
             system_api.create_dir(data_path)

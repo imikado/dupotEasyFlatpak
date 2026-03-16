@@ -134,34 +134,6 @@ class MainWindow(Adw.ApplicationWindow):
         update_overlay.set_visible(False)
         header_bar.pack_start(update_overlay)
 
-        def _fetch_updates():
-            try:
-                prefix = (
-                    ["flatpak-spawn", "--host", "--directory=/"]
-                    if os.environ.get("FLATPAK_ID")
-                    else []
-                )
-                result = subprocess.run(
-                    prefix + ["flatpak", "remote-ls", "--updates"],
-                    capture_output=True,
-                    text=True,
-                )
-                count = len([l for l in result.stdout.splitlines() if l.strip()])
-            except Exception as e:
-                print(f"[updates] ERROR: {e}")
-                return
-
-            def _apply():
-                if count > 0:
-                    badge_label.set_label(str(count))
-                    badge_label.set_visible(True)
-                    update_overlay.set_visible(True)
-                return GLib.SOURCE_REMOVE
-
-            GLib.idle_add(_apply)
-
-        # threading.Thread(target=_fetch_updates, daemon=True).start()
-
         appstream_repository = AppstreamRepository()
 
         # --- Top-level ViewStack (Home / Bundles / Installed / Pending) ---
@@ -202,6 +174,12 @@ class MainWindow(Adw.ApplicationWindow):
         view_stack.add_titled_with_icon(
             installed_page, "installed", _("Installed"), "drive-harddisk-symbolic"
         )
+
+        def _on_installed_tab_shown(_stack, _param):
+            if view_stack.get_visible_child_name() == "installed":
+                installed_page.refresh()
+
+        view_stack.connect("notify::visible-child", _on_installed_tab_shown)
 
         queue_service = InstallQueueService()
         pending_page = PendingPage(
@@ -275,7 +253,7 @@ class MainWindow(Adw.ApplicationWindow):
             (_("New"), get_home_content_uc.get_added_appstream_list()),
             (_("Updated"), get_home_content_uc.get_updated_appstream_list()),
             (_("Trending"), get_home_content_uc.get_trending_appstream_list()),
-            (_("Popular2"), get_home_content_uc.get_popular_appstream_list()),
+            (_("Popular"), get_home_content_uc.get_popular_appstream_list()),
         ]
 
         for title, app_list in tabs:

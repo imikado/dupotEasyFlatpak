@@ -243,7 +243,9 @@ class BundleDetailPage(Adw.NavigationPage):
                 row.set_title(_(perm.get_label()))
                 row.set_active(perm.get_label() in stored if stored else True)
                 if perm.get_value() in self._installed_ids:
-                    info_icon = Gtk.Image.new_from_icon_name("dialog-information-symbolic")
+                    info_icon = Gtk.Image.new_from_icon_name(
+                        "dialog-information-symbolic"
+                    )
                     info_icon.set_tooltip_text(_("Already installed"))
                     info_icon.set_valign(Gtk.Align.CENTER)
                     row.add_suffix(info_icon)
@@ -251,7 +253,8 @@ class BundleDetailPage(Adw.NavigationPage):
                 permission_rows.append((row, perm))
 
         filesystem_entry_rows = [
-            row for row, perm in permission_rows
+            row
+            for row, perm in permission_rows
             if perm.is_filesystem() or perm.is_filesystem_no_prompt()
         ]
 
@@ -290,10 +293,6 @@ class BundleDetailPage(Adw.NavigationPage):
         dialog.connect("response", on_response)
         dialog.present(self)
 
-    def _flatpak_cmd(self, *args) -> list:
-        prefix = ["flatpak-spawn", "--host", "--directory=/"] if os.environ.get("FLATPAK_ID") else []
-        return prefix + ["flatpak"] + list(args)
-
     def _on_install_clicked(self, _btn):
         selected_ids = [
             app_id
@@ -314,13 +313,14 @@ class BundleDetailPage(Adw.NavigationPage):
             if not app:
                 continue
             queue_item = queue.enqueue(app_id, app.getName(), scope)
-            if (
-                self._get_recipe.has_recipe(app_id)
-                and self._get_recipe.is_hidden(app_id)
+            if self._get_recipe.has_recipe(app_id) and self._get_recipe.is_hidden(
+                app_id
             ):
                 active_permissions = [
                     (p, p.get_value())
-                    for p in self._get_recipe.get_permission_to_override_list_by_id(app_id)
+                    for p in self._get_recipe.get_permission_to_override_list_by_id(
+                        app_id
+                    )
                 ]
             else:
                 active_permissions = self._app_permissions.get(app_id, [])
@@ -337,23 +337,15 @@ class BundleDetailPage(Adw.NavigationPage):
                         GLib.idle_add(item.append_output, line)
                     process.wait()
 
-                _stream(self._flatpak_cmd("install", "flathub", aid, "-y", *flags))
+                flatpak_api = FlatpakApi()
+
+                _stream(flatpak_api.get_install_call(aid, *flags))
                 for perm, value in perms:
                     if perm.is_filesystem():
-                        _stream(
-                            self._flatpak_cmd(
-                                "override", "--user", aid, f"--filesystem={value}"
-                            )
-                        )
+                        _stream(flatpak_api.get_override_filesystem_call(aid, value))
                     elif perm.is_install_flatpak_yes_no():
-                        _stream(
-                            self._flatpak_cmd(
-                                "install", "flathub", perm.get_value(), "-y", *flags
-                            )
-                        )
-                result = subprocess.run(
-                    self._flatpak_cmd("info", aid), capture_output=True
-                )
+                        _stream(flatpak_api.get_install_call(perm.get_value(), *flags))
+                result = FlatpakApi().get_info_by_id(aid)
                 GLib.idle_add(
                     item.set_status, "done" if result.returncode == 0 else "failed"
                 )

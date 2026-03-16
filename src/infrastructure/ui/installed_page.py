@@ -46,6 +46,11 @@ class InstalledPage(Gtk.Box):
 
         threading.Thread(target=self._load, daemon=True).start()
 
+    def refresh(self):
+        self._grid.clear()
+        self._stack.set_visible_child_name("loading")
+        threading.Thread(target=self._load, daemon=True).start()
+
     def _load(self):
         ids = self._flatpak_api.get_installed_app_id_list()
         GLib.idle_add(self._apply, ids)
