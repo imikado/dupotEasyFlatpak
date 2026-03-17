@@ -19,9 +19,13 @@ class InstallDialog(Adw.AlertDialog):
         has_recipe: bool,
         get_recipe_content: GetRecipeContentUc,
         on_confirm,  # callable(user_scope: bool, active_permissions: list)
+        heading: str = None,
+        confirm_label: str = None,
+        show_scope: bool = True,
+        filesystem_override_values: list = None,
     ):
         super().__init__()
-        self.set_heading(_("Install"))
+        self.set_heading(heading or _("Install"))
 
         self._on_confirm = on_confirm
 
@@ -30,12 +34,15 @@ class InstallDialog(Adw.AlertDialog):
 
         self._permission_rows = []  # list of (widget, PermissionOverrideEntity)
 
-        # Scope switch — always shown
-        scope_group = Adw.PreferencesGroup()
-        self._user_scope_row = Adw.SwitchRow()
-        self._user_scope_row.set_title(_("Install for current user only"))
-        scope_group.add(self._user_scope_row)
-        form_box.append(scope_group)
+        # Scope switch — shown only when installing
+        if show_scope:
+            scope_group = Adw.PreferencesGroup()
+            self._user_scope_row = Adw.SwitchRow()
+            self._user_scope_row.set_title(_("Install for current user only"))
+            scope_group.add(self._user_scope_row)
+            form_box.append(scope_group)
+        else:
+            self._user_scope_row = None
 
         if has_recipe:
             permissions = get_recipe_content.get_permission_to_override_list_by_id(
@@ -44,13 +51,21 @@ class InstallDialog(Adw.AlertDialog):
             if permissions:
                 perm_group = Adw.PreferencesGroup()
                 perm_group.set_title(_("Permissions"))
+                _fs_index = 0
                 for perm in permissions:
                     if perm.is_filesystem_no_prompt():
                         continue
                     elif perm.is_filesystem():
                         row = Adw.EntryRow()
                         row.set_title(_(perm.get_label()))
-                        row.set_text(perm.get_value())
+                        if (
+                            filesystem_override_values
+                            and _fs_index < len(filesystem_override_values)
+                        ):
+                            row.set_text(filesystem_override_values[_fs_index])
+                        else:
+                            row.set_text(perm.get_value())
+                        _fs_index += 1
                         perm_group.add(row)
                         self._permission_rows.append((row, perm))
                     elif perm.is_install_flatpak_yes_no():
@@ -61,17 +76,18 @@ class InstallDialog(Adw.AlertDialog):
                         self._permission_rows.append((row, perm))
                 form_box.append(perm_group)
 
+        confirm_key = "confirm"
         self.set_extra_child(form_box)
         self.add_response("cancel", _("Cancel"))
-        self.add_response("install", _("Install"))
-        self.set_response_appearance("install", Adw.ResponseAppearance.SUGGESTED)
-        self.set_default_response("install")
+        self.add_response(confirm_key, confirm_label or _("Install"))
+        self.set_response_appearance(confirm_key, Adw.ResponseAppearance.SUGGESTED)
+        self.set_default_response(confirm_key)
         self.set_close_response("cancel")
 
         self.connect("response", self._on_response)
 
     def _on_response(self, _dialog, response):
-        if response != "install":
+        if response != "confirm":
             return
         user_scope = (
             self._user_scope_row.get_active() if self._user_scope_row else False

@@ -47,3 +47,15 @@ class FlatpakApi(FlatpakApiContract):
 
     def get_override_filesystem_call(self, app_id: str, filesystem: str) -> list:
         return self._cmd("override", "--user", app_id, f"--filesystem={filesystem}")
+
+    def get_override_filesystems(self, app_id: str) -> list[str]:
+        result = subprocess.run(
+            self._cmd("override", "--user", "--show", app_id),
+            capture_output=True,
+            text=True,
+        )
+        for line in result.stdout.splitlines():
+            if line.startswith("filesystems="):
+                raw = line[len("filesystems="):].rstrip(";")
+                return [v for v in raw.split(";") if v.strip()]
+        return []

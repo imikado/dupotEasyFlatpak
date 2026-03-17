@@ -4,6 +4,7 @@ import threading
 import urllib.request
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 import gi
+from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.recipe_repository import RecipeRepository
@@ -130,18 +131,33 @@ class AppstreamPage(Adw.NavigationPage):
             summary_label.set_wrap(True)
             info_box.append(summary_label)
 
-        install_btn = Gtk.Button()
-        install_btn.set_halign(Gtk.Align.CENTER)
-        install_btn.set_margin_top(8)
-        install_btn.set_sensitive(False)
-
         has_recipe = self._get_recipe_content.has_recipe(app.id)
 
+        install_btn = Gtk.Button()
+        install_btn.set_sensitive(False)
+
+        recipe_btn = Gtk.Button()
+        recipe_btn.set_label(_("Recipe overrides"))
+        recipe_btn.set_visible(False)
+        recipe_btn.connect("clicked", self._on_recipe_overrides_clicked, app.id)
+
         install_btn.connect(
-            "clicked", self._on_install_clicked, app.id, app.name, has_recipe
+            "clicked",
+            self._on_install_clicked,
+            recipe_btn,
+            app.id,
+            app.name,
+            has_recipe,
         )
-        info_box.append(install_btn)
-        self._check_install_state(install_btn, app.id, has_recipe)
+
+        btn_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        btn_row.set_halign(Gtk.Align.CENTER)
+        btn_row.set_margin_top(8)
+        btn_row.append(install_btn)
+        btn_row.append(recipe_btn)
+        info_box.append(btn_row)
+
+        self._check_install_state(install_btn, recipe_btn, app.id, has_recipe)
 
         header_row = Adw.PreferencesRow()
         header_row.set_child(info_box)
@@ -260,34 +276,47 @@ class AppstreamPage(Adw.NavigationPage):
                 nav.pop_to_page(stack.get_item(0))
         return GLib.SOURCE_REMOVE
 
-    def _check_install_state(self, btn: Gtk.Button, app_id: str, has_recipe: bool):
+    def _check_install_state(
+        self, btn: Gtk.Button, recipe_btn: Gtk.Button, app_id: str, has_recipe: bool
+    ):
         def check():
-
             installed = FlatpakApi().is_app_id_installed(app_id)
-
-            GLib.idle_add(self._apply_install_state, btn, installed, has_recipe)
+            GLib.idle_add(
+                self._apply_install_state, btn, recipe_btn, installed, has_recipe
+            )
 
         threading.Thread(target=check, daemon=True).start()
 
-    def _apply_install_state(self, btn: Gtk.Button, installed: bool, has_recipe: bool):
+    def _apply_install_state(
+        self,
+        btn: Gtk.Button,
+        recipe_btn: Gtk.Button,
+        installed: bool,
+        has_recipe: bool,
+    ):
         btn.set_sensitive(True)
         if installed:
             btn.set_label(_("Uninstall"))
             btn.remove_css_class("suggested-action")
             btn.add_css_class("destructive-action")
+            recipe_btn.set_visible(has_recipe)
         else:
             if has_recipe:
                 btn_label = _("Install with recipe")
             else:
                 btn_label = _("Install")
-
             btn.set_label(btn_label)
-
             btn.remove_css_class("destructive-action")
             btn.add_css_class("suggested-action")
+            recipe_btn.set_visible(False)
 
     def _on_install_clicked(
-        self, btn: Gtk.Button, app_id: str, app_name: str, has_recipe: bool
+        self,
+        btn: Gtk.Button,
+        recipe_btn: Gtk.Button,
+        app_id: str,
+        app_name: str,
+        has_recipe: bool,
     ):
         installed = btn.has_css_class("destructive-action")
 
@@ -297,12 +326,14 @@ class AppstreamPage(Adw.NavigationPage):
 
             def run_uninstall():
                 flatpak_api = FlatpakApi()
-
                 flatpak_api.uninstall_by_id(app_id)
                 result = flatpak_api.get_info_by_id(app_id)
-
                 GLib.idle_add(
-                    self._apply_install_state, btn, result.returncode == 0, has_recipe
+                    self._apply_install_state,
+                    btn,
+                    recipe_btn,
+                    result.returncode == 0,
+                    has_recipe,
                 )
 
             threading.Thread(target=run_uninstall, daemon=True).start()
@@ -328,9 +359,7 @@ class AppstreamPage(Adw.NavigationPage):
                 process.wait()
 
             def run_install():
-
                 flatpak_api = FlatpakApi()
-
                 flags = ["--user"] if user_scope else ["--system"]
                 _stream(flatpak_api.get_install_call(app_id, *flags))
                 for perm, value in active_permission_list:
@@ -342,12 +371,42 @@ class AppstreamPage(Adw.NavigationPage):
                 final_status = "done" if result.returncode == 0 else "failed"
                 GLib.idle_add(queue_item.set_status, final_status)
                 GLib.idle_add(
-                    self._apply_install_state, btn, result.returncode == 0, has_recipe
+                    self._apply_install_state,
+                    btn,
+                    recipe_btn,
+                    result.returncode == 0,
+                    has_recipe,
                 )
 
             threading.Thread(target=run_install, daemon=True).start()
 
         dialog = InstallDialog(app_id, has_recipe, self._get_recipe_content, on_confirm)
+        dialog.present(self)
+
+    def _on_recipe_overrides_clicked(self, _btn: Gtk.Button, app_id: str):
+        current_fs = FlatpakApi().get_override_filesystems(app_id)
+
+        def on_confirm(_user_scope, active_permission_list):
+            def run_overrides():
+                flatpak_api = FlatpakApi()
+                for perm, value in active_permission_list:
+                    if perm.is_filesystem():
+                        subprocess.run(
+                            flatpak_api.get_override_filesystem_call(app_id, value)
+                        )
+
+            threading.Thread(target=run_overrides, daemon=True).start()
+
+        dialog = InstallDialog(
+            app_id,
+            True,
+            self._get_recipe_content,
+            on_confirm,
+            heading=_("Recipe overrides"),
+            confirm_label=_("Apply"),
+            show_scope=False,
+            filesystem_override_values=current_fs,
+        )
         dialog.present(self)
 
     def _build_screenshots_section(self, app: AppstreamLongEntity):
