@@ -3,6 +3,7 @@
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
 from domain.entity.application_version_entity import ApplicationVersionEntity
+from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
@@ -40,6 +41,27 @@ def main():
 
     data_path = path_conf.get_data_path()
     print(f"data path is {data_path}")
+
+    should_copy_default_user_settings = False
+
+    user_settings_current_path = path_conf.get_asset_usersettings_path
+    if system_api.file_exists(user_settings_current_path):
+        should_copy_default_user_settings = True
+    else:
+        application_user_settings = UserSettingsEntity()
+
+        current_user_settings = UserSettingsEntity(
+            system_api.read_json_file_obj(user_settings_current_path)
+        )
+
+        if application_user_settings.version != current_user_settings.version:
+            should_copy_default_user_settings = True
+
+    if should_copy_default_user_settings:
+        system_api.write_file(
+            path_conf.get_user_settings_path(),
+            application_user_settings.get_json_string(),
+        )
 
     application_version_entity = ApplicationVersionEntity(system_api)
     if not application_version_entity.is_current_version():

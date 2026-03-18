@@ -17,6 +17,7 @@ class PathConf:
     ICON_PATH = "icons"
     ICON_ARCHIVE = "icons.zip"
     BUNDLES = "bundles.json"
+    USERSETTINGS = "user_settings.json"
 
     def __new__(cls):
         if cls._instance is None:
@@ -55,6 +56,11 @@ class PathConf:
             [self.get_asset_path(), self.ID_BUNDLES_PATH, self.BUNDLES]
         )
 
+    def get_asset_usersettings_path(self) -> str:
+        return self.get_path_list_join(
+            [self.get_asset_path(), self.ID_JSON_PATH, self.USERSETTINGS]
+        )
+
     # user
     def set_data_path(self, data_path):
         self._data_path = data_path
@@ -75,3 +81,6 @@ class PathConf:
 
     def get_icons_archive_path(self) -> str:
         return self.get_path_list_join([self.get_data_path(), self.ICON_ARCHIVE])
+
+    def get_user_settings_path(self) -> str:
+        return self.get_path_list_join([self.get_data_path(), self.USERSETTINGS])
