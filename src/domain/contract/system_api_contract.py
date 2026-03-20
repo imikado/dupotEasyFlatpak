@@ -8,6 +8,10 @@ class SystemApiContract(ABC):
         pass
 
     @abstractmethod
+    def write_file(self, path: str, content: str):
+        pass
+
+    @abstractmethod
     def get_datetime_current_timestamp(self) -> int:
         pass
 

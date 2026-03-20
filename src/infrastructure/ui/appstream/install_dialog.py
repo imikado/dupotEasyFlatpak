@@ -1,6 +1,7 @@
 import subprocess
 import threading
 
+from domain.entity.user_settings_entity import UserSettingsEntity
 import gi
 
 gi.require_version("Gtk", "4.0")
@@ -34,11 +35,16 @@ class InstallDialog(Adw.AlertDialog):
 
         self._permission_rows = []  # list of (widget, PermissionOverrideEntity)
 
+        user_settings_entity = UserSettingsEntity()
+
         # Scope switch — shown only when installing
         if show_scope:
             scope_group = Adw.PreferencesGroup()
             self._user_scope_row = Adw.SwitchRow()
             self._user_scope_row.set_title(_("Install for current user only"))
+
+            self._user_scope_row.set_active(user_settings_entity.is_user_scope())
+
             scope_group.add(self._user_scope_row)
             form_box.append(scope_group)
         else:
@@ -58,9 +64,11 @@ class InstallDialog(Adw.AlertDialog):
                     elif perm.is_filesystem():
                         row = Adw.EntryRow()
                         row.set_title(_(perm.get_label()))
-                        if (
+
+                        if user_settings_entity.has_game_path():
+                            row.set_text(user_settings_entity.installation_game_path)
+                        elif filesystem_override_values and _fs_index < len(
                             filesystem_override_values
-                            and _fs_index < len(filesystem_override_values)
                         ):
                             row.set_text(filesystem_override_values[_fs_index])
                         else:

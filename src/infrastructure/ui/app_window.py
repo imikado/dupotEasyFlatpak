@@ -14,6 +14,7 @@ from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.installed_page import InstalledPage
 from infrastructure.ui.pending_list_page import PendingPage
 from infrastructure.ui.search_list_page import SearchListPage
+from infrastructure.ui.parameters_dialog import ParametersDialog
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 
 gi.require_version("Gtk", "4.0")
@@ -447,9 +448,7 @@ class MainWindow(Adw.ApplicationWindow):
         return grid.get_widget()
 
     def _on_menu_parameters(self, _action, _param):
-        dialog = Adw.MessageDialog.new(self, _("Parameters"), _("Not yet implemented."))
-        dialog.add_response("close", _("Close"))
-        dialog.present()
+        ParametersDialog().present(self)
 
     def _on_menu_import_export(self, _action, _param):
         dialog = Adw.MessageDialog.new(

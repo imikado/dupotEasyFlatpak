@@ -35,13 +35,14 @@ class ApplicationVersionEntity:
         # installed
         installed_version_path = path_conf.get_installed_version_path()
         if not system_api.file_exists(installed_version_path):
+            print(f"installed version is missing {installed_version_path}")
             return
 
         content = system_api.read_file(installed_version_path)
         version_object = json.loads(content)
 
         if self.FIELD_VERSION in version_object:
-            self._version = version_object[self.FIELD_VERSION]
+            self._installed_version = version_object[self.FIELD_VERSION]
         else:
             raise ValueError(
                 "Missing field " + self.FIELD_VERSION + " in " + installed_version_path

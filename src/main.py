@@ -42,25 +42,30 @@ def main():
     data_path = path_conf.get_data_path()
     print(f"data path is {data_path}")
 
+    current_user_settings = UserSettingsEntity()
+
     should_copy_default_user_settings = False
 
-    user_settings_current_path = path_conf.get_asset_usersettings_path
-    if system_api.file_exists(user_settings_current_path):
+    user_settings_current_path = path_conf.get_user_settings_path()
+    if not system_api.file_exists(user_settings_current_path):
+        print(f"user setting is missing : {user_settings_current_path}")
         should_copy_default_user_settings = True
     else:
-        application_user_settings = UserSettingsEntity()
-
-        current_user_settings = UserSettingsEntity(
+        current_user_settings.load(
             system_api.read_json_file_obj(user_settings_current_path)
         )
 
-        if application_user_settings.version != current_user_settings.version:
+        if UserSettingsEntity.DEFAULT_VERSION != current_user_settings.version:
+            print(
+                f"user settings is already there, but version is different current:{current_user_settings.version} vs application {application_user_settings.version}"
+            )
             should_copy_default_user_settings = True
 
     if should_copy_default_user_settings:
+        print(f"install application one")
         system_api.write_file(
-            path_conf.get_user_settings_path(),
-            application_user_settings.get_json_string(),
+            user_settings_current_path,
+            current_user_settings.get_json_string(),
         )
 
     application_version_entity = ApplicationVersionEntity(system_api)
