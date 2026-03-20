@@ -428,15 +428,22 @@ class AppstreamPage(Adw.NavigationPage):
                 return
 
             def on_confirm(commit):
+                from domain.entity.user_settings_entity import UserSettingsEntity
+                flags = ["--user"] if UserSettingsEntity().is_user_scope() else ["--system"]
                 queue_item = InstallQueueService().enqueue(app_id, app_name)
                 GLib.idle_add(self._navigate_home)
 
                 def run():
-                    result = FlatpakApi().update_version_by_id_and_commit(app_id, commit)
-                    if result.stdout:
-                        for line in result.stdout.splitlines(keepends=True):
-                            GLib.idle_add(queue_item.append_output, line)
-                    final_status = "done" if result.returncode == 0 else "failed"
+                    process = subprocess.Popen(
+                        FlatpakApi().get_downgrade_call(app_id, commit, *flags),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                    )
+                    for line in process.stdout:
+                        GLib.idle_add(queue_item.append_output, line)
+                    process.wait()
+                    final_status = "done" if process.returncode == 0 else "failed"
                     GLib.idle_add(queue_item.set_status, final_status)
 
                 threading.Thread(target=run, daemon=True).start()
