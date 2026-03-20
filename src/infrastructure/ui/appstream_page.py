@@ -18,6 +18,7 @@ from gi.repository import Gtk, Adw, GLib, Gdk
 from domain.entity.appstream_long_entity import AppstreamLongEntity
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.service.install_queue_service import InstallQueueService
+from infrastructure.ui.appstream.downgrade_dialog import DowngradeDialog
 from infrastructure.ui.appstream.install_dialog import InstallDialog
 
 
@@ -141,10 +142,23 @@ class AppstreamPage(Adw.NavigationPage):
         recipe_btn.set_visible(False)
         recipe_btn.connect("clicked", self._on_recipe_overrides_clicked, app.id)
 
+        downgrade_btn = Gtk.Button()
+        downgrade_btn.set_label(_("Downgrade"))
+        downgrade_btn.set_visible(False)
+        downgrade_btn.connect("clicked", self._on_downgrade_clicked, app.id, app.name)
+
+        run_btn = Gtk.Button()
+        run_btn.set_label(_("Run"))
+        run_btn.set_visible(False)
+        run_btn.add_css_class("suggested-action")
+        run_btn.connect("clicked", lambda _btn: FlatpakApi().run_by_id(app.id))
+
         install_btn.connect(
             "clicked",
             self._on_install_clicked,
             recipe_btn,
+            downgrade_btn,
+            run_btn,
             app.id,
             app.name,
             has_recipe,
@@ -153,11 +167,13 @@ class AppstreamPage(Adw.NavigationPage):
         btn_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         btn_row.set_halign(Gtk.Align.CENTER)
         btn_row.set_margin_top(8)
+        btn_row.append(run_btn)
         btn_row.append(install_btn)
         btn_row.append(recipe_btn)
+        btn_row.append(downgrade_btn)
         info_box.append(btn_row)
 
-        self._check_install_state(install_btn, recipe_btn, app.id, has_recipe)
+        self._check_install_state(install_btn, recipe_btn, downgrade_btn, run_btn, app.id, has_recipe)
 
         header_row = Adw.PreferencesRow()
         header_row.set_child(info_box)
@@ -277,12 +293,12 @@ class AppstreamPage(Adw.NavigationPage):
         return GLib.SOURCE_REMOVE
 
     def _check_install_state(
-        self, btn: Gtk.Button, recipe_btn: Gtk.Button, app_id: str, has_recipe: bool
+        self, btn: Gtk.Button, recipe_btn: Gtk.Button, downgrade_btn: Gtk.Button, run_btn: Gtk.Button, app_id: str, has_recipe: bool
     ):
         def check():
             installed = FlatpakApi().is_app_id_installed(app_id)
             GLib.idle_add(
-                self._apply_install_state, btn, recipe_btn, installed, has_recipe
+                self._apply_install_state, btn, recipe_btn, downgrade_btn, run_btn, installed, has_recipe
             )
 
         threading.Thread(target=check, daemon=True).start()
@@ -291,6 +307,8 @@ class AppstreamPage(Adw.NavigationPage):
         self,
         btn: Gtk.Button,
         recipe_btn: Gtk.Button,
+        downgrade_btn: Gtk.Button,
+        run_btn: Gtk.Button,
         installed: bool,
         has_recipe: bool,
     ):
@@ -300,6 +318,8 @@ class AppstreamPage(Adw.NavigationPage):
             btn.remove_css_class("suggested-action")
             btn.add_css_class("destructive-action")
             recipe_btn.set_visible(has_recipe)
+            downgrade_btn.set_visible(True)
+            run_btn.set_visible(True)
         else:
             if has_recipe:
                 btn_label = _("Install with recipe")
@@ -309,11 +329,15 @@ class AppstreamPage(Adw.NavigationPage):
             btn.remove_css_class("destructive-action")
             btn.add_css_class("suggested-action")
             recipe_btn.set_visible(False)
+            downgrade_btn.set_visible(False)
+            run_btn.set_visible(False)
 
     def _on_install_clicked(
         self,
         btn: Gtk.Button,
         recipe_btn: Gtk.Button,
+        downgrade_btn: Gtk.Button,
+        run_btn: Gtk.Button,
         app_id: str,
         app_name: str,
         has_recipe: bool,
@@ -332,6 +356,8 @@ class AppstreamPage(Adw.NavigationPage):
                     self._apply_install_state,
                     btn,
                     recipe_btn,
+                    downgrade_btn,
+                    run_btn,
                     result.returncode == 0,
                     has_recipe,
                 )
@@ -374,6 +400,8 @@ class AppstreamPage(Adw.NavigationPage):
                     self._apply_install_state,
                     btn,
                     recipe_btn,
+                    downgrade_btn,
+                    run_btn,
                     result.returncode == 0,
                     has_recipe,
                 )
@@ -382,6 +410,40 @@ class AppstreamPage(Adw.NavigationPage):
 
         dialog = InstallDialog(app_id, has_recipe, self._get_recipe_content, on_confirm)
         dialog.present(self)
+
+    def _on_downgrade_clicked(self, btn: Gtk.Button, app_id: str, app_name: str):
+        btn.set_sensitive(False)
+        btn.set_label(_("Loading…"))
+
+        def fetch():
+            api = FlatpakApi()
+            history = api.get_history_list_by_id(app_id)
+            current_commit = api.get_installed_commit_by_id(app_id)
+            GLib.idle_add(on_history_loaded, history, current_commit)
+
+        def on_history_loaded(history, current_commit):
+            btn.set_sensitive(True)
+            btn.set_label(_("Downgrade"))
+            if not history:
+                return
+
+            def on_confirm(commit):
+                queue_item = InstallQueueService().enqueue(app_id, app_name)
+                GLib.idle_add(self._navigate_home)
+
+                def run():
+                    result = FlatpakApi().update_version_by_id_and_commit(app_id, commit)
+                    if result.stdout:
+                        for line in result.stdout.splitlines(keepends=True):
+                            GLib.idle_add(queue_item.append_output, line)
+                    final_status = "done" if result.returncode == 0 else "failed"
+                    GLib.idle_add(queue_item.set_status, final_status)
+
+                threading.Thread(target=run, daemon=True).start()
+
+            DowngradeDialog(history, on_confirm, current_commit).present(self)
+
+        threading.Thread(target=fetch, daemon=True).start()
 
     def _on_recipe_overrides_clicked(self, _btn: Gtk.Button, app_id: str):
         current_fs = FlatpakApi().get_override_filesystems(app_id)

@@ -2,6 +2,7 @@ import os
 import subprocess
 
 from domain.contract.flatpak_api_contract import FlatpakApiContract
+from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
 
 
 class FlatpakApi(FlatpakApiContract):
@@ -56,6 +57,58 @@ class FlatpakApi(FlatpakApiContract):
         )
         for line in result.stdout.splitlines():
             if line.startswith("filesystems="):
-                raw = line[len("filesystems="):].rstrip(";")
+                raw = line[len("filesystems=") :].rstrip(";")
                 return [v for v in raw.split(";") if v.strip()]
         return []
+
+    def get_downgrade_call(self, app_id: str, commit: str, *flags) -> list:
+        return self._cmd("update", f"--commit={commit}", *flags, app_id, "-y")
+
+    def update_version_by_id_and_commit(
+        self, app_id: str, commit: str
+    ) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            self._cmd("update", "-y", f"--commit={commit}", app_id),
+            capture_output=True,
+            text=True,
+        )
+
+    def run_by_id(self, app_id: str):
+        subprocess.Popen(self._cmd("run", app_id))
+
+    def get_installed_commit_by_id(self, app_id: str) -> str | None:
+        result = subprocess.run(
+            self._cmd("info", "--show-commit", app_id),
+            capture_output=True,
+            text=True,
+        )
+        commit = result.stdout.strip()
+        return commit if commit else None
+
+    def get_history_list_by_id(self, app_id: str) -> list[FlatpakHistoryEntity]:
+
+        flatpak_history_list = []
+
+        result = subprocess.run(
+            self._cmd("remote-info", "--user", "--log", "flathub", app_id),
+            capture_output=True,
+            text=True,
+        )
+
+        commit = subject = date = None
+        for line in result.stdout.splitlines():
+            line = line.strip()
+            if line.startswith("Commit:"):
+                commit = line[len("Commit:") :].strip()
+            elif line.startswith("Subject:"):
+                subject = line[len("Subject:") :].strip()
+            elif line.startswith("Date:"):
+                date = line[len("Date:") :].strip()
+            elif line == "" and commit and subject and date:
+                flatpak_history_list.append(FlatpakHistoryEntity(commit, subject, date))
+                commit = subject = date = None
+
+        if commit and subject and date:
+            flatpak_history_list.append(FlatpakHistoryEntity(commit, subject, date))
+
+        return flatpak_history_list
