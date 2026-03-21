@@ -13,6 +13,7 @@ from infrastructure.ui.category_list_page import CategoryListPage
 from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.installed_page import InstalledPage
 from infrastructure.ui.pending_list_page import PendingPage
+from infrastructure.ui.updates_page import UpdatesPage
 from infrastructure.ui.search_list_page import SearchListPage
 from infrastructure.ui.parameters_dialog import ParametersDialog
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
@@ -21,10 +22,8 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
 import os
-import subprocess
-import threading
 
-from gi.repository import GLib, Gio, Gtk, Adw
+from gi.repository import Gio, Gtk, Adw
 
 
 class MainWindow(Adw.ApplicationWindow):
@@ -77,27 +76,6 @@ class MainWindow(Adw.ApplicationWindow):
             action.connect("activate", callback)
             self.add_action(action)
 
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_string(
-            """
-            .update-badge {
-                background-color: @destructive_bg_color;
-                color: @destructive_fg_color;
-                border-radius: 999px;
-                font-size: 0.7em;
-                font-weight: bold;
-                min-width: 16px;
-                min-height: 16px;
-                padding: 0px 2px;
-            }
-        """
-        )
-        Gtk.StyleContext.add_provider_for_display(
-            self.get_display(),
-            css_provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
-        )
-
         pending_badge_css = Gtk.CssProvider()
         pending_badge_css.load_from_string(
             """
@@ -117,27 +95,9 @@ class MainWindow(Adw.ApplicationWindow):
             Gtk.STYLE_PROVIDER_PRIORITY_USER,
         )
 
-        update_btn = Gtk.Button()
-        update_btn.set_icon_name("software-update-available-symbolic")
-        update_btn.set_tooltip_text(_("Available updates"))
-
-        badge_label = Gtk.Label()
-        badge_label.add_css_class("update-badge")
-        badge_label.set_halign(Gtk.Align.END)
-        badge_label.set_valign(Gtk.Align.START)
-        badge_label.set_margin_end(-6)
-        badge_label.set_margin_top(-4)
-        badge_label.set_visible(False)
-
-        update_overlay = Gtk.Overlay()
-        update_overlay.set_child(update_btn)
-        update_overlay.add_overlay(badge_label)
-        update_overlay.set_visible(False)
-        header_bar.pack_start(update_overlay)
-
         appstream_repository = AppstreamRepository()
 
-        # --- Top-level ViewStack (Home / Bundles / Installed / Pending) ---
+        # --- Top-level ViewStack (Home / Categories / Bundles / Installed / Updates / Pending) ---
         view_stack = Adw.ViewStack()
         view_stack.set_vexpand(True)
         view_stack.set_hexpand(True)
@@ -182,6 +142,17 @@ class MainWindow(Adw.ApplicationWindow):
 
         view_stack.connect("notify::visible-child", _on_installed_tab_shown)
 
+        updates_page = UpdatesPage(
+            on_loaded=lambda count: (
+                updates_stack_page.set_badge_number(count),
+                updates_stack_page.set_visible(count > 0),
+            )
+        )
+        updates_stack_page = view_stack.add_titled_with_icon(
+            updates_page, "updates", _("Updates"), "software-update-available-symbolic"
+        )
+        updates_stack_page.set_visible(False)
+
         queue_service = InstallQueueService()
         pending_page = PendingPage(
             queue_service,
@@ -190,6 +161,7 @@ class MainWindow(Adw.ApplicationWindow):
         pending_stack_page = view_stack.add_titled_with_icon(
             pending_page, "pending", _("Pending"), "emblem-downloads-symbolic"
         )
+        pending_stack_page.set_visible(bool(queue_service.get_all()))
 
         def _update_pending_badge():
             count = sum(
@@ -199,6 +171,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         def _on_queue_changed():
             items = queue_service.get_all()
+            pending_stack_page.set_visible(bool(items))
             if items:
                 item = items[-1]
                 item.subscribe_status(lambda _s: _update_pending_badge())

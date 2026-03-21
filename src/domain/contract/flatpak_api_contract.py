@@ -2,6 +2,8 @@ from abc import abstractmethod
 import subprocess
 
 from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
+from domain.entity.installed_version_entity import InstalledVersionEntity
+from domain.entity.update_available_entity import UpdateAvailableEntity
 
 
 class FlatpakApiContract:
@@ -11,7 +13,15 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def get_installed_list(self) -> list[InstalledVersionEntity]:
+        pass
+
+    @abstractmethod
     def get_number_of_updates(self) -> int:
+        pass
+
+    @abstractmethod
+    def get_available_update_list(self) -> list[UpdateAvailableEntity]:
         pass
 
     @abstractmethod
@@ -47,9 +57,19 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def get_installation_scope(self, app_id: str) -> str:
+        pass
+
+    @abstractmethod
     def get_downgrade_call(self, app_id: str, commit: str, *flags) -> list:
         pass
 
     @abstractmethod
-    def update_version_by_id_and_commit(self, app_id: str, commit: str) -> subprocess.CompletedProcess:
+    def update_version_by_id_and_commit(
+        self, app_id: str, commit: str
+    ) -> subprocess.CompletedProcess:
+        pass
+
+    @abstractmethod
+    def get_update_call(self, app_id: str) -> list:
         pass

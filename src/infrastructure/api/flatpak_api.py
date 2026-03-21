@@ -3,6 +3,8 @@ import subprocess
 
 from domain.contract.flatpak_api_contract import FlatpakApiContract
 from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
+from domain.entity.installed_version_entity import InstalledVersionEntity
+from domain.entity.update_available_entity import UpdateAvailableEntity
 
 
 class FlatpakApi(FlatpakApiContract):
@@ -23,13 +25,44 @@ class FlatpakApi(FlatpakApiContract):
         )
         return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
-    def get_number_of_updates(self) -> int:
+    def get_installed_list(self) -> list[InstalledVersionEntity]:
         result = subprocess.run(
-            self._cmd("flatpak", "remote-ls", "--updates"),
+            self._cmd("list", "--columns=application,version"),
             capture_output=True,
             text=True,
         )
-        return len([l for l in result.stdout.splitlines() if l.strip()])
+        installed_list = []
+        for line in result.stdout.splitlines():
+            parts = line.split("\t")
+            if len(parts) >= 2:
+                installed_list.append(
+                    InstalledVersionEntity(parts[0].strip(), parts[1].strip())
+                )
+        return installed_list
+
+    def get_number_of_updates(self) -> int:
+        return len(self.get_available_update_list())
+
+    def get_available_update_list(self) -> list[UpdateAvailableEntity]:
+        result = subprocess.run(
+            self._cmd("remote-ls", "--updates", "--columns=application,name,version"),
+            capture_output=True,
+            text=True,
+        )
+        available_update_list = []
+        for line in result.stdout.splitlines():
+            parts = line.split("\t")
+            if len(parts) >= 3:
+                available_update_list.append(
+                    UpdateAvailableEntity(
+                        parts[0].strip(), parts[1].strip(), parts[2].strip()
+                    )
+                )
+            elif len(parts) >= 2:
+                available_update_list.append(
+                    UpdateAvailableEntity(parts[0].strip(), parts[1].strip(), "")
+                )
+        return available_update_list
 
     def get_info_by_id(self, app_id: str) -> subprocess.CompletedProcess[bytes]:
         return subprocess.run(self._cmd("info", app_id), capture_output=True)
@@ -46,6 +79,16 @@ class FlatpakApi(FlatpakApiContract):
     def get_install_call(self, app_id: str, flags) -> list:
         return self._cmd("install", "flathub", app_id, "-y", flags)
 
+    def get_update_call(self, app_id: str) -> list:
+        result = subprocess.run(
+            self._cmd("list", "--user", "--columns=application"),
+            capture_output=True,
+            text=True,
+        )
+        user_ids = {l.strip() for l in result.stdout.splitlines() if l.strip()}
+        scope = "--user" if app_id in user_ids else "--system"
+        return self._cmd("update", scope, app_id, "-y")
+
     def get_override_filesystem_call(self, app_id: str, filesystem: str) -> list:
         return self._cmd("override", "--user", app_id, f"--filesystem={filesystem}")
 
@@ -60,6 +103,15 @@ class FlatpakApi(FlatpakApiContract):
                 raw = line[len("filesystems=") :].rstrip(";")
                 return [v for v in raw.split(";") if v.strip()]
         return []
+
+    def get_installation_scope(self, app_id: str) -> str:
+        result = subprocess.run(
+            self._cmd("list", "--user", "--columns=application"),
+            capture_output=True,
+            text=True,
+        )
+        user_ids = {l.strip() for l in result.stdout.splitlines() if l.strip()}
+        return "user" if app_id in user_ids else "system"
 
     def get_downgrade_call(self, app_id: str, commit: str, *flags) -> list:
         return self._cmd("update", f"--commit={commit}", *flags, app_id, "-y")

@@ -428,8 +428,8 @@ class AppstreamPage(Adw.NavigationPage):
                 return
 
             def on_confirm(commit):
-                from domain.entity.user_settings_entity import UserSettingsEntity
-                flags = ["--user"] if UserSettingsEntity().is_user_scope() else ["--system"]
+                scope = FlatpakApi().get_installation_scope(app_id)
+                flags = [f"--{scope}"]
                 queue_item = InstallQueueService().enqueue(app_id, app_name)
                 GLib.idle_add(self._navigate_home)
 
