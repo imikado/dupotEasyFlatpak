@@ -45,6 +45,10 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def get_override_filesystems(self, app_id: str) -> list[str]:
+        pass
+
+    @abstractmethod
     def run_by_id(self, app_id: str):
         pass
 

@@ -12,6 +12,10 @@ class SystemApiContract(ABC):
         pass
 
     @abstractmethod
+    def write_json_file(self, path: str, data: any):
+        pass
+
+    @abstractmethod
     def get_datetime_current_timestamp(self) -> int:
         pass
 
@@ -49,4 +53,8 @@ class SystemApiContract(ABC):
 
     @abstractmethod
     def download_remote_file_to(self, remote_path: str, local_path: str):
+        pass
+
+    @abstractmethod
+    def get_current_datetime_string(self) -> str:
         pass

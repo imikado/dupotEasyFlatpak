@@ -1,3 +1,4 @@
+from datetime import datetime
 from genericpath import exists
 import json
 import shutil
@@ -19,6 +20,10 @@ class SystemApi(SystemApiContract):
 
     def write_file(self, path: str, content: str):
         open(path, "w").write(content)
+
+    def write_json_file(self, path: str, data: any):
+        with open(path, "w") as f:
+            json.dump(data, f, indent=2)
 
     def write_file_tmp(self, content: str) -> str:
         with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".nix") as tmp:
@@ -70,4 +75,9 @@ class SystemApi(SystemApiContract):
 
     def download_remote_file_to(self, remote_path: str, local_path: str):
         import urllib.request
+
         urllib.request.urlretrieve(remote_path, local_path)
+
+    def get_current_datetime_string(self) -> str:
+        now = datetime.now()
+        return now.strftime("%Y-%m-%d")

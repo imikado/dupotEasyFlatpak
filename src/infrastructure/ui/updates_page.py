@@ -128,6 +128,11 @@ class UpdatesPage(Gtk.Box):
                 self._group_without_version.add(row)
                 self._rows.append((row, False))
 
+        has_with_version = any(hv for _, hv in self._rows)
+        has_without_version = any(not hv for _, hv in self._rows)
+        self._group_with_version.set_visible(has_with_version)
+        self._group_without_version.set_visible(has_without_version)
+
         self._stack.set_visible_child_name("list")
         self._action_bar.set_revealed(True)
         self._update_btn.set_label(_("Update (0)"))
@@ -172,6 +177,8 @@ class UpdatesPage(Gtk.Box):
         self._rows.clear()
         self._checkboxes.clear()
         self._action_bar.set_revealed(False)
+        self._group_with_version.set_visible(True)
+        self._group_without_version.set_visible(True)
         self._stack.set_visible_child_name("loading")
         threading.Thread(target=self._load, daemon=True).start()
 

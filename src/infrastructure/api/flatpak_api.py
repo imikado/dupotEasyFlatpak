@@ -45,7 +45,9 @@ class FlatpakApi(FlatpakApiContract):
 
     def get_available_update_list(self) -> list[UpdateAvailableEntity]:
         result = subprocess.run(
-            self._cmd("remote-ls", "--updates", "--columns=application,name,version"),
+            self._cmd(
+                "remote-ls", "--updates", "--app", "--columns=application,name,version"
+            ),
             capture_output=True,
             text=True,
         )

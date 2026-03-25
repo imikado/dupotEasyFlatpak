@@ -1,3 +1,5 @@
+from domain.UseCase.export_uc import ExportUc
+from domain.UseCase.import_uc import ImportUc
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
 from domain.UseCase.get_bundle_content_uc import GetBundleContentUc
 import gi
@@ -15,15 +17,20 @@ from infrastructure.ui.installed_page import InstalledPage
 from infrastructure.ui.pending_list_page import PendingPage
 from infrastructure.ui.updates_page import UpdatesPage
 from infrastructure.ui.search_list_page import SearchListPage
+from infrastructure.ui.import_dialog import ImportDialog
 from infrastructure.ui.parameters_dialog import ParametersDialog
+from infrastructure.api.flatpak_api import FlatpakApi
+from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
+import json
 import os
+import threading
 
-from gi.repository import Gio, Gtk, Adw
+from gi.repository import Gio, Gtk, Adw, GLib
 
 
 class MainWindow(Adw.ApplicationWindow):
@@ -59,7 +66,8 @@ class MainWindow(Adw.ApplicationWindow):
 
         menu = Gio.Menu()
         menu.append(_("Parameters"), "win.parameters")
-        menu.append(_("Import / Export"), "win.import_export")
+        menu.append(_("Import"), "win.import")
+        menu.append(_("Export"), "win.export")
         menu.append(_("About"), "win.about")
 
         menu_button = Gtk.MenuButton()
@@ -69,7 +77,8 @@ class MainWindow(Adw.ApplicationWindow):
 
         for name, callback in [
             ("parameters", self._on_menu_parameters),
-            ("import_export", self._on_menu_import_export),
+            ("import", self._on_menu_import),
+            ("export", self._on_menu_export),
             ("about", self._on_menu_about),
         ]:
             action = Gio.SimpleAction.new(name, None)
@@ -423,12 +432,75 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_menu_parameters(self, _action, _param):
         ParametersDialog().present(self)
 
-    def _on_menu_import_export(self, _action, _param):
-        dialog = Adw.MessageDialog.new(
-            self, _("Import / Export"), _("Not yet implemented.")
+    def _on_menu_import(self, _action, _param):
+        file_dialog = Gtk.FileDialog.new()
+        file_dialog.set_title(_("Import"))
+        documents = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS)
+        if documents:
+            file_dialog.set_initial_folder(Gio.File.new_for_path(documents))
+        file_dialog.open(self, None, self._on_import_file_chosen)
+
+    def _on_import_file_chosen(self, file_dialog, result):
+        try:
+            file = file_dialog.open_finish(result)
+        except GLib.Error:
+            return
+        path = file.get_path()
+        import_uc = ImportUc(
+            SystemApi(), FlatpakApi(), RecipeRepository(), AppstreamRepository()
         )
-        dialog.add_response("close", _("Close"))
-        dialog.present()
+        import_list = import_uc.get_appstream_list(path)
+        ImportDialog(
+            import_list,
+            lambda selected_ids: self._on_import_confirm(
+                import_uc, import_list, selected_ids
+            ),
+        ).present(self)
+
+    def _on_import_confirm(self, import_uc, import_list, selected_ids):
+        threading.Thread(
+            target=self._do_import,
+            args=(import_uc, import_list, selected_ids),
+            daemon=True,
+        ).start()
+
+    def _do_import(self, import_uc, import_list, selected_ids):
+        filtered = import_uc.get_filtered_list(import_list, selected_ids)
+        import_uc.process(filtered)
+
+    def _on_menu_export(self, _action, _param):
+        file_dialog = Gtk.FileDialog.new()
+        file_dialog.set_title(_("Export"))
+        file_dialog.set_initial_name(
+            f"easyflatpak_export_{SystemApi().get_current_datetime_string()}.json"
+        )
+        documents = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS)
+        if documents:
+            file_dialog.set_initial_folder(Gio.File.new_for_path(documents))
+        file_dialog.save(self, None, self._on_export_file_chosen)
+
+    def _on_export_file_chosen(self, file_dialog, result):
+        try:
+            file = file_dialog.save_finish(result)
+        except GLib.Error:
+            return
+        path = file.get_path()
+        threading.Thread(target=self._do_export, args=(path,), daemon=True).start()
+
+    def _do_export(self, path):
+
+        flatpak_api = FlatpakApi()
+        recipe_repo = RecipeRepository()
+        system_api = SystemApi()
+
+        export_uc = ExportUc(system_api, flatpak_api, recipe_repo)
+        export_uc.export(path)
+
+        GLib.idle_add(self._on_export_done)
+
+    def _on_export_done(self):
+        self._toast_overlay.add_toast(Adw.Toast.new(_("Export saved")))
+        return GLib.SOURCE_REMOVE
 
     def _on_menu_about(self, _action, _param):
         about = Adw.AboutDialog.new()
