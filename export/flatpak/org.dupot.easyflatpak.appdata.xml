@@ -41,10 +41,7 @@
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_home.png</image>
       <caption>Home page</caption>
     </screenshot>
-     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_home_dark.png</image>
-      <caption>Home page, dark mode</caption>
-    </screenshot>
+     
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_category.png</image>
       <caption>Category page</caption>
@@ -53,10 +50,7 @@
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_category_grid.png</image>
       <caption>Category page displayed as grid</caption>
     </screenshot>
-     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_category_table.png</image>
-      <caption>Category page displayed as table</caption>
-    </screenshot>
+     
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_installed_applications.png</image>
       <caption>Installed applications</caption>
@@ -94,6 +88,13 @@
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_bundles.png</image>
       <caption>Application bundles</caption>
     </screenshot>
+
+    <screenshot>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_downgrade_view.png</image>
+      <caption>Application version downgrade</caption>
+    </screenshot>
+
+    
 
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_import_export.png</image>
