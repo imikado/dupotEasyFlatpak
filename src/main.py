@@ -30,7 +30,10 @@ def main():
 
     # Set up Gettext
     en_i18n = gettext.translation(
-        appname, localedir, fallback=True, languages=["en", "fr", "pt_BR", "ar", "es", "it", "ro"]
+        appname,
+        localedir,
+        fallback=True,
+        languages=["en", "fr", "pt_BR", "ar", "es", "it", "ro"],
     )
 
     # Create the "magic" function
@@ -71,7 +74,8 @@ def main():
             current_user_settings.get_json_string(),
         )
 
-    application_version_entity = ApplicationVersionEntity(system_api)
+    application_version_entity = ApplicationVersionEntity()
+    application_version_entity.load(system_api)
     if not application_version_entity.is_current_version():
 
         print("not current version, will install v2026-03-16 22:38")

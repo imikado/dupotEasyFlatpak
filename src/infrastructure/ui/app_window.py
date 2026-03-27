@@ -1,6 +1,7 @@
 from domain.UseCase.export_uc import ExportUc
 from domain.UseCase.import_uc import ImportUc
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
+from domain.entity.application_version_entity import ApplicationVersionEntity
 import gi
 from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
@@ -410,7 +411,7 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_menu_about(self, _action, _param):
         about = Adw.AboutDialog.new()
         about.set_application_name("Easy Flatpak")
-        about.set_version("1.0")
+        about.set_version(ApplicationVersionEntity().get_current_version())
         about.set_developer_name("dupot")
         about.set_license_type(Gtk.License.GPL_3_0)
         about.present(self)

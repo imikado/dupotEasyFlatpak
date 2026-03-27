@@ -11,7 +11,14 @@ class ApplicationVersionEntity:
     _installed_version: str = "0.0.0"
     _current_version: str = "X.X.X"
 
-    def __init__(self, system_api: SystemApiContract):
+    _instance: "ApplicationVersionEntity | None" = None
+
+    def __new__(cls, *_args, **_kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def load(self, system_api: SystemApiContract):
 
         path_conf = PathConf()
 
@@ -52,6 +59,9 @@ class ApplicationVersionEntity:
 
     def get_version(self) -> str:
         return self._installed_version
+
+    def get_current_version(self) -> str:
+        return self._current_version
 
     def is_current_version(self) -> bool:
         return self._installed_version == self._current_version

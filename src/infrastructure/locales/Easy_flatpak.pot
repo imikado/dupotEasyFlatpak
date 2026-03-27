@@ -1,9 +1,19 @@
-# Spanish translations for Easy flatpak
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Easy_flatpak package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
+"Project-Id-Version: Easy_flatpak\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-27 22:35+0100\n"
-"Language: es\n"
+"POT-Creation-Date: 2026-03-27 23:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
@@ -24,35 +34,34 @@ msgstr ""
 #: src/infrastructure/ui/bundle_detail_page.py:269
 #: src/infrastructure/ui/home/updates_page.py:163
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr ""
 
-# --- General actions ---
 #: src/infrastructure/ui/appstream/install_dialog.py:29
 #: src/infrastructure/ui/appstream/install_dialog.py:90
 #: src/infrastructure/ui/appstream_page.py:341
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:190
 msgid "Install"
-msgstr "Instalar"
+msgstr ""
 
 #: src/infrastructure/ui/appstream/install_dialog.py:44
 #: src/infrastructure/ui/bundle_detail_page.py:70
 msgid "Install for current user only"
-msgstr "Instalar solo para el usuario actual"
+msgstr ""
 
 #: src/infrastructure/ui/appstream/install_dialog.py:59
 #: src/infrastructure/ui/bundle_detail_page.py:217
 msgid "Permissions"
-msgstr "Permisos"
+msgstr ""
 
 #: src/infrastructure/ui/appstream/install_progress_dialog.py:13
 #: src/infrastructure/ui/home/pending_list_page.py:130
 msgid "Installing…"
-msgstr "Instalando…"
+msgstr ""
 
 #: src/infrastructure/ui/appstream/install_progress_dialog.py:38
 msgid "Close"
-msgstr "Cerrar"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:141
 #: src/infrastructure/ui/appstream_page.py:514
@@ -63,37 +72,36 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
-# --- App detail page ---
 #: src/infrastructure/ui/appstream_page.py:211
 msgid "Details"
-msgstr "Detalles"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:215
 msgid "License"
-msgstr "Licencia"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:221
 msgid "Download Size"
-msgstr "Tamaño de descarga"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:227
 msgid "Installed Size"
-msgstr "Tamaño instalado"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:235
 msgid "Description"
-msgstr "Descripción"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:331
 #: src/infrastructure/ui/appstream_page.py:374
 #: src/infrastructure/ui/appstream_page.py:377
 msgid "Uninstall"
-msgstr "Desinstalar"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:339
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:190
 msgid "Install with recipe"
-msgstr "Instalar con receta"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:367
 msgid "Delete application data"
@@ -102,7 +110,7 @@ msgstr ""
 #: src/infrastructure/ui/appstream_page.py:386
 #: src/infrastructure/ui/appstream_page.py:411
 msgid "Please wait…"
-msgstr "Por favor, espere…"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:456
 msgid "Loading…"
@@ -114,21 +122,20 @@ msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:533
 msgid "Screenshots"
-msgstr "Capturas de pantalla"
+msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:727
 msgid "Release History"
-msgstr "Historial de versiones"
+msgstr ""
 
-# --- Navigation / window ---
 #: src/infrastructure/ui/app_window.py:56
 msgid "Easy flatpak"
-msgstr "Easy flatpak"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:65
 #: src/infrastructure/ui/menu/parameters_dialog.py:17
 msgid "Parameters"
-msgstr "Parámetros"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:66
 #: src/infrastructure/ui/app_window.py:342
@@ -143,24 +150,24 @@ msgstr ""
 
 #: src/infrastructure/ui/app_window.py:68
 msgid "About"
-msgstr "Acerca de"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:122
 msgid "Home"
-msgstr "Inicio"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:128
 msgid "Categories"
-msgstr "Categorías"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:135
 msgid "Bundles"
-msgstr "Paquetes"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:144
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:165
 msgid "Installed"
-msgstr "Instalado"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:160
 msgid "Updates"
@@ -168,7 +175,7 @@ msgstr ""
 
 #: src/infrastructure/ui/app_window.py:170
 msgid "Pending"
-msgstr "Pendiente"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:187
 #, python-brace-format
@@ -181,16 +188,15 @@ msgstr ""
 
 #: src/infrastructure/ui/app_window.py:221
 msgid "Updated"
-msgstr "Actualizado"
+msgstr ""
 
-# --- Home sections ---
 #: src/infrastructure/ui/app_window.py:222
 msgid "Trending"
-msgstr "Tendencias"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:223
 msgid "Popular"
-msgstr "Popular"
+msgstr ""
 
 #: src/infrastructure/ui/app_window.py:407
 msgid "Export saved"
@@ -225,7 +231,7 @@ msgstr ""
 
 #: src/infrastructure/ui/category_list_page.py:44
 msgid "Search…"
-msgstr "Buscar…"
+msgstr ""
 
 #: src/infrastructure/ui/home/installed_page.py:33
 msgid "No installed applications found"
@@ -301,32 +307,4 @@ msgstr ""
 #: src/infrastructure/ui/search_list_page.py:17
 #: src/infrastructure/ui/search_list_page.py:30
 msgid "Search"
-msgstr "Buscar"
-
-#~ msgid "Import / Export"
-#~ msgstr "Importar / Exportar"
-
-#~ msgid "Available updates"
-#~ msgstr "Actualizaciones disponibles"
-
-# --- Misc ---
-#~ msgid "Not yet implemented"
-#~ msgstr "Aún no implementado"
-
-#~ msgid "Not yet implemented."
-#~ msgstr "Aún no implementado."
-
-# --- Recipe permission labels ---
-#~ msgid "recipe_share_your_home_label"
-#~ msgstr ""
-#~ "Para información: debería permitir que Discord acceda a su directorio "
-#~ "personal (deje que se configure)"
-
-#~ msgid "recipe_indicate_your_game_path_label"
-#~ msgstr "Indique la ruta del directorio donde almacena sus juegos"
-
-#~ msgid "recipe_should_installMangoHud"
-#~ msgstr "Instalar MangoHud"
-
-#~ msgid "recipe_enable_mangohud"
-#~ msgstr "Activar MangoHud"
+msgstr ""

@@ -1,6 +1,7 @@
 [
     {
         "id": "Gaming",
+        "label": "Gaming",
         "icon": "assets/bundles/Gaming.png",
         "applicationList": [
             "com.valvesoftware.Steam",
@@ -13,6 +14,7 @@
     },
     {
         "id": "Graphic_design",
+        "label": "Graphic design",
         "icon": "assets/bundles/Graphic_design.png",
         "applicationList": [
             "org.kde.kdenlive",
@@ -26,6 +28,7 @@
     },
     {
         "id": "Software_development",
+        "label": "Software development",
         "icon": "assets/bundles/Software_development.png",
         "applicationList": [
             "com.visualstudio.code",

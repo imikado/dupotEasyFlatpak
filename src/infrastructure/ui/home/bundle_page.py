@@ -13,6 +13,7 @@ _css_provider.load_from_string(
 )
 
 from domain.UseCase.get_bundle_content_uc import GetBundleContentUc
+from domain.conf.path_conf import PathConf
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.bundle_repository import BundleRepository
 from infrastructure.ui.bundle_detail_page import BundleDetailPage
@@ -71,11 +72,15 @@ class BundlePage(Gtk.ScrolledWindow):
         header_box.set_margin_top(34)
         header_box.set_margin_bottom(18)
 
-        bundle_icon = Gtk.Image.new_from_icon_name("folder-symbolic")
+        bundle_icon = Gtk.Image.new_from_file(
+            PathConf().get_asset_bundles_images_path(f"{bundle.id}.png")
+        )
         bundle_icon.set_pixel_size(32)
+        bundle_icon.set_margin_end(8)
+
         header_box.append(bundle_icon)
 
-        label = Gtk.Label(label=bundle.id)
+        label = Gtk.Label(label=_(bundle.label))
         label.add_css_class("heading")
         header_box.append(label)
 

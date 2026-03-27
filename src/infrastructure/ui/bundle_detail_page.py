@@ -24,7 +24,7 @@ class BundleDetailPage(Adw.NavigationPage):
 
     def __init__(self, bundle: BundleEntity, appstream_repository: AppstreamRepository):
         super().__init__()
-        self.set_title(bundle.id)
+        self.set_title(bundle.label)
         self._bundle = bundle
         self._appstream_repository = appstream_repository
         self._get_recipe = GetRecipeContentUc(RecipeRepository())
@@ -47,7 +47,7 @@ class BundleDetailPage(Adw.NavigationPage):
         toolbar_view = Adw.ToolbarView()
 
         header_bar = Adw.HeaderBar()
-        header_bar.set_title_widget(Gtk.Label(label=self._bundle.id))
+        header_bar.set_title_widget(Gtk.Label(label=self._bundle.label))
 
         self._edit_btn = Gtk.Button()
         self._edit_btn.set_icon_name("document-edit-symbolic")

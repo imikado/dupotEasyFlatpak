@@ -17,6 +17,7 @@ class PathConf:
     ICON_PATH = "icons"
     ICON_ARCHIVE = "icons.zip"
     BUNDLES = "bundles.json"
+    BUNDLES_IMAGES = "images"
     USERSETTINGS = "user_settings.json"
 
     def __new__(cls):
@@ -54,6 +55,11 @@ class PathConf:
     def get_asset_bundles_path(self) -> str:
         return self.get_path_list_join(
             [self.get_asset_path(), self.ID_BUNDLES_PATH, self.BUNDLES]
+        )
+
+    def get_asset_bundles_images_path(self, image: str) -> str:
+        return self.get_path_list_join(
+            [self.get_asset_path(), self.ID_BUNDLES_PATH, self.BUNDLES_IMAGES, image]
         )
 
     def get_asset_usersettings_path(self) -> str:
