@@ -75,8 +75,11 @@ class FlatpakApi(FlatpakApiContract):
 
         return installed
 
-    def uninstall_by_id(self, app_id: str):
-        subprocess.run(self._cmd("uninstall", app_id, "-y"), capture_output=True)
+    def uninstall_by_id(self, app_id: str, delete_data: bool = False):
+        cmd = self._cmd("uninstall", app_id, "-y")
+        if delete_data:
+            cmd.append("--delete-data")
+        subprocess.run(cmd, capture_output=True)
 
     def get_install_call(self, app_id: str, flags) -> list:
         return self._cmd("install", "flathub", app_id, "-y", flags)

@@ -359,24 +359,50 @@ class AppstreamPage(Adw.NavigationPage):
         installed = btn.has_css_class("destructive-action")
 
         if installed:
-            btn.set_sensitive(False)
-            btn.set_label(_("Please wait…"))
+            delete_toggle = Gtk.Switch()
+            delete_toggle.set_active(False)
+            delete_toggle.set_valign(Gtk.Align.CENTER)
 
-            def run_uninstall():
-                flatpak_api = FlatpakApi()
-                flatpak_api.uninstall_by_id(app_id)
-                result = flatpak_api.get_info_by_id(app_id)
-                GLib.idle_add(
-                    self._apply_install_state,
-                    btn,
-                    recipe_btn,
-                    downgrade_btn,
-                    run_btn,
-                    result.returncode == 0,
-                    has_recipe,
-                )
+            toggle_row = Adw.ActionRow()
+            toggle_row.set_title(_("Delete application data"))
+            toggle_row.add_suffix(delete_toggle)
+            toggle_row.set_activatable_widget(delete_toggle)
 
-            threading.Thread(target=run_uninstall, daemon=True).start()
+            group = Adw.PreferencesGroup()
+            group.add(toggle_row)
+
+            dialog = Adw.AlertDialog(heading=_("Uninstall"))
+            dialog.set_extra_child(group)
+            dialog.add_response("cancel", _("Cancel"))
+            dialog.add_response("confirm", _("Uninstall"))
+            dialog.set_response_appearance("confirm", Adw.ResponseAppearance.DESTRUCTIVE)
+            dialog.set_default_response("cancel")
+            dialog.set_close_response("cancel")
+
+            def on_response(_d, response):
+                if response != "confirm":
+                    return
+                btn.set_sensitive(False)
+                btn.set_label(_("Please wait…"))
+
+                def run_uninstall():
+                    flatpak_api = FlatpakApi()
+                    flatpak_api.uninstall_by_id(app_id, delete_data=delete_toggle.get_active())
+                    result = flatpak_api.get_info_by_id(app_id)
+                    GLib.idle_add(
+                        self._apply_install_state,
+                        btn,
+                        recipe_btn,
+                        downgrade_btn,
+                        run_btn,
+                        result.returncode == 0,
+                        has_recipe,
+                    )
+
+                threading.Thread(target=run_uninstall, daemon=True).start()
+
+            dialog.connect("response", on_response)
+            dialog.present(self)
             return
 
         # --- Install: show confirm dialog ---
