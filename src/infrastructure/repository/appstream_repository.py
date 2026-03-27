@@ -28,6 +28,14 @@ class AppstreamRepository(AppstreamRepositoryContract):
         )
         return rows
 
+    def get_id_and_lastupdate_list_by_id_list(self, ids: list[str]) -> list[object]:
+        placeholders = ",".join("?" * len(ids))
+
+        rows = self._db.execute(
+            f"SELECT id,lastUpdate FROM appstream  WHERE id IN ({placeholders})",
+        )
+        return rows
+
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(

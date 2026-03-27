@@ -43,15 +43,18 @@ class CategoryListPage(Adw.NavigationPage):
         search_entry = Gtk.SearchEntry()
         search_entry.set_placeholder_text(_("Search…"))
         search_entry.set_hexpand(True)
-
         search_entry.connect("search-changed", self._on_search_changed)
+
+        search_clamp = Adw.Clamp()
+        search_clamp.set_maximum_size(500)
+        search_clamp.set_child(search_entry)
 
         search_bar_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         search_bar_box.set_margin_top(4)
         search_bar_box.set_margin_bottom(4)
         search_bar_box.set_margin_start(8)
         search_bar_box.set_margin_end(8)
-        search_bar_box.append(search_entry)
+        search_bar_box.append(search_clamp)
 
         toolbar_view.add_top_bar(header_bar)
         toolbar_view.add_top_bar(search_bar_box)

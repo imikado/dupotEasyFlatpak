@@ -1,24 +1,21 @@
 from domain.UseCase.export_uc import ExportUc
 from domain.UseCase.import_uc import ImportUc
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
-from domain.UseCase.get_bundle_content_uc import GetBundleContentUc
 import gi
 from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
-from infrastructure.repository.bundle_repository import BundleRepository
-from infrastructure.repository.category_repository import CategoryRepository
 from infrastructure.ui.appstream_page import AppstreamPage
-from infrastructure.ui.bundle_detail_page import BundleDetailPage
-from infrastructure.ui.category_list_page import CategoryListPage
+from infrastructure.ui.home.bundle_page import BundlePage
+from infrastructure.ui.home.category_page import CategoryPage
 from infrastructure.service.install_queue_service import InstallQueueService
-from infrastructure.ui.installed_page import InstalledPage
-from infrastructure.ui.pending_list_page import PendingPage
-from infrastructure.ui.updates_page import UpdatesPage
+from infrastructure.ui.home.installed_page import InstalledPage
+from infrastructure.ui.home.pending_list_page import PendingPage
+from infrastructure.ui.home.updates_page import UpdatesPage
 from infrastructure.ui.search_list_page import SearchListPage
-from infrastructure.ui.import_dialog import ImportDialog
-from infrastructure.ui.parameters_dialog import ParametersDialog
+from infrastructure.ui.menu.import_dialog import ImportDialog
+from infrastructure.ui.menu.parameters_dialog import ParametersDialog
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
@@ -125,20 +122,18 @@ class MainWindow(Adw.ApplicationWindow):
         view_stack.add_titled_with_icon(home_box, "home", _("Home"), "go-home-symbolic")
 
         # Categories tab
-        categories_scroll = Gtk.ScrolledWindow()
-        categories_scroll.set_vexpand(True)
-        categories_scroll.set_hexpand(True)
-        categories_scroll.set_child(self._create_category_bar(appstream_repository))
         view_stack.add_titled_with_icon(
-            categories_scroll, "categories", _("Categories"), "view-app-grid-symbolic"
+            CategoryPage(appstream_repository, self.navigation_view.push),
+            "categories",
+            _("Categories"),
+            "view-app-grid-symbolic",
         )
 
-        bundles_scroll = Gtk.ScrolledWindow()
-        bundles_scroll.set_vexpand(True)
-        bundles_scroll.set_hexpand(True)
-        bundles_scroll.set_child(self._create_bundle_bar(appstream_repository))
         view_stack.add_titled_with_icon(
-            bundles_scroll, "bundles", _("Bundles"), "folder-symbolic"
+            BundlePage(appstream_repository, self.navigation_view.push),
+            "bundles",
+            _("Bundles"),
+            "folder-symbolic",
         )
 
         installed_page = InstalledPage(
@@ -318,179 +313,20 @@ class MainWindow(Adw.ApplicationWindow):
         dots.set_margin_top(4)
         dots.set_margin_bottom(4)
 
+        def _auto_advance():
+            n = carousel.get_n_pages()
+            if n == 0:
+                return GLib.SOURCE_REMOVE
+            next_idx = (round(carousel.get_position()) + 1) % n
+            carousel.scroll_to(carousel.get_nth_page(next_idx), True)
+            return GLib.SOURCE_CONTINUE
+
+        GLib.timeout_add_seconds(3, _auto_advance)
+
         wrapper = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         wrapper.append(carousel)
         wrapper.append(dots)
         return wrapper
-
-    def _on_categories_clicked(self, _btn):
-        self.navigation_view.push(self._build_categories_page(AppstreamRepository()))
-
-    def _build_categories_page(
-        self, appstream_repository: AppstreamRepository
-    ) -> Adw.NavigationPage:
-        toolbar_view = Adw.ToolbarView()
-        toolbar_view.add_top_bar(Adw.HeaderBar())
-
-        scroll = Gtk.ScrolledWindow()
-        scroll.set_vexpand(True)
-        scroll.set_hexpand(True)
-        scroll.set_child(self._create_category_bar(appstream_repository))
-        toolbar_view.set_content(scroll)
-
-        page = Adw.NavigationPage.new(toolbar_view, _("Categories"))
-        return page
-
-    def _create_category_bar(self, appstream_repository: AppstreamRepository):
-        category_icons = {
-            "AudioVideo": "audio-x-generic-symbolic",
-            "Development": "applications-development-symbolic",
-            "Education": "applications-education-symbolic",
-            "Game": "applications-games-symbolic",
-            "Graphics": "applications-graphics-symbolic",
-            "Network": "network-workgroup-symbolic",
-            "Office": "applications-office-symbolic",
-            "Science": "applications-science-symbolic",
-            "System": "applications-system-symbolic",
-            "Utility": "applications-utilities-symbolic",
-        }
-
-        flow = Gtk.FlowBox()
-        flow.set_selection_mode(Gtk.SelectionMode.NONE)
-        flow.set_max_children_per_line(5)
-        flow.set_min_children_per_line(2)
-        flow.set_homogeneous(False)
-        flow.set_row_spacing(12)
-        flow.set_column_spacing(12)
-        flow.set_margin_top(24)
-        flow.set_margin_bottom(24)
-        flow.set_margin_start(24)
-        flow.set_margin_end(24)
-        flow.set_halign(Gtk.Align.CENTER)
-
-        for category in CategoryRepository().get_all():
-            icon_name = category_icons.get(
-                category, "application-x-executable-symbolic"
-            )
-
-            card_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-            card_box.add_css_class("card")
-            card_box.set_size_request(220, 160)
-            card_box.set_halign(Gtk.Align.CENTER)
-            card_box.set_valign(Gtk.Align.CENTER)
-
-            apps = appstream_repository.get_summary_list_by_category_id(category)
-
-            for row_apps in [apps[:4], apps[4:8]]:
-                if not row_apps:
-                    break
-                row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-                row_box.set_halign(Gtk.Align.CENTER)
-                row_box.set_margin_start(16)
-                row_box.set_margin_end(16)
-                for app in row_apps:
-                    app_icon = Gtk.Image.new_from_file(app.getIcon())
-                    app_icon.set_pixel_size(36)
-                    row_box.append(app_icon)
-                card_box.append(row_box)
-
-            card_box.get_first_child().set_margin_top(16)
-
-            # Category name + symbolic icon
-            footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-            footer_box.set_halign(Gtk.Align.CENTER)
-            footer_box.set_margin_top(14)
-            footer_box.set_margin_bottom(16)
-
-            cat_icon = Gtk.Image.new_from_icon_name(icon_name)
-            cat_icon.set_pixel_size(16)
-            footer_box.append(cat_icon)
-
-            label = Gtk.Label(label=_(category))
-            label.add_css_class("heading")
-            footer_box.append(label)
-
-            card_box.append(footer_box)
-
-            btn = Gtk.Button()
-            btn.add_css_class("flat")
-            btn.set_child(card_box)
-            btn.connect(
-                "clicked",
-                self._on_category_clicked,
-                category,
-                icon_name,
-                appstream_repository,
-            )
-            flow.append(btn)
-
-        return flow
-
-    def _create_bundle_bar(self, appstream_repository: AppstreamRepository):
-        bundle_uc = GetBundleContentUc(BundleRepository())
-
-        flow = Gtk.FlowBox()
-        flow.set_selection_mode(Gtk.SelectionMode.NONE)
-        flow.set_max_children_per_line(5)
-        flow.set_min_children_per_line(2)
-        flow.set_homogeneous(False)
-        flow.set_row_spacing(12)
-        flow.set_column_spacing(12)
-        flow.set_margin_top(24)
-        flow.set_margin_bottom(24)
-        flow.set_margin_start(24)
-        flow.set_margin_end(24)
-        flow.set_halign(Gtk.Align.CENTER)
-
-        for bundle in bundle_uc.get_list():
-            card_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-            card_box.add_css_class("card")
-            card_box.set_size_request(220, 160)
-            card_box.set_halign(Gtk.Align.CENTER)
-            card_box.set_valign(Gtk.Align.CENTER)
-
-            apps = appstream_repository.get_list_by_id_list(
-                bundle.get_application_list()[:4]
-            )
-
-            icons_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-            icons_box.set_halign(Gtk.Align.CENTER)
-            icons_box.set_margin_start(16)
-            icons_box.set_margin_end(16)
-            icons_box.set_margin_top(16)
-            for app in apps[:4]:
-                app_icon = Gtk.Image.new_from_file(app.getIcon())
-                app_icon.set_pixel_size(36)
-                icons_box.append(app_icon)
-            card_box.append(icons_box)
-
-            footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-            footer_box.set_halign(Gtk.Align.CENTER)
-            footer_box.set_margin_top(14)
-            footer_box.set_margin_bottom(16)
-
-            bundle_icon = Gtk.Image.new_from_icon_name("folder-symbolic")
-            bundle_icon.set_pixel_size(16)
-            footer_box.append(bundle_icon)
-
-            label = Gtk.Label(label=bundle.id)
-            label.add_css_class("heading")
-            footer_box.append(label)
-
-            card_box.append(footer_box)
-
-            btn = Gtk.Button()
-            btn.add_css_class("flat")
-            btn.set_child(card_box)
-            btn.connect(
-                "clicked", self._on_bundle_clicked, bundle, appstream_repository
-            )
-            flow.append(btn)
-
-        return flow
-
-    def _on_bundle_clicked(self, _btn, bundle, appstream_repository):
-        self.navigation_view.push(BundleDetailPage(bundle, appstream_repository))
 
     def _get_application_list_widget(self, application_list, appstream_repository):
         grid = AppListGridShared()
@@ -582,17 +418,6 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_search_button_clicked(self, _, appstream_repository: AppstreamRepository):
         if not isinstance(self.navigation_view.get_visible_page(), SearchListPage):
             self.navigation_view.push(SearchListPage("", appstream_repository))
-
-    def _on_category_clicked(
-        self,
-        _button,
-        category: str,
-        icon_name: str,
-        appstream_repository: AppstreamRepository,
-    ):
-        self.navigation_view.push(
-            CategoryListPage(category, icon_name, appstream_repository)
-        )
 
     def _on_app_clicked(
         self, _button, app_id: str, appstream_repository: AppstreamRepository

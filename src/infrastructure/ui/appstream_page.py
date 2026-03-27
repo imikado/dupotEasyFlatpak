@@ -173,7 +173,9 @@ class AppstreamPage(Adw.NavigationPage):
         btn_row.append(downgrade_btn)
         info_box.append(btn_row)
 
-        self._check_install_state(install_btn, recipe_btn, downgrade_btn, run_btn, app.id, has_recipe)
+        self._check_install_state(
+            install_btn, recipe_btn, downgrade_btn, run_btn, app.id, has_recipe
+        )
 
         header_row = Adw.PreferencesRow()
         header_row.set_child(info_box)
@@ -293,12 +295,24 @@ class AppstreamPage(Adw.NavigationPage):
         return GLib.SOURCE_REMOVE
 
     def _check_install_state(
-        self, btn: Gtk.Button, recipe_btn: Gtk.Button, downgrade_btn: Gtk.Button, run_btn: Gtk.Button, app_id: str, has_recipe: bool
+        self,
+        btn: Gtk.Button,
+        recipe_btn: Gtk.Button,
+        downgrade_btn: Gtk.Button,
+        run_btn: Gtk.Button,
+        app_id: str,
+        has_recipe: bool,
     ):
         def check():
             installed = FlatpakApi().is_app_id_installed(app_id)
             GLib.idle_add(
-                self._apply_install_state, btn, recipe_btn, downgrade_btn, run_btn, installed, has_recipe
+                self._apply_install_state,
+                btn,
+                recipe_btn,
+                downgrade_btn,
+                run_btn,
+                installed,
+                has_recipe,
             )
 
         threading.Thread(target=check, daemon=True).start()
@@ -503,6 +517,7 @@ class AppstreamPage(Adw.NavigationPage):
         scroll.set_hexpand(True)
 
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        hbox.set_halign(Gtk.Align.CENTER)
         hbox.set_margin_top(8)
         hbox.set_margin_bottom(8)
         hbox.set_margin_start(8)
@@ -511,12 +526,10 @@ class AppstreamPage(Adw.NavigationPage):
         large_urls = [s.large for s in screenshots]
         for idx, screenshot in enumerate(screenshots):
             btn = Gtk.Button()
-            btn.add_css_class("flat")
+            btn.add_css_class("card")
 
             picture = Gtk.Picture()
             picture.set_size_request(360, 210)
-            picture.set_content_fit(Gtk.ContentFit.COVER)
-            picture.add_css_class("card")
             btn.set_child(picture)
 
             self._load_image_async(picture, screenshot.preview)
@@ -594,7 +607,6 @@ class AppstreamPage(Adw.NavigationPage):
         content_box.set_halign(Gtk.Align.CENTER)
         content_box.set_valign(Gtk.Align.CENTER)
         content_box.set_size_request(900, 600)
-        content_box.add_css_class("card")
 
         picture = Gtk.Picture()
         picture.set_content_fit(Gtk.ContentFit.CONTAIN)

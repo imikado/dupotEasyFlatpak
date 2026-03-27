@@ -14,6 +14,10 @@ class AppstreamRepositoryContract(ABC):
         pass
 
     @abstractmethod
+    def get_id_and_lastupdate_list_by_id_list(self, ids: list[str]) -> list[object]:
+        pass
+
+    @abstractmethod
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         pass
 
