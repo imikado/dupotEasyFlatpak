@@ -3,13 +3,15 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, Gdk
 
 _css_provider = Gtk.CssProvider()
-_css_provider.load_from_string("""
+_css_provider.load_from_string(
+    """
 .app-grid flowboxchild { background: transparent; padding: 0; }
 .app-grid flowboxchild:hover { background: transparent; }
-""")
+"""
+)
 
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.category_repository import CategoryRepository
@@ -19,16 +21,16 @@ from infrastructure.ui.category_list_page import CategoryListPage
 class CategoryPage(Gtk.ScrolledWindow):
 
     _CATEGORY_ICONS = {
-        "AudioVideo": "audio-x-generic-symbolic",
-        "Development": "applications-development-symbolic",
-        "Education": "applications-education-symbolic",
-        "Game": "applications-games-symbolic",
-        "Graphics": "applications-graphics-symbolic",
-        "Network": "network-workgroup-symbolic",
-        "Office": "applications-office-symbolic",
-        "Science": "applications-science-symbolic",
-        "System": "applications-system-symbolic",
-        "Utility": "applications-utilities-symbolic",
+        "AudioVideo": "media-playback-start-symbolic",  # Play icon for media
+        "Development": "emblem-developer-symbolic",  # Gear/Terminal symbol
+        "Education": "accessories-dictionary-symbolic",  # A book icon
+        "Game": "input-gaming-symbolic",  # Controller icon
+        "Graphics": "image-x-generic-symbolic",  # Picture/Landscape icon
+        "Network": "network-workgroup-symbolic",  # Multiple computers
+        "Office": "x-office-document-symbolic",  # Document icon
+        "Science": "applications-science-symbolic",  # Beaker icon
+        "System": "emblem-system-symbolic",  # Shield or Cog
+        "Utility": "accessories-calculator-symbolic",  # Calculator icon
     }
 
     def __init__(
@@ -66,10 +68,18 @@ class CategoryPage(Gtk.ScrolledWindow):
         flow.set_halign(Gtk.Align.CENTER)
         flow.set_valign(Gtk.Align.START)
 
+        # Get the default icon theme
+        icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+
         for category in CategoryRepository().get_all():
             icon_name = self._CATEGORY_ICONS.get(
                 category, "application-x-executable-symbolic"
             )
+
+            # Fallback check: if the icon doesn't exist in the current theme, use a default
+            if not icon_theme.has_icon(icon_name):
+                icon_name = "application-x-executable-symbolic"
+
             flow.append(self._build_card(category, icon_name))
 
         return flow

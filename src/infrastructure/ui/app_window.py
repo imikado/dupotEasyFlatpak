@@ -36,7 +36,7 @@ class MainWindow(Adw.ApplicationWindow):
         super().__init__(*args, **kwargs)
 
         self.set_title("Easy flatpak")
-        self.set_default_size(1000, 800)
+        self.set_default_size(1100, 800)
 
         self._toast_overlay = Adw.ToastOverlay()
         self.set_content(self._toast_overlay)

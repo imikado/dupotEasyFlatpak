@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
 from domain.entity.application_version_entity import ApplicationVersionEntity
@@ -38,6 +40,7 @@ def main():
 
     path_conf = PathConf()
     path_conf.set_data_path(GLib.get_user_data_dir())
+    os.makedirs(path_conf.get_data_path(), exist_ok=True)
 
     data_path = path_conf.get_data_path()
     print(f"data path is {data_path}")

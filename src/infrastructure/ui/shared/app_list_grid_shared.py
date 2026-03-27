@@ -15,17 +15,28 @@ _css_provider = Gtk.CssProvider()
 _css_provider.load_from_string(
     """
 .app-grid flowboxchild {
-    background: transparent;
     padding: 0;
+    transition: all 200ms ease;
 }
-.app-grid flowboxchild:hover {
-    background: transparent;
+
+.card {
+    border-radius: 12px;
+    background-color: alpha(@window_fg_color, 0.05);
+    border: 1px solid transparent;
 }
-.installed-strip {
-    border-top: 1px solid alpha(@success_color, 0.3);
+
+.card:hover {
+    background-color: alpha(@window_fg_color, 0.1);
+    border: 1px solid alpha(@window_fg_color, 0.1);
 }
+
+ 
 """
 )
+
+
+CARD_WIDTH = 320
+CARD_SPACING = 8
 
 
 def _make_icon_with_badge(
@@ -79,13 +90,10 @@ def _make_square_card(
     title = Gtk.Label(label=app.getName())
     title.add_css_class("caption")
     title.set_wrap(True)
-    title.set_justify(Gtk.Justification.CENTER)
-    title.set_max_width_chars(14)
-    title.set_lines(2)
+    title.set_max_width_chars(12)  # Slightly smaller to be safe
+    title.set_lines(3)
+    title.set_height_request(32)  # Force a fixed height for the text area
     title.set_ellipsize(Pango.EllipsizeMode.END)
-    title.set_margin_start(6)
-    title.set_margin_end(6)
-    title.set_margin_bottom(10)
     box.append(title)
 
     button.set_child(box)
@@ -114,23 +122,28 @@ def _make_list_card(
 
     text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
     text_box.set_valign(Gtk.Align.CENTER)
+
+    text_box.set_size_request(CARD_WIDTH - 80, -1)  # Subtract icon + spacing width
     text_box.set_hexpand(False)
-    text_box.set_size_request(CARD_WIDTH, -1)
 
     title = Gtk.Label(label=app.getName())
     title.add_css_class("heading")
     title.set_halign(Gtk.Align.START)
-    title.set_max_width_chars(50)
     title.set_ellipsize(Pango.EllipsizeMode.END)
+    title.set_wrap(False)  # Titles usually shouldn't wrap in this layout
     text_box.append(title)
 
     summary = Gtk.Label(label=app.getSummary())
+    summary.set_halign(Gtk.Align.START)
     summary.add_css_class("caption")
     summary.add_css_class("dim-label")
-    summary.set_halign(Gtk.Align.START)
-    summary.set_lines(2)
-    summary.set_max_width_chars(30)
+
+    # CRITICAL: Force wrapping and prevent pushing
+    summary.set_wrap(True)
+    summary.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
+    summary.set_lines(3)
     summary.set_ellipsize(Pango.EllipsizeMode.END)
+    summary.set_max_width_chars(24)  # Limits horizontal "natural" size
     text_box.append(summary)
 
     box.append(text_box)
@@ -234,10 +247,6 @@ def _make_list_card(
     return button
 
 
-CARD_WIDTH = 200
-CARD_SPACING = 8
-
-
 class AppListGridShared:
 
     def __init__(self, square: bool = False):
@@ -281,8 +290,11 @@ class AppListGridShared:
             self._list_flow.set_valign(Gtk.Align.START)
             self._list_flow.set_halign(Gtk.Align.CENTER)
             self._list_flow.set_selection_mode(Gtk.SelectionMode.NONE)
-            self._list_flow.set_homogeneous(False)
-            self._list_flow.set_max_children_per_line(10)
+            self._list_flow.set_homogeneous(True)
+            self._list_flow.set_min_children_per_line(2)
+            self._list_flow.set_max_children_per_line(
+                3
+            )  # Force 2 columns like your screenshot
             self._list_flow.set_min_children_per_line(1)
             self._list_flow.set_column_spacing(CARD_SPACING)
             self._list_flow.set_row_spacing(CARD_SPACING)
@@ -305,6 +317,8 @@ class AppListGridShared:
         else:
             btn = _make_list_card(app, on_click, installed, has_recipe, *on_click_args)
             btn.set_size_request(CARD_WIDTH, 76)
+            btn.set_hexpand(False)
+            btn.set_vexpand(False)
 
             child = Gtk.FlowBoxChild()
             child.set_halign(Gtk.Align.CENTER)
