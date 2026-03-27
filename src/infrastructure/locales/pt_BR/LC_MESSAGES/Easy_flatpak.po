@@ -1,0 +1,123 @@
+# Brazilian Portuguese translations for Easy flatpak
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+
+# --- General actions ---
+msgid "Install"
+msgstr "Instalar"
+
+msgid "Install with recipe"
+msgstr "Instalar com receita"
+
+msgid "Install for current user only"
+msgstr "Instalar apenas para o usuário atual"
+
+msgid "Uninstall"
+msgstr "Desinstalar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Close"
+msgstr "Fechar"
+
+msgid "Please wait…"
+msgstr "Por favor, aguarde…"
+
+# --- App detail page ---
+msgid "Details"
+msgstr "Detalhes"
+
+msgid "License"
+msgstr "Licença"
+
+msgid "Download Size"
+msgstr "Tamanho do Download"
+
+msgid "Installed Size"
+msgstr "Tamanho Instalado"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Screenshots"
+msgstr "Capturas de Tela"
+
+msgid "Release History"
+msgstr "Histórico de Versões"
+
+msgid "Permissions"
+msgstr "Permissões"
+
+# --- Navigation / window ---
+msgid "Easy flatpak"
+msgstr "Easy flatpak"
+
+msgid "Home"
+msgstr "Início"
+
+msgid "Categories"
+msgstr "Categorias"
+
+msgid "Bundles"
+msgstr "Pacotes"
+
+msgid "Installed"
+msgstr "Instalado"
+
+msgid "Pending"
+msgstr "Pendente"
+
+msgid "Parameters"
+msgstr "Parâmetros"
+
+msgid "Import / Export"
+msgstr "Importar / Exportar"
+
+msgid "About"
+msgstr "Sobre"
+
+msgid "Available updates"
+msgstr "Atualizações disponíveis"
+
+msgid "Search"
+msgstr "Pesquisar"
+
+msgid "Search…"
+msgstr "Pesquisar…"
+
+# --- Home sections ---
+msgid "Trending"
+msgstr "Em alta"
+
+msgid "Popular"
+msgstr "Popular"
+
+msgid "Updated"
+msgstr "Atualizado"
+
+# --- Misc ---
+msgid "Not yet implemented"
+msgstr "Não implementado ainda"
+
+msgid "Not yet implemented."
+msgstr "Não implementado ainda."
+
+# --- Recipe permission labels ---
+msgid "recipe_share_your_home_label"
+msgstr "Para informação: deve permitir que o Discord acesse seu diretório pessoal (deixe-o configurar)"
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indique o caminho do diretório onde você armazena seus jogos"
+
+msgid "recipe_should_installMangoHud"
+msgstr "Instalar MangoHud"
+
+msgid "recipe_enable_mangohud"
+msgstr "Ativar MangoHud"
+
+msgid "Installing…"
+msgstr "Instalando…"

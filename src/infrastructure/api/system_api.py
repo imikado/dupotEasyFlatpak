@@ -54,7 +54,7 @@ class SystemApi(SystemApiContract):
         shutil.copy(path_from, path_to)
 
     def get_datetime_current_timestamp(self) -> int:
-        return int(time.time() * 1000)
+        return int(time.time())
 
     def unzip_archive_to(self, archive_path: str, path_to: str):
         with zipfile.ZipFile(archive_path, "r") as zip_ref:
@@ -73,10 +73,17 @@ class SystemApi(SystemApiContract):
         with open(path, "r") as file:
             return json.load(file)
 
-    def download_remote_file_to(self, remote_path: str, local_path: str):
+    def download_remote_file_to(self, remote_path: str, local_path: str) -> bool:
         import urllib.request
+        import urllib.error
 
-        urllib.request.urlretrieve(remote_path, local_path)
+        if not remote_path:
+            return False
+        try:
+            urllib.request.urlretrieve(remote_path, local_path)
+            return True
+        except (urllib.error.URLError, urllib.error.HTTPError, TypeError):
+            return False
 
     def get_current_datetime_string(self) -> str:
         now = datetime.now()

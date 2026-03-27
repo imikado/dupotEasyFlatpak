@@ -75,6 +75,10 @@ class MainWindow(Adw.ApplicationWindow):
         menu_button.set_menu_model(menu)
         header_bar.pack_end(menu_button)
 
+        search_button = Gtk.Button()
+        search_button.set_icon_name("system-search-symbolic")
+        header_bar.pack_start(search_button)
+
         for name, callback in [
             ("parameters", self._on_menu_parameters),
             ("import", self._on_menu_import),
@@ -195,26 +199,11 @@ class MainWindow(Adw.ApplicationWindow):
 
         queue_service.subscribe_changes(_on_queue_changed)
 
-        # Search bar (centered, ~70% width) above the view stack
-        search_entry = Gtk.SearchEntry()
-        search_entry.set_placeholder_text(_("Search…"))
-        search_entry.set_hexpand(True)
-
-        search_entry.connect(
-            "search-changed", self._on_search_focus, appstream_repository
+        search_button.connect(
+            "clicked", self._on_search_button_clicked, appstream_repository
         )
 
-        search_clamp = Adw.Clamp()
-        search_clamp.set_maximum_size(700)
-        search_clamp.set_margin_top(12)
-        search_clamp.set_margin_bottom(18)
-        search_clamp.set_child(search_entry)
-
-        content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        content_box.append(search_clamp)
-        content_box.append(view_stack)
-
-        toolbar_view.set_content(content_box)
+        toolbar_view.set_content(view_stack)
 
         return toolbar_view
 
@@ -249,10 +238,90 @@ class MainWindow(Adw.ApplicationWindow):
             stack.add_titled(scroll, title.lower(), title)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        apps_of_week = get_home_content_uc.get_apps_of_the_week()
+        if apps_of_week:
+            box.append(self._build_carousel(apps_of_week, appstream_repository))
         box.append(stack_switcher)
         box.append(stack)
 
         return box
+
+    def _build_carousel(self, app_list: list, appstream_repository) -> Gtk.Widget:
+        style_manager = Adw.StyleManager.get_default()
+        display = self.get_display()
+
+        carousel = Adw.Carousel()
+        carousel.set_hexpand(True)
+        carousel.set_allow_scroll_wheel(True)
+
+        for app in app_list[:8]:
+            color = (
+                app.getBrandingDark()
+                if style_manager.get_dark()
+                else app.getBrandingLight()
+            )
+            safe_id = app.id.lower().replace(".", "-").replace("_", "-")
+            css_class = f"carousel-card-{safe_id}"
+            provider = Gtk.CssProvider()
+            provider.load_from_string(f".{css_class} {{ background-color: {color}; }}")
+            Gtk.StyleContext.add_provider_for_display(
+                display, provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            )
+
+            card = Gtk.Button()
+            card.add_css_class("flat")
+            card.add_css_class(css_class)
+            card.set_hexpand(True)
+            card.set_size_request(-1, 200)
+            card.connect("clicked", self._on_app_clicked, app.id, appstream_repository)
+
+            content = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=32)
+            content.set_halign(Gtk.Align.CENTER)
+            content.set_valign(Gtk.Align.CENTER)
+            content.set_margin_top(24)
+            content.set_margin_bottom(24)
+            content.set_margin_start(48)
+            content.set_margin_end(48)
+
+            icon_path = app.getIcon()
+            if os.path.exists(icon_path):
+                icon_img = Gtk.Image.new_from_file(icon_path)
+            else:
+                icon_img = Gtk.Image.new_from_icon_name("application-x-executable")
+            icon_img.set_pixel_size(96)
+            icon_img.set_valign(Gtk.Align.CENTER)
+
+            text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+            text_box.set_valign(Gtk.Align.CENTER)
+
+            name_label = Gtk.Label(label=app.getName())
+            name_label.add_css_class("title-1")
+            name_label.set_halign(Gtk.Align.START)
+            name_label.set_wrap(True)
+            name_label.set_max_width_chars(40)
+
+            summary_label = Gtk.Label(label=app.getSummary())
+            summary_label.add_css_class("body")
+            summary_label.set_halign(Gtk.Align.START)
+            summary_label.set_wrap(True)
+            summary_label.set_max_width_chars(60)
+
+            text_box.append(name_label)
+            text_box.append(summary_label)
+            content.append(icon_img)
+            content.append(text_box)
+            card.set_child(content)
+            carousel.append(card)
+
+        dots = Adw.CarouselIndicatorDots()
+        dots.set_carousel(carousel)
+        dots.set_margin_top(4)
+        dots.set_margin_bottom(4)
+
+        wrapper = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        wrapper.append(carousel)
+        wrapper.append(dots)
+        return wrapper
 
     def _on_categories_clicked(self, _btn):
         self.navigation_view.push(self._build_categories_page(AppstreamRepository()))
@@ -510,13 +579,9 @@ class MainWindow(Adw.ApplicationWindow):
         about.set_license_type(Gtk.License.GPL_3_0)
         about.present(self)
 
-    def _on_search_focus(
-        self, entry: Gtk.SearchEntry, appstream_repository: AppstreamRepository
-    ):
+    def _on_search_button_clicked(self, _, appstream_repository: AppstreamRepository):
         if not isinstance(self.navigation_view.get_visible_page(), SearchListPage):
-            self.navigation_view.push(
-                SearchListPage(entry.get_text(), appstream_repository)
-            )
+            self.navigation_view.push(SearchListPage("", appstream_repository))
 
     def _on_category_clicked(
         self,

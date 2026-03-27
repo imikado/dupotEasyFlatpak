@@ -1,0 +1,217 @@
+# French translations for Easy flatpak
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+
+# --- General actions ---
+msgid "Install"
+msgstr "Installer"
+
+msgid "Install with recipe"
+msgstr "Installer avec une recette"
+
+msgid "Install for current user only"
+msgstr "Installer uniquement pour l'utilisateur actuel"
+
+msgid "Install selected"
+msgstr "Installer la sélection"
+
+msgid "Uninstall"
+msgstr "Désinstaller"
+
+msgid "Downgrade"
+msgstr "Rétrograder"
+
+msgid "Select a version to downgrade to"
+msgstr "Sélectionnez une version pour rétrograder"
+
+msgid "Update"
+msgstr "Mettre à jour"
+
+msgid "Update (0)"
+msgstr "Mise à jour (0)"
+
+msgid "Update ({n})"
+msgstr "Mise à jour ({n})"
+
+msgid "Update {n} application(s)?"
+msgstr "Mettre à jour {n} application(s) ?"
+
+msgid "Updates"
+msgstr "Mises à jour"
+
+msgid "Run"
+msgstr "Lancer"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Done"
+msgstr "Terminé"
+
+msgid "Import"
+msgstr "Importer"
+
+msgid "Export"
+msgstr "Exporter"
+
+msgid "Export saved"
+msgstr "Export sauvegardé"
+
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+msgid "Unselect all"
+msgstr "Tout désélectionner"
+
+# --- Status ---
+msgid "Installing…"
+msgstr "Installation…"
+
+msgid "Loading…"
+msgstr "Chargement…"
+
+msgid "Please wait…"
+msgstr "Veuillez patienter…"
+
+msgid "Already installed"
+msgstr "Déjà installé"
+
+msgid "Failed"
+msgstr "Échec"
+
+msgid "{name} is installing — track progress in Pending"
+msgstr "{name} est en cours d'installation — suivez la progression dans En attente"
+
+msgid "No installed applications found"
+msgstr "Aucune application installée trouvée"
+
+msgid "No pending installations"
+msgstr "Aucune installation en attente"
+
+msgid "No updates available"
+msgstr "Aucune mise à jour disponible"
+
+# --- App detail page ---
+msgid "Details"
+msgstr "Détails"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "License"
+msgstr "Licence"
+
+msgid "Download Size"
+msgstr "Taille du téléchargement"
+
+msgid "Installed Size"
+msgstr "Taille installée"
+
+msgid "Screenshots"
+msgstr "Captures d'écran"
+
+msgid "Release History"
+msgstr "Historique des versions"
+
+msgid "Permissions"
+msgstr "Permissions"
+
+msgid "Installation"
+msgstr "Installation"
+
+msgid "Installation scope"
+msgstr "Portée de l'installation"
+
+msgid "Where Flatpak apps will be installed"
+msgstr "Où les applications Flatpak seront installées"
+
+# --- Navigation / window ---
+msgid "Easy flatpak"
+msgstr "Easy flatpak"
+
+msgid "Home"
+msgstr "Accueil"
+
+msgid "Categories"
+msgstr "Catégories"
+
+msgid "Applications"
+msgstr "Applications"
+
+msgid "Bundles"
+msgstr "Lots"
+
+msgid "Runtimes"
+msgstr "Environnements d'exécution"
+
+msgid "Installed"
+msgstr "Installé"
+
+msgid "Pending"
+msgstr "En attente"
+
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgid "About"
+msgstr "À propos"
+
+msgid "New"
+msgstr "Nouveau"
+
+msgid "Search"
+msgstr "Rechercher"
+
+msgid "Search…"
+msgstr "Rechercher…"
+
+# --- Home sections ---
+msgid "Trending"
+msgstr "Tendances"
+
+msgid "Popular"
+msgstr "Populaire"
+
+msgid "Updated"
+msgstr "Mis à jour"
+
+# --- Bundle / recipe ---
+msgid "Edit bundle"
+msgstr "Modifier le lot"
+
+msgid "Edit permissions"
+msgstr "Modifier les permissions"
+
+msgid "Recipe overrides"
+msgstr "Substitutions de recette"
+
+msgid "Game path"
+msgstr "Chemin des jeux"
+
+# --- Recipe permission labels ---
+msgid "recipe_share_your_home_label"
+msgstr "Pour information : devrait autoriser Discord à accéder à votre répertoire personnel (laissez-le se configurer)"
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indiquez le chemin du répertoire où vous stockez vos jeux"
+
+msgid "recipe_should_installMangoHud"
+msgstr "Installer MangoHud"
+
+msgid "recipe_enable_mangohud"
+msgstr "Activer MangoHud"

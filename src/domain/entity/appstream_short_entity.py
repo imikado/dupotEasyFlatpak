@@ -1,3 +1,4 @@
+import json
 import os
 
 from domain.conf.path_conf import PathConf
@@ -5,11 +6,21 @@ from domain.conf.path_conf import PathConf
 
 class AppstreamShortEntity:
 
-    def __init__(self, id, name, icon, summary):
+    FIELD_BRANDING = "branding"
+    FIELD_BRANDING_LIGHT = "light"
+    FIELD_BRANDING_DARK = "dark"
+
+    _branding_loaded: bool = False
+    _branding_light: str = "#888888"
+    _branding_dark: str = "#333333"
+
+    def __init__(self, id, name, icon, summary, metadata_obj="{}"):
         self.id = id
         self.name = name
         self.icon = icon
         self.summary = summary
+        self.raw_metadata_obj = metadata_obj
+
         pass
 
     def getName(self) -> str:
@@ -20,5 +31,27 @@ class AppstreamShortEntity:
 
     def getIcon(self) -> str:
         return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
+
+    def _load_branding(self):
+        if self._branding_loaded:
+            return
+
+        metadata_obj = json.loads(self.raw_metadata_obj)
+
+        if self.FIELD_BRANDING in metadata_obj:
+            branding = metadata_obj.get(self.FIELD_BRANDING)
+            if self.FIELD_BRANDING_DARK in branding:
+                self._branding_dark = branding.get(self.FIELD_BRANDING_DARK)
+            else:
+                self._branding_light = branding.get(self.FIELD_BRANDING_LIGHT)
+        self._branding_loaded = True
+
+    def getBrandingLight(self) -> str:
+        self._load_branding()
+        return self._branding_light
+
+    def getBrandingDark(self) -> str:
+        self._load_branding()
+        return self._branding_dark
 
     pass

@@ -1,0 +1,123 @@
+# Arabic translations for Easy flatpak
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+
+# --- General actions ---
+msgid "Install"
+msgstr "تثبيت"
+
+msgid "Install with recipe"
+msgstr "التثبيت بالوصفة"
+
+msgid "Install for current user only"
+msgstr "التثبيت للمستخدم الحالي فقط"
+
+msgid "Uninstall"
+msgstr "إلغاء التثبيت"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Close"
+msgstr "إغلاق"
+
+msgid "Please wait…"
+msgstr "يرجى الانتظار…"
+
+# --- App detail page ---
+msgid "Details"
+msgstr "التفاصيل"
+
+msgid "License"
+msgstr "الرخصة"
+
+msgid "Download Size"
+msgstr "حجم التنزيل"
+
+msgid "Installed Size"
+msgstr "الحجم المثبت"
+
+msgid "Description"
+msgstr "الوصف"
+
+msgid "Screenshots"
+msgstr "لقطات الشاشة"
+
+msgid "Release History"
+msgstr "تاريخ الإصدارات"
+
+msgid "Permissions"
+msgstr "الأذونات"
+
+# --- Navigation / window ---
+msgid "Easy flatpak"
+msgstr "Easy flatpak"
+
+msgid "Home"
+msgstr "الرئيسية"
+
+msgid "Categories"
+msgstr "الفئات"
+
+msgid "Bundles"
+msgstr "الحزم"
+
+msgid "Installed"
+msgstr "مثبت"
+
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+msgid "Parameters"
+msgstr "المعاملات"
+
+msgid "Import / Export"
+msgstr "استيراد / تصدير"
+
+msgid "About"
+msgstr "حول"
+
+msgid "Available updates"
+msgstr "التحديثات المتاحة"
+
+msgid "Search"
+msgstr "بحث"
+
+msgid "Search…"
+msgstr "بحث…"
+
+# --- Home sections ---
+msgid "Trending"
+msgstr "الأكثر رواجاً"
+
+msgid "Popular"
+msgstr "شائع"
+
+msgid "Updated"
+msgstr "محدّث"
+
+# --- Misc ---
+msgid "Not yet implemented"
+msgstr "غير منفذ بعد"
+
+msgid "Not yet implemented."
+msgstr "غير منفذ بعد."
+
+# --- Recipe permission labels ---
+msgid "recipe_share_your_home_label"
+msgstr "للمعلومة: يجب السماح لـ Discord بالوصول إلى المجلد الرئيسي الخاص بك (دعه يُهيئ نفسه)"
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr "حدد مسار المجلد الذي تخزن فيه ألعابك"
+
+msgid "recipe_should_installMangoHud"
+msgstr "تثبيت MangoHud"
+
+msgid "recipe_enable_mangohud"
+msgstr "تفعيل MangoHud"
+
+msgid "Installing…"
+msgstr "جاري التثبيت…"

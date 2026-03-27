@@ -1,0 +1,123 @@
+# Romanian translations for Easy flatpak
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro\n"
+
+# --- General actions ---
+msgid "Install"
+msgstr "Instalează"
+
+msgid "Install with recipe"
+msgstr "Instalează cu rețetă"
+
+msgid "Install for current user only"
+msgstr "Instalează doar pentru utilizatorul curent"
+
+msgid "Uninstall"
+msgstr "Dezinstalează"
+
+msgid "Cancel"
+msgstr "Anulează"
+
+msgid "Close"
+msgstr "Închide"
+
+msgid "Please wait…"
+msgstr "Vă rugăm așteptați…"
+
+# --- App detail page ---
+msgid "Details"
+msgstr "Detalii"
+
+msgid "License"
+msgstr "Licență"
+
+msgid "Download Size"
+msgstr "Dimensiune descărcare"
+
+msgid "Installed Size"
+msgstr "Dimensiune instalată"
+
+msgid "Description"
+msgstr "Descriere"
+
+msgid "Screenshots"
+msgstr "Capturi de ecran"
+
+msgid "Release History"
+msgstr "Istoricul versiunilor"
+
+msgid "Permissions"
+msgstr "Permisiuni"
+
+# --- Navigation / window ---
+msgid "Easy flatpak"
+msgstr "Easy flatpak"
+
+msgid "Home"
+msgstr "Acasă"
+
+msgid "Categories"
+msgstr "Categorii"
+
+msgid "Bundles"
+msgstr "Pachete"
+
+msgid "Installed"
+msgstr "Instalat"
+
+msgid "Pending"
+msgstr "În așteptare"
+
+msgid "Parameters"
+msgstr "Parametri"
+
+msgid "Import / Export"
+msgstr "Import / Export"
+
+msgid "About"
+msgstr "Despre"
+
+msgid "Available updates"
+msgstr "Actualizări disponibile"
+
+msgid "Search"
+msgstr "Căutare"
+
+msgid "Search…"
+msgstr "Căutare…"
+
+# --- Home sections ---
+msgid "Trending"
+msgstr "Tendințe"
+
+msgid "Popular"
+msgstr "Popular"
+
+msgid "Updated"
+msgstr "Actualizat"
+
+# --- Misc ---
+msgid "Not yet implemented"
+msgstr "Neimplementat încă"
+
+msgid "Not yet implemented."
+msgstr "Neimplementat încă."
+
+# --- Recipe permission labels ---
+msgid "recipe_share_your_home_label"
+msgstr "Pentru informare: ar trebui să permiteți Discord să acceseze directorul dvs. personal (lăsați-l să se configureze)"
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indicați calea directorului unde vă stocați jocurile"
+
+msgid "recipe_should_installMangoHud"
+msgstr "Instalează MangoHud"
+
+msgid "recipe_enable_mangohud"
+msgstr "Activează MangoHud"
+
+msgid "Installing…"
+msgstr "Se instalează…"

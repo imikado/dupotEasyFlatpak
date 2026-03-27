@@ -1,4 +1,5 @@
 import urllib.request
+import urllib.error
 import json
 
 from domain.contract.flathub_api_contract import FlathubApiContract
@@ -48,7 +49,20 @@ class FlathubApi(FlathubApiContract):
             data = json.loads(response.read().decode())
         return data.get("hits", [])
 
-    def get_appstream_by_id(self, id: str) -> object:
+    def get_appstream_by_id(self, id: str) -> object | None:
         url = f"{self._BASE_URL}/appstream/{id}"
+        try:
+            with urllib.request.urlopen(url) as response:
+                return json.loads(response.read().decode())
+        except (urllib.error.URLError, urllib.error.HTTPError):
+            return None
+
+    def get_app_id_list_of_the_week(self, date: str) -> list[str]:
+        url = f"{self._BASE_URL}/app-picks/apps-of-the-week/{date}"
+        app_id_list = []
         with urllib.request.urlopen(url) as response:
-            return json.loads(response.read().decode())
+            data = json.loads(response.read().decode())
+            for app_loop in data["apps"]:
+                app_id_list.append(app_loop["app_id"])
+
+        return app_id_list

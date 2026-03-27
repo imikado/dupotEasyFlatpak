@@ -15,8 +15,41 @@ msgstr "Install with recipe"
 msgid "Install for current user only"
 msgstr "Install for current user only"
 
+msgid "Install selected"
+msgstr "Install selected"
+
 msgid "Uninstall"
 msgstr "Uninstall"
+
+msgid "Downgrade"
+msgstr "Downgrade"
+
+msgid "Select a version to downgrade to"
+msgstr "Select a version to downgrade to"
+
+msgid "Update"
+msgstr "Update"
+
+msgid "Update (0)"
+msgstr "Update (0)"
+
+msgid "Update ({n})"
+msgstr "Update ({n})"
+
+msgid "Update {n} application(s)?"
+msgstr "Update {n} application(s)?"
+
+msgid "Updates"
+msgstr "Updates"
+
+msgid "Run"
+msgstr "Run"
+
+msgid "Apply"
+msgstr "Apply"
+
+msgid "Save"
+msgstr "Save"
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -24,12 +57,61 @@ msgstr "Cancel"
 msgid "Close"
 msgstr "Close"
 
+msgid "OK"
+msgstr "OK"
+
+msgid "Done"
+msgstr "Done"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Export saved"
+msgstr "Export saved"
+
+msgid "Select all"
+msgstr "Select all"
+
+msgid "Unselect all"
+msgstr "Unselect all"
+
+# --- Status ---
+msgid "Installing…"
+msgstr "Installing…"
+
+msgid "Loading…"
+msgstr "Loading…"
+
 msgid "Please wait…"
 msgstr "Please wait…"
+
+msgid "Already installed"
+msgstr "Already installed"
+
+msgid "Failed"
+msgstr "Failed"
+
+msgid "{name} is installing — track progress in Pending"
+msgstr "{name} is installing — track progress in Pending"
+
+msgid "No installed applications found"
+msgstr "No installed applications found"
+
+msgid "No pending installations"
+msgstr "No pending installations"
+
+msgid "No updates available"
+msgstr "No updates available"
 
 # --- App detail page ---
 msgid "Details"
 msgstr "Details"
+
+msgid "Description"
+msgstr "Description"
 
 msgid "License"
 msgstr "License"
@@ -40,9 +122,6 @@ msgstr "Download Size"
 msgid "Installed Size"
 msgstr "Installed Size"
 
-msgid "Description"
-msgstr "Description"
-
 msgid "Screenshots"
 msgstr "Screenshots"
 
@@ -51,6 +130,15 @@ msgstr "Release History"
 
 msgid "Permissions"
 msgstr "Permissions"
+
+msgid "Installation"
+msgstr "Installation"
+
+msgid "Installation scope"
+msgstr "Installation scope"
+
+msgid "Where Flatpak apps will be installed"
+msgstr "Where Flatpak apps will be installed"
 
 # --- Navigation / window ---
 msgid "Easy flatpak"
@@ -62,8 +150,14 @@ msgstr "Home"
 msgid "Categories"
 msgstr "Categories"
 
+msgid "Applications"
+msgstr "Applications"
+
 msgid "Bundles"
 msgstr "Bundles"
+
+msgid "Runtimes"
+msgstr "Runtimes"
 
 msgid "Installed"
 msgstr "Installed"
@@ -74,14 +168,11 @@ msgstr "Pending"
 msgid "Parameters"
 msgstr "Parameters"
 
-msgid "Import / Export"
-msgstr "Import / Export"
-
 msgid "About"
 msgstr "About"
 
-msgid "Available updates"
-msgstr "Available updates"
+msgid "New"
+msgstr "New"
 
 msgid "Search"
 msgstr "Search"
@@ -99,12 +190,18 @@ msgstr "Popular"
 msgid "Updated"
 msgstr "Updated"
 
-# --- Misc ---
-msgid "Not yet implemented"
-msgstr "Not yet implemented"
+# --- Bundle / recipe ---
+msgid "Edit bundle"
+msgstr "Edit bundle"
 
-msgid "Not yet implemented."
-msgstr "Not yet implemented."
+msgid "Edit permissions"
+msgstr "Edit permissions"
+
+msgid "Recipe overrides"
+msgstr "Recipe overrides"
+
+msgid "Game path"
+msgstr "Game path"
 
 # --- Recipe permission labels ---
 msgid "recipe_share_your_home_label"
@@ -118,6 +215,3 @@ msgstr "Install MangoHud"
 
 msgid "recipe_enable_mangohud"
 msgstr "Enable MangoHud"
-
-msgid "Installing…"
-msgstr "Installing…"

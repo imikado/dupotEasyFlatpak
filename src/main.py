@@ -28,7 +28,7 @@ def main():
 
     # Set up Gettext
     en_i18n = gettext.translation(
-        appname, localedir, fallback=True, languages=["en", "fr"]
+        appname, localedir, fallback=True, languages=["en", "fr", "pt_BR", "ar", "es", "it", "ro"]
     )
 
     # Create the "magic" function

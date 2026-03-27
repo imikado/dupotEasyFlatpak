@@ -52,7 +52,7 @@ class SystemApiContract(ABC):
         pass
 
     @abstractmethod
-    def download_remote_file_to(self, remote_path: str, local_path: str):
+    def download_remote_file_to(self, remote_path: str, local_path: str) -> bool:
         pass
 
     @abstractmethod

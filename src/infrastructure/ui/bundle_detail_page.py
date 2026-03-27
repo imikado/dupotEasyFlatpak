@@ -3,6 +3,7 @@ import os
 import subprocess
 import threading
 
+from domain.entity.user_settings_entity import UserSettingsEntity
 import gi
 
 gi.require_version("Gtk", "4.0")
@@ -39,6 +40,8 @@ class BundleDetailPage(Adw.NavigationPage):
         self._user_scope_row = None
         self.set_child(self._build())
         threading.Thread(target=self._load_installed, daemon=True).start()
+
+        self.user_settings_entity = UserSettingsEntity()
 
     def _build(self) -> Gtk.Widget:
         toolbar_view = Adw.ToolbarView()
@@ -103,7 +106,7 @@ class BundleDetailPage(Adw.NavigationPage):
             app_id in self._apps_requiring_config
             and app_id not in self._app_permissions
             and switch.get_active()
-            for app_id, _row, switch, _remove_btn in self._app_rows
+            for app_id, switch, _perm_btn in self._app_rows
         )
         self._install_btn.set_sensitive(not blocked)
 
@@ -127,13 +130,7 @@ class BundleDetailPage(Adw.NavigationPage):
             icon.set_pixel_size(48)
             row.add_prefix(icon)
 
-            switch = Gtk.Switch()
-            switch.set_active(True)
-            switch.set_valign(Gtk.Align.CENTER)
-            switch.set_visible(not self._edit_mode)
-            switch.connect("notify::active", self._update_install_btn)
-            row.add_suffix(switch)
-
+            perm_btn = None
             if (
                 not self._edit_mode
                 and self._get_recipe.has_recipe(app.id)
@@ -150,20 +147,18 @@ class BundleDetailPage(Adw.NavigationPage):
                 perm_btn.connect("clicked", self._on_perm_clicked, app.id, perm_btn)
                 row.add_suffix(perm_btn)
 
-            remove_btn = Gtk.Button()
-            remove_btn.set_icon_name("list-remove-symbolic")
-            remove_btn.add_css_class("destructive-action")
-            remove_btn.add_css_class("circular")
-            remove_btn.set_valign(Gtk.Align.CENTER)
-            remove_btn.set_visible(self._edit_mode)
-            remove_btn.connect("clicked", self._on_remove_app, app.id)
-            row.add_suffix(remove_btn)
+            switch = Gtk.Switch()
+            switch.set_active(True)
+            switch.set_valign(Gtk.Align.CENTER)
+            switch.set_visible(not self._edit_mode)
+            switch.connect("notify::active", self._update_install_btn)
+            row.add_suffix(switch)
 
             if not self._edit_mode:
                 row.connect("activated", self._on_row_activated, app.id)
 
             self._listbox.append(row)
-            self._app_rows.append((app.id, row, switch, remove_btn))
+            self._app_rows.append((app.id, switch, perm_btn))
 
         self._update_install_btn()
 
@@ -173,14 +168,15 @@ class BundleDetailPage(Adw.NavigationPage):
 
     def _apply_installed(self, ids: list):
         self._installed_ids = set(ids)
-        for app_id, row, switch, _remove_btn in self._app_rows:
+        for app_id, switch, perm_btn in self._app_rows:
             if app_id in self._installed_ids:
+                if perm_btn is not None:
+                    perm_btn.set_sensitive(False)
+
                 switch.set_active(False)
                 switch.set_sensitive(False)
-                info_icon = Gtk.Image.new_from_icon_name("dialog-information-symbolic")
-                info_icon.set_tooltip_text(_("Already installed"))
-                info_icon.set_valign(Gtk.Align.CENTER)
-                row.add_suffix(info_icon)
+
+                switch.set_tooltip_text(_("Already installed"))
 
     def _on_edit_clicked(self, _btn):
         self._edit_mode = not self._edit_mode
@@ -228,6 +224,10 @@ class BundleDetailPage(Adw.NavigationPage):
                 row = Adw.EntryRow()
                 row.set_title(_(perm.get_label()))
                 row.set_text(stored.get(perm.get_label()) or perm.get_value())
+
+                if self.user_settings_entity.has_game_path():
+                    row.set_text(self.user_settings_entity.installation_game_path)
+
                 perm_group.add(row)
                 permission_rows.append((row, perm))
 
@@ -296,7 +296,7 @@ class BundleDetailPage(Adw.NavigationPage):
     def _on_install_clicked(self, _btn):
         selected_ids = [
             app_id
-            for app_id, _row, switch, _remove_btn in self._app_rows
+            for app_id, switch, _perm_btn in self._app_rows
             if switch.get_active()
         ]
         if not selected_ids:

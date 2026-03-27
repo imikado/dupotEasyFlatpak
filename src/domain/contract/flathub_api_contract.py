@@ -34,5 +34,9 @@ class FlathubApiContract(ABC):
         pass
 
     @abstractmethod
-    def get_appstream_by_id(self, id: str) -> object:
+    def get_appstream_by_id(self, id: str) -> object | None:
+        pass
+
+    @abstractmethod
+    def get_app_id_list_of_the_week(self, date: str) -> list[str]:
         pass

@@ -6,6 +6,8 @@ from domain.contract.system_api_contract import SystemApiContract
 
 class UpdateDatabaseFromApiUc:
 
+    LAST_UPDATE_MAX_DAYS = 7
+
     _flathub_api: FlathubApiContract
     _appstream_repository: AppstreamRepositoryContract
     _system_api: SystemApiContract
@@ -45,7 +47,36 @@ class UpdateDatabaseFromApiUc:
                     recently_raw_appstream_loop
                 )
 
+        apps_stored_list = self._appstream_repository.get_all_app_id_lastupdate_list()
+        for app_stored_loop in apps_stored_list:
+
+            id_loop = app_stored_loop["id"]
+            lastupdate_loop = app_stored_loop["lastUpdate"]
+
+            if not self.should_update(lastupdate_loop):
+                continue
+
+            raw_obj_loop = self._flathub_api.get_appstream_by_id(id_loop)
+
+            if raw_obj_loop is None:
+                continue
+
+            print(f"{id_loop} update \n")
+            self._appstream_repository.update_from_raw_object_with_id(
+                id_loop, raw_obj_loop
+            )
+
+            if "icon" in raw_obj_loop:
+
                 self._system_api.download_remote_file_to(
-                    recently_raw_appstream_loop["icon"],
+                    raw_obj_loop["icon"],
                     f"{PathConf().get_icons_path()}/{id_loop.lower()}.png",
                 )
+
+    def should_update(self, last_update) -> bool:
+        if (
+            last_update + self.LAST_UPDATE_MAX_DAYS * 60 * 60 * 24
+        ) < self._system_api.get_datetime_current_timestamp():
+
+            return True
+        return False

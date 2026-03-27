@@ -22,14 +22,26 @@ class AppstreamRepository(AppstreamRepositoryContract):
         row = rows[0]
         return AppstreamLongEntity(row)
 
+    def get_all_app_id_lastupdate_list(self) -> list[object]:
+        rows = self._db.execute(
+            f"SELECT id,lastUpdate FROM appstream  ",
+        )
+        return rows
+
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary FROM appstream WHERE id IN ({placeholders})",
+            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders})",
             tuple(ids),
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            AppstreamShortEntity(
+                row["id"],
+                row["name"],
+                row["icon"],
+                row["summary"],
+                row["metadataObj"],
+            )
             for row in rows
         ]
 
@@ -143,21 +155,49 @@ class AppstreamRepository(AppstreamRepositoryContract):
             categories = [categories]
 
         metadata_obj = {}
-        for key in ["flathub_verified", "flathub_verified_label", "download_size", "installed_size", "verification_verified"]:
+        raw_metadata = raw_obj.get("metadata", {}) or {}
+        if raw_metadata.get("flathub::verification::verified"):
+            metadata_obj["flathub_verified"] = True
+            label = (
+                raw_metadata.get("flathub::verification::website")
+                or raw_metadata.get("flathub::verification::login_name")
+                or ""
+            )
+            metadata_obj["flathub_verified_label"] = label
+        for key in ["download_size", "installed_size"]:
             if key in raw_obj:
                 metadata_obj[key] = raw_obj[key]
 
+        branding = {}
+
+        if "branding" in raw_obj:
+            raw_branding_list = raw_obj.get("branding")
+
+            if isinstance(raw_branding_list, list):
+
+                for raw_branding_loop in raw_branding_list:
+                    if not "scheme_preference" in raw_branding_loop:
+                        continue
+                    elif raw_branding_loop["scheme_preference"] == "light":
+                        branding["light"] = raw_branding_loop["value"]
+                    else:
+                        branding["dark"] = raw_branding_loop["value"]
+
+        metadata_obj["branding"] = branding
+
         screenshots = []
-        for raw_screenshot in raw_obj.get("screenshots", []):
-            if "sizes" in raw_screenshot:
-                screenshot = {}
-                for raw_size in raw_screenshot["sizes"]:
-                    if int(raw_size["width"]) < 600:
-                        screenshot["preview"] = raw_size["src"]
-                    if int(raw_size["width"]) > 700:
-                        screenshot["large"] = raw_size["src"]
-                if "preview" in screenshot and "large" in screenshot:
-                    screenshots.append(screenshot)
+        raw_screenshot_list = raw_obj.get("screenshots")
+        if isinstance(raw_screenshot_list, list):
+            for raw_screenshot in raw_screenshot_list:
+                if "sizes" in raw_screenshot:
+                    screenshot = {}
+                    for raw_size in raw_screenshot["sizes"]:
+                        if int(raw_size["width"]) < 600:
+                            screenshot["preview"] = raw_size["src"]
+                        if int(raw_size["width"]) > 700:
+                            screenshot["large"] = raw_size["src"]
+                    if "preview" in screenshot and "large" in screenshot:
+                        screenshots.append(screenshot)
 
         releases = raw_obj.get("releases", [])
         last_update = int(time.time() * 1000)

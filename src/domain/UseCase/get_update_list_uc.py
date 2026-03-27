@@ -21,6 +21,14 @@ class GetUpdateListUc:
         for update_available_loop in updates_available_list:
             if update_available_loop.app_id in indexed_installed_list:
                 installed_version = indexed_installed_list[update_available_loop.app_id]
+
+                if (
+                    installed_version != ""
+                    and installed_version == update_available_loop.version
+                ):
+                    updates_available_list.remove(update_available_loop)
+                    continue
+
                 update_available_loop.set_current_version(installed_version)
 
         return updates_available_list

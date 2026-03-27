@@ -57,12 +57,20 @@ class GetHomeContentUC:
                     ApiCacheRepositoryContract.ID_RECENTLY_ADDED, app_id_list_in_api
                 )
 
+            app_id_list_in_api = self._flathub_api.get_app_id_list_of_the_week(
+                self.get_current_datetime()
+            )
+            if len(app_id_list_in_api):
+                self.update_app_id_list_in_cache(
+                    ApiCacheRepositoryContract.ID_APPS_OF_WEEK, app_id_list_in_api
+                )
+
             api_cache_parameters = self.get_entity_in_cache()
             parameters_object = api_cache_parameters.update_home_api_updated_timestamp(
                 self.get_current_timestamp()
             )
 
-            print(parameters_object)
+            # print(parameters_object)
 
             self.update_parameters_in_cache(parameters_object)
 
@@ -115,6 +123,11 @@ class GetHomeContentUC:
             ApiCacheRepositoryContract.ID_RECENTLY_ADDED
         )
 
+    def get_apps_of_the_week(self) -> list[AppstreamShortEntity]:
+        return self.get_app_from_cache_by_id_list(
+            ApiCacheRepositoryContract.ID_APPS_OF_WEEK
+        )
+
     def get_app_id_list_in_cache(self, cache_id) -> list:
 
         api_cache = self._api_cache_repository.get_by_id(cache_id)
@@ -161,3 +174,6 @@ class GetHomeContentUC:
 
     def get_current_timestamp(self) -> int:
         return self._system_api.get_datetime_current_timestamp()
+
+    def get_current_datetime(self) -> str:
+        return self._system_api.get_current_datetime_string()

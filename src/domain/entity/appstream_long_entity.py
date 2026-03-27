@@ -14,6 +14,10 @@ class AppstreamLongEntity:
     FIELD_DOWNLOAD_SIZE = "download_size"
     FIELD_INSTALLED_SIZE = "installed_size"
 
+    FIELD_BRANDING = "branding"
+    FIELD_BRANDING_LIGHT = "light"
+    FIELD_BRANDING_DARK = "darkt"
+
     id: str
     name: str
     summary: str
@@ -35,6 +39,9 @@ class AppstreamLongEntity:
     _download_size: int
     _installed_size: int
     _release_obj_list: list[ReleaseEntity]
+
+    _branding_light: str = "eeeeee"
+    _branding_dark: str = "cccccc"
 
     # maps entity field name -> DB column name
     _db_column_map = {
@@ -102,6 +109,13 @@ class AppstreamLongEntity:
         if self.FIELD_INSTALLED_SIZE in raw_obj:
             self._installed_size = raw_obj[self.FIELD_INSTALLED_SIZE]
 
+        if self.FIELD_BRANDING in raw_obj:
+            branding = raw_obj[self.FIELD_BRANDING]
+            if self.FIELD_BRANDING_DARK in branding:
+                self._branding_dark = branding[self.FIELD_BRANDING_DARK]
+            elif self.FIELD_BRANDING_LIGHT in branding:
+                self._branding_dark = branding[self.FIELD_BRANDING_LIGHT]
+
     def load_release_obj_list(self):
         raw_obj_list = json.loads(self.release_obj_list)
         self._release_obj_list = []
@@ -139,3 +153,9 @@ class AppstreamLongEntity:
         ) < current_timestamp:
             return True
         return False
+
+    def get_branding_light(self) -> str:
+        return self._branding_light
+
+    def get_branding_dark(self) -> str:
+        return self._branding_dark
