@@ -412,8 +412,9 @@ class MainWindow(Adw.ApplicationWindow):
         about = Adw.AboutDialog.new()
         about.set_application_name("Easy Flatpak")
         about.set_version(ApplicationVersionEntity().get_current_version())
-        about.set_developer_name("dupot")
-        about.set_license_type(Gtk.License.GPL_3_0)
+        about.set_developer_name("Michael Bertocchi")
+        about.set_license_type(Gtk.License.LGPL_2_1)
+        about.set_website("https://dupot.org")
         about.present(self)
 
     def _on_search_button_clicked(self, _, appstream_repository: AppstreamRepository):
