@@ -38,66 +38,66 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_home.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_home.png</image>
       <caption>Home page</caption>
     </screenshot>
      
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_category.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_category.png</image>
       <caption>Category page</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_category_grid.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_category_grid.png</image>
       <caption>Category page displayed as grid</caption>
     </screenshot>
      
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_installed_applications.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_installed_applications.png</image>
       <caption>Installed applications</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_update_availables.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_update_availables.png</image>
       <caption>Updates availables</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_search.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_search.png</image>
       <caption>Search page</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_application_steam.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_application_steam.png</image>
       <caption>Example application view</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_application_steam_confirm_install.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_application_steam_confirm_install.png</image>
       <caption>Confirmation on installation</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_application_steam_install_setup_path.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_application_steam_install_setup_path.png</image>
       <caption>Installation form preferences</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_override_view.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_override_view.png</image>
       <caption>Override application page</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_settings.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_settings.png</image>
       <caption>Application settings</caption>
     </screenshot>
 
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_bundles.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_bundles.png</image>
       <caption>Application bundles</caption>
     </screenshot>
 
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_downgrade_view.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_downgrade_view.png</image>
       <caption>Application version downgrade</caption>
     </screenshot>
 
     
 
     <screenshot>
-      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/dcc80a929bcaec79d93d09d7b8691f3dcbc9bafa/export/screenshots/Screenshot_import_export.png</image>
+      <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/c335781097e78b47c695cca8dad5c30caf4fee68/export/screenshots/Screenshot_import_export.png</image>
       <caption>Application import/export application installed</caption>
     </screenshot>
 
@@ -111,7 +111,7 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
-<release date="2026-03-27" version="4.0.10"> 
+<release date="2026-03-27" version="4.0.11"> 
       <description>
         <ul>
           <li>New interface</li>
