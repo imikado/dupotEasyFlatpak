@@ -8,6 +8,7 @@ from domain.entity.application_version_entity import ApplicationVersionEntity
 from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
+from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.app_window import AppWindow
 from gi.repository import GLib
@@ -78,7 +79,7 @@ def main():
     application_version_entity.load(system_api)
     if not application_version_entity.is_current_version():
 
-        print("not current version, will install v2026-03-16 22:38")
+        print("not current version, will install")
 
         if not system_api.file_exists(data_path):
             system_api.create_dir(data_path)
@@ -111,10 +112,10 @@ def main():
 
         system_api.unzip_archive_to(icons_archive_path, path_conf.get_data_path())
 
-        update_database_from_api = UpdateDatabaseFromApiUc(
-            FlathubApi(), AppstreamRepository(), SystemApi()
-        )
-        update_database_from_api.process()
+    update_database_from_api = UpdateDatabaseFromApiUc(
+        FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()
+    )
+    update_database_from_api.process()
 
     app = AppWindow()
     app.run(None)

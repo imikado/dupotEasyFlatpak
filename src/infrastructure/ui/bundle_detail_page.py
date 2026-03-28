@@ -9,7 +9,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw, GLib, Gdk
 
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 from domain.conf.path_conf import PathConf
@@ -18,6 +18,14 @@ from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.recipe_repository import RecipeRepository
+
+
+def _resolve_icon(names: list[str]) -> str:
+    theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+    for name in names:
+        if theme.has_icon(name):
+            return name
+    return names[0]
 
 
 class BundleDetailPage(Adw.NavigationPage):
@@ -50,7 +58,7 @@ class BundleDetailPage(Adw.NavigationPage):
         header_bar.set_title_widget(Gtk.Label(label=self._bundle.label))
 
         self._edit_btn = Gtk.Button()
-        self._edit_btn.set_icon_name("document-edit-symbolic")
+        self._edit_btn.set_icon_name(_resolve_icon(["document-edit-symbolic", "edit-symbolic", "accessories-text-editor-symbolic"]))
         self._edit_btn.set_tooltip_text(_("Edit bundle"))
         self._edit_btn.connect("clicked", self._on_edit_clicked)
         header_bar.pack_end(self._edit_btn)
@@ -138,7 +146,7 @@ class BundleDetailPage(Adw.NavigationPage):
             ):
                 self._apps_requiring_config.add(app.id)
                 perm_btn = Gtk.Button()
-                perm_btn.set_icon_name("preferences-system-symbolic")
+                perm_btn.set_icon_name(_resolve_icon(["preferences-system-symbolic", "settings-symbolic", "system-run-symbolic"]))
                 perm_btn.add_css_class("flat")
                 perm_btn.set_valign(Gtk.Align.CENTER)
                 perm_btn.set_tooltip_text(_("Edit permissions"))
@@ -181,7 +189,9 @@ class BundleDetailPage(Adw.NavigationPage):
     def _on_edit_clicked(self, _btn):
         self._edit_mode = not self._edit_mode
         self._edit_btn.set_icon_name(
-            "object-select-symbolic" if self._edit_mode else "document-edit-symbolic"
+            _resolve_icon(["object-select-symbolic", "emblem-ok-symbolic", "checkmark-symbolic"])
+            if self._edit_mode else
+            _resolve_icon(["document-edit-symbolic", "edit-symbolic", "accessories-text-editor-symbolic"])
         )
         self._edit_btn.set_tooltip_text(
             _("Done") if self._edit_mode else _("Edit bundle")
@@ -244,7 +254,7 @@ class BundleDetailPage(Adw.NavigationPage):
                 row.set_active(perm.get_label() in stored if stored else True)
                 if perm.get_value() in self._installed_ids:
                     info_icon = Gtk.Image.new_from_icon_name(
-                        "dialog-information-symbolic"
+                        _resolve_icon(["dialog-information-symbolic", "information-symbolic", "help-about-symbolic"])
                     )
                     info_icon.set_tooltip_text(_("Already installed"))
                     info_icon.set_valign(Gtk.Align.CENTER)

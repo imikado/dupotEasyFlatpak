@@ -155,10 +155,8 @@ class UpdatesPage(Gtk.Box):
         if not selected:
             return
 
-        names = "\n".join(f"• {item.name}" for item in selected)
         dialog = Adw.AlertDialog.new(
             _("Update {n} application(s)?").format(n=len(selected)),
-            names,
         )
         dialog.add_response("cancel", _("Cancel"))
         dialog.add_response("confirm", _("Update"))

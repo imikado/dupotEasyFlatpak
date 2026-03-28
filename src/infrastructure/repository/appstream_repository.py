@@ -22,9 +22,9 @@ class AppstreamRepository(AppstreamRepositoryContract):
         row = rows[0]
         return AppstreamLongEntity(row)
 
-    def get_all_app_id_lastupdate_list(self) -> list[object]:
+    def get_all_app_id_should_update_list(self) -> list[object]:
         rows = self._db.execute(
-            f"SELECT id,lastUpdate FROM appstream  ",
+            f"SELECT id,lastUpdate FROM appstream where  lastUpdate < 100 ",
         )
         return rows
 
@@ -101,6 +101,20 @@ class AppstreamRepository(AppstreamRepositoryContract):
             AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
             for row in rows
         ]
+
+    def insert_missing_app_id(self, app_id: str):
+        self._db.execute(
+            """
+                INSERT INTO appstream 
+                (
+                id,
+                lastUpdate
+                 ) values (?,?) """,
+            (
+                app_id,
+                0,
+            ),
+        )
 
     def insert_from_raw_object(self, raw_obj: object):
 

@@ -9,7 +9,7 @@ from infrastructure.service.install_queue_service import InstallQueueService
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 
-from gi.repository import Gdk, GLib, Gtk, Pango
+from gi.repository import GLib, Gtk, Pango
 
 _css_provider = Gtk.CssProvider()
 _css_provider.load_from_string(
@@ -102,11 +102,7 @@ def _make_square_card(
 
 def _make_list_card(
     app, on_click, installed: bool = False, has_recipe: bool = False, *on_click_args
-) -> Gtk.Button:
-    button = Gtk.Button()
-    button.add_css_class("card")
-    button.connect("clicked", on_click, app.id, *on_click_args)
-
+) -> Gtk.Widget:
     outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
     box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
@@ -171,80 +167,73 @@ def _make_list_card(
         strip.append(badge_label)
         outer.append(strip)
 
-    button.set_child(outer)
+    # Use Overlay as card root so the install button can float above content
+    # without being nested inside a Gtk.Button (which causes double-click issues)
+    card = Gtk.Overlay()
+    card.add_css_class("card")
+    card.set_child(outer)
+
+    # Navigation gesture on the overlay — fired for any click not claimed by a child
+    nav = Gtk.GestureClick()
+    nav.connect("released", lambda *_: on_click(card, app.id, *on_click_args))
+    card.add_controller(nav)
 
     if not installed:
-        gesture = Gtk.GestureClick()
-        gesture.set_button(3)
+        install_label = _("Install with recipe") if has_recipe else _("Install")
+        install_btn = Gtk.Button(label=install_label)
+        install_btn.add_css_class("suggested-action")
+        install_btn.add_css_class("pill")
+        install_btn.set_halign(Gtk.Align.END)
+        install_btn.set_valign(Gtk.Align.CENTER)
+        install_btn.set_margin_end(10)
+        install_btn.set_visible(False)
+        card.add_overlay(install_btn)
 
-        def on_right_click(g, _n, x, y):
-            popover = Gtk.Popover()
-            popover.set_parent(button)
-            rect = Gdk.Rectangle()
-            rect.x = int(x)
-            rect.y = int(y)
-            rect.width = 1
-            rect.height = 1
-            popover.set_pointing_to(rect)
+        def on_install(_btn):
+            from infrastructure.ui.appstream.install_dialog import InstallDialog
 
-            label = _("Install with recipe") if has_recipe else _("Install")
-            install_btn = Gtk.Button(label=label)
-            install_btn.add_css_class("suggested-action")
-            install_btn.set_margin_top(4)
-            install_btn.set_margin_bottom(4)
-            install_btn.set_margin_start(4)
-            install_btn.set_margin_end(4)
+            def on_confirm(user_scope, active_permission_list):
+                queue_item = InstallQueueService().enqueue(app.id, app.getName())
 
-            def on_install(_btn):
-                from infrastructure.ui.appstream.install_dialog import InstallDialog
-                from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
-                from infrastructure.repository.recipe_repository import RecipeRepository
-
-                popover.popdown()
-
-                def on_confirm(user_scope, active_permission_list):
-                    queue_item = InstallQueueService().enqueue(app.id, app.getName())
-
-                    def run_install():
-                        flatpak_api = FlatpakApi()
-                        flags = ["--user"] if user_scope else ["--system"]
-                        process = subprocess.Popen(
-                            flatpak_api.get_install_call(app.id, *flags),
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT,
-                            text=True,
-                        )
-                        for line in process.stdout:
-                            GLib.idle_add(queue_item.append_output, line)
-                        process.wait()
-                        for perm, value in active_permission_list:
-                            if perm.is_filesystem():
-                                subprocess.run(
-                                    flatpak_api.get_override_filesystem_call(
-                                        app.id, value
-                                    )
+                def run_install():
+                    flatpak_api = FlatpakApi()
+                    flags = ["--user"] if user_scope else ["--system"]
+                    process = subprocess.Popen(
+                        flatpak_api.get_install_call(app.id, *flags),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                    )
+                    for line in process.stdout:
+                        GLib.idle_add(queue_item.append_output, line)
+                    process.wait()
+                    for perm, value in active_permission_list:
+                        if perm.is_filesystem():
+                            subprocess.run(
+                                flatpak_api.get_override_filesystem_call(
+                                    app.id, value
                                 )
-                        result = flatpak_api.get_info_by_id(app.id)
-                        GLib.idle_add(
-                            queue_item.set_status,
-                            "done" if result.returncode == 0 else "failed",
-                        )
+                            )
+                    result = flatpak_api.get_info_by_id(app.id)
+                    GLib.idle_add(
+                        queue_item.set_status,
+                        "done" if result.returncode == 0 else "failed",
+                    )
 
-                    threading.Thread(target=run_install, daemon=True).start()
+                threading.Thread(target=run_install, daemon=True).start()
 
-                recipe_uc = GetRecipeContentUc(RecipeRepository())
-                dialog = InstallDialog(app.id, has_recipe, recipe_uc, on_confirm)
-                dialog.present(button.get_root())
+            recipe_uc = GetRecipeContentUc(RecipeRepository())
+            dialog = InstallDialog(app.id, has_recipe, recipe_uc, on_confirm)
+            dialog.present(card.get_root())
 
-            install_btn.connect("clicked", on_install)
-            popover.set_child(install_btn)
-            popover.popup()
-            g.set_state(Gtk.EventSequenceState.CLAIMED)
+        install_btn.connect("clicked", on_install)
 
-        gesture.connect("pressed", on_right_click)
-        button.add_controller(gesture)
+        motion = Gtk.EventControllerMotion()
+        motion.connect("enter", lambda *_: install_btn.set_visible(True))
+        motion.connect("leave", lambda *_: install_btn.set_visible(False))
+        card.add_controller(motion)
 
-    return button
+    return card
 
 
 class AppListGridShared:

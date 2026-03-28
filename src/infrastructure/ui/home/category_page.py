@@ -21,16 +21,16 @@ from infrastructure.ui.category_list_page import CategoryListPage
 class CategoryPage(Gtk.ScrolledWindow):
 
     _CATEGORY_ICONS = {
-        "AudioVideo": "media-playback-start-symbolic",  # Play icon for media
-        "Development": "emblem-developer-symbolic",  # Gear/Terminal symbol
-        "Education": "accessories-dictionary-symbolic",  # A book icon
-        "Game": "input-gaming-symbolic",  # Controller icon
-        "Graphics": "image-x-generic-symbolic",  # Picture/Landscape icon
-        "Network": "network-workgroup-symbolic",  # Multiple computers
-        "Office": "x-office-document-symbolic",  # Document icon
-        "Science": "applications-science-symbolic",  # Beaker icon
-        "System": "emblem-system-symbolic",  # Shield or Cog
-        "Utility": "accessories-calculator-symbolic",  # Calculator icon
+        "AudioVideo": ["media-playback-start-symbolic", "audio-x-generic-symbolic", "multimedia-player-symbolic"],
+        "Development": ["emblem-developer-symbolic", "applications-development-symbolic", "utilities-terminal-symbolic"],
+        "Education": ["accessories-dictionary-symbolic", "accessories-text-editor-symbolic", "format-text-bold-symbolic"],
+        "Game": ["input-gaming-symbolic", "applications-games-symbolic", "joystick-symbolic"],
+        "Graphics": ["image-x-generic-symbolic", "applications-graphics-symbolic", "image-missing-symbolic"],
+        "Network": ["network-workgroup-symbolic", "network-server-symbolic", "network-wired-symbolic"],
+        "Office": ["x-office-document-symbolic", "office-calendar-symbolic", "document-new-symbolic"],
+        "Science": ["applications-science-symbolic", "utilities-system-monitor-symbolic", "computer-symbolic"],
+        "System": ["emblem-system-symbolic", "preferences-system-symbolic", "system-run-symbolic"],
+        "Utility": ["accessories-calculator-symbolic", "applications-utilities-symbolic", "system-run-symbolic"],
     }
 
     def __init__(
@@ -72,14 +72,11 @@ class CategoryPage(Gtk.ScrolledWindow):
         icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
 
         for category in CategoryRepository().get_all():
-            icon_name = self._CATEGORY_ICONS.get(
-                category, "application-x-executable-symbolic"
+            candidates = self._CATEGORY_ICONS.get(category, [])
+            icon_name = next(
+                (n for n in candidates if icon_theme.has_icon(n)),
+                "application-x-executable-symbolic",
             )
-
-            # Fallback check: if the icon doesn't exist in the current theme, use a default
-            if not icon_theme.has_icon(icon_name):
-                icon_name = "application-x-executable-symbolic"
-
             flow.append(self._build_card(category, icon_name))
 
         return flow

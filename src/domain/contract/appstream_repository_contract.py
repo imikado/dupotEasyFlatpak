@@ -10,7 +10,7 @@ class AppstreamRepositoryContract(ABC):
         pass
 
     @abstractmethod
-    def get_all_app_id_lastupdate_list(self) -> list[object]:
+    def get_all_app_id_should_update_list(self) -> list[object]:
         pass
 
     @abstractmethod
@@ -39,6 +39,10 @@ class AppstreamRepositoryContract(ABC):
     def get_summary_list_by_category_id(
         self, category_id: str
     ) -> list[AppstreamShortEntity]:
+        pass
+
+    @abstractmethod
+    def insert_missing_app_id(self, app_id: str):
         pass
 
     @abstractmethod

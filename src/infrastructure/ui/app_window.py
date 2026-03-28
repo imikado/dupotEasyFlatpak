@@ -28,7 +28,16 @@ import json
 import os
 import threading
 
-from gi.repository import Gio, Gtk, Adw, GLib
+from gi.repository import Gdk, Gio, Gtk, Adw, GLib
+
+
+def _resolve_icon(*names: str) -> str:
+    """Return the first icon name available in the default theme, or the first name as fallback."""
+    theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+    for name in names:
+        if theme.has_icon(name):
+            return name
+    return names[0]
 
 
 class MainWindow(Adw.ApplicationWindow):
@@ -120,21 +129,24 @@ class MainWindow(Adw.ApplicationWindow):
 
         # Home page content
         home_box = self._build_home_page(appstream_repository)
-        view_stack.add_titled_with_icon(home_box, "home", _("Home"), "go-home-symbolic")
+        view_stack.add_titled_with_icon(
+            home_box, "home", _("Home"),
+            _resolve_icon("go-home-symbolic", "user-home-symbolic", "start-here-symbolic"),
+        )
 
         # Categories tab
         view_stack.add_titled_with_icon(
             CategoryPage(appstream_repository, self.navigation_view.push),
             "categories",
             _("Categories"),
-            "view-app-grid-symbolic",
+            _resolve_icon("view-app-grid-symbolic", "applications-all-symbolic", "applications-system-symbolic"),
         )
 
         view_stack.add_titled_with_icon(
             BundlePage(appstream_repository, self.navigation_view.push),
             "bundles",
             _("Bundles"),
-            "folder-symbolic",
+            _resolve_icon("folder-symbolic", "folder", "document-open-symbolic"),
         )
 
         installed_page = InstalledPage(
@@ -142,7 +154,8 @@ class MainWindow(Adw.ApplicationWindow):
             lambda p: self.navigation_view.push(p),
         )
         view_stack.add_titled_with_icon(
-            installed_page, "installed", _("Installed"), "drive-harddisk-symbolic"
+            installed_page, "installed", _("Installed"),
+            _resolve_icon("drive-harddisk-symbolic", "computer-symbolic", "drive-harddisk"),
         )
 
         def _on_installed_tab_shown(_stack, _param):
@@ -158,7 +171,8 @@ class MainWindow(Adw.ApplicationWindow):
             )
         )
         updates_stack_page = view_stack.add_titled_with_icon(
-            updates_page, "updates", _("Updates"), "software-update-available-symbolic"
+            updates_page, "updates", _("Updates"),
+            _resolve_icon("software-update-available-symbolic", "software-update-urgent-symbolic", "view-refresh-symbolic"),
         )
         updates_stack_page.set_visible(False)
 
@@ -168,7 +182,8 @@ class MainWindow(Adw.ApplicationWindow):
             lambda p: self.navigation_view.push(p),
         )
         pending_stack_page = view_stack.add_titled_with_icon(
-            pending_page, "pending", _("Pending"), "emblem-downloads-symbolic"
+            pending_page, "pending", _("Pending"),
+            _resolve_icon("emblem-downloads-symbolic", "folder-download-symbolic", "document-save-symbolic"),
         )
         pending_stack_page.set_visible(bool(queue_service.get_all()))
 
