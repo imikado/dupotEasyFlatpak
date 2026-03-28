@@ -1,8 +1,9 @@
 import gi
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 gi.require_version("Gtk", "4.0")
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
 
 _css_provider = Gtk.CssProvider()
 _css_provider.load_from_string(
@@ -17,14 +18,6 @@ from domain.conf.path_conf import PathConf
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.bundle_repository import BundleRepository
 from infrastructure.ui.bundle_detail_page import BundleDetailPage
-
-
-def _resolve_icon(names: list[str]) -> str:
-    theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
-    for name in names:
-        if theme.has_icon(name):
-            return name
-    return names[0]
 
 
 class BundlePage(Gtk.ScrolledWindow):
@@ -80,10 +73,9 @@ class BundlePage(Gtk.ScrolledWindow):
         header_box.set_margin_top(34)
         header_box.set_margin_bottom(18)
 
-        bundle_icon = Gtk.Image.new_from_icon_name(
-            _resolve_icon(bundle.get_icon_list())
-        )
-        bundle_icon.set_margin_end(8)
+        bundle_icon = IconsShared().get_icon_by_name(bundle.get_icon())
+        bundle_icon.set_pixel_size(24)
+        bundle_icon.set_margin_end(6)
 
         header_box.append(bundle_icon)
 

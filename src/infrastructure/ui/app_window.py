@@ -20,6 +20,7 @@ from infrastructure.ui.menu.parameters_dialog import ParametersDialog
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -29,15 +30,6 @@ import os
 import threading
 
 from gi.repository import Gdk, Gio, Gtk, Adw, GLib
-
-
-def _resolve_icon(*names: str) -> str:
-    """Return the first icon name available in the default theme, or the first name as fallback."""
-    theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
-    for name in names:
-        if theme.has_icon(name):
-            return name
-    return names[0]
 
 
 class MainWindow(Adw.ApplicationWindow):
@@ -130,8 +122,10 @@ class MainWindow(Adw.ApplicationWindow):
         # Home page content
         home_box = self._build_home_page(appstream_repository)
         view_stack.add_titled_with_icon(
-            home_box, "home", _("Home"),
-            _resolve_icon("go-home-symbolic", "user-home-symbolic", "start-here-symbolic"),
+            home_box,
+            "home",
+            _("Home"),
+            IconsShared().find_icon_name_available(IconsShared.ICON_HOME),
         )
 
         # Categories tab
@@ -139,14 +133,14 @@ class MainWindow(Adw.ApplicationWindow):
             CategoryPage(appstream_repository, self.navigation_view.push),
             "categories",
             _("Categories"),
-            _resolve_icon("view-app-grid-symbolic", "applications-all-symbolic", "applications-system-symbolic"),
+            IconsShared().find_icon_name_available(IconsShared.ICON_CATEGORIES),
         )
 
         view_stack.add_titled_with_icon(
             BundlePage(appstream_repository, self.navigation_view.push),
             "bundles",
             _("Bundles"),
-            _resolve_icon("folder-symbolic", "folder", "document-open-symbolic"),
+            IconsShared().find_icon_name_available(IconsShared.ICON_BUNDLES),
         )
 
         installed_page = InstalledPage(
@@ -154,8 +148,10 @@ class MainWindow(Adw.ApplicationWindow):
             lambda p: self.navigation_view.push(p),
         )
         view_stack.add_titled_with_icon(
-            installed_page, "installed", _("Installed"),
-            _resolve_icon("drive-harddisk-symbolic", "computer-symbolic", "drive-harddisk"),
+            installed_page,
+            "installed",
+            _("Installed"),
+            IconsShared().find_icon_name_available(IconsShared.ICON_INSTALLED),
         )
 
         def _on_installed_tab_shown(_stack, _param):
@@ -171,8 +167,10 @@ class MainWindow(Adw.ApplicationWindow):
             )
         )
         updates_stack_page = view_stack.add_titled_with_icon(
-            updates_page, "updates", _("Updates"),
-            _resolve_icon("software-update-available-symbolic", "software-update-urgent-symbolic", "view-refresh-symbolic"),
+            updates_page,
+            "updates",
+            _("Updates"),
+            IconsShared().find_icon_name_available(IconsShared.ICON_UPDATES),
         )
         updates_stack_page.set_visible(False)
 
@@ -182,8 +180,10 @@ class MainWindow(Adw.ApplicationWindow):
             lambda p: self.navigation_view.push(p),
         )
         pending_stack_page = view_stack.add_titled_with_icon(
-            pending_page, "pending", _("Pending"),
-            _resolve_icon("emblem-downloads-symbolic", "folder-download-symbolic", "document-save-symbolic"),
+            pending_page,
+            "pending",
+            _("Pending"),
+            IconsShared().find_icon_name_available(IconsShared.ICON_PENDING),
         )
         pending_stack_page.set_visible(bool(queue_service.get_all()))
 

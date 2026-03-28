@@ -2,11 +2,7 @@
     {
         "id": "Gaming",
         "label": "Gaming",
-        "icon": [
-            "input-gaming-symbolic",
-            "applications-games-symbolic",
-            "joystick-symbolic"
-        ],
+        "icon": "Game",
         "applicationList": [
             "com.valvesoftware.Steam",
             "com.discordapp.Discord",
@@ -19,11 +15,7 @@
     {
         "id": "Graphic_design",
         "label": "Graphic design",
-        "icon": [
-            "image-x-generic-symbolic",
-            "applications-graphics-symbolic",
-            "image-missing-symbolic"
-        ],
+        "icon": "Graphics",
         "applicationList": [
             "org.kde.kdenlive",
             "org.audacityteam.Audacity",
@@ -37,11 +29,7 @@
     {
         "id": "Software_development",
         "label": "Software development",
-        "icon": [
-            "emblem-developer-symbolic",
-            "applications-development-symbolic",
-            "utilities-terminal-symbolic"
-        ],
+        "icon": "Development",
         "applicationList": [
             "com.visualstudio.code",
             "com.google.AndroidStudio",

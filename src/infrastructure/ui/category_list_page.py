@@ -14,7 +14,9 @@ BATCH_SIZE = 20
 
 class CategoryListPage(Adw.NavigationPage):
 
-    def __init__(self, category: str, icon_name: str, appstream_repository: AppstreamRepository):
+    def __init__(
+        self, category: str, cat_icon, appstream_repository: AppstreamRepository
+    ):
         super().__init__()
         self.set_title(_(category))
         self._appstream_repository = appstream_repository
@@ -23,16 +25,16 @@ class CategoryListPage(Adw.NavigationPage):
         self._grid = None
         self._pending = []
         self._idle_id = None
-        self.set_child(self._build(category, icon_name))
+        self.set_child(self._build(category, cat_icon))
 
-    def _build(self, category: str, icon_name: str) -> Gtk.Widget:
+    def _build(self, category: str, cat_icon) -> Gtk.Widget:
         toolbar_view = Adw.ToolbarView()
 
         header_bar = Adw.HeaderBar()
 
         title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         title_box.set_halign(Gtk.Align.CENTER)
-        title_icon = Gtk.Image.new_from_icon_name(icon_name)
+        title_icon = cat_icon
         title_icon.set_pixel_size(16)
         title_label = Gtk.Label(label=_(category))
         title_label.add_css_class("heading")
@@ -98,7 +100,9 @@ class CategoryListPage(Adw.NavigationPage):
         self._cancel_pending(None)
         self._grid.clear()
         if len(query) >= 2:
-            apps = self._uc.get_app_list_by_category_id_and_search(self._category, query)
+            apps = self._uc.get_app_list_by_category_id_and_search(
+                self._category, query
+            )
         else:
             apps = self._uc.get_app_list_by_category_id(self._category)
         self._pending = list(apps)

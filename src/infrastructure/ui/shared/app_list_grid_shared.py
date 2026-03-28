@@ -134,12 +134,10 @@ def _make_list_card(
     summary.add_css_class("caption")
     summary.add_css_class("dim-label")
 
-    # CRITICAL: Force wrapping and prevent pushing
-    summary.set_wrap(True)
-    summary.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
-    summary.set_lines(3)
+    summary.set_wrap(False)
+    summary.set_lines(1)
     summary.set_ellipsize(Pango.EllipsizeMode.END)
-    summary.set_max_width_chars(24)  # Limits horizontal "natural" size
+    summary.set_max_width_chars(32)
     text_box.append(summary)
 
     box.append(text_box)

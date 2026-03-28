@@ -1,4 +1,5 @@
 import gi
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -19,19 +20,6 @@ from infrastructure.ui.category_list_page import CategoryListPage
 
 
 class CategoryPage(Gtk.ScrolledWindow):
-
-    _CATEGORY_ICONS = {
-        "AudioVideo": ["media-playback-start-symbolic", "audio-x-generic-symbolic", "multimedia-player-symbolic"],
-        "Development": ["emblem-developer-symbolic", "applications-development-symbolic", "utilities-terminal-symbolic"],
-        "Education": ["accessories-dictionary-symbolic", "accessories-text-editor-symbolic", "format-text-bold-symbolic"],
-        "Game": ["input-gaming-symbolic", "applications-games-symbolic", "joystick-symbolic"],
-        "Graphics": ["image-x-generic-symbolic", "applications-graphics-symbolic", "image-missing-symbolic"],
-        "Network": ["network-workgroup-symbolic", "network-server-symbolic", "network-wired-symbolic"],
-        "Office": ["x-office-document-symbolic", "office-calendar-symbolic", "document-new-symbolic"],
-        "Science": ["applications-science-symbolic", "utilities-system-monitor-symbolic", "computer-symbolic"],
-        "System": ["emblem-system-symbolic", "preferences-system-symbolic", "system-run-symbolic"],
-        "Utility": ["accessories-calculator-symbolic", "applications-utilities-symbolic", "system-run-symbolic"],
-    }
 
     def __init__(
         self,
@@ -68,20 +56,13 @@ class CategoryPage(Gtk.ScrolledWindow):
         flow.set_halign(Gtk.Align.CENTER)
         flow.set_valign(Gtk.Align.START)
 
-        # Get the default icon theme
-        icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
-
         for category in CategoryRepository().get_all():
-            candidates = self._CATEGORY_ICONS.get(category, [])
-            icon_name = next(
-                (n for n in candidates if icon_theme.has_icon(n)),
-                "application-x-executable-symbolic",
-            )
-            flow.append(self._build_card(category, icon_name))
+            icon_loop = IconsShared().get_icon_by_name(category)
+            flow.append(self._build_card(category, icon_loop))
 
         return flow
 
-    def _build_card(self, category: str, icon_name: str) -> Gtk.Button:
+    def _build_card(self, category: str, cat_icon) -> Gtk.Button:
         card_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         card_box.set_size_request(220, 180)
         card_box.set_halign(Gtk.Align.CENTER)
@@ -93,8 +74,10 @@ class CategoryPage(Gtk.ScrolledWindow):
         header_box.set_margin_top(34)
         header_box.set_margin_bottom(18)
 
-        cat_icon = Gtk.Image.new_from_icon_name(icon_name)
-        cat_icon.set_pixel_size(32)
+        cat_icon = cat_icon
+        cat_icon.set_pixel_size(24)
+        cat_icon.set_margin_end(6)
+
         header_box.append(cat_icon)
 
         label = Gtk.Label(label=_(category))
@@ -120,10 +103,10 @@ class CategoryPage(Gtk.ScrolledWindow):
         btn = Gtk.Button()
         btn.add_css_class("card")
         btn.set_child(card_box)
-        btn.connect("clicked", self._on_card_clicked, category, icon_name)
+        btn.connect("clicked", self._on_card_clicked, category, cat_icon)
         return btn
 
-    def _on_card_clicked(self, _btn, category: str, icon_name: str):
+    def _on_card_clicked(self, _btn, category: str, cat_icon):
         self._on_navigate(
-            CategoryListPage(category, icon_name, self._appstream_repository)
+            CategoryListPage(category, cat_icon, self._appstream_repository)
         )
