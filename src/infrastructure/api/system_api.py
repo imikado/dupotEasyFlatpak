@@ -88,3 +88,7 @@ class SystemApi(SystemApiContract):
     def get_current_datetime_string(self) -> str:
         now = datetime.now()
         return now.strftime("%Y-%m-%d")
+
+    def get_file_list(self, path: str) -> list[str]:
+        files = os.listdir(path)
+        return [file.lower() for file in files]

@@ -10,16 +10,20 @@ class RecipeRepository(RecipeRepositoryContract):
 
     _recipes_path: str
 
+    _recipe_file_list: list[str]
+
     def __init__(self):
         self._system_api = SystemApi()
         self._recipes_path = PathConf().get_asset_recipes_path()
+
+        self._recipe_file_list = self._system_api.get_file_list(self._recipes_path)
         pass
 
     def _get_path_to_id(self, id: str) -> str:
         return PathConf().get_path_list_join([self._recipes_path, id + ".json"])
 
     def has_id(self, id: str) -> bool:
-        return self._system_api.file_exists(self._get_path_to_id(id))
+        return id.lower() + ".json" in self._recipe_file_list
 
     def get_by_id(self, id: str) -> RecipeEntity:
         json_obj = self._system_api.read_json_file_obj(self._get_path_to_id(id))

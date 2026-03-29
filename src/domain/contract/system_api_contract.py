@@ -58,3 +58,7 @@ class SystemApiContract(ABC):
     @abstractmethod
     def get_current_datetime_string(self) -> str:
         pass
+
+    @abstractmethod
+    def get_file_list(self, path: str) -> list[str]:
+        pass

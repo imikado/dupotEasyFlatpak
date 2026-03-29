@@ -30,12 +30,16 @@ _css_provider.load_from_string(
     border: 1px solid alpha(@window_fg_color, 0.1);
 }
 
- 
+.small-button {
+    padding: 4px 8px;
+    font-size: smaller;
+    min-height: 0;
+}
 """
 )
 
 
-CARD_WIDTH = 320
+CARD_WIDTH = 330
 CARD_SPACING = 8
 
 
@@ -180,10 +184,11 @@ def _make_list_card(
         install_label = _("Install with recipe") if has_recipe else _("Install")
         install_btn = Gtk.Button(label=install_label)
         install_btn.add_css_class("suggested-action")
-        install_btn.add_css_class("pill")
+        install_btn.add_css_class("small-button")
+        # install_btn.add_css_class("pill")
         install_btn.set_halign(Gtk.Align.END)
-        install_btn.set_valign(Gtk.Align.CENTER)
-        install_btn.set_margin_end(10)
+        install_btn.set_valign(Gtk.Align.END)
+        # install_btn.set_margin_end(10)
         install_btn.set_visible(False)
         card.add_overlay(install_btn)
 
@@ -208,9 +213,7 @@ def _make_list_card(
                     for perm, value in active_permission_list:
                         if perm.is_filesystem():
                             subprocess.run(
-                                flatpak_api.get_override_filesystem_call(
-                                    app.id, value
-                                )
+                                flatpak_api.get_override_filesystem_call(app.id, value)
                             )
                     result = flatpak_api.get_info_by_id(app.id)
                     GLib.idle_add(
