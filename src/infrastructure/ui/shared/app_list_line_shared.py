@@ -201,7 +201,7 @@ def _make_list_card(
     return card
 
 
-class AppListGridShared:
+class AppListLineShared:
 
     def __init__(self):
         self._apps = []

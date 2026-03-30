@@ -53,6 +53,23 @@ class AppstreamRepository(AppstreamRepositoryContract):
             for row in rows
         ]
 
+    def get_list_by_id_list_ordered(self, ids: list[str]) -> list[AppstreamShortEntity]:
+        placeholders = ",".join("?" * len(ids))
+        rows = self._db.execute(
+            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders}) ORDER BY name ASC",
+            tuple(ids),
+        )
+        return [
+            AppstreamShortEntity(
+                row["id"],
+                row["name"],
+                row["icon"],
+                row["summary"],
+                row["metadataObj"],
+            )
+            for row in rows
+        ]
+
     def get_list_by_category_id(self, category_id: str) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
             f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%'",

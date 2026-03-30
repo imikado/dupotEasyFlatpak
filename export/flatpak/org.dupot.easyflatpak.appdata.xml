@@ -113,6 +113,15 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+<release date="2026-03-30" version="4.0.18"> 
+      <description>
+        <ul>
+          <li>Bugfix</li>
+          <li>Improve installed apps page</li>
+        </ul>
+      </description>
+    </release> 
+
 <release date="2026-03-29" version="4.0.17"> 
       <description>
         <ul>

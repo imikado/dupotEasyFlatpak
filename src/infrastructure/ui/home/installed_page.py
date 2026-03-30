@@ -9,7 +9,7 @@ from gi.repository import Gtk, Adw, GLib
 
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
-from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
+from infrastructure.ui.shared.installed_list_shared import InstalledListShared
 
 
 class InstalledPage(Gtk.Box):
@@ -34,7 +34,7 @@ class InstalledPage(Gtk.Box):
         empty_label.add_css_class("dim-label")
         self._stack.add_named(empty_label, "empty")
 
-        self._grid = AppListGridShared()
+        self._grid = InstalledListShared()
         scroll = Gtk.ScrolledWindow()
         scroll.set_vexpand(True)
         scroll.set_hexpand(True)
@@ -60,7 +60,7 @@ class InstalledPage(Gtk.Box):
             self._stack.set_visible_child_name("empty")
             return
 
-        apps = self._appstream_repository.get_list_by_id_list(ids)
+        apps = self._appstream_repository.get_list_by_id_list_ordered(ids)
         if not apps:
             self._stack.set_visible_child_name("empty")
             return

@@ -22,6 +22,10 @@ class AppstreamRepositoryContract(ABC):
         pass
 
     @abstractmethod
+    def get_list_by_id_list_ordered(self, ids: list[str]) -> list[AppstreamShortEntity]:
+        pass
+
+    @abstractmethod
     def get_list_by_category_id(self, category_id: str) -> list[AppstreamShortEntity]:
         pass
 
