@@ -267,9 +267,9 @@ class MainWindow(Adw.ApplicationWindow):
 
         for app in app_list[:8]:
             color = (
-                app.getBrandingDark()
+                app.get_branding_dark()
                 if style_manager.get_dark()
-                else app.getBrandingLight()
+                else app.get_branding_light()
             )
             safe_id = app.id.lower().replace(".", "-").replace("_", "-")
             css_class = f"carousel-card-{safe_id}"

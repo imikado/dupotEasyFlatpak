@@ -264,7 +264,7 @@ class BundleDetailPage(Adw.NavigationPage):
         ]
 
         def _validate(*_args):
-            ok = all(row.get_text().strip() for row in filesystem_entry_rows)
+            ok = True
             dialog.set_response_enabled("ok", ok)
 
         for entry_row in filesystem_entry_rows:

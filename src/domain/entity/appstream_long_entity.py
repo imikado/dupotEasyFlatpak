@@ -113,7 +113,7 @@ class AppstreamLongEntity:
             branding = raw_obj[self.FIELD_BRANDING]
             if self.FIELD_BRANDING_DARK in branding:
                 self._branding_dark = branding[self.FIELD_BRANDING_DARK]
-            elif self.FIELD_BRANDING_LIGHT in branding:
+            if self.FIELD_BRANDING_LIGHT in branding:
                 self._branding_dark = branding[self.FIELD_BRANDING_LIGHT]
 
     def load_release_obj_list(self):

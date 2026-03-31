@@ -253,6 +253,6 @@ class AppListLineShared:
         self._list_flow.append(child)
 
     def clear(self):
-        flow = self._flow_box if self._square else self._list_flow
+        flow = self._list_flow
         while child := flow.get_first_child():
             flow.remove(child)

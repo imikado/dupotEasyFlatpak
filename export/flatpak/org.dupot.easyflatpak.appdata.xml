@@ -113,6 +113,16 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+<release date="2026-03-31" version="4.0.19"> 
+      <description>
+        <ul>
+          <li>Bugfix: in bundle could not validate recipe without game path filled</li>
+          <li>Bugfix: does not display right background color for apps of the week</li>
+          <li>Bugfix: miss label in recipe window</li>
+           </ul>
+      </description>
+    </release> 
+
 <release date="2026-03-30" version="4.0.18"> 
       <description>
         <ul>

@@ -322,11 +322,11 @@ msgstr "Pesquisar"
 #~ "Para informação: deve permitir que o Discord acesse seu diretório pessoal "
 #~ "(deixe-o configurar)"
 
-#~ msgid "recipe_indicate_your_game_path_label"
-#~ msgstr "Indique o caminho do diretório onde você armazena seus jogos"
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indique o caminho do diretório onde você armazena seus jogos"
 
-#~ msgid "recipe_should_installMangoHud"
-#~ msgstr "Instalar MangoHud"
+msgid "recipe_should_installMangoHud"
+msgstr "Instalar MangoHud"
 
-#~ msgid "recipe_enable_mangohud"
-#~ msgstr "Ativar MangoHud"
+msgid "recipe_enable_mangohud"
+msgstr "Ativar MangoHud"

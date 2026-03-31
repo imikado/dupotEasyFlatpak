@@ -322,11 +322,11 @@ msgstr "بحث"
 #~ "للمعلومة: يجب السماح لـ Discord بالوصول إلى المجلد الرئيسي الخاص بك (دعه "
 #~ "يُهيئ نفسه)"
 
-#~ msgid "recipe_indicate_your_game_path_label"
-#~ msgstr "حدد مسار المجلد الذي تخزن فيه ألعابك"
+msgid "recipe_indicate_your_game_path_label"
+msgstr "حدد مسار المجلد الذي تخزن فيه ألعابك"
 
-#~ msgid "recipe_should_installMangoHud"
-#~ msgstr "تثبيت MangoHud"
+msgid "recipe_should_installMangoHud"
+msgstr "تثبيت MangoHud"
 
-#~ msgid "recipe_enable_mangohud"
-#~ msgstr "تفعيل MangoHud"
+msgid "recipe_enable_mangohud"
+msgstr "تفعيل MangoHud"

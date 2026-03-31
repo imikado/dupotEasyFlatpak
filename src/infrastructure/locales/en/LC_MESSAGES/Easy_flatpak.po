@@ -311,11 +311,11 @@ msgstr "Search"
 #~ "For information: should allow discord to access your home directory (let "
 #~ "it set up)"
 
-#~ msgid "recipe_indicate_your_game_path_label"
-#~ msgstr "Indicate directory path where you store your games"
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indicate directory path where you store your games"
 
-#~ msgid "recipe_should_installMangoHud"
-#~ msgstr "Install MangoHud"
+msgid "recipe_should_installMangoHud"
+msgstr "Install MangoHud"
 
-#~ msgid "recipe_enable_mangohud"
-#~ msgstr "Enable MangoHud"
+msgid "recipe_enable_mangohud"
+msgstr "Enable MangoHud"

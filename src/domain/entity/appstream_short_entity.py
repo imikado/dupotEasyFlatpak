@@ -33,6 +33,7 @@ class AppstreamShortEntity:
         return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
 
     def _load_branding(self):
+
         if self._branding_loaded:
             return
 
@@ -42,15 +43,15 @@ class AppstreamShortEntity:
             branding = metadata_obj.get(self.FIELD_BRANDING)
             if self.FIELD_BRANDING_DARK in branding:
                 self._branding_dark = branding.get(self.FIELD_BRANDING_DARK)
-            else:
+            if self.FIELD_BRANDING_LIGHT in branding:
                 self._branding_light = branding.get(self.FIELD_BRANDING_LIGHT)
         self._branding_loaded = True
 
-    def getBrandingLight(self) -> str:
+    def get_branding_light(self) -> str:
         self._load_branding()
         return self._branding_light
 
-    def getBrandingDark(self) -> str:
+    def get_branding_dark(self) -> str:
         self._load_branding()
         return self._branding_dark
 
