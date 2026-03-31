@@ -142,6 +142,26 @@ class FlatpakApi(FlatpakApiContract):
         commit = result.stdout.strip()
         return commit if commit else None
 
+    def ensure_flathub_remote(self) -> bool:
+        result = subprocess.run(
+            self._cmd("remotes", "--columns=name"),
+            capture_output=True,
+            text=True,
+        )
+        remotes = {line.strip() for line in result.stdout.splitlines() if line.strip()}
+        if "flathub" in remotes:
+            return True
+        add_result = subprocess.run(
+            self._cmd(
+                "remote-add",
+                "--if-not-exists",
+                "flathub",
+                "https://dl.flathub.org/repo/flathub.flatpakrepo",
+            ),
+            capture_output=True,
+        )
+        return add_result.returncode == 0
+
     def get_history_list_by_id(self, app_id: str) -> list[FlatpakHistoryEntity]:
 
         flatpak_history_list = []

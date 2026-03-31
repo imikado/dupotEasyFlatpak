@@ -77,3 +77,7 @@ class FlatpakApiContract:
     @abstractmethod
     def get_update_call(self, app_id: str) -> list:
         pass
+
+    @abstractmethod
+    def ensure_flathub_remote(self) -> bool:
+        pass

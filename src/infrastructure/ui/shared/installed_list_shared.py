@@ -60,63 +60,6 @@ def _make_installed_row(
     btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
     btn_box.set_valign(Gtk.Align.CENTER)
 
-    # Run
-    run_btn = Gtk.Button(label=_("Run"))
-    run_btn.add_css_class("suggested-action")
-    run_btn.connect("clicked", lambda _: FlatpakApi().run_by_id(app.id))
-    btn_box.append(run_btn)
-
-    # Uninstall
-    uninstall_btn = Gtk.Button(label=_("Uninstall"))
-    uninstall_btn.add_css_class("destructive-action")
-    uninstall_btn.set_sensitive(is_user_installed)
-    if not is_user_installed:
-        uninstall_btn.set_tooltip_text(_("System application cannot be uninstalled"))
-
-    def on_uninstall(_btn):
-        delete_toggle = Gtk.Switch()
-        delete_toggle.set_active(False)
-        delete_toggle.set_valign(Gtk.Align.CENTER)
-
-        toggle_row = Adw.ActionRow()
-        toggle_row.set_title(_("Delete application data"))
-        toggle_row.add_suffix(delete_toggle)
-        toggle_row.set_activatable_widget(delete_toggle)
-
-        group = Adw.PreferencesGroup()
-        group.add(toggle_row)
-
-        dialog = Adw.AlertDialog(heading=_("Uninstall"))
-        dialog.set_extra_child(group)
-        dialog.add_response("cancel", _("Cancel"))
-        dialog.add_response("confirm", _("Uninstall"))
-        dialog.set_response_appearance("confirm", Adw.ResponseAppearance.DESTRUCTIVE)
-        dialog.set_default_response("cancel")
-        dialog.set_close_response("cancel")
-
-        def on_response(_d, response):
-            if response != "confirm":
-                return
-            uninstall_btn.set_sensitive(False)
-            uninstall_btn.set_label(_("Please wait…"))
-
-            def run_uninstall():
-                FlatpakApi().uninstall_by_id(app.id, delete_data=delete_toggle.get_active())
-                result = FlatpakApi().get_info_by_id(app.id)
-                if result.returncode != 0:  # non-zero = app no longer found = success
-                    GLib.idle_add(lambda: listbox.remove(row))
-                else:
-                    GLib.idle_add(lambda: uninstall_btn.set_sensitive(True))
-                    GLib.idle_add(lambda: uninstall_btn.set_label(_("Uninstall")))
-
-            threading.Thread(target=run_uninstall, daemon=True).start()
-
-        dialog.connect("response", on_response)
-        dialog.present(row.get_root())
-
-    uninstall_btn.connect("clicked", on_uninstall)
-    btn_box.append(uninstall_btn)
-
     # Recipe overrides
     if has_recipe:
         recipe_btn = Gtk.Button(label=_("Recipe overrides"))
@@ -150,6 +93,65 @@ def _make_installed_row(
 
         recipe_btn.connect("clicked", on_recipe)
         btn_box.append(recipe_btn)
+
+    # Run
+    run_btn = Gtk.Button(label=_("Run"))
+    run_btn.add_css_class("suggested-action")
+    run_btn.connect("clicked", lambda _: FlatpakApi().run_by_id(app.id))
+    btn_box.append(run_btn)
+
+    # Uninstall
+    uninstall_btn = Gtk.Button(label=_("Uninstall"))
+    uninstall_btn.add_css_class("destructive-action")
+    # uninstall_btn.set_sensitive(is_user_installed)
+    # if not is_user_installed:
+    #    uninstall_btn.set_tooltip_text(_("System application cannot be uninstalled"))
+
+    def on_uninstall(_btn):
+        delete_toggle = Gtk.Switch()
+        delete_toggle.set_active(False)
+        delete_toggle.set_valign(Gtk.Align.CENTER)
+
+        toggle_row = Adw.ActionRow()
+        toggle_row.set_title(_("Delete application data"))
+        toggle_row.add_suffix(delete_toggle)
+        toggle_row.set_activatable_widget(delete_toggle)
+
+        group = Adw.PreferencesGroup()
+        group.add(toggle_row)
+
+        dialog = Adw.AlertDialog(heading=_("Uninstall"))
+        dialog.set_extra_child(group)
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("confirm", _("Uninstall"))
+        dialog.set_response_appearance("confirm", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_default_response("cancel")
+        dialog.set_close_response("cancel")
+
+        def on_response(_d, response):
+            if response != "confirm":
+                return
+            uninstall_btn.set_sensitive(False)
+            uninstall_btn.set_label(_("Please wait…"))
+
+            def run_uninstall():
+                FlatpakApi().uninstall_by_id(
+                    app.id, delete_data=delete_toggle.get_active()
+                )
+                result = FlatpakApi().get_info_by_id(app.id)
+                if result.returncode != 0:  # non-zero = app no longer found = success
+                    GLib.idle_add(lambda: listbox.remove(row))
+                else:
+                    GLib.idle_add(lambda: uninstall_btn.set_sensitive(True))
+                    GLib.idle_add(lambda: uninstall_btn.set_label(_("Uninstall")))
+
+            threading.Thread(target=run_uninstall, daemon=True).start()
+
+        dialog.connect("response", on_response)
+        dialog.present(row.get_root())
+
+    uninstall_btn.connect("clicked", on_uninstall)
+    btn_box.append(uninstall_btn)
 
     # Downgrade
     downgrade_btn = Gtk.Button(label=_("Downgrade"))

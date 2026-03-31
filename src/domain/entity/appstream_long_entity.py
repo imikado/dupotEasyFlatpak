@@ -7,7 +7,7 @@ from domain.entity.screenshot_entity import ScreenshotEntity
 
 class AppstreamLongEntity:
 
-    LAST_UPDATE_MAX_DAYS = 7
+    LAST_UPDATE_MAX_DAYS = 1
 
     FIELD_FLATHUB_VERIFIED = "flathub_verified"
     FIELD_FLATHUB_VERIFIED_LABEL = "flathub_verified_label"

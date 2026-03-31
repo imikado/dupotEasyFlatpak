@@ -7,7 +7,7 @@ from domain.contract.system_api_contract import SystemApiContract
 
 class UpdateDatabaseFromApiUc:
 
-    LAST_UPDATE_MAX_DAYS = 7
+    LAST_SYNC_MAX_DAYS = 3
 
     _flathub_api: FlathubApiContract
     _appstream_repository: AppstreamRepositoryContract
@@ -27,6 +27,9 @@ class UpdateDatabaseFromApiUc:
         self._api_cache_repository = api_cache_repository
 
     def process(self):
+
+        if not self.should_sync_api():
+            return
 
         app_id_to_check_in_db_list = []
 
@@ -67,33 +70,33 @@ class UpdateDatabaseFromApiUc:
                     app_id_of_the_week_loop
                 )
 
-        apps_stored_list = (
-            self._appstream_repository.get_all_app_id_should_update_list()
-        )
-        for app_stored_loop in apps_stored_list:
+        self.update_sync_api()
 
-            id_loop = app_stored_loop["id"]
-
-            raw_obj_loop = self._flathub_api.get_appstream_by_id(id_loop)
-
-            if raw_obj_loop is None:
-                continue
-
-            self._appstream_repository.update_from_raw_object_with_id(
-                id_loop, raw_obj_loop
-            )
-
-            if "icon" in raw_obj_loop:
-
-                self._system_api.download_remote_file_to(
-                    raw_obj_loop["icon"],
-                    f"{PathConf().get_icons_path()}/{id_loop.lower()}.png",
-                )
-
-    def should_update(self, last_update) -> bool:
+    def should_sync(self, last_update) -> bool:
         if (
-            last_update + self.LAST_UPDATE_MAX_DAYS * 60 * 60 * 24
+            last_update + self.LAST_SYNC_MAX_DAYS * 60 * 60 * 24
         ) < self._system_api.get_datetime_current_timestamp():
 
             return True
         return False
+
+    def should_sync_api(self) -> bool:
+        api_cache_parameter_entity = self._api_cache_repository.get_by_id(
+            ApiCacheRepositoryContract.ID_PARAMETERS
+        )
+
+        last_timestamp_update = api_cache_parameter_entity.get_api_last_sync_timestamp()
+        return self.should_sync(last_timestamp_update)
+
+    def update_sync_api(self):
+        api_cache_parameter_entity = self._api_cache_repository.get_by_id(
+            ApiCacheRepositoryContract.ID_PARAMETERS
+        )
+        api_cache_parameter_entity.update_api_last_sync_timestamp(
+            self._system_api.get_datetime_current_timestamp()
+        )
+
+        self._api_cache_repository.update_by_id(
+            ApiCacheRepositoryContract.ID_PARAMETERS,
+            api_cache_parameter_entity.get_content_as_object(),
+        )

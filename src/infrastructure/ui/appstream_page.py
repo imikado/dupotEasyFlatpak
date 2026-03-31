@@ -375,7 +375,9 @@ class AppstreamPage(Adw.NavigationPage):
             dialog.set_extra_child(group)
             dialog.add_response("cancel", _("Cancel"))
             dialog.add_response("confirm", _("Uninstall"))
-            dialog.set_response_appearance("confirm", Adw.ResponseAppearance.DESTRUCTIVE)
+            dialog.set_response_appearance(
+                "confirm", Adw.ResponseAppearance.DESTRUCTIVE
+            )
             dialog.set_default_response("cancel")
             dialog.set_close_response("cancel")
 
@@ -387,7 +389,9 @@ class AppstreamPage(Adw.NavigationPage):
 
                 def run_uninstall():
                     flatpak_api = FlatpakApi()
-                    flatpak_api.uninstall_by_id(app_id, delete_data=delete_toggle.get_active())
+                    flatpak_api.uninstall_by_id(
+                        app_id, delete_data=delete_toggle.get_active()
+                    )
                     result = flatpak_api.get_info_by_id(app_id)
                     GLib.idle_add(
                         self._apply_install_state,
@@ -452,8 +456,23 @@ class AppstreamPage(Adw.NavigationPage):
         dialog.present(self)
 
     def _on_downgrade_clicked(self, btn: Gtk.Button, app_id: str, app_name: str):
+        old_label_widget = btn.get_child()
+
+        # 2. Create the Overlay and the Spinner
+        overlay = Gtk.Overlay()
+        spinner = Gtk.Spinner()
+        spinner.start()
+
+        # 3. Transfer the label to the overlay
+        # We remove it from the button so we can add it to the overlay
+        btn.set_child(None)
+        overlay.set_child(old_label_widget)  # The label is now the base layer
+        overlay.add_overlay(spinner)  # The spinner floats on top
+
+        # 4. Set the overlay as the new button content
+        btn.set_child(overlay)
         btn.set_sensitive(False)
-        btn.set_label(_("Loading…"))
+        old_label_widget.set_opacity(0.3)
 
         def fetch():
             api = FlatpakApi()
@@ -462,8 +481,12 @@ class AppstreamPage(Adw.NavigationPage):
             GLib.idle_add(on_history_loaded, history, current_commit)
 
         def on_history_loaded(history, current_commit):
+            # btn.set_label(_("Downgrade"))
+            spinner.stop()
+            old_label_widget.set_opacity(1.0)
             btn.set_sensitive(True)
-            btn.set_label(_("Downgrade"))
+
+            # btn.label.set_opacity(1.0)
             if not history:
                 return
 
