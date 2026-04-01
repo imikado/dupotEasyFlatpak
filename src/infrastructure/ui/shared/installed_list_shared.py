@@ -1,3 +1,4 @@
+import os
 import subprocess
 import threading
 
@@ -23,7 +24,11 @@ def _make_installed_row(
     row.set_activatable(False)
 
     # --- Left: icon + text (acts as nav button) ---
-    icon = Gtk.Image.new_from_file(app.getIcon())
+    icon_path = app.getIcon()
+    if os.path.isfile(icon_path):
+        icon = Gtk.Image.new_from_file(icon_path)
+    else:
+        icon = Gtk.Image.new_from_icon_name("application-x-executable")
     icon.set_pixel_size(48)
 
     text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)

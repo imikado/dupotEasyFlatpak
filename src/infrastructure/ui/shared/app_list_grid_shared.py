@@ -92,7 +92,7 @@ def _make_list_card(
     title = Gtk.Label(label=app.getName())
     title.add_css_class("heading")
     title.set_halign(Gtk.Align.START)
-    title.set_max_width_chars(30)
+    title.set_max_width_chars(26)
     title.set_ellipsize(Pango.EllipsizeMode.END)
     title.set_wrap(False)  # Titles usually shouldn't wrap in this layout
     text_box.append(title)
