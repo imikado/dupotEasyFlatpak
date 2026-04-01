@@ -222,9 +222,6 @@ class AppListGridShared:
         self._list_flow.set_selection_mode(Gtk.SelectionMode.NONE)
         self._list_flow.set_homogeneous(True)
         self._list_flow.set_min_children_per_line(2)
-        self._list_flow.set_max_children_per_line(
-            3
-        )  # Force 2 columns like your screenshot
         self._list_flow.set_min_children_per_line(1)
         self._list_flow.set_column_spacing(CARD_SPACING)
         self._list_flow.set_row_spacing(CARD_SPACING)
