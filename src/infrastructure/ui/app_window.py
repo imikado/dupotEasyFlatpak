@@ -19,6 +19,7 @@ from infrastructure.ui.menu.import_dialog import ImportDialog
 from infrastructure.ui.menu.parameters_dialog import ParametersDialog
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
+from infrastructure.ui.appstream.flatpak_file_page import FlatpakFilePage
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 from infrastructure.ui.shared.icons_shared import IconsShared
 
@@ -443,6 +444,16 @@ class MainWindow(Adw.ApplicationWindow):
         if app:
             self.navigation_view.push(AppstreamPage(app))
 
+    def open_flatpak_file(self, file_path: str):
+        page = FlatpakFilePage(file_path, self._navigate_home)
+        self.navigation_view.push(page)
+
+    def _navigate_home(self):
+        stack = self.navigation_view.get_navigation_stack()
+        if stack.get_n_items() > 1:
+            self.navigation_view.pop_to_page(stack.get_item(0))
+        return GLib.SOURCE_REMOVE
+
     def _on_close_request(self, _window):
 
         return False  # Allow window to close
@@ -450,8 +461,22 @@ class MainWindow(Adw.ApplicationWindow):
 
 class AppWindow(Adw.Application):
     def __init__(self):
-        super().__init__(application_id="org.dupot.easyflatpak")
+        super().__init__(
+            application_id="org.dupot.easyflatpak",
+            flags=Gio.ApplicationFlags.HANDLES_OPEN,
+        )
 
     def do_activate(self):
         win = MainWindow(application=self)
         win.present()
+
+    def do_open(self, files, n_files, hint):
+        self.activate()
+        win = self.get_active_window()
+        if not isinstance(win, MainWindow):
+            return
+        for f in files:
+            path = f.get_path()
+            if path and path.endswith(".flatpak"):
+                win.open_flatpak_file(path)
+                break

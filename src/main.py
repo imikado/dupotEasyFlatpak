@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
 from domain.entity.application_version_entity import ApplicationVersionEntity
 from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flathub_api import FlathubApi
+from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
@@ -81,6 +83,8 @@ def main():
 
         print("not current version, will install")
 
+        FlatpakApi().ensure_flathub_remote()
+
         if not system_api.file_exists(data_path):
             system_api.create_dir(data_path)
 
@@ -118,7 +122,7 @@ def main():
     update_database_from_api.process()
 
     app = AppWindow()
-    app.run(None)
+    app.run(sys.argv)
 
 
 if __name__ == "__main__":

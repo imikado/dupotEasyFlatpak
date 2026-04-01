@@ -57,6 +57,10 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def ensure_flathub_remote(self):
+        pass
+
+    @abstractmethod
     def get_history_list_by_id(self, app_id: str) -> list[FlatpakHistoryEntity]:
         pass
 
@@ -79,5 +83,9 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
-    def ensure_flathub_remote(self) -> bool:
+    def get_flatpak_bundle_info(self, file_path: str) -> dict:
+        pass
+
+    @abstractmethod
+    def get_install_bundle_call(self, file_path: str, *flags) -> list:
         pass

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-27 22:35+0100\n"
+"POT-Creation-Date: 2026-04-01 21:53+0200\n"
 "Language: ro\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,7 +10,8 @@ msgstr ""
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
 #: src/infrastructure/ui/appstream_page.py:146
-#: src/infrastructure/ui/appstream_page.py:466
+#: src/infrastructure/ui/shared/installed_list_shared.py:162
+#: src/infrastructure/ui/shared/installed_list_shared.py:176
 msgid "Downgrade"
 msgstr ""
 
@@ -21,27 +22,69 @@ msgstr ""
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:89
 #: src/infrastructure/ui/appstream_page.py:376
-#: src/infrastructure/ui/bundle_detail_page.py:269
-#: src/infrastructure/ui/home/updates_page.py:163
+#: src/infrastructure/ui/bundle_detail_page.py:274
+#: src/infrastructure/ui/home/updates_page.py:161
+#: src/infrastructure/ui/shared/installed_list_shared.py:130
 msgid "Cancel"
 msgstr "Anulează"
 
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:22
+msgid "Install .flatpak"
+msgstr "Instalează .flatpak"
+
+# --- App detail page ---
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:122
+#: src/infrastructure/ui/appstream_page.py:211
+msgid "Details"
+msgstr "Detalii"
+
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:127
+msgid "Runtime"
+msgstr "Mediu de execuție"
+
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:134
+msgid "SDK"
+msgstr "SDK"
+
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:141
+msgid "Origin"
+msgstr "Origine"
+
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:146
+msgid "File"
+msgstr "Fișier"
+
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:156
+#: src/infrastructure/ui/menu/parameters_dialog.py:26
+msgid "Installation"
+msgstr "Instalare"
+
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:159
+#: src/infrastructure/ui/appstream/install_dialog.py:44
+#: src/infrastructure/ui/bundle_detail_page.py:73
+msgid "Install for current user only"
+msgstr "Instalează doar pentru utilizatorul curent"
+
 # --- General actions ---
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/install_dialog.py:29
 #: src/infrastructure/ui/appstream/install_dialog.py:90
 #: src/infrastructure/ui/appstream_page.py:341
 #: src/infrastructure/ui/menu/import_dialog.py:82
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:190
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:148
+#: src/infrastructure/ui/shared/app_list_line_shared.py:148
 msgid "Install"
 msgstr "Instalează"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:44
-#: src/infrastructure/ui/bundle_detail_page.py:70
-msgid "Install for current user only"
-msgstr "Instalează doar pentru utilizatorul curent"
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:189
+#: src/infrastructure/ui/appstream_page.py:388
+#: src/infrastructure/ui/appstream_page.py:415
+#: src/infrastructure/ui/shared/installed_list_shared.py:140
+msgid "Please wait…"
+msgstr "Vă rugăm așteptați…"
 
 #: src/infrastructure/ui/appstream/install_dialog.py:59
-#: src/infrastructure/ui/bundle_detail_page.py:217
+#: src/infrastructure/ui/bundle_detail_page.py:224
 msgid "Permissions"
 msgstr "Permisiuni"
 
@@ -55,18 +98,16 @@ msgid "Close"
 msgstr "Închide"
 
 #: src/infrastructure/ui/appstream_page.py:141
-#: src/infrastructure/ui/appstream_page.py:514
+#: src/infrastructure/ui/appstream_page.py:537
+#: src/infrastructure/ui/shared/installed_list_shared.py:70
+#: src/infrastructure/ui/shared/installed_list_shared.py:92
 msgid "Recipe overrides"
 msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:151
+#: src/infrastructure/ui/shared/installed_list_shared.py:103
 msgid "Run"
 msgstr ""
-
-# --- App detail page ---
-#: src/infrastructure/ui/appstream_page.py:211
-msgid "Details"
-msgstr "Detalii"
 
 #: src/infrastructure/ui/appstream_page.py:215
 msgid "License"
@@ -87,143 +128,142 @@ msgstr "Descriere"
 #: src/infrastructure/ui/appstream_page.py:331
 #: src/infrastructure/ui/appstream_page.py:374
 #: src/infrastructure/ui/appstream_page.py:377
+#: src/infrastructure/ui/shared/installed_list_shared.py:109
+#: src/infrastructure/ui/shared/installed_list_shared.py:128
+#: src/infrastructure/ui/shared/installed_list_shared.py:131
+#: src/infrastructure/ui/shared/installed_list_shared.py:151
 msgid "Uninstall"
 msgstr "Dezinstalează"
 
 #: src/infrastructure/ui/appstream_page.py:339
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:190
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:148
+#: src/infrastructure/ui/shared/app_list_line_shared.py:148
 msgid "Install with recipe"
 msgstr "Instalează cu rețetă"
 
 #: src/infrastructure/ui/appstream_page.py:367
+#: src/infrastructure/ui/shared/installed_list_shared.py:121
 msgid "Delete application data"
-msgstr ""
+msgstr "Șterge datele aplicației"
 
-#: src/infrastructure/ui/appstream_page.py:386
-#: src/infrastructure/ui/appstream_page.py:411
-msgid "Please wait…"
-msgstr "Vă rugăm așteptați…"
-
-#: src/infrastructure/ui/appstream_page.py:456
-msgid "Loading…"
-msgstr ""
-
-#: src/infrastructure/ui/appstream_page.py:515
+#: src/infrastructure/ui/appstream_page.py:538
+#: src/infrastructure/ui/shared/installed_list_shared.py:93
 msgid "Apply"
 msgstr ""
 
-#: src/infrastructure/ui/appstream_page.py:533
+#: src/infrastructure/ui/appstream_page.py:556
 msgid "Screenshots"
 msgstr "Capturi de ecran"
 
-#: src/infrastructure/ui/appstream_page.py:727
+#: src/infrastructure/ui/appstream_page.py:750
 msgid "Release History"
 msgstr "Istoricul versiunilor"
 
 # --- Navigation / window ---
-#: src/infrastructure/ui/app_window.py:56
+#: src/infrastructure/ui/app_window.py:59
 msgid "Easy flatpak"
 msgstr "Easy flatpak"
 
-#: src/infrastructure/ui/app_window.py:65
+#: src/infrastructure/ui/app_window.py:68
 #: src/infrastructure/ui/menu/parameters_dialog.py:17
 msgid "Parameters"
 msgstr "Parametri"
 
-#: src/infrastructure/ui/app_window.py:66
-#: src/infrastructure/ui/app_window.py:342
+#: src/infrastructure/ui/app_window.py:69
+#: src/infrastructure/ui/app_window.py:359
 #: src/infrastructure/ui/menu/import_dialog.py:15
 msgid "Import"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:67
-#: src/infrastructure/ui/app_window.py:378
+#: src/infrastructure/ui/app_window.py:70
+#: src/infrastructure/ui/app_window.py:395
 msgid "Export"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:68
+#: src/infrastructure/ui/app_window.py:71
 msgid "About"
 msgstr "Despre"
 
-#: src/infrastructure/ui/app_window.py:122
+#: src/infrastructure/ui/app_window.py:128
 msgid "Home"
 msgstr "Acasă"
 
-#: src/infrastructure/ui/app_window.py:128
+#: src/infrastructure/ui/app_window.py:136
 msgid "Categories"
 msgstr "Categorii"
 
-#: src/infrastructure/ui/app_window.py:135
+#: src/infrastructure/ui/app_window.py:143
 msgid "Bundles"
 msgstr "Pachete"
 
-#: src/infrastructure/ui/app_window.py:144
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:165
+#: src/infrastructure/ui/app_window.py:154
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:127
+#: src/infrastructure/ui/shared/app_list_line_shared.py:127
 msgid "Installed"
 msgstr "Instalat"
 
-#: src/infrastructure/ui/app_window.py:160
+#: src/infrastructure/ui/app_window.py:173
 msgid "Updates"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:170
+#: src/infrastructure/ui/app_window.py:186
 msgid "Pending"
 msgstr "În așteptare"
 
-#: src/infrastructure/ui/app_window.py:187
+#: src/infrastructure/ui/app_window.py:204
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:220
+#: src/infrastructure/ui/app_window.py:237
 msgid "New"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:221
+#: src/infrastructure/ui/app_window.py:238
 msgid "Updated"
 msgstr "Actualizat"
 
 # --- Home sections ---
-#: src/infrastructure/ui/app_window.py:222
+#: src/infrastructure/ui/app_window.py:239
 msgid "Trending"
 msgstr "Tendințe"
 
-#: src/infrastructure/ui/app_window.py:223
+#: src/infrastructure/ui/app_window.py:240
 msgid "Popular"
 msgstr "Popular"
 
-#: src/infrastructure/ui/app_window.py:407
+#: src/infrastructure/ui/app_window.py:424
 msgid "Export saved"
 msgstr ""
 
-#: src/infrastructure/ui/bundle_detail_page.py:54
-#: src/infrastructure/ui/bundle_detail_page.py:187
+#: src/infrastructure/ui/bundle_detail_page.py:57
+#: src/infrastructure/ui/bundle_detail_page.py:194
 msgid "Edit bundle"
 msgstr ""
 
-#: src/infrastructure/ui/bundle_detail_page.py:74
+#: src/infrastructure/ui/bundle_detail_page.py:77
 msgid "Install selected"
 msgstr ""
 
-#: src/infrastructure/ui/bundle_detail_page.py:144
+#: src/infrastructure/ui/bundle_detail_page.py:149
 msgid "Edit permissions"
 msgstr ""
 
-#: src/infrastructure/ui/bundle_detail_page.py:179
-#: src/infrastructure/ui/bundle_detail_page.py:249
+#: src/infrastructure/ui/bundle_detail_page.py:184
+#: src/infrastructure/ui/bundle_detail_page.py:254
 msgid "Already installed"
 msgstr ""
 
-#: src/infrastructure/ui/bundle_detail_page.py:187
+#: src/infrastructure/ui/bundle_detail_page.py:194
 #: src/infrastructure/ui/home/pending_list_page.py:135
 msgid "Done"
 msgstr ""
 
-#: src/infrastructure/ui/bundle_detail_page.py:270
+#: src/infrastructure/ui/bundle_detail_page.py:275
 msgid "OK"
 msgstr ""
 
-#: src/infrastructure/ui/category_list_page.py:44
+#: src/infrastructure/ui/category_list_page.py:46
 msgid "Search…"
 msgstr "Căutare…"
 
@@ -265,21 +305,17 @@ msgstr ""
 msgid "Update ({n})"
 msgstr ""
 
-#: src/infrastructure/ui/home/updates_page.py:160
+#: src/infrastructure/ui/home/updates_page.py:159
 #, python-brace-format
 msgid "Update {n} application(s)?"
 msgstr ""
 
-#: src/infrastructure/ui/home/updates_page.py:164
+#: src/infrastructure/ui/home/updates_page.py:162
 msgid "Update"
 msgstr ""
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"
-msgstr ""
-
-#: src/infrastructure/ui/menu/parameters_dialog.py:26
-msgid "Installation"
 msgstr ""
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:30
@@ -303,6 +339,10 @@ msgstr ""
 msgid "Search"
 msgstr "Căutare"
 
+#: src/infrastructure/ui/shared/installed_list_shared.py:166
+msgid "Loading…"
+msgstr ""
+
 #~ msgid "Import / Export"
 #~ msgstr "Import / Export"
 
@@ -322,11 +362,11 @@ msgstr "Căutare"
 #~ "Pentru informare: ar trebui să permiteți Discord să acceseze directorul "
 #~ "dvs. personal (lăsați-l să se configureze)"
 
-msgid "recipe_indicate_your_game_path_label"
-msgstr "Indicați calea directorului unde vă stocați jocurile"
+#~ msgid "recipe_indicate_your_game_path_label"
+#~ msgstr "Indicați calea directorului unde vă stocați jocurile"
 
-msgid "recipe_should_installMangoHud"
-msgstr "Instalează MangoHud"
+#~ msgid "recipe_should_installMangoHud"
+#~ msgstr "Instalează MangoHud"
 
-msgid "recipe_enable_mangohud"
-msgstr "Activează MangoHud"
+#~ msgid "recipe_enable_mangohud"
+#~ msgstr "Activează MangoHud"

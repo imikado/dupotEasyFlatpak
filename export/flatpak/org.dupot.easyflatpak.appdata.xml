@@ -114,6 +114,16 @@
   <releases>
 
 
+
+<release date="2026-04-01" version="4.0.23"> 
+      <description>
+        <ul>
+          <li>Improvments</li>
+          <li>Setup flathub remote if missing</li>
+        </ul>
+      </description>
+    </release> 
+    
 <release date="2026-04-01" version="4.0.22"> 
       <description>
         <ul>

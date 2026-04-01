@@ -142,25 +142,66 @@ class FlatpakApi(FlatpakApiContract):
         commit = result.stdout.strip()
         return commit if commit else None
 
-    def ensure_flathub_remote(self) -> bool:
-        result = subprocess.run(
-            self._cmd("remotes", "--columns=name"),
-            capture_output=True,
-            text=True,
-        )
-        remotes = {line.strip() for line in result.stdout.splitlines() if line.strip()}
-        if "flathub" in remotes:
-            return True
-        add_result = subprocess.run(
+    def ensure_flathub_remote(self):
+
+        subprocess.run(
             self._cmd(
                 "remote-add",
                 "--if-not-exists",
+                "--system",
                 "flathub",
                 "https://dl.flathub.org/repo/flathub.flatpakrepo",
             ),
-            capture_output=True,
+            capture_output=False,
         )
-        return add_result.returncode == 0
+
+        subprocess.run(
+            self._cmd(
+                "remote-add",
+                "--if-not-exists",
+                "--user",
+                "flathub",
+                "https://dl.flathub.org/repo/flathub.flatpakrepo",
+            ),
+            capture_output=False,
+        )
+
+    def get_flatpak_bundle_info(self, file_path: str) -> dict:
+        info = {}
+
+        # Derive a candidate app_id from filename as fallback
+        import os
+        basename = os.path.basename(file_path)
+        if basename.endswith(".flatpak"):
+            info["name"] = basename[: -len(".flatpak")]
+
+        try:
+            from gi.repository import GLib
+            with open(file_path, "rb") as f:
+                data = f.read()
+            gbytes = GLib.Bytes.new(data)
+            variant = GLib.Variant.new_from_bytes(
+                GLib.VariantType.new("(a{sv}aya{sv})"),
+                gbytes,
+                False,
+            )
+            metadata_dict = variant.get_child_value(0)
+            for i in range(metadata_dict.n_children()):
+                entry = metadata_dict.get_child_value(i)
+                key = entry.get_child_value(0).get_string()
+                value_variant = entry.get_child_value(1).get_variant()
+                vtype = value_variant.get_type_string()
+                if vtype == "s":
+                    info[key] = value_variant.get_string()
+                elif vtype == "ay":
+                    info[key] = bytes(value_variant.get_data_as_bytes().get_data())
+        except Exception:
+            pass
+
+        return info
+
+    def get_install_bundle_call(self, file_path: str, *flags) -> list:
+        return self._cmd("install", "--bundle", *flags, file_path, "-y")
 
     def get_history_list_by_id(self, app_id: str) -> list[FlatpakHistoryEntity]:
 
