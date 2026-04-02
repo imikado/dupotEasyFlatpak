@@ -16,7 +16,11 @@ class AppstreamLongEntity:
 
     FIELD_BRANDING = "branding"
     FIELD_BRANDING_LIGHT = "light"
-    FIELD_BRANDING_DARK = "darkt"
+    FIELD_BRANDING_DARK = "dark"
+
+    FIELD_URL_BUGTRACKER = "bugtracker"
+    FIELD_URL_HOMEPAGE = "homepage"
+    FIELD_URL_DONATION = "donation"
 
     id: str
     name: str
@@ -42,6 +46,10 @@ class AppstreamLongEntity:
 
     _branding_light: str = "eeeeee"
     _branding_dark: str = "cccccc"
+
+    _url_homepage: str = ""
+    _url_bugtracker: str = ""
+    _url_donation: str = ""
 
     # maps entity field name -> DB column name
     _db_column_map = {
@@ -70,6 +78,7 @@ class AppstreamLongEntity:
         self.load_screenshot_list()
         self.load_metadata_obj()
         self.load_release_obj_list()
+        self.loadl_url_obj()
 
     def get_select_columns(self) -> str:
         return ", ".join(
@@ -116,6 +125,18 @@ class AppstreamLongEntity:
             if self.FIELD_BRANDING_LIGHT in branding:
                 self._branding_dark = branding[self.FIELD_BRANDING_LIGHT]
 
+    def loadl_url_obj(self):
+        if not self.url_obj:
+            return
+        raw_obj = json.loads(self.url_obj)
+
+        if self.FIELD_URL_BUGTRACKER in raw_obj:
+            self._url_bugtracker = raw_obj[self.FIELD_URL_BUGTRACKER]
+        if self.FIELD_URL_DONATION in raw_obj:
+            self._url_donation = raw_obj[self.FIELD_URL_DONATION]
+        if self.FIELD_URL_HOMEPAGE in raw_obj:
+            self._url_homepage = raw_obj[self.FIELD_URL_HOMEPAGE]
+
     def load_release_obj_list(self):
         raw_obj_list = json.loads(self.release_obj_list)
         self._release_obj_list = []
@@ -159,3 +180,26 @@ class AppstreamLongEntity:
 
     def get_branding_dark(self) -> str:
         return self._branding_dark
+
+    def has_url_homepage(self) -> bool:
+        return self.is_empty(self._url_homepage)
+
+    def get_url_homepage(self) -> str:
+        return self._url_homepage
+
+    def has_url_bugtracker(self) -> bool:
+        return self.is_empty(self._url_bugtracker)
+
+    def get_url_bugtracker(self) -> str:
+        return self._url_bugtracker
+
+    def has_url_donation(self) -> bool:
+        return self.is_empty(self._url_donation)
+
+    def get_url_bdonation(self) -> str:
+        return self._url_donation
+
+    def is_empty(self, value_to_test: str) -> bool:
+        if len(value_to_test) > 0:
+            return True
+        return False

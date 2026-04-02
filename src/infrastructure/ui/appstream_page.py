@@ -13,11 +13,12 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw, GLib, Gdk
+from gi.repository import Gtk, Adw, GLib, Gdk, Gio
 
 from domain.entity.appstream_long_entity import AppstreamLongEntity
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.service.install_queue_service import InstallQueueService
+from infrastructure.ui.shared.icons_shared import IconsShared
 from infrastructure.ui.appstream.downgrade_dialog import DowngradeDialog
 from infrastructure.ui.appstream.install_dialog import InstallDialog
 
@@ -226,6 +227,48 @@ class AppstreamPage(Adw.NavigationPage):
             row = Adw.ActionRow()
             row.set_title(_("Installed Size"))
             row.set_subtitle(app.get_installed_size())
+            details_group.add(row)
+
+        if app.has_url_homepage():
+            url = app.get_url_homepage()
+            row = Adw.ActionRow()
+            row.set_title(_("Homepage"))
+            icon = IconsShared().get_icon_by_name(IconsShared.ICON_HOMEPAGE)
+            icon.set_valign(Gtk.Align.CENTER)
+            row.add_prefix(icon)
+            arrow = Gtk.Image.new_from_icon_name("go-next-symbolic")
+            arrow.set_valign(Gtk.Align.CENTER)
+            row.add_suffix(arrow)
+            row.set_activatable(True)
+            row.connect("activated", lambda _r, u=url: Gio.AppInfo.launch_default_for_uri(u, None))
+            details_group.add(row)
+
+        if app.has_url_bugtracker():
+            url = app.get_url_bugtracker()
+            row = Adw.ActionRow()
+            row.set_title(_("Bug Tracker"))
+            icon = IconsShared().get_icon_by_name(IconsShared.ICON_BUGTRACKER)
+            icon.set_valign(Gtk.Align.CENTER)
+            row.add_prefix(icon)
+            arrow = Gtk.Image.new_from_icon_name("go-next-symbolic")
+            arrow.set_valign(Gtk.Align.CENTER)
+            row.add_suffix(arrow)
+            row.set_activatable(True)
+            row.connect("activated", lambda _r, u=url: Gio.AppInfo.launch_default_for_uri(u, None))
+            details_group.add(row)
+
+        if app.has_url_donation():
+            url = app.get_url_bdonation()
+            row = Adw.ActionRow()
+            row.set_title(_("Donate"))
+            icon = IconsShared().get_icon_by_name(IconsShared.ICON_DONATION)
+            icon.set_valign(Gtk.Align.CENTER)
+            row.add_prefix(icon)
+            arrow = Gtk.Image.new_from_icon_name("go-next-symbolic")
+            arrow.set_valign(Gtk.Align.CENTER)
+            row.add_suffix(arrow)
+            row.set_activatable(True)
+            row.connect("activated", lambda _r, u=url: Gio.AppInfo.launch_default_for_uri(u, None))
             details_group.add(row)
 
         details_clamp_box.append(details_group)

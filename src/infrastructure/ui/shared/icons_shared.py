@@ -23,6 +23,9 @@ class IconsShared:
     ICON_DEVELOPMENT = "Development"
     ICON_GAME = "Game"
     ICON_GRAPHICS = "Graphics"
+    ICON_HOMEPAGE = "Homepage"
+    ICON_BUGTRACKER = "Bugtracker"
+    ICON_DONATION = "Donation"
 
     icon_ref = {
         "CheckMark": [
@@ -121,6 +124,21 @@ class IconsShared:
             "accessories-calculator-symbolic",
             "applications-utilities-symbolic",
             "system-run-symbolic",
+        ],
+        "Homepage": [
+            "globe-symbolic",
+            "web-browser-symbolic",
+            "go-home-symbolic",
+        ],
+        "Bugtracker": [
+            "bug-symbolic",
+            "dialog-warning-symbolic",
+            "emblem-important-symbolic",
+        ],
+        "Donation": [
+            "heart-filled-symbolic",
+            "emblem-favorite-symbolic",
+            "starred-symbolic",
         ],
     }
 

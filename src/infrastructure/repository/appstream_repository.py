@@ -241,6 +241,8 @@ class AppstreamRepository(AppstreamRepositoryContract):
         releases = raw_obj.get("releases", [])
         last_update = int(time.time() * 1000)
 
+        url_obj = raw_obj.get("urls", {}) or {}
+
         self._db.execute(
             """UPDATE appstream SET
                 name = ?,
@@ -251,6 +253,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 icon = ?,
                 categoryIdList = ?,
                 metadataObj = ?,
+                urlObj = ?,
                 screenshotList = ?,
                 releaseObjList = ?,
                 lastUpdate = ?
@@ -264,6 +267,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 icon,
                 json.dumps(categories),
                 json.dumps(metadata_obj),
+                json.dumps(url_obj),
                 json.dumps(screenshots),
                 json.dumps(releases),
                 last_update,
