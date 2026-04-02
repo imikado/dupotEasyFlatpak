@@ -29,12 +29,15 @@ class PathToCopy:
 def main():
     # Set the local directory
     appname = "Easy_flatpak"
-    localedir = "./infrastructure/locales"
+    localedir = os.path.join(os.path.dirname(__file__), "infrastructure", "locales")
 
-    # Set up Gettext
+    # GLib.get_language_names() is the reliable source for locale in GTK/Flatpak apps
+    # e.g. ['fr_FR.UTF-8', 'fr_FR', 'fr', 'C'] — gettext handles the variants automatically
+    languages = [l for l in GLib.get_language_names() if l != "C"]
     en_i18n = gettext.translation(
         appname,
         localedir,
+        languages=languages,
         fallback=True,
     )
 
