@@ -44,26 +44,34 @@ class FlatpakApi(FlatpakApiContract):
         return len(self.get_available_update_list())
 
     def get_available_update_list(self) -> list[UpdateAvailableEntity]:
-        result = subprocess.run(
-            self._cmd(
-                "remote-ls", "--updates", "--app", "--columns=application,name,version"
-            ),
-            capture_output=True,
-            text=True,
-        )
         available_update_list = []
-        for line in result.stdout.splitlines():
-            parts = line.split("\t")
-            if len(parts) >= 3:
-                available_update_list.append(
-                    UpdateAvailableEntity(
-                        parts[0].strip(), parts[1].strip(), parts[2].strip()
+        seen_ids = set()
+
+        for scope in ("--user", "--system"):
+            result = subprocess.run(
+                self._cmd(
+                    "remote-ls",
+                    "--updates",
+                    scope,
+                    "--app",
+                    "--columns=application,name,version",
+                ),
+                capture_output=True,
+                text=True,
+            )
+            for line in result.stdout.splitlines():
+                parts = line.split("\t")
+                if len(parts) >= 2:
+                    app_id = parts[0].strip()
+                    if app_id in seen_ids:
+                        continue
+                    seen_ids.add(app_id)
+                    name = parts[1].strip()
+                    version = parts[2].strip() if len(parts) >= 3 else ""
+                    available_update_list.append(
+                        UpdateAvailableEntity(app_id, name, version)
                     )
-                )
-            elif len(parts) >= 2:
-                available_update_list.append(
-                    UpdateAvailableEntity(parts[0].strip(), parts[1].strip(), "")
-                )
+
         return available_update_list
 
     def get_info_by_id(self, app_id: str) -> subprocess.CompletedProcess[bytes]:
