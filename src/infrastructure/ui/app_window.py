@@ -147,6 +147,8 @@ class MainWindow(Adw.ApplicationWindow):
         installed_page = InstalledPage(
             appstream_repository,
             lambda p: self.navigation_view.push(p),
+            on_import=self._on_menu_import,
+            on_export=self._on_menu_export,
         )
         view_stack.add_titled_with_icon(
             installed_page,

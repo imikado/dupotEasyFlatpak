@@ -2,14 +2,14 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-01 21:53+0200\n"
+"POT-Creation-Date: 2026-04-03 08:23+0200\n"
 "Language: ro\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
-#: src/infrastructure/ui/appstream_page.py:146
+#: src/infrastructure/ui/appstream_page.py:147
 #: src/infrastructure/ui/shared/installed_list_shared.py:162
 #: src/infrastructure/ui/shared/installed_list_shared.py:176
 msgid "Downgrade"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:89
-#: src/infrastructure/ui/appstream_page.py:376
+#: src/infrastructure/ui/appstream_page.py:419
 #: src/infrastructure/ui/bundle_detail_page.py:274
 #: src/infrastructure/ui/home/updates_page.py:161
 #: src/infrastructure/ui/shared/installed_list_shared.py:130
@@ -34,7 +34,7 @@ msgstr "Instalează .flatpak"
 
 # --- App detail page ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:122
-#: src/infrastructure/ui/appstream_page.py:211
+#: src/infrastructure/ui/appstream_page.py:212
 msgid "Details"
 msgstr "Detalii"
 
@@ -69,7 +69,7 @@ msgstr "Instalează doar pentru utilizatorul curent"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/install_dialog.py:29
 #: src/infrastructure/ui/appstream/install_dialog.py:90
-#: src/infrastructure/ui/appstream_page.py:341
+#: src/infrastructure/ui/appstream_page.py:384
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:148
 #: src/infrastructure/ui/shared/app_list_line_shared.py:148
@@ -77,8 +77,8 @@ msgid "Install"
 msgstr "Instalează"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
-#: src/infrastructure/ui/appstream_page.py:388
-#: src/infrastructure/ui/appstream_page.py:415
+#: src/infrastructure/ui/appstream_page.py:431
+#: src/infrastructure/ui/appstream_page.py:458
 #: src/infrastructure/ui/shared/installed_list_shared.py:140
 msgid "Please wait…"
 msgstr "Vă rugăm așteptați…"
@@ -97,37 +97,49 @@ msgstr "Se instalează…"
 msgid "Close"
 msgstr "Închide"
 
-#: src/infrastructure/ui/appstream_page.py:141
-#: src/infrastructure/ui/appstream_page.py:537
+#: src/infrastructure/ui/appstream_page.py:142
+#: src/infrastructure/ui/appstream_page.py:580
 #: src/infrastructure/ui/shared/installed_list_shared.py:70
 #: src/infrastructure/ui/shared/installed_list_shared.py:92
 msgid "Recipe overrides"
 msgstr ""
 
-#: src/infrastructure/ui/appstream_page.py:151
+#: src/infrastructure/ui/appstream_page.py:152
 #: src/infrastructure/ui/shared/installed_list_shared.py:103
 msgid "Run"
 msgstr ""
 
-#: src/infrastructure/ui/appstream_page.py:215
+#: src/infrastructure/ui/appstream_page.py:216
 msgid "License"
 msgstr "Licență"
 
-#: src/infrastructure/ui/appstream_page.py:221
+#: src/infrastructure/ui/appstream_page.py:222
 msgid "Download Size"
 msgstr "Dimensiune descărcare"
 
-#: src/infrastructure/ui/appstream_page.py:227
+#: src/infrastructure/ui/appstream_page.py:228
 msgid "Installed Size"
 msgstr "Dimensiune instalată"
 
 #: src/infrastructure/ui/appstream_page.py:235
+msgid "Homepage"
+msgstr ""
+
+#: src/infrastructure/ui/appstream_page.py:249
+msgid "Bug Tracker"
+msgstr ""
+
+#: src/infrastructure/ui/appstream_page.py:263
+msgid "Donate"
+msgstr ""
+
+#: src/infrastructure/ui/appstream_page.py:278
 msgid "Description"
 msgstr "Descriere"
 
-#: src/infrastructure/ui/appstream_page.py:331
 #: src/infrastructure/ui/appstream_page.py:374
-#: src/infrastructure/ui/appstream_page.py:377
+#: src/infrastructure/ui/appstream_page.py:417
+#: src/infrastructure/ui/appstream_page.py:420
 #: src/infrastructure/ui/shared/installed_list_shared.py:109
 #: src/infrastructure/ui/shared/installed_list_shared.py:128
 #: src/infrastructure/ui/shared/installed_list_shared.py:131
@@ -135,27 +147,27 @@ msgstr "Descriere"
 msgid "Uninstall"
 msgstr "Dezinstalează"
 
-#: src/infrastructure/ui/appstream_page.py:339
+#: src/infrastructure/ui/appstream_page.py:382
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:148
 #: src/infrastructure/ui/shared/app_list_line_shared.py:148
 msgid "Install with recipe"
 msgstr "Instalează cu rețetă"
 
-#: src/infrastructure/ui/appstream_page.py:367
+#: src/infrastructure/ui/appstream_page.py:410
 #: src/infrastructure/ui/shared/installed_list_shared.py:121
 msgid "Delete application data"
 msgstr "Șterge datele aplicației"
 
-#: src/infrastructure/ui/appstream_page.py:538
+#: src/infrastructure/ui/appstream_page.py:581
 #: src/infrastructure/ui/shared/installed_list_shared.py:93
 msgid "Apply"
 msgstr ""
 
-#: src/infrastructure/ui/appstream_page.py:556
+#: src/infrastructure/ui/appstream_page.py:599
 msgid "Screenshots"
 msgstr "Capturi de ecran"
 
-#: src/infrastructure/ui/appstream_page.py:750
+#: src/infrastructure/ui/appstream_page.py:793
 msgid "Release History"
 msgstr "Istoricul versiunilor"
 
@@ -170,13 +182,17 @@ msgid "Parameters"
 msgstr "Parametri"
 
 #: src/infrastructure/ui/app_window.py:69
-#: src/infrastructure/ui/app_window.py:359
+#: src/infrastructure/ui/app_window.py:361
+#: src/infrastructure/ui/home/installed_page.py:67
+#: src/infrastructure/ui/home/installed_page.py:70
 #: src/infrastructure/ui/menu/import_dialog.py:15
 msgid "Import"
 msgstr ""
 
 #: src/infrastructure/ui/app_window.py:70
-#: src/infrastructure/ui/app_window.py:395
+#: src/infrastructure/ui/app_window.py:397
+#: src/infrastructure/ui/home/installed_page.py:77
+#: src/infrastructure/ui/home/installed_page.py:80
 msgid "Export"
 msgstr ""
 
@@ -196,43 +212,43 @@ msgstr "Categorii"
 msgid "Bundles"
 msgstr "Pachete"
 
-#: src/infrastructure/ui/app_window.py:154
+#: src/infrastructure/ui/app_window.py:156
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:127
 #: src/infrastructure/ui/shared/app_list_line_shared.py:127
 msgid "Installed"
 msgstr "Instalat"
 
-#: src/infrastructure/ui/app_window.py:173
+#: src/infrastructure/ui/app_window.py:175
 msgid "Updates"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:186
+#: src/infrastructure/ui/app_window.py:188
 msgid "Pending"
 msgstr "În așteptare"
 
-#: src/infrastructure/ui/app_window.py:204
+#: src/infrastructure/ui/app_window.py:206
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:237
+#: src/infrastructure/ui/app_window.py:239
 msgid "New"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:238
+#: src/infrastructure/ui/app_window.py:240
 msgid "Updated"
 msgstr "Actualizat"
 
 # --- Home sections ---
-#: src/infrastructure/ui/app_window.py:239
+#: src/infrastructure/ui/app_window.py:241
 msgid "Trending"
 msgstr "Tendințe"
 
-#: src/infrastructure/ui/app_window.py:240
+#: src/infrastructure/ui/app_window.py:242
 msgid "Popular"
 msgstr "Popular"
 
-#: src/infrastructure/ui/app_window.py:424
+#: src/infrastructure/ui/app_window.py:426
 msgid "Export saved"
 msgstr ""
 
@@ -267,7 +283,47 @@ msgstr ""
 msgid "Search…"
 msgstr "Căutare…"
 
-#: src/infrastructure/ui/home/installed_page.py:33
+#: src/infrastructure/ui/home/category_page.py:22
+msgid "AudioVideo"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:22
+msgid "Development"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:22
+msgid "Education"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:22
+msgid "Game"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:23
+msgid "Graphics"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:23
+msgid "Network"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:23
+msgid "Office"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:23
+msgid "Science"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:24
+msgid "System"
+msgstr ""
+
+#: src/infrastructure/ui/home/category_page.py:24
+msgid "Utility"
+msgstr ""
+
+#: src/infrastructure/ui/home/installed_page.py:41
 msgid "No installed applications found"
 msgstr ""
 

@@ -18,6 +18,11 @@ from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.category_repository import CategoryRepository
 from infrastructure.ui.category_list_page import CategoryListPage
 
+if False:  # xgettext extraction hints for dynamic category strings
+    _("AudioVideo"); _("Development"); _("Education"); _("Game")
+    _("Graphics"); _("Network"); _("Office"); _("Science")
+    _("System"); _("Utility")
+
 
 class CategoryPage(Gtk.ScrolledWindow):
 

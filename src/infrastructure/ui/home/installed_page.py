@@ -14,11 +14,19 @@ from infrastructure.ui.shared.installed_list_shared import InstalledListShared
 
 class InstalledPage(Gtk.Box):
 
-    def __init__(self, appstream_repository: AppstreamRepository, push_fn):
+    def __init__(
+        self,
+        appstream_repository: AppstreamRepository,
+        push_fn,
+        on_import=None,
+        on_export=None,
+    ):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self._appstream_repository = appstream_repository
         self._push_fn = push_fn
         self._flatpak_api = FlatpakApi()
+
+        self.append(self._build_toolbar(on_import, on_export))
 
         self._stack = Gtk.Stack()
         self._stack.set_vexpand(True)
@@ -45,6 +53,36 @@ class InstalledPage(Gtk.Box):
         self._stack.set_visible_child_name("loading")
 
         threading.Thread(target=self._load, daemon=True).start()
+
+    def _build_toolbar(self, on_import, on_export) -> Gtk.Box:
+        toolbar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        toolbar.set_margin_top(12)
+        toolbar.set_margin_bottom(4)
+        toolbar.set_margin_start(24)
+        toolbar.set_margin_end(24)
+        toolbar.set_halign(Gtk.Align.END)
+
+        import_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        import_box.append(Gtk.Image.new_from_icon_name("document-open-symbolic"))
+        import_box.append(Gtk.Label(label=_("Import")))
+        import_btn = Gtk.Button()
+        import_btn.set_child(import_box)
+        import_btn.set_tooltip_text(_("Import"))
+        if on_import:
+            import_btn.connect("clicked", lambda _: on_import(None, None))
+        toolbar.append(import_btn)
+
+        export_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        export_box.append(Gtk.Image.new_from_icon_name("document-save-symbolic"))
+        export_box.append(Gtk.Label(label=_("Export")))
+        export_btn = Gtk.Button()
+        export_btn.set_child(export_box)
+        export_btn.set_tooltip_text(_("Export"))
+        if on_export:
+            export_btn.connect("clicked", lambda _: on_export(None, None))
+        toolbar.append(export_btn)
+
+        return toolbar
 
     def refresh(self):
         self._grid.clear()
