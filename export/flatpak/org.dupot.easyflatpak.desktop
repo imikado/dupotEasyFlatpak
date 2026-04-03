@@ -5,4 +5,4 @@ StartupWMClass=dupot_easy_flatpak
 Type=Application
 Icon=org.dupot.easyflatpak
 Categories=Utility
-MimeType=application/vnd.flatpak.ref
+MimeType=application/vnd.flatpak;
