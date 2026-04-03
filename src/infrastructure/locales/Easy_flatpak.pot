@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy_flatpak\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 10:38+0200\n"
+"POT-Creation-Date: 2026-04-03 11:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -406,4 +406,13 @@ msgid "recipe_should_installMangoHud"
 msgstr ""
 
 msgid "recipe_enable_mangohud"
+msgstr ""
+
+msgid "Gaming"
+msgstr ""
+
+msgid "Graphic design"
+msgstr ""
+
+msgid "Software development"
 msgstr ""

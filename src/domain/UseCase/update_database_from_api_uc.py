@@ -31,6 +31,8 @@ class UpdateDatabaseFromApiUc:
         if not self.should_sync_api():
             return
 
+        print("need to sync from api")
+
         app_id_to_check_in_db_list = []
 
         api_cache_entity = self._api_cache_repository.get_by_id(

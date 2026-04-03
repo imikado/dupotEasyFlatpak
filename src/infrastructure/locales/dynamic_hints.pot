@@ -48,3 +48,14 @@ msgstr ""
 
 msgid "recipe_enable_mangohud"
 msgstr ""
+
+
+msgid "Gaming"
+msgstr ""
+
+msgid "Graphic design"
+msgstr ""
+
+msgid "Software development"
+msgstr ""
+

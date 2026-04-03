@@ -73,7 +73,7 @@ def main():
             should_copy_default_user_settings = True
 
     if should_copy_default_user_settings:
-        print(f"install application one")
+        print(f"install default user settings conf")
         system_api.write_file(
             user_settings_current_path,
             current_user_settings.get_json_string(),

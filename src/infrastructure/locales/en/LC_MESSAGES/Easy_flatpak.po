@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 10:38+0200\n"
+"POT-Creation-Date: 2026-04-03 11:15+0200\n"
 "Language: en\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -405,3 +405,12 @@ msgstr "Install MangoHud"
 
 msgid "recipe_enable_mangohud"
 msgstr "Enable MangoHud"
+
+msgid "Gaming"
+msgstr "Gaming"
+
+msgid "Graphic design"
+msgstr "Graphic design"
+
+msgid "Software development"
+msgstr "Software development"
