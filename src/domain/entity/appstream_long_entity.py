@@ -199,7 +199,7 @@ class AppstreamLongEntity:
     def get_url_bdonation(self) -> str:
         return self._url_donation
 
-    def is_empty(self, value_to_test: str) -> bool:
-        if len(value_to_test) > 0:
+    def is_empty(self, value_to_test: str | None) -> bool:
+        if value_to_test and len(value_to_test) > 0:
             return True
         return False

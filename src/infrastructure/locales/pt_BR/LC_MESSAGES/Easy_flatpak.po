@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 08:23+0200\n"
+"POT-Creation-Date: 2026-04-03 10:27+0200\n"
 "Language: pt_BR\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,8 +10,8 @@ msgstr ""
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
 #: src/infrastructure/ui/appstream_page.py:147
-#: src/infrastructure/ui/shared/installed_list_shared.py:162
-#: src/infrastructure/ui/shared/installed_list_shared.py:176
+#: src/infrastructure/ui/shared/installed_list_shared.py:166
+#: src/infrastructure/ui/shared/installed_list_shared.py:180
 msgid "Downgrade"
 msgstr ""
 
@@ -20,11 +20,11 @@ msgid "Select a version to downgrade to"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
-#: src/infrastructure/ui/appstream/install_dialog.py:89
+#: src/infrastructure/ui/appstream/install_dialog.py:95
 #: src/infrastructure/ui/appstream_page.py:419
 #: src/infrastructure/ui/bundle_detail_page.py:274
 #: src/infrastructure/ui/home/updates_page.py:161
-#: src/infrastructure/ui/shared/installed_list_shared.py:130
+#: src/infrastructure/ui/shared/installed_list_shared.py:134
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -60,15 +60,15 @@ msgid "Installation"
 msgstr "Instalação"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:159
-#: src/infrastructure/ui/appstream/install_dialog.py:44
+#: src/infrastructure/ui/appstream/install_dialog.py:50
 #: src/infrastructure/ui/bundle_detail_page.py:73
 msgid "Install for current user only"
 msgstr "Instalar apenas para o usuário atual"
 
 # --- General actions ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
-#: src/infrastructure/ui/appstream/install_dialog.py:29
-#: src/infrastructure/ui/appstream/install_dialog.py:90
+#: src/infrastructure/ui/appstream/install_dialog.py:35
+#: src/infrastructure/ui/appstream/install_dialog.py:96
 #: src/infrastructure/ui/appstream_page.py:384
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:148
@@ -79,11 +79,30 @@ msgstr "Instalar"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
 #: src/infrastructure/ui/appstream_page.py:431
 #: src/infrastructure/ui/appstream_page.py:458
-#: src/infrastructure/ui/shared/installed_list_shared.py:140
+#: src/infrastructure/ui/shared/installed_list_shared.py:144
 msgid "Please wait…"
 msgstr "Por favor, aguarde…"
 
-#: src/infrastructure/ui/appstream/install_dialog.py:59
+# --- Recipe permission labels ---
+#: src/infrastructure/ui/appstream/install_dialog.py:15
+msgid "recipe_share_your_home_label"
+msgstr ""
+"Para informação: deve permitir que o Discord acesse seu diretório pessoal "
+"(deixe-o configurar)"
+
+#: src/infrastructure/ui/appstream/install_dialog.py:16
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indique o caminho do diretório onde você armazena seus jogos"
+
+#: src/infrastructure/ui/appstream/install_dialog.py:17
+msgid "recipe_should_installMangoHud"
+msgstr "Instalar MangoHud"
+
+#: src/infrastructure/ui/appstream/install_dialog.py:18
+msgid "recipe_enable_mangohud"
+msgstr "Ativar MangoHud"
+
+#: src/infrastructure/ui/appstream/install_dialog.py:65
 #: src/infrastructure/ui/bundle_detail_page.py:224
 msgid "Permissions"
 msgstr "Permissões"
@@ -99,13 +118,12 @@ msgstr "Fechar"
 
 #: src/infrastructure/ui/appstream_page.py:142
 #: src/infrastructure/ui/appstream_page.py:580
-#: src/infrastructure/ui/shared/installed_list_shared.py:70
-#: src/infrastructure/ui/shared/installed_list_shared.py:92
+#: src/infrastructure/ui/shared/installed_list_shared.py:96
 msgid "Recipe overrides"
 msgstr ""
 
 #: src/infrastructure/ui/appstream_page.py:152
-#: src/infrastructure/ui/shared/installed_list_shared.py:103
+#: src/infrastructure/ui/shared/installed_list_shared.py:107
 msgid "Run"
 msgstr ""
 
@@ -140,10 +158,10 @@ msgstr "Descrição"
 #: src/infrastructure/ui/appstream_page.py:374
 #: src/infrastructure/ui/appstream_page.py:417
 #: src/infrastructure/ui/appstream_page.py:420
-#: src/infrastructure/ui/shared/installed_list_shared.py:109
-#: src/infrastructure/ui/shared/installed_list_shared.py:128
-#: src/infrastructure/ui/shared/installed_list_shared.py:131
-#: src/infrastructure/ui/shared/installed_list_shared.py:151
+#: src/infrastructure/ui/shared/installed_list_shared.py:113
+#: src/infrastructure/ui/shared/installed_list_shared.py:132
+#: src/infrastructure/ui/shared/installed_list_shared.py:135
+#: src/infrastructure/ui/shared/installed_list_shared.py:155
 msgid "Uninstall"
 msgstr "Desinstalar"
 
@@ -154,12 +172,12 @@ msgid "Install with recipe"
 msgstr "Instalar com receita"
 
 #: src/infrastructure/ui/appstream_page.py:410
-#: src/infrastructure/ui/shared/installed_list_shared.py:121
+#: src/infrastructure/ui/shared/installed_list_shared.py:125
 msgid "Delete application data"
 msgstr "Excluir dados do aplicativo"
 
 #: src/infrastructure/ui/appstream_page.py:581
-#: src/infrastructure/ui/shared/installed_list_shared.py:93
+#: src/infrastructure/ui/shared/installed_list_shared.py:97
 msgid "Apply"
 msgstr ""
 
@@ -395,7 +413,7 @@ msgstr ""
 msgid "Search"
 msgstr "Pesquisar"
 
-#: src/infrastructure/ui/shared/installed_list_shared.py:166
+#: src/infrastructure/ui/shared/installed_list_shared.py:170
 msgid "Loading…"
 msgstr ""
 
@@ -411,18 +429,3 @@ msgstr ""
 
 #~ msgid "Not yet implemented."
 #~ msgstr "Não implementado ainda."
-
-# --- Recipe permission labels ---
-#~ msgid "recipe_share_your_home_label"
-#~ msgstr ""
-#~ "Para informação: deve permitir que o Discord acesse seu diretório pessoal "
-#~ "(deixe-o configurar)"
-
-#~ msgid "recipe_indicate_your_game_path_label"
-#~ msgstr "Indique o caminho do diretório onde você armazena seus jogos"
-
-#~ msgid "recipe_should_installMangoHud"
-#~ msgstr "Instalar MangoHud"
-
-#~ msgid "recipe_enable_mangohud"
-#~ msgstr "Ativar MangoHud"

@@ -3,6 +3,7 @@ import subprocess
 import threading
 
 import gi
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -67,7 +68,10 @@ def _make_installed_row(
 
     # Recipe overrides
     if has_recipe:
-        recipe_btn = Gtk.Button(label=_("Recipe overrides"))
+        recipe_btn = Gtk.Button()
+        recipe_btn.set_icon_name(
+            IconsShared().find_icon_name_available(IconsShared.ICON_EDITRECIPE)
+        )
 
         def on_recipe(_btn):
             recipe_uc = GetRecipeContentUc(RecipeRepository())
