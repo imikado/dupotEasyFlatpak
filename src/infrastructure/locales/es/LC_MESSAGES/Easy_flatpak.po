@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 11:15+0200\n"
+"POT-Creation-Date: 2026-04-03 12:12+0200\n"
 "Language: es\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -170,84 +170,102 @@ msgstr "Capturas de pantalla"
 msgid "Release History"
 msgstr "Historial de versiones"
 
+#: src/infrastructure/ui/app_window.py:66
+#: src/infrastructure/ui/shared/installed_list_shared.py:170
+msgid "Loading…"
+msgstr ""
+
 # --- Navigation / window ---
-#: src/infrastructure/ui/app_window.py:59
+#: src/infrastructure/ui/app_window.py:90
 msgid "Easy flatpak"
 msgstr "Easy flatpak"
 
-#: src/infrastructure/ui/app_window.py:68
+#: src/infrastructure/ui/app_window.py:99
 #: src/infrastructure/ui/menu/parameters_dialog.py:17
 msgid "Parameters"
 msgstr "Parámetros"
 
-#: src/infrastructure/ui/app_window.py:69
-#: src/infrastructure/ui/app_window.py:361
-#: src/infrastructure/ui/home/installed_page.py:67
-#: src/infrastructure/ui/home/installed_page.py:70
+#: src/infrastructure/ui/app_window.py:100
+#: src/infrastructure/ui/app_window.py:413
+#: src/infrastructure/ui/home/installed_page.py:69
+#: src/infrastructure/ui/home/installed_page.py:72
 #: src/infrastructure/ui/menu/import_dialog.py:15
 msgid "Import"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:70
-#: src/infrastructure/ui/app_window.py:397
-#: src/infrastructure/ui/home/installed_page.py:77
-#: src/infrastructure/ui/home/installed_page.py:80
+#: src/infrastructure/ui/app_window.py:101
+#: src/infrastructure/ui/app_window.py:449
+#: src/infrastructure/ui/home/installed_page.py:79
+#: src/infrastructure/ui/home/installed_page.py:82
 msgid "Export"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:71
+#: src/infrastructure/ui/app_window.py:102
+#: src/infrastructure/ui/app_window.py:395
+#: src/infrastructure/ui/home/installed_page.py:89
+#: src/infrastructure/ui/home/installed_page.py:92
+#: src/infrastructure/ui/home/installed_page.py:100
+msgid "Install local Flatpak"
+msgstr ""
+
+#: src/infrastructure/ui/app_window.py:103
 msgid "About"
 msgstr "Acerca de"
 
-#: src/infrastructure/ui/app_window.py:128
+#: src/infrastructure/ui/app_window.py:161
 msgid "Home"
 msgstr "Inicio"
 
-#: src/infrastructure/ui/app_window.py:136
+#: src/infrastructure/ui/app_window.py:169
 msgid "Categories"
 msgstr "Categorías"
 
-#: src/infrastructure/ui/app_window.py:143
+#: src/infrastructure/ui/app_window.py:176
 msgid "Bundles"
 msgstr "Paquetes"
 
-#: src/infrastructure/ui/app_window.py:156
+#: src/infrastructure/ui/app_window.py:190
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:127
 #: src/infrastructure/ui/shared/app_list_line_shared.py:127
 msgid "Installed"
 msgstr "Instalado"
 
-#: src/infrastructure/ui/app_window.py:175
+#: src/infrastructure/ui/app_window.py:209
 msgid "Updates"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:188
+#: src/infrastructure/ui/app_window.py:222
 msgid "Pending"
 msgstr "Pendiente"
 
-#: src/infrastructure/ui/app_window.py:206
+#: src/infrastructure/ui/app_window.py:240
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:239
+#: src/infrastructure/ui/app_window.py:273
 msgid "New"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:240
+#: src/infrastructure/ui/app_window.py:274
 msgid "Updated"
 msgstr "Actualizado"
 
 # --- Home sections ---
-#: src/infrastructure/ui/app_window.py:241
+#: src/infrastructure/ui/app_window.py:275
 msgid "Trending"
 msgstr "Tendencias"
 
-#: src/infrastructure/ui/app_window.py:242
+#: src/infrastructure/ui/app_window.py:276
 msgid "Popular"
 msgstr "Popular"
 
-#: src/infrastructure/ui/app_window.py:426
+#: src/infrastructure/ui/app_window.py:397
+#: src/infrastructure/ui/home/installed_page.py:102
+msgid "Flatpak files"
+msgstr ""
+
+#: src/infrastructure/ui/app_window.py:478
 msgid "Export saved"
 msgstr ""
 
@@ -282,7 +300,7 @@ msgstr ""
 msgid "Search…"
 msgstr "Buscar…"
 
-#: src/infrastructure/ui/home/installed_page.py:41
+#: src/infrastructure/ui/home/installed_page.py:43
 msgid "No installed applications found"
 msgstr ""
 
@@ -353,10 +371,6 @@ msgstr ""
 #: src/infrastructure/ui/search_list_page.py:30
 msgid "Search"
 msgstr "Buscar"
-
-#: src/infrastructure/ui/shared/installed_list_shared.py:170
-msgid "Loading…"
-msgstr ""
 
 msgid "AudioVideo"
 msgstr ""

@@ -35,7 +35,7 @@ from gi.repository import Gdk, Gio, Gtk, Adw, GLib
 
 class MainWindow(Adw.ApplicationWindow):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, init_fn=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.set_title("Easy flatpak")
@@ -44,16 +44,47 @@ class MainWindow(Adw.ApplicationWindow):
         self._toast_overlay = Adw.ToastOverlay()
         self.set_content(self._toast_overlay)
 
-        # Create navigation view for in-window navigation
         self.navigation_view = Adw.NavigationView()
         self._toast_overlay.set_child(self.navigation_view)
 
-        # Create and push the home page
+        self.connect("close-request", self._on_close_request)
+
+        if init_fn:
+            self._show_loading()
+            self.connect("map", lambda w: threading.Thread(target=self._run_init, args=(init_fn,), daemon=True).start())
+        else:
+            self._build_home()
+
+    def _show_loading(self):
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
+        box.set_halign(Gtk.Align.CENTER)
+        box.set_valign(Gtk.Align.CENTER)
+        box.set_vexpand(True)
+        spinner = Gtk.Spinner()
+        spinner.set_spinning(True)
+        spinner.set_size_request(48, 48)
+        label = Gtk.Label(label=_("Loading…"))
+        label.add_css_class("dim-label")
+        box.append(spinner)
+        box.append(label)
+        loading_page = Adw.NavigationPage.new(box, "Easy flatpak")
+        self.navigation_view.push(loading_page)
+
+    def _run_init(self, init_fn):
+        init_fn()
+        GLib.idle_add(self._on_init_done)
+
+    def _on_init_done(self):
+        # Remove loading page and push the real home
+        stack = self.navigation_view.get_navigation_stack()
+        if stack.get_n_items() > 0:
+            self.navigation_view.pop_to_page(stack.get_item(0))
+            self.navigation_view.replace([self._create_home_page()])
+        return GLib.SOURCE_REMOVE
+
+    def _build_home(self):
         home_page = self._create_home_page()
         self.navigation_view.push(home_page)
-
-        # Handle close request to prompt for unsaved changes
-        self.connect("close-request", self._on_close_request)
 
     def _create_home_page(self):
         page = Adw.NavigationPage.new(self._create_home_content(), _("Easy flatpak"))
@@ -68,6 +99,7 @@ class MainWindow(Adw.ApplicationWindow):
         menu.append(_("Parameters"), "win.parameters")
         menu.append(_("Import"), "win.import")
         menu.append(_("Export"), "win.export")
+        menu.append(_("Install local Flatpak"), "win.open_flatpak")
         menu.append(_("About"), "win.about")
 
         menu_button = Gtk.MenuButton()
@@ -83,6 +115,7 @@ class MainWindow(Adw.ApplicationWindow):
             ("parameters", self._on_menu_parameters),
             ("import", self._on_menu_import),
             ("export", self._on_menu_export),
+            ("open_flatpak", self._on_menu_open_flatpak),
             ("about", self._on_menu_about),
         ]:
             action = Gio.SimpleAction.new(name, None)
@@ -149,6 +182,7 @@ class MainWindow(Adw.ApplicationWindow):
             lambda p: self.navigation_view.push(p),
             on_import=self._on_menu_import,
             on_export=self._on_menu_export,
+            on_open_flatpak=self.open_flatpak_file,
         )
         view_stack.add_titled_with_icon(
             installed_page,
@@ -356,6 +390,24 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_menu_parameters(self, _action, _param):
         ParametersDialog().present(self)
 
+    def _on_menu_open_flatpak(self, _action, _param):
+        file_dialog = Gtk.FileDialog.new()
+        file_dialog.set_title(_("Install local Flatpak"))
+        filter_flatpak = Gtk.FileFilter()
+        filter_flatpak.set_name(_("Flatpak files"))
+        filter_flatpak.add_pattern("*.flatpak")
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        filters.append(filter_flatpak)
+        file_dialog.set_filters(filters)
+        file_dialog.open(self, None, self._on_menu_open_flatpak_chosen)
+
+    def _on_menu_open_flatpak_chosen(self, file_dialog, result):
+        try:
+            file = file_dialog.open_finish(result)
+        except GLib.Error:
+            return
+        self.open_flatpak_file(file.get_path())
+
     def _on_menu_import(self, _action, _param):
         file_dialog = Gtk.FileDialog.new()
         file_dialog.set_title(_("Import"))
@@ -462,14 +514,15 @@ class MainWindow(Adw.ApplicationWindow):
 
 
 class AppWindow(Adw.Application):
-    def __init__(self):
+    def __init__(self, init_fn=None):
         super().__init__(
             application_id="org.dupot.easyflatpak",
             flags=Gio.ApplicationFlags.HANDLES_OPEN,
         )
+        self._init_fn = init_fn
 
     def do_activate(self):
-        win = MainWindow(application=self)
+        win = MainWindow(application=self, init_fn=self._init_fn)
         win.present()
 
     def do_open(self, files, n_files, hint):

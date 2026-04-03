@@ -44,86 +44,86 @@ def main():
     # Create the "magic" function
     en_i18n.install()
 
-    system_api = SystemApi()
+    def init_fn():
+        system_api = SystemApi()
 
-    path_conf = PathConf()
-    path_conf.set_data_path(GLib.get_user_data_dir())
-    os.makedirs(path_conf.get_data_path(), exist_ok=True)
+        path_conf = PathConf()
+        path_conf.set_data_path(GLib.get_user_data_dir())
+        os.makedirs(path_conf.get_data_path(), exist_ok=True)
 
-    data_path = path_conf.get_data_path()
-    print(f"data path is {data_path}")
+        data_path = path_conf.get_data_path()
+        print(f"data path is {data_path}")
 
-    current_user_settings = UserSettingsEntity()
+        current_user_settings = UserSettingsEntity()
 
-    should_copy_default_user_settings = False
+        should_copy_default_user_settings = False
 
-    user_settings_current_path = path_conf.get_user_settings_path()
-    if not system_api.file_exists(user_settings_current_path):
-        print(f"user setting is missing : {user_settings_current_path}")
-        should_copy_default_user_settings = True
-    else:
-        current_user_settings.load(
-            system_api.read_json_file_obj(user_settings_current_path)
-        )
-
-        if UserSettingsEntity.DEFAULT_VERSION != current_user_settings.version:
-            print(
-                f"user settings is already there, but version is different current:{current_user_settings.version} vs application {application_user_settings.version}"
-            )
+        user_settings_current_path = path_conf.get_user_settings_path()
+        if not system_api.file_exists(user_settings_current_path):
+            print(f"user setting is missing : {user_settings_current_path}")
             should_copy_default_user_settings = True
+        else:
+            current_user_settings.load(
+                system_api.read_json_file_obj(user_settings_current_path)
+            )
 
-    if should_copy_default_user_settings:
-        print(f"install default user settings conf")
-        system_api.write_file(
-            user_settings_current_path,
-            current_user_settings.get_json_string(),
-        )
+            if UserSettingsEntity.DEFAULT_VERSION != current_user_settings.version:
+                print(
+                    f"user settings is already there, but version is different current:{current_user_settings.version} vs application {UserSettingsEntity.DEFAULT_VERSION}"
+                )
+                should_copy_default_user_settings = True
 
-    application_version_entity = ApplicationVersionEntity()
-    application_version_entity.load(system_api)
-    if not application_version_entity.is_current_version():
+        if should_copy_default_user_settings:
+            print(f"install default user settings conf")
+            system_api.write_file(
+                user_settings_current_path,
+                current_user_settings.get_json_string(),
+            )
 
-        print("not current version, will install")
+        application_version_entity = ApplicationVersionEntity()
+        application_version_entity.load(system_api)
+        if not application_version_entity.is_current_version():
 
-        FlatpakApi().ensure_flathub_remote()
+            print("not current version, will install")
 
-        if not system_api.file_exists(data_path):
-            system_api.create_dir(data_path)
+            FlatpakApi().ensure_flathub_remote()
 
-        icons_archive_path = path_conf.get_icons_archive_path()
-        if system_api.file_exists(icons_archive_path):
-            system_api.remove_file(icons_archive_path)
+            if not system_api.file_exists(data_path):
+                system_api.create_dir(data_path)
 
-        file_path_to_copy_list = [
-            PathToCopy(
-                path_conf.get_asset_database_path(),
-                path_conf.get_database_path(),
-            ),
-            PathToCopy(
-                path_conf.get_asset_application_version_path(),
-                path_conf.get_installed_version_path(),
-            ),
-            PathToCopy(
-                path_conf.get_asset_icons_archive_path(),
-                icons_archive_path,
-            ),
-        ]
+            icons_archive_path = path_conf.get_icons_archive_path()
+            if system_api.file_exists(icons_archive_path):
+                system_api.remove_file(icons_archive_path)
 
-        for path_to_copy_loop in file_path_to_copy_list:
-            system_api.copy_file(path_to_copy_loop.path_from, path_to_copy_loop.path_to)
+            file_path_to_copy_list = [
+                PathToCopy(
+                    path_conf.get_asset_database_path(),
+                    path_conf.get_database_path(),
+                ),
+                PathToCopy(
+                    path_conf.get_asset_application_version_path(),
+                    path_conf.get_installed_version_path(),
+                ),
+                PathToCopy(
+                    path_conf.get_asset_icons_archive_path(),
+                    icons_archive_path,
+                ),
+            ]
 
-        icons_directory_path = path_conf.get_icons_path()
-        if system_api.file_exists(icons_directory_path):
-            system_api.remove_directory(icons_directory_path)
+            for path_to_copy_loop in file_path_to_copy_list:
+                system_api.copy_file(path_to_copy_loop.path_from, path_to_copy_loop.path_to)
 
-        system_api.unzip_archive_to(icons_archive_path, path_conf.get_data_path())
+            icons_directory_path = path_conf.get_icons_path()
+            if system_api.file_exists(icons_directory_path):
+                system_api.remove_directory(icons_directory_path)
 
-    update_database_from_api = UpdateDatabaseFromApiUc(
-        FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()
-    )
-    update_database_from_api.process()
+            system_api.unzip_archive_to(icons_archive_path, path_conf.get_data_path())
 
-    app = AppWindow()
+        UpdateDatabaseFromApiUc(
+            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()
+        ).process()
+
+    app = AppWindow(init_fn=init_fn)
     app.run(sys.argv)
 
 

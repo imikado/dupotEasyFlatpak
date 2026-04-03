@@ -5,7 +5,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw, GLib, Gio
 
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
@@ -20,11 +20,13 @@ class InstalledPage(Gtk.Box):
         push_fn,
         on_import=None,
         on_export=None,
+        on_open_flatpak=None,
     ):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self._appstream_repository = appstream_repository
         self._push_fn = push_fn
         self._flatpak_api = FlatpakApi()
+        self._on_open_flatpak = on_open_flatpak
 
         self.append(self._build_toolbar(on_import, on_export))
 
@@ -82,7 +84,35 @@ class InstalledPage(Gtk.Box):
             export_btn.connect("clicked", lambda _: on_export(None, None))
         toolbar.append(export_btn)
 
+        flatpak_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        flatpak_box.append(Gtk.Image.new_from_icon_name("package-x-generic-symbolic"))
+        flatpak_box.append(Gtk.Label(label=_("Install local Flatpak")))
+        flatpak_btn = Gtk.Button()
+        flatpak_btn.set_child(flatpak_box)
+        flatpak_btn.set_tooltip_text(_("Install local Flatpak"))
+        flatpak_btn.connect("clicked", self._on_open_flatpak_clicked)
+        toolbar.append(flatpak_btn)
+
         return toolbar
+
+    def _on_open_flatpak_clicked(self, _btn):
+        file_dialog = Gtk.FileDialog.new()
+        file_dialog.set_title(_("Install local Flatpak"))
+        filter_flatpak = Gtk.FileFilter()
+        filter_flatpak.set_name(_("Flatpak files"))
+        filter_flatpak.add_pattern("*.flatpak")
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        filters.append(filter_flatpak)
+        file_dialog.set_filters(filters)
+        file_dialog.open(self.get_root(), None, self._on_flatpak_file_chosen)
+
+    def _on_flatpak_file_chosen(self, file_dialog, result):
+        try:
+            file = file_dialog.open_finish(result)
+        except GLib.Error:
+            return
+        if self._on_open_flatpak:
+            self._on_open_flatpak(file.get_path())
 
     def refresh(self):
         self._grid.clear()
