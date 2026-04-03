@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 10:27+0200\n"
+"POT-Creation-Date: 2026-04-03 10:38+0200\n"
 "Language: en\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgid "Select a version to downgrade to"
 msgstr "Select a version to downgrade to"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
-#: src/infrastructure/ui/appstream/install_dialog.py:95
+#: src/infrastructure/ui/appstream/install_dialog.py:88
 #: src/infrastructure/ui/appstream_page.py:419
 #: src/infrastructure/ui/bundle_detail_page.py:274
 #: src/infrastructure/ui/home/updates_page.py:161
@@ -60,15 +60,15 @@ msgid "Installation"
 msgstr "Installation"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:159
-#: src/infrastructure/ui/appstream/install_dialog.py:50
+#: src/infrastructure/ui/appstream/install_dialog.py:43
 #: src/infrastructure/ui/bundle_detail_page.py:73
 msgid "Install for current user only"
 msgstr "Install for current user only"
 
 # --- General actions ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
-#: src/infrastructure/ui/appstream/install_dialog.py:35
-#: src/infrastructure/ui/appstream/install_dialog.py:96
+#: src/infrastructure/ui/appstream/install_dialog.py:28
+#: src/infrastructure/ui/appstream/install_dialog.py:89
 #: src/infrastructure/ui/appstream_page.py:384
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:148
@@ -83,26 +83,7 @@ msgstr "Install"
 msgid "Please wait…"
 msgstr "Please wait…"
 
-# --- Recipe permission labels ---
-#: src/infrastructure/ui/appstream/install_dialog.py:15
-msgid "recipe_share_your_home_label"
-msgstr ""
-"For information: should allow discord to access your home directory (let it "
-"set up)"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:16
-msgid "recipe_indicate_your_game_path_label"
-msgstr "Indicate directory path where you store your games"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:17
-msgid "recipe_should_installMangoHud"
-msgstr "Install MangoHud"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:18
-msgid "recipe_enable_mangohud"
-msgstr "Enable MangoHud"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:65
+#: src/infrastructure/ui/appstream/install_dialog.py:58
 #: src/infrastructure/ui/bundle_detail_page.py:224
 msgid "Permissions"
 msgstr "Permissions"
@@ -303,47 +284,6 @@ msgstr "OK"
 msgid "Search…"
 msgstr "Search…"
 
-# --- Categories ---
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "AudioVideo"
-msgstr "Audio & Video"
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Development"
-msgstr "Development"
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Education"
-msgstr "Education"
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Game"
-msgstr "Games"
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Graphics"
-msgstr "Graphics"
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Network"
-msgstr "Network"
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Office"
-msgstr "Office"
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Science"
-msgstr "Science"
-
-#: src/infrastructure/ui/home/category_page.py:24
-msgid "System"
-msgstr "System"
-
-#: src/infrastructure/ui/home/category_page.py:24
-msgid "Utility"
-msgstr "Utilities"
-
 #: src/infrastructure/ui/home/installed_page.py:41
 msgid "No installed applications found"
 msgstr "No installed applications found"
@@ -419,3 +359,49 @@ msgstr "Search"
 #: src/infrastructure/ui/shared/installed_list_shared.py:170
 msgid "Loading…"
 msgstr "Loading…"
+
+# --- Categories ---
+msgid "AudioVideo"
+msgstr "Audio & Video"
+
+msgid "Development"
+msgstr "Development"
+
+msgid "Education"
+msgstr "Education"
+
+msgid "Game"
+msgstr "Games"
+
+msgid "Graphics"
+msgstr "Graphics"
+
+msgid "Network"
+msgstr "Network"
+
+msgid "Office"
+msgstr "Office"
+
+msgid "Science"
+msgstr "Science"
+
+msgid "System"
+msgstr "System"
+
+msgid "Utility"
+msgstr "Utilities"
+
+# --- Recipe permission labels ---
+msgid "recipe_share_your_home_label"
+msgstr ""
+"For information: should allow discord to access your home directory (let it "
+"set up)"
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr "Indicate directory path where you store your games"
+
+msgid "recipe_should_installMangoHud"
+msgstr "Install MangoHud"
+
+msgid "recipe_enable_mangohud"
+msgstr "Enable MangoHud"

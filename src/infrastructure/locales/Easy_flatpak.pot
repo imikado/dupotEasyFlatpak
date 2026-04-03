@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy_flatpak\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 10:27+0200\n"
+"POT-Creation-Date: 2026-04-03 10:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgid "Select a version to downgrade to"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
-#: src/infrastructure/ui/appstream/install_dialog.py:95
+#: src/infrastructure/ui/appstream/install_dialog.py:88
 #: src/infrastructure/ui/appstream_page.py:419
 #: src/infrastructure/ui/bundle_detail_page.py:274
 #: src/infrastructure/ui/home/updates_page.py:161
@@ -69,14 +69,14 @@ msgid "Installation"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:159
-#: src/infrastructure/ui/appstream/install_dialog.py:50
+#: src/infrastructure/ui/appstream/install_dialog.py:43
 #: src/infrastructure/ui/bundle_detail_page.py:73
 msgid "Install for current user only"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
-#: src/infrastructure/ui/appstream/install_dialog.py:35
-#: src/infrastructure/ui/appstream/install_dialog.py:96
+#: src/infrastructure/ui/appstream/install_dialog.py:28
+#: src/infrastructure/ui/appstream/install_dialog.py:89
 #: src/infrastructure/ui/appstream_page.py:384
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:148
@@ -91,23 +91,7 @@ msgstr ""
 msgid "Please wait…"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/install_dialog.py:15
-msgid "recipe_share_your_home_label"
-msgstr ""
-
-#: src/infrastructure/ui/appstream/install_dialog.py:16
-msgid "recipe_indicate_your_game_path_label"
-msgstr ""
-
-#: src/infrastructure/ui/appstream/install_dialog.py:17
-msgid "recipe_should_installMangoHud"
-msgstr ""
-
-#: src/infrastructure/ui/appstream/install_dialog.py:18
-msgid "recipe_enable_mangohud"
-msgstr ""
-
-#: src/infrastructure/ui/appstream/install_dialog.py:65
+#: src/infrastructure/ui/appstream/install_dialog.py:58
 #: src/infrastructure/ui/bundle_detail_page.py:224
 msgid "Permissions"
 msgstr ""
@@ -304,46 +288,6 @@ msgstr ""
 msgid "Search…"
 msgstr ""
 
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "AudioVideo"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Development"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Education"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Game"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Graphics"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Network"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Office"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Science"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:24
-msgid "System"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:24
-msgid "Utility"
-msgstr ""
-
 #: src/infrastructure/ui/home/installed_page.py:41
 msgid "No installed applications found"
 msgstr ""
@@ -418,4 +362,48 @@ msgstr ""
 
 #: src/infrastructure/ui/shared/installed_list_shared.py:170
 msgid "Loading…"
+msgstr ""
+
+# --- Categories (category_page.py uses _(category) with a variable) ---
+msgid "AudioVideo"
+msgstr ""
+
+msgid "Development"
+msgstr ""
+
+msgid "Education"
+msgstr ""
+
+msgid "Game"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Network"
+msgstr ""
+
+msgid "Office"
+msgstr ""
+
+msgid "Science"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "Utility"
+msgstr ""
+
+# --- Recipe permission labels (install_dialog.py uses _(perm.get_label()) with a variable) ---
+msgid "recipe_share_your_home_label"
+msgstr ""
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr ""
+
+msgid "recipe_should_installMangoHud"
+msgstr ""
+
+msgid "recipe_enable_mangohud"
 msgstr ""

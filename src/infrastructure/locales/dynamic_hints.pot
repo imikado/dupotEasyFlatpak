@@ -1,0 +1,50 @@
+# Dynamic string hints for xgettext — strings passed as variables to _()
+# Add entries here whenever a new dynamic string is introduced.
+# This file is merged into the main .pot by generate_translations.sh
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+# --- Categories (category_page.py uses _(category) with a variable) ---
+msgid "AudioVideo"
+msgstr ""
+
+msgid "Development"
+msgstr ""
+
+msgid "Education"
+msgstr ""
+
+msgid "Game"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Network"
+msgstr ""
+
+msgid "Office"
+msgstr ""
+
+msgid "Science"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "Utility"
+msgstr ""
+
+# --- Recipe permission labels (install_dialog.py uses _(perm.get_label()) with a variable) ---
+msgid "recipe_share_your_home_label"
+msgstr ""
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr ""
+
+msgid "recipe_should_installMangoHud"
+msgstr ""
+
+msgid "recipe_enable_mangohud"
+msgstr ""

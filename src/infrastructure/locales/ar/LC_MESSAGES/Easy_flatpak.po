@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 10:27+0200\n"
+"POT-Creation-Date: 2026-04-03 10:38+0200\n"
 "Language: ar\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgid "Select a version to downgrade to"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
-#: src/infrastructure/ui/appstream/install_dialog.py:95
+#: src/infrastructure/ui/appstream/install_dialog.py:88
 #: src/infrastructure/ui/appstream_page.py:419
 #: src/infrastructure/ui/bundle_detail_page.py:274
 #: src/infrastructure/ui/home/updates_page.py:161
@@ -60,15 +60,15 @@ msgid "Installation"
 msgstr "التثبيت"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:159
-#: src/infrastructure/ui/appstream/install_dialog.py:50
+#: src/infrastructure/ui/appstream/install_dialog.py:43
 #: src/infrastructure/ui/bundle_detail_page.py:73
 msgid "Install for current user only"
 msgstr "التثبيت للمستخدم الحالي فقط"
 
 # --- General actions ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
-#: src/infrastructure/ui/appstream/install_dialog.py:35
-#: src/infrastructure/ui/appstream/install_dialog.py:96
+#: src/infrastructure/ui/appstream/install_dialog.py:28
+#: src/infrastructure/ui/appstream/install_dialog.py:89
 #: src/infrastructure/ui/appstream_page.py:384
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:148
@@ -83,26 +83,7 @@ msgstr "تثبيت"
 msgid "Please wait…"
 msgstr "يرجى الانتظار…"
 
-# --- Recipe permission labels ---
-#: src/infrastructure/ui/appstream/install_dialog.py:15
-msgid "recipe_share_your_home_label"
-msgstr ""
-"للمعلومة: يجب السماح لـ Discord بالوصول إلى المجلد الرئيسي الخاص بك (دعه "
-"يُهيئ نفسه)"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:16
-msgid "recipe_indicate_your_game_path_label"
-msgstr "حدد مسار المجلد الذي تخزن فيه ألعابك"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:17
-msgid "recipe_should_installMangoHud"
-msgstr "تثبيت MangoHud"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:18
-msgid "recipe_enable_mangohud"
-msgstr "تفعيل MangoHud"
-
-#: src/infrastructure/ui/appstream/install_dialog.py:65
+#: src/infrastructure/ui/appstream/install_dialog.py:58
 #: src/infrastructure/ui/bundle_detail_page.py:224
 msgid "Permissions"
 msgstr "الأذونات"
@@ -301,46 +282,6 @@ msgstr ""
 msgid "Search…"
 msgstr "بحث…"
 
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "AudioVideo"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Development"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Education"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:22
-msgid "Game"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Graphics"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Network"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Office"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:23
-msgid "Science"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:24
-msgid "System"
-msgstr ""
-
-#: src/infrastructure/ui/home/category_page.py:24
-msgid "Utility"
-msgstr ""
-
 #: src/infrastructure/ui/home/installed_page.py:41
 msgid "No installed applications found"
 msgstr ""
@@ -416,6 +357,51 @@ msgstr "بحث"
 #: src/infrastructure/ui/shared/installed_list_shared.py:170
 msgid "Loading…"
 msgstr ""
+
+msgid "AudioVideo"
+msgstr ""
+
+msgid "Development"
+msgstr ""
+
+msgid "Education"
+msgstr ""
+
+msgid "Game"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Network"
+msgstr ""
+
+msgid "Office"
+msgstr ""
+
+msgid "Science"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "Utility"
+msgstr ""
+
+# --- Recipe permission labels ---
+msgid "recipe_share_your_home_label"
+msgstr ""
+"للمعلومة: يجب السماح لـ Discord بالوصول إلى المجلد الرئيسي الخاص بك (دعه "
+"يُهيئ نفسه)"
+
+msgid "recipe_indicate_your_game_path_label"
+msgstr "حدد مسار المجلد الذي تخزن فيه ألعابك"
+
+msgid "recipe_should_installMangoHud"
+msgstr "تثبيت MangoHud"
+
+msgid "recipe_enable_mangohud"
+msgstr "تفعيل MangoHud"
 
 #~ msgid "Import / Export"
 #~ msgstr "استيراد / تصدير"

@@ -27,6 +27,14 @@ find "$SRC_DIR" -name "*.py" | sort | xgettext \
 
 echo "  → $POT_FILE"
 
+# Merge dynamic hints (strings passed as variables to _()) into the pot
+DYNAMIC_HINTS="$LOCALES_DIR/dynamic_hints.pot"
+if [ -f "$DYNAMIC_HINTS" ]; then
+    echo "=== Merging dynamic hints ==="
+    msgcat --use-first "$POT_FILE" "$DYNAMIC_HINTS" -o "$POT_FILE"
+    echo "  → merged $DYNAMIC_HINTS"
+fi
+
 for LANG in "${LANGUAGES[@]}"; do
     PO_FILE="$LOCALES_DIR/$LANG/LC_MESSAGES/$DOMAIN.po"
     MO_FILE="$LOCALES_DIR/$LANG/LC_MESSAGES/$DOMAIN.mo"

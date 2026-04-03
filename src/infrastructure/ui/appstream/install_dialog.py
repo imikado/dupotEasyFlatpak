@@ -11,13 +11,6 @@ from gi.repository import Gtk, Adw, GLib
 
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 
-if False:  # xgettext extraction hints for dynamic recipe permission labels
-    _("recipe_share_your_home_label")
-    _("recipe_indicate_your_game_path_label")
-    _("recipe_should_installMangoHud")
-    _("recipe_enable_mangohud")
-
-
 class InstallDialog(Adw.AlertDialog):
 
     def __init__(
