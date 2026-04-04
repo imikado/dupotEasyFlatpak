@@ -89,3 +89,7 @@ class FlatpakApiContract:
     @abstractmethod
     def get_install_bundle_call(self, file_path: str, *flags) -> list:
         pass
+
+    @abstractmethod
+    def clean_cache(self):
+        pass

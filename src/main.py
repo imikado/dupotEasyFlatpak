@@ -86,7 +86,10 @@ def main():
 
             print("not current version, will install")
 
-            FlatpakApi().ensure_flathub_remote()
+            flatpak_api = FlatpakApi()
+
+            flatpak_api.ensure_flathub_remote()
+            flatpak_api.clean_cache()
 
             if not system_api.file_exists(data_path):
                 system_api.create_dir(data_path)
@@ -111,7 +114,9 @@ def main():
             ]
 
             for path_to_copy_loop in file_path_to_copy_list:
-                system_api.copy_file(path_to_copy_loop.path_from, path_to_copy_loop.path_to)
+                system_api.copy_file(
+                    path_to_copy_loop.path_from, path_to_copy_loop.path_to
+                )
 
             icons_directory_path = path_conf.get_icons_path()
             if system_api.file_exists(icons_directory_path):

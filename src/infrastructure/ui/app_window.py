@@ -40,6 +40,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.set_title("Easy flatpak")
         self.set_default_size(1100, 800)
+        self._pending_flatpak = None
 
         self._toast_overlay = Adw.ToastOverlay()
         self.set_content(self._toast_overlay)
@@ -75,11 +76,13 @@ class MainWindow(Adw.ApplicationWindow):
         GLib.idle_add(self._on_init_done)
 
     def _on_init_done(self):
-        # Remove loading page and push the real home
         stack = self.navigation_view.get_navigation_stack()
         if stack.get_n_items() > 0:
             self.navigation_view.pop_to_page(stack.get_item(0))
             self.navigation_view.replace([self._create_home_page()])
+        if self._pending_flatpak:
+            self.open_flatpak_file(self._pending_flatpak)
+            self._pending_flatpak = None
         return GLib.SOURCE_REMOVE
 
     def _build_home(self):
@@ -533,5 +536,8 @@ class AppWindow(Adw.Application):
         for f in files:
             path = f.get_path()
             if path and path.endswith(".flatpak"):
-                win.open_flatpak_file(path)
+                if win._pending_flatpak is not None or not win.navigation_view.get_visible_page():
+                    win._pending_flatpak = path
+                else:
+                    win.open_flatpak_file(path)
                 break

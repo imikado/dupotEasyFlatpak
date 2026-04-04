@@ -179,12 +179,14 @@ class FlatpakApi(FlatpakApiContract):
 
         # Derive a candidate app_id from filename as fallback
         import os
+
         basename = os.path.basename(file_path)
         if basename.endswith(".flatpak"):
             info["name"] = basename[: -len(".flatpak")]
 
         try:
             from gi.repository import GLib
+
             with open(file_path, "rb") as f:
                 data = f.read()
             gbytes = GLib.Bytes.new(data)
@@ -238,3 +240,10 @@ class FlatpakApi(FlatpakApiContract):
             flatpak_history_list.append(FlatpakHistoryEntity(commit, subject, date))
 
         return flatpak_history_list
+
+    def clean_cache(self):
+
+        subprocess.run(
+            self._cmd("run", "--command=fc-cache", "org.dupot.easyflatpak", "-f", "-v"),
+            capture_output=False,
+        )
