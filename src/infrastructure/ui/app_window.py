@@ -76,6 +76,16 @@ class MainWindow(Adw.ApplicationWindow):
         GLib.idle_add(self._on_init_done)
 
     def _on_init_done(self):
+        from domain.entity.user_settings_entity import UserSettingsEntity
+        settings = UserSettingsEntity()
+        style_manager = Adw.StyleManager.get_default()
+        if settings.use_theme_dark():
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+        elif settings.use_theme_light():
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
+        else:
+            style_manager.set_color_scheme(Adw.ColorScheme.DEFAULT)
+
         stack = self.navigation_view.get_navigation_stack()
         if stack.get_n_items() > 0:
             self.navigation_view.pop_to_page(stack.get_item(0))

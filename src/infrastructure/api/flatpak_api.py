@@ -18,12 +18,18 @@ class FlatpakApi(FlatpakApiContract):
         return prefix + ["flatpak"] + list(args)
 
     def get_installed_app_id_list(self) -> list[str]:
-        result = subprocess.run(
-            self._cmd("list", "--app", "--columns=application"),
-            capture_output=True,
-            text=True,
-        )
-        return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+        seen = set()
+        for scope in ("--user", "--system"):
+            result = subprocess.run(
+                self._cmd("list", "--app", scope, "--columns=application"),
+                capture_output=True,
+                text=True,
+            )
+            for line in result.stdout.splitlines():
+                app_id = line.strip()
+                if app_id:
+                    seen.add(app_id)
+        return list(seen)
 
     def get_installed_list(self) -> list[InstalledVersionEntity]:
         result = subprocess.run(

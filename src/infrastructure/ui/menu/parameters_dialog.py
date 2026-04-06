@@ -41,6 +41,20 @@ class ParametersDialog(Adw.PreferencesDialog):
         self._path_row.connect("changed", lambda *_: self._on_change())
         group.add(self._path_row)
 
+        appearance_group = Adw.PreferencesGroup()
+        appearance_group.set_title(_("Appearance"))
+        page.add(appearance_group)
+
+        theme_choices = self._settings.get_theme_choice_list()
+        self._theme_row = Adw.ComboRow()
+        self._theme_row.set_title(_("Theme"))
+        self._theme_row.set_model(Gtk.StringList.new(theme_choices))
+        current_theme = self._settings.theme
+        selected_index = theme_choices.index(current_theme) if current_theme in theme_choices else 0
+        self._theme_row.set_selected(selected_index)
+        self._theme_row.connect("notify::selected", lambda *_: self._on_change())
+        appearance_group.add(self._theme_row)
+
         save_group = Adw.PreferencesGroup()
         page.add(save_group)
 
@@ -62,5 +76,18 @@ class ParametersDialog(Adw.PreferencesDialog):
         if item:
             self._settings.installation_scope = item.get_string()
         self._settings.installation_game_path = self._path_row.get_text()
+        theme_item = self._theme_row.get_selected_item()
+        if theme_item:
+            self._settings.theme = theme_item.get_string()
         self._user_settings_api.save()
+        self._apply_theme()
         self.close()
+
+    def _apply_theme(self):
+        style_manager = Adw.StyleManager.get_default()
+        if self._settings.use_theme_dark():
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+        elif self._settings.use_theme_light():
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
+        else:
+            style_manager.set_color_scheme(Adw.ColorScheme.DEFAULT)
