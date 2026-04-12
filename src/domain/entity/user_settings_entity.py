@@ -9,23 +9,35 @@ class UserSettingsEntity:
     THEME_LIGHT = "light"
     THEME_SYSTEM = "system"
 
+    LANGUAGE_SYSTEM = "system"
+    LANGUAGE_FR = "french"
+    LANGUAGE_EN = "english"
+    LANGUAGE_AR = "arabic"
+    LANGUAGE_ES = "spanish"
+    LANGUAGE_IT = "italian"
+    LANGUAGE_PT = "portugues"
+    LANGUAGE_RO = "romanian"
+
     FIELD_VERSION = "version"
     FIELD_INSTALLATION_SCOPE = "installation_scope"
     FIELD_INSTALLATION_GAME_PATH = "installation_game_path"
     FIELD_THEME = "theme"
+    FIELD_LANGUAGE = "language"
 
     _instance: "UserSettingsEntity | None" = None
 
-    DEFAULT_VERSION = 17
+    DEFAULT_VERSION = 18
     DEFAULT_INSTALLATION_SCOPE = INSTALLATION_USER_SCOPE
     DEFAULT_GAME_PATH = ""
     DEFAULT_THEME = THEME_SYSTEM
+    DEFAULT_LANGUAGE = LANGUAGE_SYSTEM
 
     version: int = DEFAULT_VERSION
     installation_scope: str = DEFAULT_INSTALLATION_SCOPE
     installation_game_path: str = DEFAULT_GAME_PATH
 
     theme: str = DEFAULT_THEME
+    language: str = DEFAULT_LANGUAGE
 
     def __new__(cls, *_args, **_kwargs):
         if cls._instance is None:
@@ -39,6 +51,9 @@ class UserSettingsEntity:
 
         if self.FIELD_THEME in raw_obj:
             self.theme = raw_obj[self.FIELD_THEME]
+
+        if self.FIELD_LANGUAGE in raw_obj:
+            self.language = raw_obj[self.FIELD_LANGUAGE]
 
     def is_user_scope(self) -> bool:
         if self.installation_scope == self.INSTALLATION_USER_SCOPE:
@@ -55,6 +70,7 @@ class UserSettingsEntity:
                 self.FIELD_INSTALLATION_SCOPE: self.installation_scope,
                 self.FIELD_INSTALLATION_GAME_PATH: self.installation_game_path,
                 self.FIELD_THEME: self.theme,
+                self.FIELD_LANGUAGE: self.language,
             }
         )
 
@@ -69,3 +85,30 @@ class UserSettingsEntity:
 
     def get_theme_choice_list(self) -> list[str]:
         return [self.THEME_DARK, self.THEME_LIGHT, self.THEME_SYSTEM]
+
+    def get_language_choice_list(self) -> list[str]:
+        return [
+            self.LANGUAGE_SYSTEM,
+            self.LANGUAGE_AR,
+            self.LANGUAGE_EN,
+            self.LANGUAGE_ES,
+            self.LANGUAGE_FR,
+            self.LANGUAGE_IT,
+            self.LANGUAGE_PT,
+            self.LANGUAGE_RO,
+        ]
+
+    def should_force_language(self) -> bool:
+        return self.language != self.LANGUAGE_SYSTEM
+
+    def get_language_code(self) -> str:
+        language_codes = {
+            self.LANGUAGE_AR: "ar",
+            self.LANGUAGE_EN: "en",
+            self.LANGUAGE_ES: "es",
+            self.LANGUAGE_FR: "fr",
+            self.LANGUAGE_IT: "it",
+            self.LANGUAGE_PT: "pt_BR",
+            self.LANGUAGE_RO: "ro",
+        }
+        return language_codes.get(self.language, "en")

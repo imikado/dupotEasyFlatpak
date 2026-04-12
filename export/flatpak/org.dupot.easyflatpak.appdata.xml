@@ -114,12 +114,14 @@
   <releases>
 
 
-<release date="2026-04-03" version="4.1.3"> 
+<release date="2026-04-03" version="4.1.4"> 
       <description>
         <ul>
           <li>Improvments</li>
           <li>Fix installed page to get user and system scope</li>
           <li>Add cache clean each new version installed</li>
+          <li>Add feature to force language</li>
+          <li>Fix updates available page</li>
          
         </ul>
       </description>

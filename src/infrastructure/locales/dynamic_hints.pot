@@ -59,3 +59,29 @@ msgstr ""
 msgid "Software development"
 msgstr ""
 
+# --- Language choices (user_settings_entity.py get_language_choice_list()) ---
+msgid "system"
+msgstr ""
+
+msgid "arabic"
+msgstr ""
+
+msgid "english"
+msgstr ""
+
+msgid "spanish"
+msgstr ""
+
+msgid "french"
+msgstr ""
+
+msgid "italian"
+msgstr ""
+
+msgid "portugues"
+msgstr ""
+
+msgid "romanian"
+msgstr ""
+
+

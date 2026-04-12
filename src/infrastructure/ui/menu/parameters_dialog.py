@@ -1,3 +1,5 @@
+import os
+import sys
 import gi
 
 gi.require_version("Gtk", "4.0")
@@ -18,6 +20,7 @@ class ParametersDialog(Adw.PreferencesDialog):
 
         self._settings = UserSettingsEntity()
         self._user_settings_api = UserSettingsApi(SystemApi())
+        self._initial_language = self._settings.language
 
         page = Adw.PreferencesPage()
         self.add(page)
@@ -55,6 +58,16 @@ class ParametersDialog(Adw.PreferencesDialog):
         self._theme_row.connect("notify::selected", lambda *_: self._on_change())
         appearance_group.add(self._theme_row)
 
+        language_choices = self._settings.get_language_choice_list()
+        self._language_row = Adw.ComboRow()
+        self._language_row.set_title(_("Language"))
+        self._language_row.set_model(Gtk.StringList.new([_(c) for c in language_choices]))
+        current_language = self._settings.language
+        selected_lang_index = language_choices.index(current_language) if current_language in language_choices else 0
+        self._language_row.set_selected(selected_lang_index)
+        self._language_row.connect("notify::selected", lambda *_: self._on_change())
+        appearance_group.add(self._language_row)
+
         save_group = Adw.PreferencesGroup()
         page.add(save_group)
 
@@ -79,8 +92,13 @@ class ParametersDialog(Adw.PreferencesDialog):
         theme_item = self._theme_row.get_selected_item()
         if theme_item:
             self._settings.theme = theme_item.get_string()
+        language_choices = self._settings.get_language_choice_list()
+        self._settings.language = language_choices[self._language_row.get_selected()]
         self._user_settings_api.save()
         self._apply_theme()
+        if self._settings.language != self._initial_language:
+            self.close()
+            os.execv(sys.executable, [sys.executable] + sys.argv)
         self.close()
 
     def _apply_theme(self):

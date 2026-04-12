@@ -50,8 +50,23 @@ class FlatpakApi(FlatpakApiContract):
         return len(self.get_available_update_list())
 
     def get_available_update_list(self) -> list[UpdateAvailableEntity]:
+        # Build installed (app_id, branch) → version map to detect runtimes
+        # already at their latest visible version (same version+branch = commit-only
+        # update that would loop endlessly if shown).
+        installed: dict[tuple[str, str], str] = {}
+        for scope in ("--user", "--system"):
+            result = subprocess.run(
+                self._cmd("list", scope, "--columns=application,version,branch"),
+                capture_output=True,
+                text=True,
+            )
+            for line in result.stdout.splitlines():
+                parts = line.split("\t")
+                if len(parts) >= 3:
+                    installed[(parts[0].strip(), parts[2].strip())] = parts[1].strip()
+
         available_update_list = []
-        seen_ids = set()
+        seen_ids: set[str] = set()
 
         for scope in ("--user", "--system"):
             result = subprocess.run(
@@ -59,24 +74,32 @@ class FlatpakApi(FlatpakApiContract):
                     "remote-ls",
                     "--updates",
                     scope,
-                    "--app",
-                    "--columns=application,name,version",
+                    "--columns=application,name,version,branch",
                 ),
                 capture_output=True,
                 text=True,
             )
             for line in result.stdout.splitlines():
                 parts = line.split("\t")
-                if len(parts) >= 2:
-                    app_id = parts[0].strip()
-                    if app_id in seen_ids:
-                        continue
-                    seen_ids.add(app_id)
-                    name = parts[1].strip()
-                    version = parts[2].strip() if len(parts) >= 3 else ""
-                    available_update_list.append(
-                        UpdateAvailableEntity(app_id, name, version)
-                    )
+                if len(parts) < 1:
+                    continue
+                app_id = parts[0].strip()
+                if not app_id or app_id in seen_ids:
+                    continue
+                name = parts[1].strip() if len(parts) >= 2 else app_id
+                version = parts[2].strip() if len(parts) >= 3 else ""
+                branch = parts[3].strip() if len(parts) >= 4 else ""
+
+                # Hide runtimes where the visible version hasn't changed — only
+                # a commit difference exists, which causes an infinite update loop.
+                installed_version = installed.get((app_id, branch))
+                if installed_version is not None and installed_version == version:
+                    continue
+
+                seen_ids.add(app_id)
+                available_update_list.append(
+                    UpdateAvailableEntity(app_id, name, version)
+                )
 
         return available_update_list
 

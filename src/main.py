@@ -80,6 +80,16 @@ def main():
                 current_user_settings.get_json_string(),
             )
 
+        if current_user_settings.should_force_language():
+            lang_code = current_user_settings.get_language_code()
+            forced_i18n = gettext.translation(
+                appname,
+                localedir,
+                languages=[lang_code],
+                fallback=True,
+            )
+            forced_i18n.install()
+
         application_version_entity = ApplicationVersionEntity()
         application_version_entity.load(system_api)
         if not application_version_entity.is_current_version():
