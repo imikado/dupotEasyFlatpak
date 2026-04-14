@@ -13,11 +13,11 @@ msgstr ""
 #: src/infrastructure/ui/shared/installed_list_shared.py:166
 #: src/infrastructure/ui/shared/installed_list_shared.py:180
 msgid "Downgrade"
-msgstr ""
+msgstr "Retrogradează"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:16
 msgid "Select a version to downgrade to"
-msgstr ""
+msgstr "Selectați o versiune la care să reveniți"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:88
@@ -101,12 +101,12 @@ msgstr "Închide"
 #: src/infrastructure/ui/appstream_page.py:580
 #: src/infrastructure/ui/shared/installed_list_shared.py:96
 msgid "Recipe overrides"
-msgstr ""
+msgstr "Substituiri rețetă"
 
 #: src/infrastructure/ui/appstream_page.py:152
 #: src/infrastructure/ui/shared/installed_list_shared.py:107
 msgid "Run"
-msgstr ""
+msgstr "Rulează"
 
 #: src/infrastructure/ui/appstream_page.py:216
 msgid "License"
@@ -122,15 +122,15 @@ msgstr "Dimensiune instalată"
 
 #: src/infrastructure/ui/appstream_page.py:235
 msgid "Homepage"
-msgstr ""
+msgstr "Pagina principală"
 
 #: src/infrastructure/ui/appstream_page.py:249
 msgid "Bug Tracker"
-msgstr ""
+msgstr "Urmărire erori"
 
 #: src/infrastructure/ui/appstream_page.py:263
 msgid "Donate"
-msgstr ""
+msgstr "Donează"
 
 #: src/infrastructure/ui/appstream_page.py:278
 msgid "Description"
@@ -160,7 +160,7 @@ msgstr "Șterge datele aplicației"
 #: src/infrastructure/ui/appstream_page.py:581
 #: src/infrastructure/ui/shared/installed_list_shared.py:97
 msgid "Apply"
-msgstr ""
+msgstr "Aplică"
 
 #: src/infrastructure/ui/appstream_page.py:599
 msgid "Screenshots"
@@ -173,7 +173,7 @@ msgstr "Istoricul versiunilor"
 #: src/infrastructure/ui/app_window.py:67
 #: src/infrastructure/ui/shared/installed_list_shared.py:170
 msgid "Loading…"
-msgstr ""
+msgstr "Se încarcă…"
 
 # --- Navigation / window ---
 #: src/infrastructure/ui/app_window.py:93
@@ -191,14 +191,14 @@ msgstr "Parametri"
 #: src/infrastructure/ui/home/installed_page.py:72
 #: src/infrastructure/ui/menu/import_dialog.py:15
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #: src/infrastructure/ui/app_window.py:104
 #: src/infrastructure/ui/app_window.py:452
 #: src/infrastructure/ui/home/installed_page.py:79
 #: src/infrastructure/ui/home/installed_page.py:82
 msgid "Export"
-msgstr ""
+msgstr "Export"
 
 #: src/infrastructure/ui/app_window.py:105
 #: src/infrastructure/ui/app_window.py:398
@@ -206,7 +206,7 @@ msgstr ""
 #: src/infrastructure/ui/home/installed_page.py:92
 #: src/infrastructure/ui/home/installed_page.py:100
 msgid "Install local Flatpak"
-msgstr ""
+msgstr "Instalează Flatpak local"
 
 #: src/infrastructure/ui/app_window.py:106
 msgid "About"
@@ -232,7 +232,7 @@ msgstr "Instalat"
 
 #: src/infrastructure/ui/app_window.py:212
 msgid "Updates"
-msgstr ""
+msgstr "Actualizări"
 
 #: src/infrastructure/ui/app_window.py:225
 msgid "Pending"
@@ -241,11 +241,11 @@ msgstr "În așteptare"
 #: src/infrastructure/ui/app_window.py:243
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
-msgstr ""
+msgstr "{name} se instalează — urmăriți progresul în În așteptare"
 
 #: src/infrastructure/ui/app_window.py:276
 msgid "New"
-msgstr ""
+msgstr "Nou"
 
 #: src/infrastructure/ui/app_window.py:277
 msgid "Updated"
@@ -263,38 +263,38 @@ msgstr "Popular"
 #: src/infrastructure/ui/app_window.py:400
 #: src/infrastructure/ui/home/installed_page.py:102
 msgid "Flatpak files"
-msgstr ""
+msgstr "Fișiere Flatpak"
 
 #: src/infrastructure/ui/app_window.py:481
 msgid "Export saved"
-msgstr ""
+msgstr "Export salvat"
 
 #: src/infrastructure/ui/bundle_detail_page.py:57
 #: src/infrastructure/ui/bundle_detail_page.py:194
 msgid "Edit bundle"
-msgstr ""
+msgstr "Editează pachetul"
 
 #: src/infrastructure/ui/bundle_detail_page.py:77
 msgid "Install selected"
-msgstr ""
+msgstr "Instalează selectate"
 
 #: src/infrastructure/ui/bundle_detail_page.py:149
 msgid "Edit permissions"
-msgstr ""
+msgstr "Editează permisiunile"
 
 #: src/infrastructure/ui/bundle_detail_page.py:184
 #: src/infrastructure/ui/bundle_detail_page.py:254
 msgid "Already installed"
-msgstr ""
+msgstr "Deja instalat"
 
 #: src/infrastructure/ui/bundle_detail_page.py:194
 #: src/infrastructure/ui/home/pending_list_page.py:135
 msgid "Done"
-msgstr ""
+msgstr "Gata"
 
 #: src/infrastructure/ui/bundle_detail_page.py:275
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/infrastructure/ui/category_list_page.py:46
 msgid "Search…"
@@ -302,70 +302,70 @@ msgstr "Căutare…"
 
 #: src/infrastructure/ui/home/installed_page.py:43
 msgid "No installed applications found"
-msgstr ""
+msgstr "Nu s-au găsit aplicații instalate"
 
 #: src/infrastructure/ui/home/pending_list_page.py:75
 msgid "No pending installations"
-msgstr ""
+msgstr "Nu există instalări în așteptare"
 
 #: src/infrastructure/ui/home/pending_list_page.py:140
 msgid "Failed"
-msgstr ""
+msgstr "Eșuat"
 
 #: src/infrastructure/ui/home/updates_page.py:39
 msgid "No updates available"
-msgstr ""
+msgstr "Nu sunt disponibile actualizări"
 
 #: src/infrastructure/ui/home/updates_page.py:44
 msgid "Applications"
-msgstr ""
+msgstr "Aplicații"
 
 #: src/infrastructure/ui/home/updates_page.py:47
 msgid "Runtimes"
-msgstr ""
+msgstr "Medii de execuție"
 
 #: src/infrastructure/ui/home/updates_page.py:72
 #: src/infrastructure/ui/menu/import_dialog.py:27
 msgid "Select all"
-msgstr ""
+msgstr "Selectează tot"
 
 #: src/infrastructure/ui/home/updates_page.py:138
 msgid "Update (0)"
-msgstr ""
+msgstr "Actualizare (0)"
 
 #: src/infrastructure/ui/home/updates_page.py:151
 #, python-brace-format
 msgid "Update ({n})"
-msgstr ""
+msgstr "Actualizare ({n})"
 
 #: src/infrastructure/ui/home/updates_page.py:159
 #, python-brace-format
 msgid "Update {n} application(s)?"
-msgstr ""
+msgstr "Actualizați {n} aplicație/aplicații?"
 
 #: src/infrastructure/ui/home/updates_page.py:162
 msgid "Update"
-msgstr ""
+msgstr "Actualizează"
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"
-msgstr ""
+msgstr "Deselectează tot"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:30
 msgid "Installation scope"
-msgstr ""
+msgstr "Domeniu de instalare"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:31
 msgid "Where Flatpak apps will be installed"
-msgstr ""
+msgstr "Unde vor fi instalate aplicațiile Flatpak"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:39
 msgid "Game path"
-msgstr ""
+msgstr "Calea jocurilor"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:47
 msgid "Save"
-msgstr ""
+msgstr "Salvează"
 
 #: src/infrastructure/ui/search_list_page.py:17
 #: src/infrastructure/ui/search_list_page.py:30
@@ -373,34 +373,34 @@ msgid "Search"
 msgstr "Căutare"
 
 msgid "AudioVideo"
-msgstr ""
+msgstr "Audio și video"
 
 msgid "Development"
-msgstr ""
+msgstr "Dezvoltare"
 
 msgid "Education"
-msgstr ""
+msgstr "Educație"
 
 msgid "Game"
-msgstr ""
+msgstr "Jocuri"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafică"
 
 msgid "Network"
-msgstr ""
+msgstr "Rețea"
 
 msgid "Office"
-msgstr ""
+msgstr "Birou"
 
 msgid "Science"
-msgstr ""
+msgstr "Știință"
 
 msgid "System"
-msgstr ""
+msgstr "Sistem"
 
 msgid "Utility"
-msgstr ""
+msgstr "Utilități"
 
 # --- Recipe permission labels ---
 msgid "recipe_share_your_home_label"

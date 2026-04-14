@@ -123,15 +123,15 @@ msgstr "Installed Size"
 
 #: src/infrastructure/ui/appstream_page.py:235
 msgid "Homepage"
-msgstr ""
+msgstr "Homepage"
 
 #: src/infrastructure/ui/appstream_page.py:249
 msgid "Bug Tracker"
-msgstr ""
+msgstr "Bug Tracker"
 
 #: src/infrastructure/ui/appstream_page.py:263
 msgid "Donate"
-msgstr ""
+msgstr "Donate"
 
 #: src/infrastructure/ui/appstream_page.py:278
 msgid "Description"
@@ -207,7 +207,7 @@ msgstr "Export"
 #: src/infrastructure/ui/home/installed_page.py:92
 #: src/infrastructure/ui/home/installed_page.py:100
 msgid "Install local Flatpak"
-msgstr ""
+msgstr "Install local Flatpak"
 
 #: src/infrastructure/ui/app_window.py:106
 msgid "About"
@@ -264,7 +264,7 @@ msgstr "Popular"
 #: src/infrastructure/ui/app_window.py:400
 #: src/infrastructure/ui/home/installed_page.py:102
 msgid "Flatpak files"
-msgstr ""
+msgstr "Flatpak files"
 
 #: src/infrastructure/ui/app_window.py:481
 msgid "Export saved"

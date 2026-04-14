@@ -13,11 +13,11 @@ msgstr ""
 #: src/infrastructure/ui/shared/installed_list_shared.py:166
 #: src/infrastructure/ui/shared/installed_list_shared.py:180
 msgid "Downgrade"
-msgstr ""
+msgstr "Declassa versione"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:16
 msgid "Select a version to downgrade to"
-msgstr ""
+msgstr "Seleziona una versione a cui tornare"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:88
@@ -88,6 +88,7 @@ msgstr "Attendere prego…"
 msgid "Permissions"
 msgstr "Permessi"
 
+# --- Status ---
 #: src/infrastructure/ui/appstream/install_progress_dialog.py:13
 #: src/infrastructure/ui/home/pending_list_page.py:130
 msgid "Installing…"
@@ -101,12 +102,12 @@ msgstr "Chiudi"
 #: src/infrastructure/ui/appstream_page.py:580
 #: src/infrastructure/ui/shared/installed_list_shared.py:96
 msgid "Recipe overrides"
-msgstr ""
+msgstr "Sostituzioni ricetta"
 
 #: src/infrastructure/ui/appstream_page.py:152
 #: src/infrastructure/ui/shared/installed_list_shared.py:107
 msgid "Run"
-msgstr ""
+msgstr "Avvia"
 
 #: src/infrastructure/ui/appstream_page.py:216
 msgid "License"
@@ -122,15 +123,15 @@ msgstr "Dimensione installata"
 
 #: src/infrastructure/ui/appstream_page.py:235
 msgid "Homepage"
-msgstr ""
+msgstr "Sito web"
 
 #: src/infrastructure/ui/appstream_page.py:249
 msgid "Bug Tracker"
-msgstr ""
+msgstr "Segnalazione bug"
 
 #: src/infrastructure/ui/appstream_page.py:263
 msgid "Donate"
-msgstr ""
+msgstr "Dona"
 
 #: src/infrastructure/ui/appstream_page.py:278
 msgid "Description"
@@ -160,7 +161,7 @@ msgstr "Elimina i dati dell'applicazione"
 #: src/infrastructure/ui/appstream_page.py:581
 #: src/infrastructure/ui/shared/installed_list_shared.py:97
 msgid "Apply"
-msgstr ""
+msgstr "Applica"
 
 #: src/infrastructure/ui/appstream_page.py:599
 msgid "Screenshots"
@@ -173,7 +174,7 @@ msgstr "Cronologia versioni"
 #: src/infrastructure/ui/app_window.py:67
 #: src/infrastructure/ui/shared/installed_list_shared.py:170
 msgid "Loading…"
-msgstr ""
+msgstr "Caricamento…"
 
 # --- Navigation / window ---
 #: src/infrastructure/ui/app_window.py:93
@@ -191,14 +192,14 @@ msgstr "Parametri"
 #: src/infrastructure/ui/home/installed_page.py:72
 #: src/infrastructure/ui/menu/import_dialog.py:15
 msgid "Import"
-msgstr ""
+msgstr "Importa"
 
 #: src/infrastructure/ui/app_window.py:104
 #: src/infrastructure/ui/app_window.py:452
 #: src/infrastructure/ui/home/installed_page.py:79
 #: src/infrastructure/ui/home/installed_page.py:82
 msgid "Export"
-msgstr ""
+msgstr "Esporta"
 
 #: src/infrastructure/ui/app_window.py:105
 #: src/infrastructure/ui/app_window.py:398
@@ -206,7 +207,7 @@ msgstr ""
 #: src/infrastructure/ui/home/installed_page.py:92
 #: src/infrastructure/ui/home/installed_page.py:100
 msgid "Install local Flatpak"
-msgstr ""
+msgstr "Installa Flatpak locale"
 
 #: src/infrastructure/ui/app_window.py:106
 msgid "About"
@@ -232,7 +233,7 @@ msgstr "Installato"
 
 #: src/infrastructure/ui/app_window.py:212
 msgid "Updates"
-msgstr ""
+msgstr "Aggiornamenti"
 
 #: src/infrastructure/ui/app_window.py:225
 msgid "Pending"
@@ -241,11 +242,11 @@ msgstr "In attesa"
 #: src/infrastructure/ui/app_window.py:243
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
-msgstr ""
+msgstr "{name} è in fase di installazione — segui il progresso in In attesa"
 
 #: src/infrastructure/ui/app_window.py:276
 msgid "New"
-msgstr ""
+msgstr "Novità"
 
 #: src/infrastructure/ui/app_window.py:277
 msgid "Updated"
@@ -263,38 +264,38 @@ msgstr "Popolare"
 #: src/infrastructure/ui/app_window.py:400
 #: src/infrastructure/ui/home/installed_page.py:102
 msgid "Flatpak files"
-msgstr ""
+msgstr "File Flatpak"
 
 #: src/infrastructure/ui/app_window.py:481
 msgid "Export saved"
-msgstr ""
+msgstr "Esportazione salvata"
 
 #: src/infrastructure/ui/bundle_detail_page.py:57
 #: src/infrastructure/ui/bundle_detail_page.py:194
 msgid "Edit bundle"
-msgstr ""
+msgstr "Modifica pacchetto"
 
 #: src/infrastructure/ui/bundle_detail_page.py:77
 msgid "Install selected"
-msgstr ""
+msgstr "Installa selezionati"
 
 #: src/infrastructure/ui/bundle_detail_page.py:149
 msgid "Edit permissions"
-msgstr ""
+msgstr "Modifica permessi"
 
 #: src/infrastructure/ui/bundle_detail_page.py:184
 #: src/infrastructure/ui/bundle_detail_page.py:254
 msgid "Already installed"
-msgstr ""
+msgstr "Già installato"
 
 #: src/infrastructure/ui/bundle_detail_page.py:194
 #: src/infrastructure/ui/home/pending_list_page.py:135
 msgid "Done"
-msgstr ""
+msgstr "Fatto"
 
 #: src/infrastructure/ui/bundle_detail_page.py:275
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/infrastructure/ui/category_list_page.py:46
 msgid "Search…"
@@ -302,70 +303,70 @@ msgstr "Cerca…"
 
 #: src/infrastructure/ui/home/installed_page.py:43
 msgid "No installed applications found"
-msgstr ""
+msgstr "Nessuna applicazione installata trovata"
 
 #: src/infrastructure/ui/home/pending_list_page.py:75
 msgid "No pending installations"
-msgstr ""
+msgstr "Nessuna installazione in sospeso"
 
 #: src/infrastructure/ui/home/pending_list_page.py:140
 msgid "Failed"
-msgstr ""
+msgstr "Fallito"
 
 #: src/infrastructure/ui/home/updates_page.py:39
 msgid "No updates available"
-msgstr ""
+msgstr "Nessun aggiornamento disponibile"
 
 #: src/infrastructure/ui/home/updates_page.py:44
 msgid "Applications"
-msgstr ""
+msgstr "Applicazioni"
 
 #: src/infrastructure/ui/home/updates_page.py:47
 msgid "Runtimes"
-msgstr ""
+msgstr "Runtime"
 
 #: src/infrastructure/ui/home/updates_page.py:72
 #: src/infrastructure/ui/menu/import_dialog.py:27
 msgid "Select all"
-msgstr ""
+msgstr "Seleziona tutto"
 
 #: src/infrastructure/ui/home/updates_page.py:138
 msgid "Update (0)"
-msgstr ""
+msgstr "Aggiorna (0)"
 
 #: src/infrastructure/ui/home/updates_page.py:151
 #, python-brace-format
 msgid "Update ({n})"
-msgstr ""
+msgstr "Aggiorna ({n})"
 
 #: src/infrastructure/ui/home/updates_page.py:159
 #, python-brace-format
 msgid "Update {n} application(s)?"
-msgstr ""
+msgstr "Aggiornare {n} applicazione/i?"
 
 #: src/infrastructure/ui/home/updates_page.py:162
 msgid "Update"
-msgstr ""
+msgstr "Aggiorna"
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"
-msgstr ""
+msgstr "Deseleziona tutto"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:30
 msgid "Installation scope"
-msgstr ""
+msgstr "Ambito di installazione"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:31
 msgid "Where Flatpak apps will be installed"
-msgstr ""
+msgstr "Dove verranno installate le app Flatpak"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:39
 msgid "Game path"
-msgstr ""
+msgstr "Percorso giochi"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:47
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: src/infrastructure/ui/search_list_page.py:17
 #: src/infrastructure/ui/search_list_page.py:30
@@ -373,34 +374,34 @@ msgid "Search"
 msgstr "Cerca"
 
 msgid "AudioVideo"
-msgstr ""
+msgstr "Audio e video"
 
 msgid "Development"
-msgstr ""
+msgstr "Sviluppo"
 
 msgid "Education"
-msgstr ""
+msgstr "Istruzione"
 
 msgid "Game"
-msgstr ""
+msgstr "Giochi"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafica"
 
 msgid "Network"
-msgstr ""
+msgstr "Rete"
 
 msgid "Office"
-msgstr ""
+msgstr "Ufficio"
 
 msgid "Science"
-msgstr ""
+msgstr "Scienza"
 
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
 msgid "Utility"
-msgstr ""
+msgstr "Utilità"
 
 # --- Recipe permission labels ---
 msgid "recipe_share_your_home_label"

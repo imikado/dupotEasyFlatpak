@@ -13,11 +13,11 @@ msgstr ""
 #: src/infrastructure/ui/shared/installed_list_shared.py:166
 #: src/infrastructure/ui/shared/installed_list_shared.py:180
 msgid "Downgrade"
-msgstr ""
+msgstr "تخفيض الإصدار"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:16
 msgid "Select a version to downgrade to"
-msgstr ""
+msgstr "اختر إصداراً للرجوع إليه"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:88
@@ -101,12 +101,12 @@ msgstr "إغلاق"
 #: src/infrastructure/ui/appstream_page.py:580
 #: src/infrastructure/ui/shared/installed_list_shared.py:96
 msgid "Recipe overrides"
-msgstr ""
+msgstr "تجاوزات الوصفة"
 
 #: src/infrastructure/ui/appstream_page.py:152
 #: src/infrastructure/ui/shared/installed_list_shared.py:107
 msgid "Run"
-msgstr ""
+msgstr "تشغيل"
 
 #: src/infrastructure/ui/appstream_page.py:216
 msgid "License"
@@ -122,15 +122,15 @@ msgstr "الحجم المثبت"
 
 #: src/infrastructure/ui/appstream_page.py:235
 msgid "Homepage"
-msgstr ""
+msgstr "الصفحة الرئيسية"
 
 #: src/infrastructure/ui/appstream_page.py:249
 msgid "Bug Tracker"
-msgstr ""
+msgstr "متتبع الأخطاء"
 
 #: src/infrastructure/ui/appstream_page.py:263
 msgid "Donate"
-msgstr ""
+msgstr "تبرع"
 
 #: src/infrastructure/ui/appstream_page.py:278
 msgid "Description"
@@ -160,7 +160,7 @@ msgstr "حذف بيانات التطبيق"
 #: src/infrastructure/ui/appstream_page.py:581
 #: src/infrastructure/ui/shared/installed_list_shared.py:97
 msgid "Apply"
-msgstr ""
+msgstr "تطبيق"
 
 #: src/infrastructure/ui/appstream_page.py:599
 msgid "Screenshots"
@@ -173,7 +173,7 @@ msgstr "تاريخ الإصدارات"
 #: src/infrastructure/ui/app_window.py:67
 #: src/infrastructure/ui/shared/installed_list_shared.py:170
 msgid "Loading…"
-msgstr ""
+msgstr "جاري التحميل…"
 
 # --- Navigation / window ---
 #: src/infrastructure/ui/app_window.py:93
@@ -191,14 +191,14 @@ msgstr "المعاملات"
 #: src/infrastructure/ui/home/installed_page.py:72
 #: src/infrastructure/ui/menu/import_dialog.py:15
 msgid "Import"
-msgstr ""
+msgstr "استيراد"
 
 #: src/infrastructure/ui/app_window.py:104
 #: src/infrastructure/ui/app_window.py:452
 #: src/infrastructure/ui/home/installed_page.py:79
 #: src/infrastructure/ui/home/installed_page.py:82
 msgid "Export"
-msgstr ""
+msgstr "تصدير"
 
 #: src/infrastructure/ui/app_window.py:105
 #: src/infrastructure/ui/app_window.py:398
@@ -206,7 +206,7 @@ msgstr ""
 #: src/infrastructure/ui/home/installed_page.py:92
 #: src/infrastructure/ui/home/installed_page.py:100
 msgid "Install local Flatpak"
-msgstr ""
+msgstr "تثبيت Flatpak محلي"
 
 #: src/infrastructure/ui/app_window.py:106
 msgid "About"
@@ -232,7 +232,7 @@ msgstr "مثبت"
 
 #: src/infrastructure/ui/app_window.py:212
 msgid "Updates"
-msgstr ""
+msgstr "التحديثات"
 
 #: src/infrastructure/ui/app_window.py:225
 msgid "Pending"
@@ -241,11 +241,11 @@ msgstr "قيد الانتظار"
 #: src/infrastructure/ui/app_window.py:243
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
-msgstr ""
+msgstr "{name} يُثبَّت — تابع التقدم في قيد الانتظار"
 
 #: src/infrastructure/ui/app_window.py:276
 msgid "New"
-msgstr ""
+msgstr "جديد"
 
 #: src/infrastructure/ui/app_window.py:277
 msgid "Updated"
@@ -263,38 +263,38 @@ msgstr "شائع"
 #: src/infrastructure/ui/app_window.py:400
 #: src/infrastructure/ui/home/installed_page.py:102
 msgid "Flatpak files"
-msgstr ""
+msgstr "ملفات Flatpak"
 
 #: src/infrastructure/ui/app_window.py:481
 msgid "Export saved"
-msgstr ""
+msgstr "تم حفظ التصدير"
 
 #: src/infrastructure/ui/bundle_detail_page.py:57
 #: src/infrastructure/ui/bundle_detail_page.py:194
 msgid "Edit bundle"
-msgstr ""
+msgstr "تعديل الحزمة"
 
 #: src/infrastructure/ui/bundle_detail_page.py:77
 msgid "Install selected"
-msgstr ""
+msgstr "تثبيت المحدد"
 
 #: src/infrastructure/ui/bundle_detail_page.py:149
 msgid "Edit permissions"
-msgstr ""
+msgstr "تعديل الأذونات"
 
 #: src/infrastructure/ui/bundle_detail_page.py:184
 #: src/infrastructure/ui/bundle_detail_page.py:254
 msgid "Already installed"
-msgstr ""
+msgstr "مثبت مسبقاً"
 
 #: src/infrastructure/ui/bundle_detail_page.py:194
 #: src/infrastructure/ui/home/pending_list_page.py:135
 msgid "Done"
-msgstr ""
+msgstr "تم"
 
 #: src/infrastructure/ui/bundle_detail_page.py:275
 msgid "OK"
-msgstr ""
+msgstr "موافق"
 
 #: src/infrastructure/ui/category_list_page.py:46
 msgid "Search…"
@@ -302,70 +302,70 @@ msgstr "بحث…"
 
 #: src/infrastructure/ui/home/installed_page.py:43
 msgid "No installed applications found"
-msgstr ""
+msgstr "لم يتم العثور على تطبيقات مثبتة"
 
 #: src/infrastructure/ui/home/pending_list_page.py:75
 msgid "No pending installations"
-msgstr ""
+msgstr "لا توجد تثبيتات معلقة"
 
 #: src/infrastructure/ui/home/pending_list_page.py:140
 msgid "Failed"
-msgstr ""
+msgstr "فشل"
 
 #: src/infrastructure/ui/home/updates_page.py:39
 msgid "No updates available"
-msgstr ""
+msgstr "لا تحديثات متاحة"
 
 #: src/infrastructure/ui/home/updates_page.py:44
 msgid "Applications"
-msgstr ""
+msgstr "التطبيقات"
 
 #: src/infrastructure/ui/home/updates_page.py:47
 msgid "Runtimes"
-msgstr ""
+msgstr "بيئات التشغيل"
 
 #: src/infrastructure/ui/home/updates_page.py:72
 #: src/infrastructure/ui/menu/import_dialog.py:27
 msgid "Select all"
-msgstr ""
+msgstr "تحديد الكل"
 
 #: src/infrastructure/ui/home/updates_page.py:138
 msgid "Update (0)"
-msgstr ""
+msgstr "تحديث (0)"
 
 #: src/infrastructure/ui/home/updates_page.py:151
 #, python-brace-format
 msgid "Update ({n})"
-msgstr ""
+msgstr "تحديث ({n})"
 
 #: src/infrastructure/ui/home/updates_page.py:159
 #, python-brace-format
 msgid "Update {n} application(s)?"
-msgstr ""
+msgstr "هل تريد تحديث {n} تطبيق(ات)؟"
 
 #: src/infrastructure/ui/home/updates_page.py:162
 msgid "Update"
-msgstr ""
+msgstr "تحديث"
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"
-msgstr ""
+msgstr "إلغاء تحديد الكل"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:30
 msgid "Installation scope"
-msgstr ""
+msgstr "نطاق التثبيت"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:31
 msgid "Where Flatpak apps will be installed"
-msgstr ""
+msgstr "مكان تثبيت تطبيقات Flatpak"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:39
 msgid "Game path"
-msgstr ""
+msgstr "مسار الألعاب"
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:47
 msgid "Save"
-msgstr ""
+msgstr "حفظ"
 
 #: src/infrastructure/ui/search_list_page.py:17
 #: src/infrastructure/ui/search_list_page.py:30
@@ -373,34 +373,34 @@ msgid "Search"
 msgstr "بحث"
 
 msgid "AudioVideo"
-msgstr ""
+msgstr "صوت وفيديو"
 
 msgid "Development"
-msgstr ""
+msgstr "تطوير"
 
 msgid "Education"
-msgstr ""
+msgstr "تعليم"
 
 msgid "Game"
-msgstr ""
+msgstr "ألعاب"
 
 msgid "Graphics"
-msgstr ""
+msgstr "رسوميات"
 
 msgid "Network"
-msgstr ""
+msgstr "شبكة"
 
 msgid "Office"
-msgstr ""
+msgstr "مكتب"
 
 msgid "Science"
-msgstr ""
+msgstr "علوم"
 
 msgid "System"
-msgstr ""
+msgstr "نظام"
 
 msgid "Utility"
-msgstr ""
+msgstr "أدوات"
 
 # --- Recipe permission labels ---
 msgid "recipe_share_your_home_label"
