@@ -329,23 +329,39 @@ msgstr "Medii de execuție"
 msgid "Select all"
 msgstr "Selectează tot"
 
-#: src/infrastructure/ui/home/updates_page.py:138
-msgid "Update (0)"
-msgstr "Actualizare (0)"
-
-#: src/infrastructure/ui/home/updates_page.py:151
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update ({n})"
 msgstr "Actualizare ({n})"
 
-#: src/infrastructure/ui/home/updates_page.py:159
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update {n} application(s)?"
 msgstr "Actualizați {n} aplicație/aplicații?"
 
-#: src/infrastructure/ui/home/updates_page.py:162
+#: src/infrastructure/ui/home/updates_page.py
 msgid "Update"
 msgstr "Actualizează"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Deselect all"
+msgstr "Deselectează tot"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all"
+msgstr "Actualizează tot"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all applications?"
+msgstr "Actualizați toate aplicațiile?"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (user)"
+msgstr "Actualizează tot (utilizator)"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (system)"
+msgstr "Actualizează tot (sistem)"
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"

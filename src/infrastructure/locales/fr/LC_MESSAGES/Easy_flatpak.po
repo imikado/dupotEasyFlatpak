@@ -332,23 +332,39 @@ msgstr "Environnements d'exécution"
 msgid "Select all"
 msgstr "Tout sélectionner"
 
-#: src/infrastructure/ui/home/updates_page.py:138
-msgid "Update (0)"
-msgstr "Mise à jour (0)"
-
-#: src/infrastructure/ui/home/updates_page.py:151
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update ({n})"
 msgstr "Mise à jour ({n})"
 
-#: src/infrastructure/ui/home/updates_page.py:159
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update {n} application(s)?"
 msgstr "Mettre à jour {n} application(s) ?"
 
-#: src/infrastructure/ui/home/updates_page.py:162
+#: src/infrastructure/ui/home/updates_page.py
 msgid "Update"
 msgstr "Mettre à jour"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Deselect all"
+msgstr "Tout désélectionner"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all"
+msgstr "Tout mettre à jour"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all applications?"
+msgstr "Mettre à jour toutes les applications ?"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (user)"
+msgstr "Tout mettre à jour (utilisateur)"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (system)"
+msgstr "Tout mettre à jour (système)"
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"

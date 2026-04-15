@@ -535,8 +535,18 @@ class AppWindow(Adw.Application):
         self._init_fn = init_fn
 
     def do_activate(self):
+        self._register_bundled_icons()
         win = MainWindow(application=self, init_fn=self._init_fn)
         win.present()
+
+    def _register_bundled_icons(self):
+        import os
+        icons_path = os.path.join(
+            os.path.dirname(__file__), "..", "..", "assets", "ui_icons"
+        )
+        icons_path = os.path.normpath(icons_path)
+        theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+        theme.add_search_path(icons_path)
 
     def do_open(self, files, n_files, hint):
         self.activate()

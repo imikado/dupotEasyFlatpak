@@ -331,23 +331,39 @@ msgstr "Runtimes"
 msgid "Select all"
 msgstr "Select all"
 
-#: src/infrastructure/ui/home/updates_page.py:138
-msgid "Update (0)"
-msgstr "Update (0)"
-
-#: src/infrastructure/ui/home/updates_page.py:151
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update ({n})"
 msgstr "Update ({n})"
 
-#: src/infrastructure/ui/home/updates_page.py:159
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update {n} application(s)?"
 msgstr "Update {n} application(s)?"
 
-#: src/infrastructure/ui/home/updates_page.py:162
+#: src/infrastructure/ui/home/updates_page.py
 msgid "Update"
 msgstr "Update"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Deselect all"
+msgstr "Deselect all"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all"
+msgstr "Update all"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all applications?"
+msgstr "Update all applications?"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (user)"
+msgstr "Update all (user)"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (system)"
+msgstr "Update all (system)"
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"

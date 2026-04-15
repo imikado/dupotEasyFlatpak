@@ -68,10 +68,16 @@ class UpdatesPage(Gtk.Box):
 
         # --- Action bar (shown when at least one item is selected) ---
         self._action_bar = Gtk.ActionBar()
+        self._bulk_updating = False
 
         self._select_all_btn = Gtk.Button(label=_("Select all"))
         self._select_all_btn.connect("clicked", self._on_select_all_clicked)
         self._action_bar.pack_start(self._select_all_btn)
+
+        self._update_all_btn = Gtk.Button(label=_("Update all"))
+        self._update_all_btn.add_css_class("suggested-action")
+        self._update_all_btn.connect("clicked", self._on_update_all_clicked)
+        self._action_bar.pack_end(self._update_all_btn)
 
         self._update_btn = Gtk.Button()
         self._update_btn.add_css_class("suggested-action")
@@ -107,6 +113,7 @@ class UpdatesPage(Gtk.Box):
 
             check = Gtk.CheckButton()
             check.set_valign(Gtk.Align.CENTER)
+            check.set_active(True)
             check.connect("toggled", self._on_check_toggled)
 
             row = Adw.ActionRow()
@@ -135,20 +142,76 @@ class UpdatesPage(Gtk.Box):
 
         self._stack.set_visible_child_name("list")
         self._action_bar.set_revealed(True)
-        self._update_btn.set_label(_("Update (0)"))
+        self._update_btn.set_label(_("Update ({n})").format(n=len(items)))
+        self._select_all_btn.set_label(_("Deselect all"))
         if self._on_loaded:
             self._on_loaded(len(items))
         return GLib.SOURCE_REMOVE
 
     def _on_select_all_clicked(self, _btn):
+        all_selected = all(check.get_active() for _item, check in self._checkboxes)
+        self._bulk_updating = True
         for _item, check in self._checkboxes:
-            check.set_active(True)
+            check.set_active(not all_selected)
+        self._bulk_updating = False
+        self._refresh_action_bar()
 
-    def _on_check_toggled(self, _check):
+    def _refresh_action_bar(self):
         selected = [item for item, check in self._checkboxes if check.get_active()]
         count = len(selected)
-        self._action_bar.set_revealed(count > 0)
+        all_selected = count == len(self._checkboxes)
+        self._action_bar.set_revealed(True)
         self._update_btn.set_label(_("Update ({n})").format(n=count))
+        self._select_all_btn.set_label(
+            _("Deselect all") if all_selected else _("Select all")
+        )
+
+    def _on_check_toggled(self, _check):
+        if self._bulk_updating:
+            return
+        self._refresh_action_bar()
+
+    def _on_update_all_clicked(self, _btn):
+        dialog = Adw.AlertDialog.new(_("Update all applications?"))
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("confirm", _("Update all"))
+        dialog.set_response_appearance("confirm", Adw.ResponseAppearance.SUGGESTED)
+        dialog.set_default_response("confirm")
+        dialog.set_close_response("cancel")
+        dialog.connect("response", self._on_confirm_update_all_response)
+        dialog.present(self.get_root())
+
+    def _on_confirm_update_all_response(self, _dialog, response):
+        if response != "confirm":
+            return
+
+        queue_service = InstallQueueService()
+        flatpak_api = self._flatpak_api
+        pending = {"count": 2}
+
+        for label, cmd in [
+            (_("Update all (user)"), flatpak_api.get_update_all_user_scope_call()),
+            (_("Update all (system)"), flatpak_api.get_update_all_system_scope_call()),
+        ]:
+            queue_item = queue_service.enqueue(label, label)
+
+            def _run(qi=queue_item, command=cmd):
+                process = subprocess.Popen(
+                    command,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                )
+                for line in process.stdout:
+                    GLib.idle_add(qi.append_output, line)
+                process.wait()
+                final_status = "done" if process.returncode == 0 else "failed"
+                GLib.idle_add(qi.set_status, final_status)
+                pending["count"] -= 1
+                if pending["count"] == 0:
+                    GLib.idle_add(self.refresh)
+
+            threading.Thread(target=_run, daemon=True).start()
 
     def _on_update_clicked(self, _btn):
         selected = [item for item, check in self._checkboxes if check.get_active()]

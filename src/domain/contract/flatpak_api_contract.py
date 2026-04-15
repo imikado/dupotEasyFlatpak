@@ -83,6 +83,14 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def get_update_all_user_scope_call(self) -> list:
+        pass
+
+    @abstractmethod
+    def get_update_all_system_scope_call(self) -> list:
+        pass
+
+    @abstractmethod
     def get_flatpak_bundle_info(self, file_path: str) -> dict:
         pass
 

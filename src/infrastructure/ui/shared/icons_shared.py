@@ -2,144 +2,62 @@ import gi
 
 gi.require_version("Gtk", "4.0")
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
 
 
 class IconsShared:
 
     _instance: "IconsShared | None" = None
 
-    ICON_HOME = "Home"
-    ICON_CATEGORIES = "Categories"
-    ICON_BUNDLES = "Bundles"
-    ICON_INSTALLED = "Installed"
-    ICON_UPDATES = "Updates"
-    ICON_PENDING = "Pending"
-    ICON_EDITRECIPE = "Edit-recipe"
-    ICON_INFO = "Info"
-    ICON_EDIT = "Edit"
-    ICON_CHECKMARK = "CheckMark"
+    # Navigation
+    ICON_HOME = "easyflatpak-home-symbolic"
+    ICON_CATEGORIES = "easyflatpak-categories-symbolic"
+    ICON_BUNDLES = "easyflatpak-bundles-symbolic"
+    ICON_INSTALLED = "easyflatpak-installed-symbolic"
+    ICON_UPDATES = "easyflatpak-updates-symbolic"
+    ICON_PENDING = "easyflatpak-pending-symbolic"
 
-    ICON_DEVELOPMENT = "Development"
-    ICON_GAME = "Game"
-    ICON_GRAPHICS = "Graphics"
-    ICON_HOMEPAGE = "Homepage"
-    ICON_BUGTRACKER = "Bugtracker"
-    ICON_DONATION = "Donation"
+    # Actions
+    ICON_EDITRECIPE = "easyflatpak-edit-recipe-symbolic"
+    ICON_INFO = "easyflatpak-info-symbolic"
+    ICON_EDIT = "easyflatpak-edit-symbolic"
+    ICON_CHECKMARK = "easyflatpak-checkmark-symbolic"
+
+    # Links
+    ICON_HOMEPAGE = "easyflatpak-homepage-symbolic"
+    ICON_BUGTRACKER = "easyflatpak-bugtracker-symbolic"
+    ICON_DONATION = "easyflatpak-donation-symbolic"
+
+    # Categories
+    ICON_DEVELOPMENT = "easyflatpak-development-symbolic"
+    ICON_GAME = "easyflatpak-game-symbolic"
+    ICON_GRAPHICS = "easyflatpak-graphics-symbolic"
 
     icon_ref = {
-        "CheckMark": [
-            "object-select-symbolic",
-            "emblem-ok-symbolic",
-            "checkmark-symbolic",
-        ],
-        "Edit": [
-            "document-edit-symbolic",
-            "edit-symbolic",
-            "accessories-text-editor-symbolic",
-        ],
-        "Info": [
-            "dialog-information-symbolic",
-            "information-symbolic",
-            "help-about-symbolic",
-        ],
-        "Edit-recipe": [
-            "preferences-system-symbolic",
-            "settings-symbolic",
-            "system-run-symbolic",
-        ],
-        "Home": ["go-home-symbolic", "user-home-symbolic", "start-here-symbolic"],
-        "Categories": [
-            "view-app-grid-symbolic",
-            "applications-all-symbolic",
-            "applications-system-symbolic",
-        ],
-        "Bundles": ["folder-symbolic", "folder", "document-open-symbolic"],
-        "Installed": ["drive-harddisk-symbolic", "computer-symbolic", "drive-harddisk"],
-        "Updates": [
-            "software-update-available-symbolic",
-            "software-update-urgent-symbolic",
-            "view-refresh-symbolic",
-        ],
-        "Pending": [
-            "emblem-downloads-symbolic",
-            "folder-download-symbolic",
-            "document-save-symbolic",
-        ],
-        "AudioVideo": [
-            "applications-multimedia-symbolic",
-            "media-playback-start-symbolic",
-            "audio-x-generic-symbolic",
-            "multimedia-player-symbolic",
-        ],
-        "Development": [
-            "applications-development-symbolic",
-            "emblem-developer-symbolic",
-            "applications-development-symbolic",
-            "utilities-terminal-symbolic",
-        ],
-        "Education": [
-            "applications-science-symbolic",
-            "accessories-dictionary-symbolic",
-            "accessories-text-editor-symbolic",
-            "format-text-bold-symbolic",
-        ],
-        "Game": [
-            "applications-games-symbolic",
-            "input-gaming-symbolic",
-            "applications-games-symbolic",
-            "joystick-symbolic",
-        ],
-        "Graphics": [
-            "applications-graphics-symbolic",
-            "image-x-generic-symbolic",
-            "applications-graphics-symbolic",
-            "image-missing-symbolic",
-        ],
-        "Network": [
-            "applications-internet-symbolic",
-            "network-workgroup-symbolic",
-            "network-server-symbolic",
-            "network-wired-symbolic",
-        ],
-        "Office": [
-            "x-office-document-symbolic",
-            "office-calendar-symbolic",
-            "document-new-symbolic",
-        ],
-        "Science": [
-            "applications-engineering-symbolic",
-            "applications-science-symbolic",
-            "utilities-system-monitor-symbolic",
-            "computer-symbolic",
-        ],
-        "System": [
-            "applications-system-symbolic",
-            "emblem-system-symbolic",
-            "preferences-system-symbolic",
-            "system-run-symbolic",
-        ],
-        "Utility": [
-            "applications-utilities-symbolic",
-            "accessories-calculator-symbolic",
-            "applications-utilities-symbolic",
-            "system-run-symbolic",
-        ],
-        "Homepage": [
-            "globe-symbolic",
-            "web-browser-symbolic",
-            "go-home-symbolic",
-        ],
-        "Bugtracker": [
-            "bug-symbolic",
-            "dialog-warning-symbolic",
-            "emblem-important-symbolic",
-        ],
-        "Donation": [
-            "heart-filled-symbolic",
-            "emblem-favorite-symbolic",
-            "starred-symbolic",
-        ],
+        "AudioVideo": "easyflatpak-audiovideo-symbolic",
+        "Development": "easyflatpak-development-symbolic",
+        "Education": "easyflatpak-education-symbolic",
+        "Game": "easyflatpak-game-symbolic",
+        "Graphics": "easyflatpak-graphics-symbolic",
+        "Network": "easyflatpak-network-symbolic",
+        "Office": "easyflatpak-office-symbolic",
+        "Science": "easyflatpak-science-symbolic",
+        "System": "easyflatpak-system-symbolic",
+        "Utility": "easyflatpak-utility-symbolic",
+        # navigation / action keys kept for backwards compat
+        "CheckMark": ICON_CHECKMARK,
+        "Edit": ICON_EDIT,
+        "Info": ICON_INFO,
+        "Edit-recipe": ICON_EDITRECIPE,
+        "Home": ICON_HOME,
+        "Categories": ICON_CATEGORIES,
+        "Bundles": ICON_BUNDLES,
+        "Installed": ICON_INSTALLED,
+        "Updates": ICON_UPDATES,
+        "Pending": ICON_PENDING,
+        "Homepage": ICON_HOMEPAGE,
+        "Bugtracker": ICON_BUGTRACKER,
+        "Donation": ICON_DONATION,
     }
 
     def __new__(cls, *_args, **_kwargs):
@@ -147,16 +65,8 @@ class IconsShared:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def get_icon_by_name(self, name: str):
-        icon_name = self.find_icon_name_available(name)
-        return Gtk.Image.new_from_icon_name(icon_name)
-
-    def find_icon_available_in_list(self, name_list: list[str]) -> str:
-        theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
-        for name in name_list:
-            if theme.has_icon(name):
-                return name
-        return name_list[0]
+    def get_icon_by_name(self, name: str) -> Gtk.Image:
+        return Gtk.Image.new_from_icon_name(self.find_icon_name_available(name))
 
     def find_icon_name_available(self, name: str) -> str:
-        return self.find_icon_available_in_list(self.icon_ref.get(name))
+        return self.icon_ref.get(name, name)

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <ellipse fill="currentColor" cx="8" cy="9" rx="4" ry="5"/>
+  <rect fill="currentColor" x="5" y="3" width="6" height="4" rx="3"/>
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="4" y1="6" x2="1" y2="4"/>
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="12" y1="6" x2="15" y2="4"/>
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="4" y1="9" x2="1" y2="9"/>
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="12" y1="9" x2="15" y2="9"/>
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="4" y1="12" x2="1" y2="14"/>
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="12" y1="12" x2="15" y2="14"/>
+</svg>

@@ -329,23 +329,39 @@ msgstr "بيئات التشغيل"
 msgid "Select all"
 msgstr "تحديد الكل"
 
-#: src/infrastructure/ui/home/updates_page.py:138
-msgid "Update (0)"
-msgstr "تحديث (0)"
-
-#: src/infrastructure/ui/home/updates_page.py:151
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update ({n})"
 msgstr "تحديث ({n})"
 
-#: src/infrastructure/ui/home/updates_page.py:159
+#: src/infrastructure/ui/home/updates_page.py
 #, python-brace-format
 msgid "Update {n} application(s)?"
 msgstr "هل تريد تحديث {n} تطبيق(ات)؟"
 
-#: src/infrastructure/ui/home/updates_page.py:162
+#: src/infrastructure/ui/home/updates_page.py
 msgid "Update"
 msgstr "تحديث"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Deselect all"
+msgstr "إلغاء تحديد الكل"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all"
+msgstr "تحديث الكل"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all applications?"
+msgstr "هل تريد تحديث جميع التطبيقات؟"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (user)"
+msgstr "تحديث الكل (المستخدم)"
+
+#: src/infrastructure/ui/home/updates_page.py
+msgid "Update all (system)"
+msgstr "تحديث الكل (النظام)"
 
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"

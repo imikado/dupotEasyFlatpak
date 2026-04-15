@@ -50,9 +50,6 @@ class FlatpakApi(FlatpakApiContract):
         return len(self.get_available_update_list())
 
     def get_available_update_list(self) -> list[UpdateAvailableEntity]:
-        # Build installed (app_id, branch) → version map to detect runtimes
-        # already at their latest visible version (same version+branch = commit-only
-        # update that would loop endlessly if shown).
         installed: dict[tuple[str, str], str] = {}
         for scope in ("--user", "--system"):
             result = subprocess.run(
@@ -90,8 +87,6 @@ class FlatpakApi(FlatpakApiContract):
                 version = parts[2].strip() if len(parts) >= 3 else ""
                 branch = parts[3].strip() if len(parts) >= 4 else ""
 
-                # Hide runtimes where the visible version hasn't changed — only
-                # a commit difference exists, which causes an infinite update loop.
                 installed_version = installed.get((app_id, branch))
                 if installed_version is not None and installed_version == version:
                     continue
@@ -130,6 +125,12 @@ class FlatpakApi(FlatpakApiContract):
         user_ids = {l.strip() for l in result.stdout.splitlines() if l.strip()}
         scope = "--user" if app_id in user_ids else "--system"
         return self._cmd("update", scope, app_id, "-y")
+
+    def get_update_all_user_scope_call(self) -> list:
+        return self._cmd("update", "--user", "-y")
+
+    def get_update_all_system_scope_call(self) -> list:
+        return self._cmd("update", "--system", "-y")
 
     def get_override_filesystem_call(self, app_id: str, filesystem: str) -> list:
         return self._cmd("override", "--user", app_id, f"--filesystem={filesystem}")
