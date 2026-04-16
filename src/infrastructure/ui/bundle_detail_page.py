@@ -231,6 +231,9 @@ class BundleDetailPage(Adw.NavigationPage):
                 row = Adw.EntryRow()
                 row.set_title(_(perm.get_label()))
                 row.set_text(stored.get(perm.get_label()) or perm.get_value())
+                folder_icon = Gtk.Image.new_from_icon_name("folder-symbolic")
+                folder_icon.set_valign(Gtk.Align.CENTER)
+                row.add_prefix(folder_icon)
 
                 if self.user_settings_entity.has_game_path():
                     row.set_text(self.user_settings_entity.installation_game_path)
@@ -249,6 +252,9 @@ class BundleDetailPage(Adw.NavigationPage):
                 row = Adw.SwitchRow()
                 row.set_title(_(perm.get_label()))
                 row.set_active(perm.get_label() in stored if stored else True)
+                install_icon = Gtk.Image.new_from_icon_name("system-software-install-symbolic")
+                install_icon.set_valign(Gtk.Align.CENTER)
+                row.add_prefix(install_icon)
                 if perm.get_value() in self._installed_ids:
                     info_icon = IconsShared().get_icon_by_name(IconsShared.ICON_INFO)
                     info_icon.set_tooltip_text(_("Already installed"))

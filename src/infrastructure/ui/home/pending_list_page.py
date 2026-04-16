@@ -121,6 +121,7 @@ class PendingPage(Gtk.Box):
 
             row = Adw.ActionRow()
             row.set_title(item.app_name)
+            row.set_icon_name("system-software-install-symbolic")
 
             if item.status == "installing":
                 spinner = Gtk.Spinner()

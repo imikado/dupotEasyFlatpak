@@ -18,6 +18,7 @@ from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.category_repository import CategoryRepository
 from infrastructure.ui.category_list_page import CategoryListPage
 
+
 class CategoryPage(Gtk.ScrolledWindow):
 
     def __init__(
@@ -67,37 +68,39 @@ class CategoryPage(Gtk.ScrolledWindow):
         card_box.set_halign(Gtk.Align.CENTER)
         card_box.set_valign(Gtk.Align.CENTER)
 
-        header_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        header_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         header_box.set_halign(Gtk.Align.CENTER)
         header_box.set_valign(Gtk.Align.CENTER)
-        header_box.set_margin_top(34)
-        header_box.set_margin_bottom(18)
+        header_box.set_margin_top(48)
+        header_box.set_margin_bottom(14)
 
         cat_icon = cat_icon
-        cat_icon.set_pixel_size(24)
-        cat_icon.set_margin_end(6)
-
-        header_box.append(cat_icon)
+        cat_icon.set_pixel_size(48)
+        cat_icon.set_halign(Gtk.Align.CENTER)
 
         label = Gtk.Label(label=_(category))
         label.add_css_class("heading")
+        label.set_halign(Gtk.Align.CENTER)
+        label.set_margin_top(18)
+
+        header_box.append(cat_icon)
         header_box.append(label)
 
         card_box.append(header_box)
 
-        apps = self._appstream_repository.get_summary_list_by_category_id(category)
-        for row_apps in [apps[:4], apps[4:8]]:
-            if not row_apps:
-                break
-            row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-            row_box.set_halign(Gtk.Align.CENTER)
-            row_box.set_margin_start(16)
-            row_box.set_margin_end(16)
-            for app in row_apps:
-                app_icon = Gtk.Image.new_from_file(app.getIcon())
-                app_icon.set_pixel_size(18)
-                row_box.append(app_icon)
-            card_box.append(row_box)
+        # apps = self._appstream_repository.get_summary_list_by_category_id(category)
+        # for row_apps in [apps[:4], apps[4:8]]:
+        #    if not row_apps:
+        #        break
+        #    row_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        #    row_box.set_halign(Gtk.Align.CENTER)
+        #    row_box.set_margin_start(16)
+        #    row_box.set_margin_end(16)
+        #    for app in row_apps:
+        #        app_icon = Gtk.Image.new_from_file(app.getIcon())
+        #        app_icon.set_pixel_size(18)
+        #        row_box.append(app_icon)
+        #    card_box.append(row_box)
 
         btn = Gtk.Button()
         btn.add_css_class("card")

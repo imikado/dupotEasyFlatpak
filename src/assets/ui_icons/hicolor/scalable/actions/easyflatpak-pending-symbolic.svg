@@ -1,3 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <path fill="currentColor" d="M8 2v9M4.5 7.5L8 11l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Clock face -->
+  <circle fill="none" stroke="currentColor" stroke-width="1.5" cx="8" cy="8" r="6"/>
+  <!-- Minute hand pointing to 12 -->
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="8" y1="8" x2="8" y2="3.5"/>
+  <!-- Hour hand pointing to 3 -->
+  <line stroke="currentColor" stroke-width="1.5" stroke-linecap="round" x1="8" y1="8" x2="11.5" y2="8"/>
 </svg>

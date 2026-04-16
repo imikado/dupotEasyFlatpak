@@ -63,6 +63,9 @@ class InstallDialog(Adw.AlertDialog):
                     elif perm.is_filesystem():
                         row = Adw.EntryRow()
                         row.set_title(_(perm.get_label()))
+                        folder_icon = Gtk.Image.new_from_icon_name("folder-symbolic")
+                        folder_icon.set_valign(Gtk.Align.CENTER)
+                        row.add_prefix(folder_icon)
 
                         if user_settings_entity.has_game_path():
                             row.set_text(user_settings_entity.installation_game_path)
@@ -79,6 +82,9 @@ class InstallDialog(Adw.AlertDialog):
                         row = Adw.SwitchRow()
                         row.set_title(_(perm.get_label()))
                         row.set_active(True)
+                        install_icon = Gtk.Image.new_from_icon_name("system-software-install-symbolic")
+                        install_icon.set_valign(Gtk.Align.CENTER)
+                        row.add_prefix(install_icon)
                         perm_group.add(row)
                         self._permission_rows.append((row, perm))
                 form_box.append(perm_group)
