@@ -105,10 +105,11 @@ class CategoryPage(Gtk.ScrolledWindow):
         btn = Gtk.Button()
         btn.add_css_class("card")
         btn.set_child(card_box)
-        btn.connect("clicked", self._on_card_clicked, category, cat_icon)
+        btn.connect("clicked", self._on_card_clicked, category)
         return btn
 
-    def _on_card_clicked(self, _btn, category: str, cat_icon):
+    def _on_card_clicked(self, _btn, category: str):
+        nav_icon = IconsShared().get_icon_by_name(category)
         self._on_navigate(
-            CategoryListPage(category, cat_icon, self._appstream_repository)
+            CategoryListPage(category, nav_icon, self._appstream_repository)
         )
