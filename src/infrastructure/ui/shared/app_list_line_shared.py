@@ -10,6 +10,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 
 from gi.repository import GLib, Gtk, Pango
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 _css_provider = Gtk.CssProvider()
 _css_provider.load_from_string(
@@ -49,7 +50,7 @@ def _make_icon_with_badge(
     if not installed:
         return icon
 
-    badge_icon = Gtk.Image.new_from_icon_name("object-select-symbolic")
+    badge_icon = IconsShared().get_icon_by_name(IconsShared.ICON_CHECKMARK)
     badge_icon.set_pixel_size(10)
     badge_icon.add_css_class("success")
 
@@ -119,7 +120,7 @@ def _make_list_card(
         strip.set_margin_end(10)
         strip.set_margin_bottom(6)
 
-        badge_icon = Gtk.Image.new_from_icon_name("object-select-symbolic")
+        badge_icon = IconsShared().get_icon_by_name(IconsShared.ICON_CHECKMARK)
         badge_icon.set_pixel_size(12)
         badge_icon.add_css_class("success")
         badge_icon.set_margin_start(8)

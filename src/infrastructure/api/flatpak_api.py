@@ -9,10 +9,13 @@ from domain.entity.update_available_entity import UpdateAvailableEntity
 
 class FlatpakApi(FlatpakApiContract):
 
+    def is_running_flatpak(self) -> bool:
+        return bool(os.environ.get("FLATPAK_ID"))
+
     def _cmd(self, *args) -> list:
         prefix = (
             ["flatpak-spawn", "--host", "--directory=/"]
-            if os.environ.get("FLATPAK_ID")
+            if self.is_running_flatpak()
             else []
         )
         return prefix + ["flatpak"] + list(args)
@@ -270,6 +273,70 @@ class FlatpakApi(FlatpakApiContract):
             flatpak_history_list.append(FlatpakHistoryEntity(commit, subject, date))
 
         return flatpak_history_list
+
+    def get_running_flatpak_processes(self) -> list[dict]:
+        """Return flatpak install/update processes running outside this app.
+
+        Each entry: {"pid": int, "app_id": str, "action": "install"|"update"}
+        """
+        if self.is_running_flatpak():
+            cmd = ["flatpak-spawn", "--host", "ps", "-eo", "pid,args"]
+        else:
+            cmd = ["ps", "-eo", "pid,args"]
+
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        own_pid = os.getpid()
+        found = []
+
+        for line in result.stdout.splitlines()[1:]:
+            parts = line.strip().split(None, 1)
+            if len(parts) < 2:
+                continue
+            try:
+                pid = int(parts[0])
+            except ValueError:
+                continue
+            if pid == own_pid:
+                continue
+            args = parts[1].split()
+            flatpak_idx = next(
+                (
+                    i
+                    for i, a in enumerate(args)
+                    if a == "flatpak" or a.endswith("/flatpak")
+                ),
+                None,
+            )
+            if flatpak_idx is None:
+                continue
+            sub = args[flatpak_idx + 1 :]
+            action = next((a for a in sub if a in ("install", "update")), None)
+            if not action:
+                continue
+            action_idx = sub.index(action)
+            app_id = next(
+                (
+                    a
+                    for a in sub[action_idx + 1 :]
+                    if "." in a
+                    and not a.startswith("-")
+                    and a not in ("flathub", "flathub-beta")
+                ),
+                "",
+            )
+            found.append({"pid": pid, "app_id": app_id, "action": action})
+
+        return found
+
+    def is_pid_running(self, pid: int) -> bool:
+        """Return True while the given PID is still alive."""
+        if self.is_running_flatpak():
+            r = subprocess.run(
+                ["flatpak-spawn", "--host", "ps", "-p", str(pid)],
+                capture_output=True,
+            )
+            return r.returncode == 0
+        return os.path.exists(f"/proc/{pid}")
 
     def clean_cache(self):
 

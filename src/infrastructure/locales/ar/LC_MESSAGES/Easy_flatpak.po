@@ -442,6 +442,24 @@ msgstr "تصميم جرافيكي"
 msgid "Software development"
 msgstr "تطوير البرمجيات"
 
+msgid "Show output"
+msgstr "إظهار الإخراج"
+
+msgid "Hide output"
+msgstr "إخفاء الإخراج"
+
+msgid "External process"
+msgstr "عملية خارجية"
+
+msgid "Processes still running"
+msgstr "العمليات لا تزال قيد التشغيل"
+
+msgid "Some installations are still in progress. Are you sure you want to close?"
+msgstr "بعض التثبيتات لا تزال قيد التنفيذ. هل أنت متأكد من إغلاق التطبيق؟"
+
+msgid "Close anyway"
+msgstr "أغلق على أي حال"
+
 #~ msgid "Import / Export"
 #~ msgstr "استيراد / تصدير"
 

@@ -114,6 +114,19 @@
   <releases>
 
 
+<release date="2026-04-21" version="4.2.0"> 
+      <description>
+        <ul>
+          <li>Improvments</li>
+          <li>Fix missing icons</li>
+          <li>Add feature to catch pending flatpak process outside the application</li>
+          <li>Add confirmation to close app if pending process still running</li>
+        </ul>
+      </description>
+    </release> 
+
+
+
 <release date="2026-04-03" version="4.1.8"> 
       <description>
         <ul>

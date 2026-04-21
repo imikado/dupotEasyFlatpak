@@ -442,6 +442,24 @@ msgstr "Design grafic"
 msgid "Software development"
 msgstr "Dezvoltare software"
 
+msgid "Show output"
+msgstr "Afișează ieșirea"
+
+msgid "Hide output"
+msgstr "Ascunde ieșirea"
+
+msgid "External process"
+msgstr "Proces extern"
+
+msgid "Processes still running"
+msgstr "Procese în curs"
+
+msgid "Some installations are still in progress. Are you sure you want to close?"
+msgstr "Unele instalări sunt încă în curs. Sigur doriți să închideți?"
+
+msgid "Close anyway"
+msgstr "Închide oricum"
+
 #~ msgid "Import / Export"
 #~ msgstr "Import / Export"
 

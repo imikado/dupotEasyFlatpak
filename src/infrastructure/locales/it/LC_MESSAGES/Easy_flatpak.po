@@ -444,6 +444,24 @@ msgstr "Grafica"
 msgid "Software development"
 msgstr "Sviluppo software"
 
+msgid "Show output"
+msgstr "Mostra output"
+
+msgid "Hide output"
+msgstr "Nascondi output"
+
+msgid "External process"
+msgstr "Processo esterno"
+
+msgid "Processes still running"
+msgstr "Processi in corso"
+
+msgid "Some installations are still in progress. Are you sure you want to close?"
+msgstr "Alcune installazioni sono ancora in corso. Sei sicuro di voler chiudere?"
+
+msgid "Close anyway"
+msgstr "Chiudi comunque"
+
 #~ msgid "Import / Export"
 #~ msgstr "Importa / Esporta"
 

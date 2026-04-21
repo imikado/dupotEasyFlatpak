@@ -522,8 +522,25 @@ class MainWindow(Adw.ApplicationWindow):
         return GLib.SOURCE_REMOVE
 
     def _on_close_request(self, _window):
+        pending = [i for i in InstallQueueService().get_all() if i.status == "installing"]
+        if not pending:
+            return False
 
-        return False  # Allow window to close
+        dialog = Adw.AlertDialog()
+        dialog.set_heading(_("Processes still running"))
+        dialog.set_body(_("Some installations are still in progress. Are you sure you want to close?"))
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("close", _("Close anyway"))
+        dialog.set_response_appearance("close", Adw.ResponseAppearance.DESTRUCTIVE)
+        dialog.set_default_response("cancel")
+        dialog.set_close_response("cancel")
+        dialog.connect("response", self._on_close_confirmed)
+        dialog.present(self)
+        return True  # Prevent immediate close
+
+    def _on_close_confirmed(self, dialog, response: str):
+        if response == "close":
+            self.destroy()
 
 
 class AppWindow(Adw.Application):

@@ -444,3 +444,21 @@ msgstr "Graphic design"
 
 msgid "Software development"
 msgstr "Software development"
+
+msgid "Show output"
+msgstr "Show output"
+
+msgid "Hide output"
+msgstr "Hide output"
+
+msgid "External process"
+msgstr "External process"
+
+msgid "Processes still running"
+msgstr "Processes still running"
+
+msgid "Some installations are still in progress. Are you sure you want to close?"
+msgstr "Some installations are still in progress. Are you sure you want to close?"
+
+msgid "Close anyway"
+msgstr "Close anyway"

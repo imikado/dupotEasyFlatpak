@@ -115,7 +115,7 @@ class AppstreamPage(Adw.NavigationPage):
             circle.set_valign(Gtk.Align.CENTER)
             circle.add_css_class("verified-circle")
 
-            check = Gtk.Image.new_from_icon_name("object-select-symbolic")
+            check = IconsShared().get_icon_by_name(IconsShared.ICON_CHECKMARK)
             check.set_pixel_size(10)
             circle.append(check)
 

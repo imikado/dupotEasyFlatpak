@@ -8,6 +8,8 @@ class InstallQueueItem:
     app_name: str
     scope: str = "user"
     status: str = "installing"
+    external_pid: int | None = None
+    external_action: str = ""
     output_lines: List[str] = field(default_factory=list)
     _output_callbacks: List[Callable] = field(default_factory=list)
     _status_callbacks: List[Callable] = field(default_factory=list)
@@ -46,6 +48,17 @@ class InstallQueueService:
             cls._instance._items = []
             cls._instance._change_callbacks = []
         return cls._instance
+
+    def enqueue_external(self, pid: int, app_id: str, app_name: str, action: str = "") -> InstallQueueItem | None:
+        """Register a flatpak process started outside this app. Returns None if already tracked."""
+        for item in self._items:
+            if item.external_pid == pid:
+                return None
+        item = InstallQueueItem(app_id=app_id, app_name=app_name, external_pid=pid, external_action=action)
+        self._items.append(item)
+        for cb in list(self._change_callbacks):
+            cb()
+        return item
 
     def enqueue(self, app_id: str, app_name: str, scope: str = "user") -> InstallQueueItem:
         item = InstallQueueItem(app_id=app_id, app_name=app_name, scope=scope)

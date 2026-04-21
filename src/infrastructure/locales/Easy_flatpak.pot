@@ -430,3 +430,27 @@ msgstr ""
 
 msgid "Software development"
 msgstr ""
+
+#: src/infrastructure/ui/home/pending_list_page.py
+msgid "Show output"
+msgstr ""
+
+#: src/infrastructure/ui/home/pending_list_page.py
+msgid "Hide output"
+msgstr ""
+
+#: src/infrastructure/ui/home/pending_list_page.py
+msgid "External process"
+msgstr ""
+
+#: src/infrastructure/ui/app_window.py
+msgid "Processes still running"
+msgstr ""
+
+#: src/infrastructure/ui/app_window.py
+msgid "Some installations are still in progress. Are you sure you want to close?"
+msgstr ""
+
+#: src/infrastructure/ui/app_window.py
+msgid "Close anyway"
+msgstr ""

@@ -10,6 +10,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw, GLib
 
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 class InstallDialog(Adw.AlertDialog):
 
@@ -82,7 +83,7 @@ class InstallDialog(Adw.AlertDialog):
                         row = Adw.SwitchRow()
                         row.set_title(_(perm.get_label()))
                         row.set_active(True)
-                        install_icon = Gtk.Image.new_from_icon_name("system-software-install-symbolic")
+                        install_icon = IconsShared().get_icon_by_name(IconsShared.ICON_PENDING)
                         install_icon.set_valign(Gtk.Align.CENTER)
                         row.add_prefix(install_icon)
                         perm_group.add(row)

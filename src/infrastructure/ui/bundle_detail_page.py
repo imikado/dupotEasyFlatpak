@@ -252,7 +252,7 @@ class BundleDetailPage(Adw.NavigationPage):
                 row = Adw.SwitchRow()
                 row.set_title(_(perm.get_label()))
                 row.set_active(perm.get_label() in stored if stored else True)
-                install_icon = Gtk.Image.new_from_icon_name("system-software-install-symbolic")
+                install_icon = IconsShared().get_icon_by_name(IconsShared.ICON_PENDING)
                 install_icon.set_valign(Gtk.Align.CENTER)
                 row.add_prefix(install_icon)
                 if perm.get_value() in self._installed_ids:
