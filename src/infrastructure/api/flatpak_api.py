@@ -53,6 +53,9 @@ class FlatpakApi(FlatpakApiContract):
         return len(self.get_available_update_list())
 
     def get_available_update_list(self) -> list[UpdateAvailableEntity]:
+
+        subprocess.run(self._cmd("update", "--appstream"))
+
         installed: dict[tuple[str, str], str] = {}
         for scope in ("--user", "--system"):
             result = subprocess.run(

@@ -114,13 +114,14 @@
   <releases>
 
 
-<release date="2026-04-21" version="4.2.0"> 
+<release date="2026-04-21" version="4.2.1"> 
       <description>
         <ul>
           <li>Improvments</li>
           <li>Fix missing icons</li>
           <li>Add feature to catch pending flatpak process outside the application</li>
           <li>Add confirmation to close app if pending process still running</li>
+          <li>Fix update availables apps (problem with cache) </li>
         </ul>
       </description>
     </release> 
