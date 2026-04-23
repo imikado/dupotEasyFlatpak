@@ -51,9 +51,7 @@ class BundleDetailPage(Adw.NavigationPage):
         header_bar.set_title_widget(Gtk.Label(label=self._bundle.label))
 
         self._edit_btn = Gtk.Button()
-        self._edit_btn.set_icon_name(
-            IconsShared().find_icon_name_available(IconsShared.ICON_EDIT)
-        )
+        self._edit_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_EDIT))
         self._edit_btn.set_tooltip_text(_("Edit bundle"))
         self._edit_btn.connect("clicked", self._on_edit_clicked)
         header_bar.pack_end(self._edit_btn)
@@ -141,9 +139,7 @@ class BundleDetailPage(Adw.NavigationPage):
             ):
                 self._apps_requiring_config.add(app.id)
                 perm_btn = Gtk.Button()
-                perm_btn.set_icon_name(
-                    IconsShared().find_icon_name_available(IconsShared.ICON_EDITRECIPE)
-                )
+                perm_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_EDITRECIPE))
                 perm_btn.add_css_class("flat")
                 perm_btn.set_valign(Gtk.Align.CENTER)
                 perm_btn.set_tooltip_text(_("Edit permissions"))
@@ -185,10 +181,10 @@ class BundleDetailPage(Adw.NavigationPage):
 
     def _on_edit_clicked(self, _btn):
         self._edit_mode = not self._edit_mode
-        self._edit_btn.set_icon_name(
-            IconsShared().find_icon_name_available(IconsShared.ICON_CHECKMARK)
+        self._edit_btn.set_child(
+            IconsShared().get_icon_by_name(IconsShared.ICON_CHECKMARK)
             if self._edit_mode
-            else IconsShared().find_icon_name_available(IconsShared.ICON_EDIT)
+            else IconsShared().get_icon_by_name(IconsShared.ICON_EDIT)
         )
         self._edit_btn.set_tooltip_text(
             _("Done") if self._edit_mode else _("Edit bundle")
@@ -224,21 +220,23 @@ class BundleDetailPage(Adw.NavigationPage):
         dialog.set_heading(_("Permissions"))
 
         perm_group = Adw.PreferencesGroup()
+        perm_group.set_size_request(600, -1)
         permission_rows = []
 
         for perm in visible_perms:
             if perm.is_filesystem():
-                row = Adw.EntryRow()
-                row.set_title(_(perm.get_label()))
-                row.set_text(stored.get(perm.get_label()) or perm.get_value())
-                folder_icon = Gtk.Image.new_from_icon_name("folder-symbolic")
-                folder_icon.set_valign(Gtk.Align.CENTER)
-                row.add_prefix(folder_icon)
+                path_row = Adw.ActionRow(title=_(perm.get_label()))
+
+                row = Gtk.Entry()
+                row.set_valign(Gtk.Align.CENTER)
+                row.set_hexpand(True)
+
+                path_row.add_suffix(row)
 
                 if self.user_settings_entity.has_game_path():
                     row.set_text(self.user_settings_entity.installation_game_path)
 
-                perm_group.add(row)
+                perm_group.add(path_row)
                 permission_rows.append((row, perm))
 
             elif perm.is_filesystem_no_prompt():

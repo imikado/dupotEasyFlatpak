@@ -1,8 +1,15 @@
+import os
 import gi
 
 gi.require_version("Gtk", "4.0")
+gi.require_version("Gdk", "4.0")
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
+
+_SVG_DIR = os.path.join(
+    os.path.dirname(__file__),
+    "..", "..", "..", "assets", "ui_icons", "hicolor", "scalable", "actions",
+)
 
 
 class IconsShared:
@@ -22,6 +29,8 @@ class IconsShared:
     ICON_INFO = "easyflatpak-info-symbolic"
     ICON_EDIT = "easyflatpak-edit-symbolic"
     ICON_CHECKMARK = "easyflatpak-checkmark-symbolic"
+    ICON_MENU = "easyflatpak-menu-symbolic"
+    ICON_SEARCH = "easyflatpak-search-symbolic"
 
     # Links
     ICON_HOMEPAGE = "easyflatpak-homepage-symbolic"
@@ -66,7 +75,14 @@ class IconsShared:
         return cls._instance
 
     def get_icon_by_name(self, name: str) -> Gtk.Image:
-        return Gtk.Image.new_from_icon_name(self.find_icon_name_available(name))
+        icon_name = self.find_icon_name_available(name)
+        display = Gdk.Display.get_default()
+        if display and Gtk.IconTheme.get_for_display(display).has_icon(icon_name):
+            return Gtk.Image.new_from_icon_name(icon_name)
+        svg_path = os.path.join(_SVG_DIR, f"{icon_name}.svg")
+        if os.path.exists(svg_path):
+            return Gtk.Image.new_from_file(svg_path)
+        return Gtk.Image.new_from_icon_name("image-missing")
 
     def find_icon_name_available(self, name: str) -> str:
         return self.icon_ref.get(name, name)

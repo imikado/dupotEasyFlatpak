@@ -12,6 +12,7 @@ from gi.repository import Gtk, Adw, GLib
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 from infrastructure.ui.shared.icons_shared import IconsShared
 
+
 class InstallDialog(Adw.AlertDialog):
 
     def __init__(
@@ -32,6 +33,7 @@ class InstallDialog(Adw.AlertDialog):
 
         form_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         form_box.set_margin_top(8)
+        form_box.set_size_request(600, -1)
 
         self._permission_rows = []  # list of (widget, PermissionOverrideEntity)
 
@@ -62,11 +64,13 @@ class InstallDialog(Adw.AlertDialog):
                     if perm.is_filesystem_no_prompt():
                         continue
                     elif perm.is_filesystem():
-                        row = Adw.EntryRow()
-                        row.set_title(_(perm.get_label()))
-                        folder_icon = Gtk.Image.new_from_icon_name("folder-symbolic")
-                        folder_icon.set_valign(Gtk.Align.CENTER)
-                        row.add_prefix(folder_icon)
+                        path_row = Adw.ActionRow(title=_(perm.get_label()))
+
+                        row = Gtk.Entry()
+                        row.set_valign(Gtk.Align.CENTER)
+                        row.set_hexpand(True)
+
+                        path_row.add_suffix(row)
 
                         if user_settings_entity.has_game_path():
                             row.set_text(user_settings_entity.installation_game_path)
@@ -77,13 +81,15 @@ class InstallDialog(Adw.AlertDialog):
                         else:
                             row.set_text(perm.get_value())
                         _fs_index += 1
-                        perm_group.add(row)
+                        perm_group.add(path_row)
                         self._permission_rows.append((row, perm))
                     elif perm.is_install_flatpak_yes_no():
                         row = Adw.SwitchRow()
                         row.set_title(_(perm.get_label()))
                         row.set_active(True)
-                        install_icon = IconsShared().get_icon_by_name(IconsShared.ICON_PENDING)
+                        install_icon = IconsShared().get_icon_by_name(
+                            IconsShared.ICON_PENDING
+                        )
                         install_icon.set_valign(Gtk.Align.CENTER)
                         row.add_prefix(install_icon)
                         perm_group.add(row)

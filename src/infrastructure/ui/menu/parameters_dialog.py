@@ -10,6 +10,7 @@ from gi.repository import Gtk, Adw
 from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.system_api import SystemApi
 from infrastructure.api.user_settings_api import UserSettingsApi
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 
 class ParametersDialog(Adw.PreferencesDialog):
@@ -38,11 +39,20 @@ class ParametersDialog(Adw.PreferencesDialog):
         self._scope_row.connect("notify::selected", lambda *_: self._on_change())
         group.add(self._scope_row)
 
-        self._path_row = Adw.EntryRow()
-        self._path_row.set_title(_("Game path"))
+        # game path
+        path_row = Adw.ActionRow(title=_("Game path"))
+
+        self._path_row = Gtk.Entry()
+        self._path_row.set_placeholder_text("/home/user/games...")
+        self._path_row.set_valign(Gtk.Align.CENTER)
+        self._path_row.set_hexpand(True)
         self._path_row.set_text(self._settings.installation_game_path)
+
         self._path_row.connect("changed", lambda *_: self._on_change())
-        group.add(self._path_row)
+        path_row.add_suffix(self._path_row)
+        # end game path
+
+        group.add(path_row)
 
         appearance_group = Adw.PreferencesGroup()
         appearance_group.set_title(_("Appearance"))
@@ -53,7 +63,9 @@ class ParametersDialog(Adw.PreferencesDialog):
         self._theme_row.set_title(_("Theme"))
         self._theme_row.set_model(Gtk.StringList.new(theme_choices))
         current_theme = self._settings.theme
-        selected_index = theme_choices.index(current_theme) if current_theme in theme_choices else 0
+        selected_index = (
+            theme_choices.index(current_theme) if current_theme in theme_choices else 0
+        )
         self._theme_row.set_selected(selected_index)
         self._theme_row.connect("notify::selected", lambda *_: self._on_change())
         appearance_group.add(self._theme_row)
@@ -61,9 +73,15 @@ class ParametersDialog(Adw.PreferencesDialog):
         language_choices = self._settings.get_language_choice_list()
         self._language_row = Adw.ComboRow()
         self._language_row.set_title(_("Language"))
-        self._language_row.set_model(Gtk.StringList.new([_(c) for c in language_choices]))
+        self._language_row.set_model(
+            Gtk.StringList.new([_(c) for c in language_choices])
+        )
         current_language = self._settings.language
-        selected_lang_index = language_choices.index(current_language) if current_language in language_choices else 0
+        selected_lang_index = (
+            language_choices.index(current_language)
+            if current_language in language_choices
+            else 0
+        )
         self._language_row.set_selected(selected_lang_index)
         self._language_row.connect("notify::selected", lambda *_: self._on_change())
         appearance_group.add(self._language_row)

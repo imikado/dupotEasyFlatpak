@@ -116,12 +116,12 @@ class MainWindow(Adw.ApplicationWindow):
         menu.append(_("About"), "win.about")
 
         menu_button = Gtk.MenuButton()
-        menu_button.set_icon_name("open-menu-symbolic")
+        menu_button.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_MENU))
         menu_button.set_menu_model(menu)
         header_bar.pack_end(menu_button)
 
         search_button = Gtk.Button()
-        search_button.set_icon_name("system-search-symbolic")
+        search_button.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_SEARCH))
         header_bar.pack_start(search_button)
 
         for name, callback in [
