@@ -1,7 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <!-- Large arc at y=4, r=10: peak at y≈1.1 (safe). Move dot to y=13.5 to fill bottom. -->
-  <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M1 4A10 10 0 0 1 15 4"/>
-  <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M3 7A7 7 0 0 1 13 7"/>
-  <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" d="M5.5 10a3.5 3.5 0 0 1 5 0"/>
-  <circle fill="currentColor" cx="8" cy="13.5" r="1.2"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="easyflatpak-network-symbolic.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="50.625"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
+  <path
+     fill="none"
+     stroke="currentColor"
+     stroke-width="1.72337"
+     stroke-linecap="round"
+     d="m 1.9681887,5.5214394 a 8.6168733,8.6168733 0 0 1 12.0636223,0"
+     id="path1" />
+  <path
+     fill="none"
+     stroke="currentColor"
+     stroke-width="1.72337"
+     stroke-linecap="round"
+     d="m 3.6915633,8.1065013 a 6.0318113,6.0318113 0 0 1 8.6168737,0"
+     id="path2" />
+  <path
+     fill="none"
+     stroke="currentColor"
+     stroke-width="1.72337"
+     stroke-linecap="round"
+     d="m 5.8457817,10.691563 a 3.0159057,3.0159057 0 0 1 4.3084363,0"
+     id="path3" />
+  <circle
+     fill="currentColor"
+     cx="8"
+     cy="13.707469"
+     r="1.292531"
+     id="circle3"
+     style="stroke-width:0.861687" />
 </svg>
