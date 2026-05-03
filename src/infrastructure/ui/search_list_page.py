@@ -1,11 +1,15 @@
+import threading
+
 import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Adw, GLib
 
 from domain.UseCase.get_search_content_uc import GetSearchContentUc
+from infrastructure.api.flathub_api import FlathubApi
+from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
 
@@ -16,8 +20,9 @@ class SearchListPage(Adw.NavigationPage):
         super().__init__()
         self.set_title(_("Search"))
         self._appstream_repository = appstream_repository
-        self._uc = GetSearchContentUc(appstream_repository)
+        self._uc = GetSearchContentUc(appstream_repository, FlathubApi(), SystemApi())
         self._grid = None
+        self._current_query = query
         self.set_child(self._build(query))
 
     def _build(self, query: str) -> Gtk.Widget:
@@ -71,13 +76,30 @@ class SearchListPage(Adw.NavigationPage):
         return toolbar_view
 
     def _reload(self, query: str):
+        self._current_query = query
         self._grid.clear()
 
         if len(query.strip()) < 3:
             return
 
-        for app in self._uc.get_app_list_by_search(query):
+        local_results = self._uc.get_app_list_by_search(query)
+        for app in local_results:
             self._grid.append(app, self._on_row_activated)
+
+        if not local_results:
+            threading.Thread(
+                target=self._search_api, args=(query,), daemon=True
+            ).start()
+
+    def _search_api(self, query: str):
+        results = self._uc.get_app_list_from_api(query)
+        GLib.idle_add(self._on_api_results, query, results)
+
+    def _on_api_results(self, query: str, results: list):
+        if query == self._current_query:
+            for app in results:
+                self._grid.append(app, self._on_row_activated)
+        return GLib.SOURCE_REMOVE
 
     def _on_search_changed(self, entry: Gtk.SearchEntry):
         self._reload(entry.get_text())

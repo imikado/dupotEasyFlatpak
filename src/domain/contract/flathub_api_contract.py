@@ -40,3 +40,7 @@ class FlathubApiContract(ABC):
     @abstractmethod
     def get_app_id_list_of_the_week(self, date: str) -> list[str]:
         pass
+
+    @abstractmethod
+    def search_apps(self, query: str) -> list[object]:
+        pass

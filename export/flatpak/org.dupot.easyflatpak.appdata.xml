@@ -114,6 +114,16 @@
   <releases>
 
 
+
+
+<release date="2026-05-03" version="4.2.4"> 
+      <description>
+        <ul>
+          <li>Bug fix</li>
+        </ul>
+      </description>
+    </release> 
+
 <release date="2026-04-24" version="4.2.3"> 
       <description>
         <ul>

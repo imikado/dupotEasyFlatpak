@@ -55,15 +55,22 @@ class UpdateDatabaseFromApiUc:
         for appstream_loop in appstream_list_already_stored:
             app_id_list_already_stored.append(appstream_loop.id.lower())
 
+        icons_path = PathConf().get_icons_path()
+
         for recently_raw_appstream_loop in recently_raw_appstream_list:
 
             id_loop: str = recently_raw_appstream_loop["app_id"]
 
             if id_loop.lower() not in app_id_list_already_stored:
-
                 self._appstream_repository.insert_from_raw_object(
                     recently_raw_appstream_loop
                 )
+
+            icon_url = recently_raw_appstream_loop.get("icon", "")
+            if icon_url:
+                icon_path = f"{icons_path}/{id_loop.lower()}.png"
+                if not self._system_api.file_exists(icon_path):
+                    self._system_api.download_remote_file_to(icon_url, icon_path)
 
         for app_id_of_the_week_loop in app_id_of_the_week_list:
             if app_id_of_the_week_loop.lower() not in app_id_list_already_stored:

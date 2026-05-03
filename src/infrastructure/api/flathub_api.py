@@ -34,7 +34,7 @@ class FlathubApi(FlathubApiContract):
         return [hit["app_id"] for hit in data.get("hits", [])]
 
     def get_added_apps(
-        self, page: int = 0, per_page: int = 40, locale: str = "en"
+        self, page: int = 0, per_page: int = 50, locale: str = "en"
     ) -> list:
         url = f"{self._BASE_URL}/collection/recently-added?page={page}&per_page={per_page}&locale={locale}"
         with urllib.request.urlopen(url) as response:
@@ -48,6 +48,19 @@ class FlathubApi(FlathubApiContract):
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return data.get("hits", [])
+
+    def search_apps(self, query: str) -> list[object]:
+        url = f"{self._BASE_URL}/search"
+        payload = json.dumps({"query": query}).encode()
+        req = urllib.request.Request(
+            url, data=payload, headers={"Content-Type": "application/json"}
+        )
+        try:
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode())
+            return data.get("hits", [])
+        except (urllib.error.URLError, urllib.error.HTTPError):
+            return []
 
     def get_appstream_by_id(self, id: str) -> object | None:
         url = f"{self._BASE_URL}/appstream/{id}"

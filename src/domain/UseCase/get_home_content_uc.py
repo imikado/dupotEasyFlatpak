@@ -161,13 +161,14 @@ class GetHomeContentUC:
         if api_cache_parameters is None:
             return True
 
-        if (
-            self.get_current_timestamp()
-            - api_cache_parameters.get_home_api_updated_timestamp()
-        ) > self.seconds_from_days(self.NB_DAYS_SHOULD_SYNC_HOME):
-            return True
+        stored_ts = api_cache_parameters.get_home_api_updated_timestamp()
+        current_ts = self.get_current_timestamp()
 
-        return False
+        # Legacy: timestamps previously stored in milliseconds are larger than current seconds
+        if stored_ts > current_ts:
+            stored_ts = stored_ts // 1000
+
+        return (current_ts - stored_ts) > self.seconds_from_days(self.NB_DAYS_SHOULD_SYNC_HOME)
 
     def seconds_from_days(self, days) -> int:
         return days * 24 * 60 * 60
