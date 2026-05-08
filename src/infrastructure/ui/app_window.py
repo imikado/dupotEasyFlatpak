@@ -1,3 +1,4 @@
+import domain.conf.app_state as app_state
 from domain.UseCase.export_uc import ExportUc
 from domain.UseCase.import_uc import ImportUc
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
@@ -223,6 +224,13 @@ class MainWindow(Adw.ApplicationWindow):
             IconsShared().find_icon_name_available(IconsShared.ICON_UPDATES),
         )
         updates_stack_page.set_visible(False)
+
+        def _on_updates_tab_shown(_stack, _param):
+            if view_stack.get_visible_child_name() == "updates" and app_state.needs_updates_refresh:
+                app_state.needs_updates_refresh = False
+                updates_page.remove_uninstalled()
+
+        view_stack.connect("notify::visible-child", _on_updates_tab_shown)
 
         queue_service = InstallQueueService()
         pending_page = PendingPage(

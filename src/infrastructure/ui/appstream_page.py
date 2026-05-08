@@ -15,6 +15,7 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Adw, GLib, Gdk, Gio
 
+import domain.conf.app_state as app_state
 from domain.entity.appstream_long_entity import AppstreamLongEntity
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.service.install_queue_service import InstallQueueService
@@ -435,6 +436,7 @@ class AppstreamPage(Adw.NavigationPage):
                     flatpak_api.uninstall_by_id(
                         app_id, delete_data=delete_toggle.get_active()
                     )
+                    app_state.needs_updates_refresh = True
                     result = flatpak_api.get_info_by_id(app_id)
                     GLib.idle_add(
                         self._apply_install_state,

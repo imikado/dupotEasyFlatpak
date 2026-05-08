@@ -10,6 +10,7 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Adw, GLib, Gtk, Pango
 
+import domain.conf.app_state as app_state
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
@@ -149,6 +150,7 @@ def _make_installed_row(
                 )
                 result = FlatpakApi().get_info_by_id(app.id)
                 if result.returncode != 0:  # non-zero = app no longer found = success
+                    app_state.needs_updates_refresh = True
                     GLib.idle_add(lambda: listbox.remove(row))
                 else:
                     GLib.idle_add(lambda: uninstall_btn.set_sensitive(True))

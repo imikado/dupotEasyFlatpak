@@ -243,6 +243,45 @@ class UpdatesPage(Gtk.Box):
         self._stack.set_visible_child_name("loading")
         threading.Thread(target=self._load, daemon=True).start()
 
+    def remove_uninstalled(self):
+        def _fetch():
+            installed_ids = set(self._flatpak_api.get_installed_app_id_list())
+            GLib.idle_add(self._apply_remove_uninstalled, installed_ids)
+
+        threading.Thread(target=_fetch, daemon=True).start()
+
+    def _apply_remove_uninstalled(self, installed_ids: set):
+        kept_checkboxes = []
+        kept_rows = []
+        for (item, check), (row, has_version) in zip(self._checkboxes, self._rows):
+            if item.app_id in installed_ids:
+                kept_checkboxes.append((item, check))
+                kept_rows.append((row, has_version))
+            else:
+                if has_version:
+                    self._group_with_version.remove(row)
+                else:
+                    self._group_without_version.remove(row)
+
+        self._checkboxes = kept_checkboxes
+        self._rows = kept_rows
+
+        if not self._checkboxes:
+            self._action_bar.set_revealed(False)
+            self._stack.set_visible_child_name("empty")
+            if self._on_loaded:
+                self._on_loaded(0)
+        else:
+            has_with_version = any(hv for _, hv in self._rows)
+            has_without_version = any(not hv for _, hv in self._rows)
+            self._group_with_version.set_visible(has_with_version)
+            self._group_without_version.set_visible(has_without_version)
+            self._refresh_action_bar()
+            if self._on_loaded:
+                self._on_loaded(len(self._checkboxes))
+
+        return GLib.SOURCE_REMOVE
+
     def _on_confirm_response(self, _dialog, response, selected):
         if response != "confirm":
             return
