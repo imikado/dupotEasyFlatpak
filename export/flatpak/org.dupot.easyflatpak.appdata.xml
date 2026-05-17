@@ -115,6 +115,18 @@
 
 
 
+
+<release date="2026-05-17" version="4.2.6"> 
+      <description>
+        <ul>
+          <li>Bug fix</li>
+          <li>Add new menu tools:</li>
+          <li>With 2 features to allow to clean cache and repair permission</li>
+        </ul>
+      </description>
+    </release> 
+
+
 <release date="2026-05-08" version="4.2.5"> 
       <description>
         <ul>

@@ -18,6 +18,7 @@ from infrastructure.ui.home.updates_page import UpdatesPage
 from infrastructure.ui.search_list_page import SearchListPage
 from infrastructure.ui.menu.import_dialog import ImportDialog
 from infrastructure.ui.menu.parameters_dialog import ParametersDialog
+from infrastructure.ui.menu.tools_dialog import ToolsDialog
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.ui.appstream.flatpak_file_page import FlatpakFilePage
@@ -53,7 +54,12 @@ class MainWindow(Adw.ApplicationWindow):
 
         if init_fn:
             self._show_loading()
-            self.connect("map", lambda w: threading.Thread(target=self._run_init, args=(init_fn,), daemon=True).start())
+            self.connect(
+                "map",
+                lambda w: threading.Thread(
+                    target=self._run_init, args=(init_fn,), daemon=True
+                ).start(),
+            )
         else:
             self._build_home()
 
@@ -78,6 +84,7 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_init_done(self):
         from domain.entity.user_settings_entity import UserSettingsEntity
+
         settings = UserSettingsEntity()
         style_manager = Adw.StyleManager.get_default()
         if settings.use_theme_dark():
@@ -114,6 +121,8 @@ class MainWindow(Adw.ApplicationWindow):
         menu.append(_("Import"), "win.import")
         menu.append(_("Export"), "win.export")
         menu.append(_("Install local Flatpak"), "win.open_flatpak")
+        menu.append(_("Tools"), "win.tools")
+
         menu.append(_("About"), "win.about")
 
         menu_button = Gtk.MenuButton()
@@ -130,6 +139,7 @@ class MainWindow(Adw.ApplicationWindow):
             ("import", self._on_menu_import),
             ("export", self._on_menu_export),
             ("open_flatpak", self._on_menu_open_flatpak),
+            ("tools", self._on_menu_tools),
             ("about", self._on_menu_about),
         ]:
             action = Gio.SimpleAction.new(name, None)
@@ -137,8 +147,7 @@ class MainWindow(Adw.ApplicationWindow):
             self.add_action(action)
 
         pending_badge_css = Gtk.CssProvider()
-        pending_badge_css.load_from_string(
-            """
+        pending_badge_css.load_from_string("""
             indicatorbin > label.badge,
             indicatorbin label.badge,
             viewswitcherbutton label.badge,
@@ -147,8 +156,7 @@ class MainWindow(Adw.ApplicationWindow):
                 color: white;
                 border-radius: 9999px;
             }
-        """
-        )
+        """)
         Gtk.StyleContext.add_provider_for_display(
             self.get_display(),
             pending_badge_css,
@@ -159,6 +167,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         # --- Top-level ViewStack (Home / Categories / Bundles / Installed / Updates / Pending) ---
         view_stack = Adw.ViewStack()
+        self._view_stack = view_stack
         view_stack.set_vexpand(True)
         view_stack.set_hexpand(True)
 
@@ -226,7 +235,10 @@ class MainWindow(Adw.ApplicationWindow):
         updates_stack_page.set_visible(False)
 
         def _on_updates_tab_shown(_stack, _param):
-            if view_stack.get_visible_child_name() == "updates" and app_state.needs_updates_refresh:
+            if (
+                view_stack.get_visible_child_name() == "updates"
+                and app_state.needs_updates_refresh
+            ):
                 app_state.needs_updates_refresh = False
                 updates_page.remove_uninstalled()
 
@@ -411,6 +423,16 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_menu_parameters(self, _action, _param):
         ParametersDialog().present(self)
 
+    def _navigate_to_pending(self):
+        stack = self.navigation_view.get_navigation_stack()
+        if stack.get_n_items() > 1:
+            self.navigation_view.pop_to_page(stack.get_item(0))
+        if hasattr(self, "_view_stack"):
+            self._view_stack.set_visible_child_name("pending")
+
+    def _on_menu_tools(self, _action, _param):
+        ToolsDialog(self._navigate_to_pending).present(self)
+
     def _on_menu_open_flatpak(self, _action, _param):
         file_dialog = Gtk.FileDialog.new()
         file_dialog.set_title(_("Install local Flatpak"))
@@ -530,13 +552,19 @@ class MainWindow(Adw.ApplicationWindow):
         return GLib.SOURCE_REMOVE
 
     def _on_close_request(self, _window):
-        pending = [i for i in InstallQueueService().get_all() if i.status == "installing"]
+        pending = [
+            i for i in InstallQueueService().get_all() if i.status == "installing"
+        ]
         if not pending:
             return False
 
         dialog = Adw.AlertDialog()
         dialog.set_heading(_("Processes still running"))
-        dialog.set_body(_("Some installations are still in progress. Are you sure you want to close?"))
+        dialog.set_body(
+            _(
+                "Some installations are still in progress. Are you sure you want to close?"
+            )
+        )
         dialog.add_response("cancel", _("Cancel"))
         dialog.add_response("close", _("Close anyway"))
         dialog.set_response_appearance("close", Adw.ResponseAppearance.DESTRUCTIVE)
@@ -566,6 +594,7 @@ class AppWindow(Adw.Application):
 
     def _register_bundled_icons(self):
         import os
+
         icons_path = os.path.join(
             os.path.dirname(__file__), "..", "..", "assets", "ui_icons"
         )
@@ -581,7 +610,10 @@ class AppWindow(Adw.Application):
         for f in files:
             path = f.get_path()
             if path and path.endswith(".flatpak"):
-                if win._pending_flatpak is not None or not win.navigation_view.get_visible_page():
+                if (
+                    win._pending_flatpak is not None
+                    or not win.navigation_view.get_visible_page()
+                ):
                     win._pending_flatpak = path
                 else:
                     win.open_flatpak_file(path)

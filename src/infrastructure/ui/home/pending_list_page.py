@@ -65,6 +65,7 @@ class PendingOutputPage(Adw.NavigationPage):
         progress_box.set_margin_end(20)
 
         is_external = self._item.external_pid is not None
+        show_output_default = self._item.show_output_default
         initial_label = self._item.external_action.capitalize() + "…" if is_external and self._item.external_action else _("Installing…")
 
         self._action_label = Gtk.Label(label=initial_label)
@@ -85,15 +86,16 @@ class PendingOutputPage(Adw.NavigationPage):
         toggle_btn.add_css_class("caption")
         toggle_btn.set_halign(Gtk.Align.START)
         toggle_btn.set_active(False)
-        toggle_btn.set_visible(not is_external)
+        toggle_btn.set_visible(not is_external and not show_output_default)
 
         progress_box.append(self._action_label)
         progress_box.append(self._progress_bar)
         progress_box.append(self._speed_label)
         progress_box.append(toggle_btn)
+        progress_box.set_visible(not show_output_default)
         outer.append(progress_box)
 
-        # Log area (non-progress lines only), hidden by default
+        # Log area — visible by default when show_output_default, hidden otherwise
         text_view = Gtk.TextView()
         text_view.set_editable(False)
         text_view.set_monospace(True)
@@ -108,11 +110,11 @@ class PendingOutputPage(Adw.NavigationPage):
         scroll.set_vexpand(True)
         scroll.set_hexpand(True)
         scroll.set_child(text_view)
-        scroll.set_visible(False)
+        scroll.set_visible(show_output_default)
         self._scroll = scroll
 
         separator = Gtk.Separator()
-        separator.set_visible(False)
+        separator.set_visible(show_output_default)
         outer.append(separator)
         outer.append(scroll)
 

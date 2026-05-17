@@ -10,6 +10,7 @@ class InstallQueueItem:
     status: str = "installing"
     external_pid: int | None = None
     external_action: str = ""
+    show_output_default: bool = False
     output_lines: List[str] = field(default_factory=list)
     _output_callbacks: List[Callable] = field(default_factory=list)
     _status_callbacks: List[Callable] = field(default_factory=list)
@@ -60,8 +61,8 @@ class InstallQueueService:
             cb()
         return item
 
-    def enqueue(self, app_id: str, app_name: str, scope: str = "user") -> InstallQueueItem:
-        item = InstallQueueItem(app_id=app_id, app_name=app_name, scope=scope)
+    def enqueue(self, app_id: str, app_name: str, scope: str = "user", show_output_default: bool = False) -> InstallQueueItem:
+        item = InstallQueueItem(app_id=app_id, app_name=app_name, scope=scope, show_output_default=show_output_default)
         self._items.append(item)
         for cb in list(self._change_callbacks):
             cb()

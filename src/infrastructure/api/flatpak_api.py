@@ -342,8 +342,13 @@ class FlatpakApi(FlatpakApiContract):
         return os.path.exists(f"/proc/{pid}")
 
     def clean_cache(self):
-
         subprocess.run(
             self._cmd("run", "--command=fc-cache", "org.dupot.easyflatpak", "-f", "-v"),
             capture_output=False,
         )
+
+    def get_clean_cache_call(self) -> list:
+        return self._cmd("run", "--command=fc-cache", "org.dupot.easyflatpak", "-f", "-v")
+
+    def get_repair_user_call(self) -> list:
+        return self._cmd("repair", "--user")
