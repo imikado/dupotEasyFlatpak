@@ -4,11 +4,11 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 
-from gi.repository import Gtk, Gdk, Gio
+from gi.repository import Gtk, Gdk
 
-_SVG_DIR = os.path.normpath(os.path.join(
+_ICONS_DIR = os.path.normpath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-    "..", "..", "..", "assets", "ui_icons", "hicolor", "scalable", "actions",
+    "..", "..", "..", "assets", "ui_icons",
 ))
 
 
@@ -69,23 +69,26 @@ class IconsShared:
         "Donation": ICON_DONATION,
     }
 
+    _theme_registered: bool = False
+
     def __new__(cls, *_args, **_kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def get_icon_by_name(self, name: str) -> Gtk.Image:
-        icon_name = self.find_icon_name_available(name)
-        svg_path = os.path.join(_SVG_DIR, f"{icon_name}.svg")
-        if os.path.exists(svg_path):
-            paintable = Gtk.IconPaintable.new_for_file(
-                Gio.File.new_for_path(svg_path), 48, 1
-            )
-            return Gtk.Image.new_from_paintable(paintable)
+    @classmethod
+    def _ensure_theme_registered(cls) -> None:
+        if cls._theme_registered:
+            return
         display = Gdk.Display.get_default()
-        if display and Gtk.IconTheme.get_for_display(display).has_icon(icon_name):
-            return Gtk.Image.new_from_icon_name(icon_name)
-        return Gtk.Image.new_from_icon_name("image-missing")
+        if display:
+            Gtk.IconTheme.get_for_display(display).add_search_path(_ICONS_DIR)
+            cls._theme_registered = True
+
+    def get_icon_by_name(self, name: str) -> Gtk.Image:
+        self._ensure_theme_registered()
+        icon_name = self.find_icon_name_available(name)
+        return Gtk.Image.new_from_icon_name(icon_name)
 
     def find_icon_name_available(self, name: str) -> str:
         return self.icon_ref.get(name, name)

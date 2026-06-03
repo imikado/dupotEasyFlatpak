@@ -44,6 +44,13 @@ class UserSettingsEntity:
             cls._instance = super().__new__(cls)
         return cls._instance
 
+    def reset_to_defaults(self) -> None:
+        self.version = self.DEFAULT_VERSION
+        self.installation_scope = self.DEFAULT_INSTALLATION_SCOPE
+        self.installation_game_path = self.DEFAULT_GAME_PATH
+        self.theme = self.DEFAULT_THEME
+        self.language = self.DEFAULT_LANGUAGE
+
     def load(self, raw_obj: object):
         self.version = raw_obj[self.FIELD_VERSION]
         self.installation_scope = raw_obj[self.FIELD_INSTALLATION_SCOPE]

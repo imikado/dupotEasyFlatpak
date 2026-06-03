@@ -71,6 +71,7 @@ def main():
                 print(
                     f"user settings is already there, but version is different current:{current_user_settings.version} vs application {UserSettingsEntity.DEFAULT_VERSION}"
                 )
+                current_user_settings.reset_to_defaults()
                 should_copy_default_user_settings = True
 
         if should_copy_default_user_settings:
