@@ -37,6 +37,10 @@ class AppstreamShortEntity:
         if self._branding_loaded:
             return
 
+        if not self.raw_metadata_obj or not isinstance(self.raw_metadata_obj, (str, bytes, bytearray)):
+            self._branding_loaded = True
+            return
+
         metadata_obj = json.loads(self.raw_metadata_obj)
 
         if self.FIELD_BRANDING in metadata_obj:
