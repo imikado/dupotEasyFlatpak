@@ -36,8 +36,10 @@ class AppstreamLongEntity:
     developer_name: str
     screenshot_list: str
     last_release_timestamp: int
+    arche_list: str
 
     _screenshot_obj_list: list[ScreenshotEntity]
+    _arche_list: list[str]
     _flathub_verified: bool
     _flathub_verified_label: str
     _download_size: int
@@ -67,6 +69,7 @@ class AppstreamLongEntity:
         "developer_name": "developer_name",
         "screenshot_list": "screenshotList",
         "last_release_timestamp": "lastReleaseTimestamp",
+        "arche_list": "archeList",
     }
 
     def __init__(self, row={}):
@@ -79,6 +82,7 @@ class AppstreamLongEntity:
         self.load_metadata_obj()
         self.load_release_obj_list()
         self.loadl_url_obj()
+        self.load_arche_list()
 
     def get_select_columns(self) -> str:
         return ", ".join(
@@ -162,6 +166,15 @@ class AppstreamLongEntity:
 
     def get_release_list(self) -> list[ReleaseEntity]:
         return self._release_obj_list
+
+    def load_arche_list(self):
+        self._arche_list = json.loads(self.arche_list) if self.arche_list else []
+
+    def get_arche_list(self) -> list[str]:
+        return self._arche_list
+
+    def get_arche_label(self) -> str:
+        return ", ".join(self._arche_list)
 
     @staticmethod
     def format_mb(size: int) -> str:

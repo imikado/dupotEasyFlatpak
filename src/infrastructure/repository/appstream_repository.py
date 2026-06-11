@@ -3,6 +3,7 @@ import json
 from domain.contract.appstream_repository_contract import AppstreamRepositoryContract
 from domain.entity.appstream_long_entity import AppstreamLongEntity
 from domain.entity.appstream_short_entity import AppstreamShortEntity
+from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.database_api import DatabaseApi
 
 
@@ -11,6 +12,18 @@ class AppstreamRepository(AppstreamRepositoryContract):
     def __init__(self):
         super().__init__()
         self._db = DatabaseApi()
+
+    def _get_arch_filter_sql(self) -> str:
+        arch = UserSettingsEntity().get_architecture_filter_arch()
+        if not arch:
+            return ""
+        return f" AND (archeList = '[]' OR archeList LIKE '%\"{arch}\"%')"
+
+    def get_all_app_id_list(self)->list[str]:
+        rows = self._db.execute(
+            f"SELECT id FROM appstream",
+        )
+        return [ row['id'] for row in rows]
 
     def get_by_id(self, id: str) -> AppstreamLongEntity | None:
         rows = self._db.execute(
@@ -39,7 +52,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders})",
+            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()}",
             tuple(ids),
         )
         return [
@@ -56,7 +69,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
     def get_list_by_id_list_ordered(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders}) ORDER BY name ASC",
+            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()} ORDER BY name ASC",
             tuple(ids),
         )
         return [
@@ -72,7 +85,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
 
     def get_list_by_category_id(self, category_id: str) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%'",
+            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()}",
         )
         return [
             AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
@@ -88,6 +101,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 FROM appstream
                 WHERE categoryIdList LIKE '%{category_id}%'
                 AND (name LIKE '%{search}%' OR summary LIKE '%{search}%')
+                {self._get_arch_filter_sql()}
                 ORDER BY priority""",
         )
         return [
@@ -100,7 +114,8 @@ class AppstreamRepository(AppstreamRepositoryContract):
             f"""SELECT id, name, icon, summary,
                 CASE WHEN name LIKE '%{search}%' THEN 1 ELSE 2 END AS priority
                 FROM appstream
-                WHERE name LIKE '%{search}%' OR summary LIKE '%{search}%'
+                WHERE (name LIKE '%{search}%' OR summary LIKE '%{search}%')
+                {self._get_arch_filter_sql()}
                 ORDER BY priority""",
         )
         return [
@@ -112,7 +127,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
         self, category_id: str
     ) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%' LIMIT 10",
+            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()} LIMIT 10",
         )
         return [
             AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
@@ -193,6 +208,12 @@ class AppstreamRepository(AppstreamRepositoryContract):
         if isinstance(categories, str):
             categories = [categories]
 
+        summary_obj={}
+        summary_obj['download_size']=raw_obj.get('download_size',0)
+        summary_obj['installed_size']=raw_obj.get('installed_size',0)
+        
+        arche_list=raw_obj.get('arches',[])
+
         metadata_obj = {}
         raw_metadata = raw_obj.get("metadata", {}) or {}
         if raw_metadata.get("flathub::verification::verified"):
@@ -256,7 +277,9 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 urlObj = ?,
                 screenshotList = ?,
                 releaseObjList = ?,
-                lastUpdate = ?
+                lastUpdate = ?,
+                summaryObj=?,
+                archeList=?
             WHERE id = ?""",
             (
                 name,
@@ -271,6 +294,8 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 json.dumps(screenshots),
                 json.dumps(releases),
                 last_update,
+                json.dumps(summary_obj),
+                json.dumps(arche_list),
                 id,
             ),
         )

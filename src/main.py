@@ -47,6 +47,15 @@ def main():
     def init_fn():
         system_api = SystemApi()
 
+        # On some installations, fontconfig falls back to a font without
+        # proper Arabic shaping (joined letter forms), causing Arabic text
+        # to render as disconnected glyphs. Refresh the font cache to fix it.
+        if any(l.startswith("ar") for l in languages):
+            flatpak_api = FlatpakApi()
+            if flatpak_api.is_arabic_font_shaping_broken():
+                print("Arabic font shaping looks broken, refreshing font cache")
+                flatpak_api.clean_cache()
+
         path_conf = PathConf()
         path_conf.set_data_path(GLib.get_user_data_dir())
         os.makedirs(path_conf.get_data_path(), exist_ok=True)
@@ -133,7 +142,7 @@ def main():
             if system_api.file_exists(icons_directory_path):
                 system_api.remove_directory(icons_directory_path)
 
-            system_api.unzip_archive_to(icons_archive_path, path_conf.get_data_path())
+            system_api.unzip_archive_to(icons_archive_path, icons_directory_path)
 
         UpdateDatabaseFromApiUc(
             FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()

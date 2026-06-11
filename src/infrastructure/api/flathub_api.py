@@ -49,6 +49,12 @@ class FlathubApi(FlathubApiContract):
             data = json.loads(response.read().decode())
         return data.get("hits", [])
 
+    def get_all_app_id_list(self)->list[str]:
+        url = f"{self._BASE_URL}/appstream"
+        with urllib.request.urlopen(url) as response:
+            data = json.loads(response.read().decode())
+        return data
+
     def search_apps(self, query: str) -> list[object]:
         url = f"{self._BASE_URL}/search"
         payload = json.dumps({"query": query}).encode()
@@ -69,6 +75,15 @@ class FlathubApi(FlathubApiContract):
                 return json.loads(response.read().decode())
         except (urllib.error.URLError, urllib.error.HTTPError):
             return None
+
+    def get_summary_by_id(self, id: str) -> object | None:
+        url = f"{self._BASE_URL}/summary/{id}"
+        try:
+            with urllib.request.urlopen(url) as response:
+                return json.loads(response.read().decode())
+        except (urllib.error.URLError, urllib.error.HTTPError):
+            return None
+
 
     def get_app_id_list_of_the_week(self, date: str) -> list[str]:
         url = f"{self._BASE_URL}/app-picks/apps-of-the-week/{date}"

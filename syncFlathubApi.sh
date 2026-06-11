@@ -1,6 +1,8 @@
 #!/bin/bash
-build/linux/x64/release/bundle/dupot_easy_flatpak sync
-cp ~/.data/flathub_database.db assets/db
-rm ~/.data/Icons/Archive.zip
-cd ~/.data/Icons/ ; zip Archive.zip *.png
-mv ~/.data/Icons/Archive.zip /home/mika/code/github/flutter/dupotEasyFlatpak/assets/icons/
+#build/linux/x64/release/bundle/dupot_easy_flatpak sync
+cp ~/.local/share/org.dupot.easyflatpak/flathub_database.db src/assets/db
+rm ~/.local/share/org.dupot.easyflatpak/icons/Archive.zip
+rm ~/.local/share/org.dupot.easyflatpak/icons/icons.zip
+
+cd ~/.local/share/org.dupot.easyflatpak/icons/ ; zip icons.zip *.png
+mv ~/.local/share/org.dupot.easyflatpak/icons/icons.zip /home/mika/code/github/python/dupotEasyFlatpak/src/assets/archive/

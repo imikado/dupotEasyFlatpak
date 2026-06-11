@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-17 11:20+0200\n"
+"POT-Creation-Date: 2026-06-11 22:45+0200\n"
 "Language: pt_BR\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,7 +21,7 @@ msgstr "Selecione uma versão para fazer downgrade"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:101
-#: src/infrastructure/ui/appstream_page.py:420
+#: src/infrastructure/ui/appstream_page.py:426
 #: src/infrastructure/ui/app_window.py:568
 #: src/infrastructure/ui/bundle_detail_page.py:278
 #: src/infrastructure/ui/home/updates_page.py:176
@@ -71,7 +71,7 @@ msgstr "Instalar apenas para o usuário atual"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/install_dialog.py:30
 #: src/infrastructure/ui/appstream/install_dialog.py:102
-#: src/infrastructure/ui/appstream_page.py:385
+#: src/infrastructure/ui/appstream_page.py:391
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
@@ -79,8 +79,8 @@ msgid "Install"
 msgstr "Instalar"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
-#: src/infrastructure/ui/appstream_page.py:432
-#: src/infrastructure/ui/appstream_page.py:460
+#: src/infrastructure/ui/appstream_page.py:438
+#: src/infrastructure/ui/appstream_page.py:466
 #: src/infrastructure/ui/shared/installed_list_shared.py:145
 msgid "Please wait…"
 msgstr "Por favor, aguarde…"
@@ -101,7 +101,7 @@ msgid "Close"
 msgstr "Fechar"
 
 #: src/infrastructure/ui/appstream_page.py:143
-#: src/infrastructure/ui/appstream_page.py:582
+#: src/infrastructure/ui/appstream_page.py:588
 #: src/infrastructure/ui/shared/installed_list_shared.py:97
 msgid "Recipe overrides"
 msgstr "Substituições de receita"
@@ -123,25 +123,29 @@ msgstr "Tamanho do Download"
 msgid "Installed Size"
 msgstr "Tamanho Instalado"
 
-#: src/infrastructure/ui/appstream_page.py:236
+#: src/infrastructure/ui/appstream_page.py:235
+msgid "Architectures"
+msgstr "Arquiteturas"
+
+#: src/infrastructure/ui/appstream_page.py:242
 msgid "Homepage"
 msgstr "Página inicial"
 
-#: src/infrastructure/ui/appstream_page.py:250
+#: src/infrastructure/ui/appstream_page.py:256
 msgid "Bug Tracker"
 msgstr "Rastreador de bugs"
 
-#: src/infrastructure/ui/appstream_page.py:264
+#: src/infrastructure/ui/appstream_page.py:270
 msgid "Donate"
 msgstr "Doar"
 
-#: src/infrastructure/ui/appstream_page.py:279
+#: src/infrastructure/ui/appstream_page.py:285
 msgid "Description"
 msgstr "Descrição"
 
-#: src/infrastructure/ui/appstream_page.py:375
-#: src/infrastructure/ui/appstream_page.py:418
-#: src/infrastructure/ui/appstream_page.py:421
+#: src/infrastructure/ui/appstream_page.py:381
+#: src/infrastructure/ui/appstream_page.py:424
+#: src/infrastructure/ui/appstream_page.py:427
 #: src/infrastructure/ui/shared/installed_list_shared.py:114
 #: src/infrastructure/ui/shared/installed_list_shared.py:133
 #: src/infrastructure/ui/shared/installed_list_shared.py:136
@@ -149,27 +153,27 @@ msgstr "Descrição"
 msgid "Uninstall"
 msgstr "Desinstalar"
 
-#: src/infrastructure/ui/appstream_page.py:383
+#: src/infrastructure/ui/appstream_page.py:389
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
 msgid "Install with recipe"
 msgstr "Instalar com receita"
 
-#: src/infrastructure/ui/appstream_page.py:411
+#: src/infrastructure/ui/appstream_page.py:417
 #: src/infrastructure/ui/shared/installed_list_shared.py:126
 msgid "Delete application data"
 msgstr "Excluir dados do aplicativo"
 
-#: src/infrastructure/ui/appstream_page.py:583
+#: src/infrastructure/ui/appstream_page.py:589
 #: src/infrastructure/ui/shared/installed_list_shared.py:98
 msgid "Apply"
 msgstr "Aplicar"
 
-#: src/infrastructure/ui/appstream_page.py:601
+#: src/infrastructure/ui/appstream_page.py:607
 msgid "Screenshots"
 msgstr "Capturas de Tela"
 
-#: src/infrastructure/ui/appstream_page.py:795
+#: src/infrastructure/ui/appstream_page.py:801
 msgid "Release History"
 msgstr "Histórico de Versões"
 
@@ -416,23 +420,31 @@ msgstr "Escopo de instalação"
 msgid "Where Flatpak apps will be installed"
 msgstr "Onde os aplicativos Flatpak serão instalados"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:43
+#: src/infrastructure/ui/menu/parameters_dialog.py:44
+msgid "Architecture filter"
+msgstr "Filtro de arquitetura"
+
+#: src/infrastructure/ui/menu/parameters_dialog.py:45
+msgid "Filter apps by CPU architecture"
+msgstr "Filtrar aplicativos por arquitetura de CPU"
+
+#: src/infrastructure/ui/menu/parameters_dialog.py:55
 msgid "Game path"
 msgstr "Caminho dos jogos"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:58
+#: src/infrastructure/ui/menu/parameters_dialog.py:70
 msgid "Appearance"
 msgstr "Aparência"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:63
+#: src/infrastructure/ui/menu/parameters_dialog.py:75
 msgid "Theme"
 msgstr "Tema"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:75
+#: src/infrastructure/ui/menu/parameters_dialog.py:87
 msgid "Language"
 msgstr "Idioma"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:92
+#: src/infrastructure/ui/menu/parameters_dialog.py:104
 msgid "Save"
 msgstr "Salvar"
 
@@ -444,7 +456,9 @@ msgstr "Gerenciamento de cache"
 msgid ""
 "Sometimes you can have artifact in place of text displayed, clean the cache "
 "to fix it"
-msgstr "Às vezes podem aparecer artefatos no lugar do texto, limpe o cache para corrigir"
+msgstr ""
+"Às vezes podem aparecer artefatos no lugar do texto, limpe o cache para "
+"corrigir"
 
 #: src/infrastructure/ui/menu/tools_dialog.py:35
 msgid "Clear cache"
@@ -458,7 +472,9 @@ msgstr "Reparar"
 msgid ""
 "Fix icon/permission errors that can occur after installing apps (e.g. "
 "index.theme: Permission denied)"
-msgstr "Corrige erros de ícones ou permissões após instalar aplicativos (ex. index.theme: Permissão negada)"
+msgstr ""
+"Corrige erros de ícones ou permissões após instalar aplicativos (ex. "
+"index.theme: Permissão negada)"
 
 #: src/infrastructure/ui/menu/tools_dialog.py:52
 msgid "Repair user installation"

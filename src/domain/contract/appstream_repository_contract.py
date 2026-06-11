@@ -56,3 +56,9 @@ class AppstreamRepositoryContract(ABC):
     @abstractmethod
     def update_from_raw_object_with_id(self, id: str, raw_obj: object):
         pass
+
+    @abstractmethod
+    def get_all_app_id_list(self)->list[str]:
+        pass
+
+    

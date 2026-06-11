@@ -113,6 +113,16 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+
+
+<release date="2026-06-11" version="4.3.1"> 
+      <description>
+        <ul>
+          <li>Improve application display : add download and installed size + architectures</li>
+          <li>Add parameter to filter by architecture</li>
+          </ul>
+      </description>
+    </release> 
   
   
 <release date="2026-06-05" version="4.2.9"> 

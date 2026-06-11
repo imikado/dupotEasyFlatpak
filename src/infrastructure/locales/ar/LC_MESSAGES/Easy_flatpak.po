@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-17 11:20+0200\n"
+"POT-Creation-Date: 2026-06-11 22:45+0200\n"
 "Language: ar\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,7 +21,7 @@ msgstr "اختر إصداراً للرجوع إليه"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:101
-#: src/infrastructure/ui/appstream_page.py:420
+#: src/infrastructure/ui/appstream_page.py:426
 #: src/infrastructure/ui/app_window.py:568
 #: src/infrastructure/ui/bundle_detail_page.py:278
 #: src/infrastructure/ui/home/updates_page.py:176
@@ -71,7 +71,7 @@ msgstr "التثبيت للمستخدم الحالي فقط"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/install_dialog.py:30
 #: src/infrastructure/ui/appstream/install_dialog.py:102
-#: src/infrastructure/ui/appstream_page.py:385
+#: src/infrastructure/ui/appstream_page.py:391
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
@@ -79,8 +79,8 @@ msgid "Install"
 msgstr "تثبيت"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
-#: src/infrastructure/ui/appstream_page.py:432
-#: src/infrastructure/ui/appstream_page.py:460
+#: src/infrastructure/ui/appstream_page.py:438
+#: src/infrastructure/ui/appstream_page.py:466
 #: src/infrastructure/ui/shared/installed_list_shared.py:145
 msgid "Please wait…"
 msgstr "يرجى الانتظار…"
@@ -101,7 +101,7 @@ msgid "Close"
 msgstr "إغلاق"
 
 #: src/infrastructure/ui/appstream_page.py:143
-#: src/infrastructure/ui/appstream_page.py:582
+#: src/infrastructure/ui/appstream_page.py:588
 #: src/infrastructure/ui/shared/installed_list_shared.py:97
 msgid "Recipe overrides"
 msgstr "تجاوزات الوصفة"
@@ -123,25 +123,29 @@ msgstr "حجم التنزيل"
 msgid "Installed Size"
 msgstr "الحجم المثبت"
 
-#: src/infrastructure/ui/appstream_page.py:236
+#: src/infrastructure/ui/appstream_page.py:235
+msgid "Architectures"
+msgstr "البنى المعمارية"
+
+#: src/infrastructure/ui/appstream_page.py:242
 msgid "Homepage"
 msgstr "الصفحة الرئيسية"
 
-#: src/infrastructure/ui/appstream_page.py:250
+#: src/infrastructure/ui/appstream_page.py:256
 msgid "Bug Tracker"
 msgstr "متتبع الأخطاء"
 
-#: src/infrastructure/ui/appstream_page.py:264
+#: src/infrastructure/ui/appstream_page.py:270
 msgid "Donate"
 msgstr "تبرع"
 
-#: src/infrastructure/ui/appstream_page.py:279
+#: src/infrastructure/ui/appstream_page.py:285
 msgid "Description"
 msgstr "الوصف"
 
-#: src/infrastructure/ui/appstream_page.py:375
-#: src/infrastructure/ui/appstream_page.py:418
-#: src/infrastructure/ui/appstream_page.py:421
+#: src/infrastructure/ui/appstream_page.py:381
+#: src/infrastructure/ui/appstream_page.py:424
+#: src/infrastructure/ui/appstream_page.py:427
 #: src/infrastructure/ui/shared/installed_list_shared.py:114
 #: src/infrastructure/ui/shared/installed_list_shared.py:133
 #: src/infrastructure/ui/shared/installed_list_shared.py:136
@@ -149,27 +153,27 @@ msgstr "الوصف"
 msgid "Uninstall"
 msgstr "إلغاء التثبيت"
 
-#: src/infrastructure/ui/appstream_page.py:383
+#: src/infrastructure/ui/appstream_page.py:389
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
 msgid "Install with recipe"
 msgstr "التثبيت بالوصفة"
 
-#: src/infrastructure/ui/appstream_page.py:411
+#: src/infrastructure/ui/appstream_page.py:417
 #: src/infrastructure/ui/shared/installed_list_shared.py:126
 msgid "Delete application data"
 msgstr "حذف بيانات التطبيق"
 
-#: src/infrastructure/ui/appstream_page.py:583
+#: src/infrastructure/ui/appstream_page.py:589
 #: src/infrastructure/ui/shared/installed_list_shared.py:98
 msgid "Apply"
 msgstr "تطبيق"
 
-#: src/infrastructure/ui/appstream_page.py:601
+#: src/infrastructure/ui/appstream_page.py:607
 msgid "Screenshots"
 msgstr "لقطات الشاشة"
 
-#: src/infrastructure/ui/appstream_page.py:795
+#: src/infrastructure/ui/appstream_page.py:801
 msgid "Release History"
 msgstr "تاريخ الإصدارات"
 
@@ -415,23 +419,31 @@ msgstr "نطاق التثبيت"
 msgid "Where Flatpak apps will be installed"
 msgstr "مكان تثبيت تطبيقات Flatpak"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:43
+#: src/infrastructure/ui/menu/parameters_dialog.py:44
+msgid "Architecture filter"
+msgstr "تصفية المعمارية"
+
+#: src/infrastructure/ui/menu/parameters_dialog.py:45
+msgid "Filter apps by CPU architecture"
+msgstr "تصفية التطبيقات حسب معمارية المعالج"
+
+#: src/infrastructure/ui/menu/parameters_dialog.py:55
 msgid "Game path"
 msgstr "مسار الألعاب"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:58
+#: src/infrastructure/ui/menu/parameters_dialog.py:70
 msgid "Appearance"
 msgstr "المظهر"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:63
+#: src/infrastructure/ui/menu/parameters_dialog.py:75
 msgid "Theme"
 msgstr "السمة"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:75
+#: src/infrastructure/ui/menu/parameters_dialog.py:87
 msgid "Language"
 msgstr "اللغة"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:92
+#: src/infrastructure/ui/menu/parameters_dialog.py:104
 msgid "Save"
 msgstr "حفظ"
 
@@ -443,7 +455,8 @@ msgstr "إدارة ذاكرة التخزين المؤقت"
 msgid ""
 "Sometimes you can have artifact in place of text displayed, clean the cache "
 "to fix it"
-msgstr "أحياناً قد تظهر تشويهات بدلاً من النص، امسح ذاكرة التخزين المؤقت لإصلاح ذلك"
+msgstr ""
+"أحياناً قد تظهر تشويهات بدلاً من النص، امسح ذاكرة التخزين المؤقت لإصلاح ذلك"
 
 #: src/infrastructure/ui/menu/tools_dialog.py:35
 msgid "Clear cache"
@@ -457,7 +470,9 @@ msgstr "إصلاح"
 msgid ""
 "Fix icon/permission errors that can occur after installing apps (e.g. "
 "index.theme: Permission denied)"
-msgstr "إصلاح أخطاء الأيقونات أو الأذونات بعد تثبيت التطبيقات (مثال: index.theme: Permission denied)"
+msgstr ""
+"إصلاح أخطاء الأيقونات أو الأذونات بعد تثبيت التطبيقات (مثال: index.theme: "
+"Permission denied)"
 
 #: src/infrastructure/ui/menu/tools_dialog.py:52
 msgid "Repair user installation"

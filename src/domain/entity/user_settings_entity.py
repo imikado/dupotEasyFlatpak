@@ -18,11 +18,16 @@ class UserSettingsEntity:
     LANGUAGE_PT = "portugues"
     LANGUAGE_RO = "romanian"
 
+    ARCHITECTURE_FILTER_X86="x86_64"
+    ARCHITECTURE_FILTER_ARM="aarch64"
+    ARCHITECTURE_FILTER_NONE="none" 
+
     FIELD_VERSION = "version"
     FIELD_INSTALLATION_SCOPE = "installation_scope"
     FIELD_INSTALLATION_GAME_PATH = "installation_game_path"
     FIELD_THEME = "theme"
     FIELD_LANGUAGE = "language"
+    FIELD_ARCHITECTURE_FILTER="architecture_filter"
 
     _instance: "UserSettingsEntity | None" = None
 
@@ -31,6 +36,7 @@ class UserSettingsEntity:
     DEFAULT_GAME_PATH = ""
     DEFAULT_THEME = THEME_SYSTEM
     DEFAULT_LANGUAGE = LANGUAGE_SYSTEM
+    DEFAULT_ARCHITECTURE_FILTER= ARCHITECTURE_FILTER_NONE
 
     version: int = DEFAULT_VERSION
     installation_scope: str = DEFAULT_INSTALLATION_SCOPE
@@ -38,6 +44,7 @@ class UserSettingsEntity:
 
     theme: str = DEFAULT_THEME
     language: str = DEFAULT_LANGUAGE
+    architecture_filter:str=DEFAULT_ARCHITECTURE_FILTER
 
     def __new__(cls, *_args, **_kwargs):
         if cls._instance is None:
@@ -50,6 +57,7 @@ class UserSettingsEntity:
         self.installation_game_path = self.DEFAULT_GAME_PATH
         self.theme = self.DEFAULT_THEME
         self.language = self.DEFAULT_LANGUAGE
+        self.architecture_filter= self.DEFAULT_ARCHITECTURE_FILTER
 
     def load(self, raw_obj: object):
         self.version = raw_obj[self.FIELD_VERSION]
@@ -61,6 +69,9 @@ class UserSettingsEntity:
 
         if self.FIELD_LANGUAGE in raw_obj:
             self.language = raw_obj[self.FIELD_LANGUAGE]
+
+        if self.FIELD_ARCHITECTURE_FILTER in raw_obj:
+            self.architecture_filter = raw_obj[self.FIELD_ARCHITECTURE_FILTER]
 
     def is_user_scope(self) -> bool:
         if self.installation_scope == self.INSTALLATION_USER_SCOPE:
@@ -78,6 +89,7 @@ class UserSettingsEntity:
                 self.FIELD_INSTALLATION_GAME_PATH: self.installation_game_path,
                 self.FIELD_THEME: self.theme,
                 self.FIELD_LANGUAGE: self.language,
+                self.FIELD_ARCHITECTURE_FILTER:self.architecture_filter
             }
         )
 
@@ -119,3 +131,22 @@ class UserSettingsEntity:
             self.LANGUAGE_RO: "ro",
         }
         return language_codes.get(self.language, "en")
+
+    def get_architecture_filter_choice_list(self) -> list[str]:
+        return [
+            self.ARCHITECTURE_FILTER_ARM,
+            self.ARCHITECTURE_FILTER_X86,
+            self.ARCHITECTURE_FILTER_NONE
+        ]
+    
+    def set_architecture_filter(self,architecture_filter:str):
+        self.architecture_filter=architecture_filter
+
+    def get_architecture_filter_arch(self) -> str | None:
+        if self.architecture_filter == self.ARCHITECTURE_FILTER_X86:
+            return self.ARCHITECTURE_FILTER_X86
+        if self.architecture_filter == self.ARCHITECTURE_FILTER_ARM:
+            return self.ARCHITECTURE_FILTER_ARM
+        return None
+
+    

@@ -230,6 +230,12 @@ class AppstreamPage(Adw.NavigationPage):
             row.set_subtitle(app.get_installed_size())
             details_group.add(row)
 
+        if app.get_arche_list():
+            row = Adw.ActionRow()
+            row.set_title(_("Architectures"))
+            row.set_subtitle(app.get_arche_label())
+            details_group.add(row)
+
         if app.has_url_homepage():
             url = app.get_url_homepage()
             row = Adw.ActionRow()

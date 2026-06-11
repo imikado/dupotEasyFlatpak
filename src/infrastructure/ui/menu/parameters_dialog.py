@@ -39,6 +39,18 @@ class ParametersDialog(Adw.PreferencesDialog):
         self._scope_row.connect("notify::selected", lambda *_: self._on_change())
         group.add(self._scope_row)
 
+        arch_choices = self._settings.get_architecture_filter_choice_list()
+        self._arch_row = Adw.ComboRow()
+        self._arch_row.set_title(_("Architecture filter"))
+        self._arch_row.set_subtitle(_("Filter apps by CPU architecture"))
+        self._arch_row.set_model(Gtk.StringList.new(arch_choices))
+        current_arch = self._settings.architecture_filter
+        self._arch_row.set_selected(
+            arch_choices.index(current_arch) if current_arch in arch_choices else 0
+        )
+        self._arch_row.connect("notify::selected", lambda *_: self._on_change())
+        group.add(self._arch_row)
+
         # game path
         path_row = Adw.ActionRow(title=_("Game path"))
 
@@ -107,6 +119,8 @@ class ParametersDialog(Adw.PreferencesDialog):
         if item:
             self._settings.installation_scope = item.get_string()
         self._settings.installation_game_path = self._path_row.get_text()
+        arch_choices = self._settings.get_architecture_filter_choice_list()
+        self._settings.architecture_filter = arch_choices[self._arch_row.get_selected()]
         theme_item = self._theme_row.get_selected_item()
         if theme_item:
             self._settings.theme = theme_item.get_string()

@@ -44,3 +44,11 @@ class FlathubApiContract(ABC):
     @abstractmethod
     def search_apps(self, query: str) -> list[object]:
         pass
+
+    @abstractmethod
+    def get_summary_by_id(self, id: str) -> object | None:
+        pass
+
+    @abstractmethod
+    def get_all_app_id_list(self)->list[str]:
+        pass

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-17 11:20+0200\n"
+"POT-Creation-Date: 2026-06-11 22:45+0200\n"
 "Language: en\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,7 +21,7 @@ msgstr "Select a version to downgrade to"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:101
-#: src/infrastructure/ui/appstream_page.py:420
+#: src/infrastructure/ui/appstream_page.py:426
 #: src/infrastructure/ui/app_window.py:568
 #: src/infrastructure/ui/bundle_detail_page.py:278
 #: src/infrastructure/ui/home/updates_page.py:176
@@ -71,7 +71,7 @@ msgstr "Install for current user only"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/install_dialog.py:30
 #: src/infrastructure/ui/appstream/install_dialog.py:102
-#: src/infrastructure/ui/appstream_page.py:385
+#: src/infrastructure/ui/appstream_page.py:391
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
@@ -79,8 +79,8 @@ msgid "Install"
 msgstr "Install"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
-#: src/infrastructure/ui/appstream_page.py:432
-#: src/infrastructure/ui/appstream_page.py:460
+#: src/infrastructure/ui/appstream_page.py:438
+#: src/infrastructure/ui/appstream_page.py:466
 #: src/infrastructure/ui/shared/installed_list_shared.py:145
 msgid "Please wait…"
 msgstr "Please wait…"
@@ -102,7 +102,7 @@ msgid "Close"
 msgstr "Close"
 
 #: src/infrastructure/ui/appstream_page.py:143
-#: src/infrastructure/ui/appstream_page.py:582
+#: src/infrastructure/ui/appstream_page.py:588
 #: src/infrastructure/ui/shared/installed_list_shared.py:97
 msgid "Recipe overrides"
 msgstr "Recipe overrides"
@@ -124,25 +124,29 @@ msgstr "Download Size"
 msgid "Installed Size"
 msgstr "Installed Size"
 
-#: src/infrastructure/ui/appstream_page.py:236
+#: src/infrastructure/ui/appstream_page.py:235
+msgid "Architectures"
+msgstr ""
+
+#: src/infrastructure/ui/appstream_page.py:242
 msgid "Homepage"
 msgstr "Homepage"
 
-#: src/infrastructure/ui/appstream_page.py:250
+#: src/infrastructure/ui/appstream_page.py:256
 msgid "Bug Tracker"
 msgstr "Bug Tracker"
 
-#: src/infrastructure/ui/appstream_page.py:264
+#: src/infrastructure/ui/appstream_page.py:270
 msgid "Donate"
 msgstr "Donate"
 
-#: src/infrastructure/ui/appstream_page.py:279
+#: src/infrastructure/ui/appstream_page.py:285
 msgid "Description"
 msgstr "Description"
 
-#: src/infrastructure/ui/appstream_page.py:375
-#: src/infrastructure/ui/appstream_page.py:418
-#: src/infrastructure/ui/appstream_page.py:421
+#: src/infrastructure/ui/appstream_page.py:381
+#: src/infrastructure/ui/appstream_page.py:424
+#: src/infrastructure/ui/appstream_page.py:427
 #: src/infrastructure/ui/shared/installed_list_shared.py:114
 #: src/infrastructure/ui/shared/installed_list_shared.py:133
 #: src/infrastructure/ui/shared/installed_list_shared.py:136
@@ -150,27 +154,27 @@ msgstr "Description"
 msgid "Uninstall"
 msgstr "Uninstall"
 
-#: src/infrastructure/ui/appstream_page.py:383
+#: src/infrastructure/ui/appstream_page.py:389
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
 msgid "Install with recipe"
 msgstr "Install with recipe"
 
-#: src/infrastructure/ui/appstream_page.py:411
+#: src/infrastructure/ui/appstream_page.py:417
 #: src/infrastructure/ui/shared/installed_list_shared.py:126
 msgid "Delete application data"
 msgstr "Delete application data"
 
-#: src/infrastructure/ui/appstream_page.py:583
+#: src/infrastructure/ui/appstream_page.py:589
 #: src/infrastructure/ui/shared/installed_list_shared.py:98
 msgid "Apply"
 msgstr "Apply"
 
-#: src/infrastructure/ui/appstream_page.py:601
+#: src/infrastructure/ui/appstream_page.py:607
 msgid "Screenshots"
 msgstr "Screenshots"
 
-#: src/infrastructure/ui/appstream_page.py:795
+#: src/infrastructure/ui/appstream_page.py:801
 msgid "Release History"
 msgstr "Release History"
 
@@ -418,23 +422,31 @@ msgstr "Installation scope"
 msgid "Where Flatpak apps will be installed"
 msgstr "Where Flatpak apps will be installed"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:43
+#: src/infrastructure/ui/menu/parameters_dialog.py:44
+msgid "Architecture filter"
+msgstr ""
+
+#: src/infrastructure/ui/menu/parameters_dialog.py:45
+msgid "Filter apps by CPU architecture"
+msgstr ""
+
+#: src/infrastructure/ui/menu/parameters_dialog.py:55
 msgid "Game path"
 msgstr "Game path"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:58
+#: src/infrastructure/ui/menu/parameters_dialog.py:70
 msgid "Appearance"
 msgstr ""
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:63
+#: src/infrastructure/ui/menu/parameters_dialog.py:75
 msgid "Theme"
 msgstr ""
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:75
+#: src/infrastructure/ui/menu/parameters_dialog.py:87
 msgid "Language"
 msgstr ""
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:92
+#: src/infrastructure/ui/menu/parameters_dialog.py:104
 msgid "Save"
 msgstr "Save"
 
