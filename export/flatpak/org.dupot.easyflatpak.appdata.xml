@@ -115,11 +115,12 @@
 
 
 
-<release date="2026-06-11" version="4.3.1"> 
+<release date="2026-06-26" version="4.3.1"> 
       <description>
         <ul>
           <li>Improve application display : add download and installed size + architectures</li>
           <li>Add parameter to filter by architecture</li>
+          <li>Fix icons display on some system</li>
           </ul>
       </description>
     </release> 

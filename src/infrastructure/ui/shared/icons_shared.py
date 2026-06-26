@@ -4,12 +4,15 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, Adw
 
-_ICONS_DIR = os.path.normpath(os.path.join(
+_ASSETS_DIR = os.path.normpath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "..", "..", "..", "assets", "ui_icons",
 ))
+_ICONS_DIR = _ASSETS_DIR
+_PNG_LIGHT_DIR = os.path.join(_ASSETS_DIR, "png", "light")
+_PNG_DARK_DIR = os.path.join(_ASSETS_DIR, "png", "dark")
 
 
 class IconsShared:
@@ -70,11 +73,36 @@ class IconsShared:
     }
 
     _theme_registered: bool = False
+    _style_connected: bool = False
+    _tracked_images: list = []
 
     def __new__(cls, *_args, **_kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
+
+    @classmethod
+    def _ensure_style_connected(cls) -> None:
+        if cls._style_connected:
+            return
+        cls._style_connected = True
+        Adw.StyleManager.get_default().connect(
+            "notify::dark", lambda *_: cls._on_theme_changed()
+        )
+
+    @classmethod
+    def _on_theme_changed(cls) -> None:
+        png_dir = _PNG_DARK_DIR if cls._is_dark_theme() else _PNG_LIGHT_DIR
+        for img, icon_name in cls._tracked_images:
+            png_path = os.path.join(png_dir, icon_name + ".png")
+            if os.path.isfile(png_path):
+                img.set_from_file(png_path)
+
+    @classmethod
+    def _untrack_image(cls, img) -> None:
+        cls._tracked_images = [
+            (i, n) for i, n in cls._tracked_images if i is not img
+        ]
 
     @classmethod
     def _ensure_theme_registered(cls) -> None:
@@ -85,9 +113,22 @@ class IconsShared:
             Gtk.IconTheme.get_for_display(display).add_search_path(_ICONS_DIR)
             cls._theme_registered = True
 
+    @staticmethod
+    def _is_dark_theme() -> bool:
+        style_manager = Adw.StyleManager.get_default()
+        return style_manager.get_dark()
+
     def get_icon_by_name(self, name: str) -> Gtk.Image:
-        self._ensure_theme_registered()
+        self._ensure_style_connected()
         icon_name = self.find_icon_name_available(name)
+        png_dir = _PNG_DARK_DIR if self._is_dark_theme() else _PNG_LIGHT_DIR
+        png_path = os.path.join(png_dir, icon_name + ".png")
+        if os.path.isfile(png_path):
+            img = Gtk.Image.new_from_file(png_path)
+            self._tracked_images.append((img, icon_name))
+            img.connect("unrealize", lambda w: self._untrack_image(w))
+            return img
+        self._ensure_theme_registered()
         return Gtk.Image.new_from_icon_name(icon_name)
 
     def find_icon_name_available(self, name: str) -> str:

@@ -74,7 +74,6 @@ class CategoryPage(Gtk.ScrolledWindow):
         header_box.set_margin_top(48)
         header_box.set_margin_bottom(14)
 
-        cat_icon = cat_icon
         cat_icon.set_pixel_size(48)
         cat_icon.set_halign(Gtk.Align.CENTER)
 
