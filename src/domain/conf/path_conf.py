@@ -8,7 +8,7 @@ class PathConf:
 
     ID_DB_PATH = "db"
     ID_JSON_PATH = "json"
-    ID_ARCHIVE_PATH = "archive"
+    ID_ICONS_PATH = "icons"
     ID_RECIPES_PATH = "recipes"
     ID_BUNDLES_PATH = "bundles"
 
@@ -44,9 +44,9 @@ class PathConf:
             [self.get_asset_path(), self.ID_JSON_PATH, self.INSTALLED_VERSION_FILENAME]
         )
 
-    def get_asset_icons_archive_path(self) -> str:
+    def get_asset_icons_path(self) -> str:
         return self.get_path_list_join(
-            [self.get_asset_path(), self.ID_ARCHIVE_PATH, self.ICON_ARCHIVE]
+            [self.get_asset_path(), self.ID_ICONS_PATH]
         )
 
     def get_asset_recipes_path(self) -> str:
@@ -85,8 +85,8 @@ class PathConf:
     def get_icons_path(self) -> str:
         return self.get_path_list_join([self.get_data_path(), self.ICON_PATH])
 
-    def get_icons_archive_path(self) -> str:
-        return self.get_path_list_join([self.get_data_path(), self.ICON_ARCHIVE])
+    def get_asset_icons_archive_path(self) -> str:
+        return self.get_path_list_join([self.get_data_path(), self.ICON_PATH])
 
     def get_user_settings_path(self) -> str:
         return self.get_path_list_join([self.get_data_path(), self.USERSETTINGS])

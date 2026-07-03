@@ -51,8 +51,11 @@ class SystemApi(SystemApiContract):
         )
 
     def copy_file(self, path_from: str, path_to: str):
-        shutil.copy(path_from, path_to)
+        subprocess.run(['cp', path_from, path_to])
 
+    def copy_dir(self, path_from: str, path_to: str):
+        subprocess.run(['cp', '-r',path_from, path_to])
+ 
     def get_datetime_current_timestamp(self) -> int:
         return int(time.time())
 

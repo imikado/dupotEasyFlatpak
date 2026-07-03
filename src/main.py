@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 import sys
 
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
@@ -114,9 +115,6 @@ def main():
             if not system_api.file_exists(data_path):
                 system_api.create_dir(data_path)
 
-            icons_archive_path = path_conf.get_icons_archive_path()
-            if system_api.file_exists(icons_archive_path):
-                system_api.remove_file(icons_archive_path)
 
             file_path_to_copy_list = [
                 PathToCopy(
@@ -127,22 +125,19 @@ def main():
                     path_conf.get_asset_application_version_path(),
                     path_conf.get_installed_version_path(),
                 ),
-                PathToCopy(
-                    path_conf.get_asset_icons_archive_path(),
-                    icons_archive_path,
-                ),
+               
+                
             ]
+
+            system_api.copy_dir(path_conf.get_asset_icons_path(),data_path)
 
             for path_to_copy_loop in file_path_to_copy_list:
                 system_api.copy_file(
                     path_to_copy_loop.path_from, path_to_copy_loop.path_to
                 )
 
-            icons_directory_path = path_conf.get_icons_path()
-            if system_api.file_exists(icons_directory_path):
-                system_api.remove_directory(icons_directory_path)
 
-            system_api.unzip_archive_to(icons_archive_path, icons_directory_path)
+            #shutil .copytree(path_conf.get_asset_icons_archive_path(), path_conf.get_icons_path(), dirs_exist_ok=True)
 
         UpdateDatabaseFromApiUc(
             FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()
