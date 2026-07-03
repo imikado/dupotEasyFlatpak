@@ -1,10 +1,10 @@
 [Icon Theme]
 Name=EasyFlatpak
 Comment=EasyFlatpak bundled symbolic icons
-Directories=scalable/actions
+Directories=128x128/actions
 
-[scalable/actions]
-Size=16
+[128x128/actions]
+Size=128
 MinSize=8
 MaxSize=512
 Type=Scalable

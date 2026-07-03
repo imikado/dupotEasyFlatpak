@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <!-- Frame: y=2–14, matching development/graphics -->
-  <rect fill="none" stroke="currentColor" stroke-width="1.5" x="1" y="2" width="14" height="12" rx="2"/>
-  <line stroke="currentColor" stroke-width="1" x1="1.5" y1="10" x2="14.5" y2="10"/>
-  <circle fill="currentColor" cx="12.5" cy="12" r="1.2"/>
+  <!-- Device frame: evenodd cuts out the screen area, leaving filled border + taskbar -->
+  <path fill="currentColor" fill-rule="evenodd"
+    d="M3 2a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2H3zM3 4h10v6H3z"/>
   <rect fill="currentColor" x="3" y="11" width="5.5" height="1.5" rx="0.5"/>
+  <circle fill="currentColor" cx="12.5" cy="11.75" r="1.1"/>
 </svg>
