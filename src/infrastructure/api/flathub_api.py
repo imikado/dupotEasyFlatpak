@@ -3,16 +3,20 @@ import urllib.error
 import json
 
 from domain.contract.flathub_api_contract import FlathubApiContract
+from domain.entity.user_settings_entity import UserSettingsEntity
 
 
 class FlathubApi(FlathubApiContract):
 
     _BASE_URL = "https://flathub.org/api/v2"
 
+    def get_locale(self)->str:
+        return UserSettingsEntity().get_language_code()
+
     def get_trending_apps(
         self, page: int = 0, per_page: int = 20, locale: str = "en"
     ) -> list:
-        url = f"{self._BASE_URL}/collection/trending?page={page}&per_page={per_page}&locale={locale}"
+        url = f"{self._BASE_URL}/collection/trending?page={page}&per_page={per_page}&locale={self.get_locale()}"
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return [hit["app_id"] for hit in data.get("hits", [])]
@@ -20,7 +24,7 @@ class FlathubApi(FlathubApiContract):
     def get_popular_apps(
         self, page: int = 0, per_page: int = 20, locale: str = "en"
     ) -> list:
-        url = f"{self._BASE_URL}/collection/popular?page={page}&per_page={per_page}&locale={locale}"
+        url = f"{self._BASE_URL}/collection/popular?page={page}&per_page={per_page}&locale={self.get_locale()}"
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return [hit["app_id"] for hit in data.get("hits", [])]
@@ -28,7 +32,7 @@ class FlathubApi(FlathubApiContract):
     def get_updated_apps(
         self, page: int = 0, per_page: int = 20, locale: str = "en"
     ) -> list:
-        url = f"{self._BASE_URL}/collection/recently-updated?page={page}&per_page={per_page}&locale={locale}"
+        url = f"{self._BASE_URL}/collection/recently-updated?page={page}&per_page={per_page}&locale={self.get_locale()}"
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return [hit["app_id"] for hit in data.get("hits", [])]
@@ -36,7 +40,7 @@ class FlathubApi(FlathubApiContract):
     def get_added_apps(
         self, page: int = 0, per_page: int = 50, locale: str = "en"
     ) -> list:
-        url = f"{self._BASE_URL}/collection/recently-added?page={page}&per_page={per_page}&locale={locale}"
+        url = f"{self._BASE_URL}/collection/recently-added?page={page}&per_page={per_page}&locale={self.get_locale()}"
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return [hit["app_id"] for hit in data.get("hits", [])]
@@ -44,7 +48,7 @@ class FlathubApi(FlathubApiContract):
     def get_added_appstreams(
         self, page: int = 0, per_page: int = 50, locale: str = "en"
     ) -> list[object]:
-        url = f"{self._BASE_URL}/collection/recently-added?page={page}&per_page={per_page}&locale={locale}"
+        url = f"{self._BASE_URL}/collection/recently-added?page={page}&per_page={per_page}&locale={self.get_locale()}"
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read().decode())
         return data.get("hits", [])
@@ -69,7 +73,7 @@ class FlathubApi(FlathubApiContract):
             return []
 
     def get_appstream_by_id(self, id: str) -> object | None:
-        url = f"{self._BASE_URL}/appstream/{id}"
+        url = f"{self._BASE_URL}/appstream/{id}?locale={self.get_locale()}"
         try:
             with urllib.request.urlopen(url) as response:
                 return json.loads(response.read().decode())
@@ -77,7 +81,7 @@ class FlathubApi(FlathubApiContract):
             return None
 
     def get_summary_by_id(self, id: str) -> object | None:
-        url = f"{self._BASE_URL}/summary/{id}"
+        url = f"{self._BASE_URL}/summary/{id}?locale={self.get_locale()}"
         try:
             with urllib.request.urlopen(url) as response:
                 return json.loads(response.read().decode())

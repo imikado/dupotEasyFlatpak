@@ -18,6 +18,8 @@ class UserSettingsEntity:
     LANGUAGE_PT = "portugues"
     LANGUAGE_RO = "romanian"
 
+    LANGUAGE_EN_CODE="en"
+
     ARCHITECTURE_FILTER_X86="x86_64"
     ARCHITECTURE_FILTER_ARM="aarch64"
     ARCHITECTURE_FILTER_NONE="none" 
@@ -123,7 +125,7 @@ class UserSettingsEntity:
     def get_language_code(self) -> str:
         language_codes = {
             self.LANGUAGE_AR: "ar",
-            self.LANGUAGE_EN: "en",
+            self.LANGUAGE_EN: self.LANGUAGE_EN_CODE,
             self.LANGUAGE_ES: "es",
             self.LANGUAGE_FR: "fr",
             self.LANGUAGE_IT: "it",

@@ -58,6 +58,10 @@ class AppstreamRepositoryContract(ABC):
         pass
 
     @abstractmethod
+    def update_name_summary_by_id(self, id: str, name: str, summary: str):
+        pass
+
+    @abstractmethod
     def get_all_app_id_list(self)->list[str]:
         pass
 

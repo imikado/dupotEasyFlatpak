@@ -65,6 +65,12 @@ class UpdateDatabaseFromApiUc:
                 self._appstream_repository.insert_from_raw_object(
                     recently_raw_appstream_loop
                 )
+            else:
+                self._appstream_repository.update_name_summary_by_id(
+                    id_loop,
+                    recently_raw_appstream_loop["name"],
+                    recently_raw_appstream_loop["summary"],
+                )
 
             icon_url = recently_raw_appstream_loop.get("icon", "")
             if icon_url:
@@ -77,6 +83,12 @@ class UpdateDatabaseFromApiUc:
 
                 self._appstream_repository.insert_missing_app_id(
                     app_id_of_the_week_loop
+                )
+
+            detail = self._flathub_api.get_appstream_by_id(app_id_of_the_week_loop)
+            if detail:
+                self._appstream_repository.update_from_raw_object_with_id(
+                    app_id_of_the_week_loop, detail
                 )
 
         self.update_sync_api()

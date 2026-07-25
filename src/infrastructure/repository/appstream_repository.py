@@ -299,3 +299,15 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 id,
             ),
         )
+
+    def update_name_summary_by_id(self, id: str, name: str, summary: str):
+        self._db.execute(
+            "UPDATE appstream SET name = ?, summary = ? WHERE id = ?",
+            (name, summary, id),
+        )
+
+    def reset_updated_for_all(self):
+        self._db.execute(
+            """UPDATE appstream SET
+                lastUpdate = 0
+            """)

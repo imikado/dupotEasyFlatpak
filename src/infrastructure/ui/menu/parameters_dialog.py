@@ -1,6 +1,10 @@
 import os
 import sys
+from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 import gi
+from infrastructure.api.flathub_api import FlathubApi
+from infrastructure.repository.api_cache_repository import ApiCacheRepository
+from infrastructure.repository.appstream_repository import AppstreamRepository
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -125,13 +129,29 @@ class ParametersDialog(Adw.PreferencesDialog):
         if theme_item:
             self._settings.theme = theme_item.get_string()
         language_choices = self._settings.get_language_choice_list()
-        self._settings.language = language_choices[self._language_row.get_selected()]
+        new_language = language_choices[self._language_row.get_selected()]
+        language_changed = self._settings.language != new_language
+
+        self._settings.language = new_language
         self._user_settings_api.save()
+
+        if language_changed:
+            self.detect_language_change()
+
         self._apply_theme()
         if self._settings.language != self._initial_language:
             self.close()
             os.execv(sys.executable, [sys.executable] + sys.argv)
         self.close()
+
+    def detect_language_change(self):
+        print('reload language')
+        AppstreamRepository().reset_updated_for_all()
+        ApiCacheRepository().reset_api_lastupdate()
+
+        UpdateDatabaseFromApiUc(
+            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()
+        ).process()
 
     def _apply_theme(self):
         style_manager = Adw.StyleManager.get_default()

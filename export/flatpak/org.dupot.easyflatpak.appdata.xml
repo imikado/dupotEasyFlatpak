@@ -115,6 +115,16 @@
 
 
 
+<release date="2026-07-25" version="4.4.0"> 
+      <description>
+        <ul>
+          
+          <li>Add language management for applications summary and description (if available from author)</li>
+          </ul>
+      </description>
+    </release> 
+
+
 <release date="2026-06-26" version="4.3.5"> 
       <description>
         <ul>

@@ -45,8 +45,10 @@ def main():
     # Create the "magic" function
     en_i18n.install()
 
+
     def init_fn():
         system_api = SystemApi()
+        should_reset_lastupdate=False
 
         # On some installations, fontconfig falls back to a font without
         # proper Arabic shaping (joined letter forms), causing Arabic text
@@ -91,8 +93,9 @@ def main():
                 current_user_settings.get_json_string(),
             )
 
-        if current_user_settings.should_force_language():
-            lang_code = current_user_settings.get_language_code()
+        lang_code = current_user_settings.get_language_code()
+
+        if current_user_settings.should_force_language():    
             forced_i18n = gettext.translation(
                 appname,
                 localedir,
@@ -100,6 +103,9 @@ def main():
                 fallback=True,
             )
             forced_i18n.install()
+
+        if lang_code!=UserSettingsEntity.LANGUAGE_EN_CODE:
+            should_reset_lastupdate=True
 
         application_version_entity = ApplicationVersionEntity()
         application_version_entity.load(system_api)
@@ -136,6 +142,9 @@ def main():
                     path_to_copy_loop.path_from, path_to_copy_loop.path_to
                 )
 
+            if should_reset_lastupdate:
+                AppstreamRepository().reset_updated_for_all()
+                ApiCacheRepository().reset_api_lastupdate()
 
             #shutil .copytree(path_conf.get_asset_icons_archive_path(), path_conf.get_icons_path(), dirs_exist_ok=True)
 

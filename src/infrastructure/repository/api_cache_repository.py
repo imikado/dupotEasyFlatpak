@@ -20,3 +20,9 @@ class ApiCacheRepository(ApiCacheRepositoryContract):
             "UPDATE apicache SET content = ? WHERE id = ?",
             (json.dumps(content_value), id),
         )
+
+    def reset_api_lastupdate(self):
+        self._db.execute(
+            "UPDATE apicache SET content = ? WHERE id = ?",
+            ('{"lastApiSyncTimeStamp": 0, "lastHomeApiSyncTimeStamp": 0}', 'parameters'))
+        
