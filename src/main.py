@@ -95,7 +95,7 @@ def main():
 
         lang_code = current_user_settings.get_language_code()
 
-        if current_user_settings.should_force_language():    
+        if current_user_settings.should_force_language():
             forced_i18n = gettext.translation(
                 appname,
                 localedir,
@@ -104,8 +104,10 @@ def main():
             )
             forced_i18n.install()
 
-        if lang_code!=UserSettingsEntity.LANGUAGE_EN_CODE:
-            should_reset_lastupdate=True
+            if lang_code != UserSettingsEntity.LANGUAGE_EN_CODE:
+                should_reset_lastupdate = True
+        elif not any(l.startswith(UserSettingsEntity.LANGUAGE_EN_CODE) for l in languages):
+            should_reset_lastupdate = True
 
         application_version_entity = ApplicationVersionEntity()
         application_version_entity.load(system_api)

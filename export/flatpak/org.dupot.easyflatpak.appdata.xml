@@ -18,24 +18,41 @@
     <name>Michael Bertocchi</name>
   </developer>
   <summary>Manage your flatpaks with a simple GUI.</summary>
+  <summary xml:lang="fr">Gérer facilement vos flatpak</summary>
   <description>
     <p>It will help you install Flatpak apps in a user-friendly way. We have recipes for some of them to install them even better. </p>
+    <p xml:lang="fr">Cette application vous aide à installer facilement des flatpaks. Vous avez des recettes pour certaines pour installer plus confortablement.</p>
     <p>For example, for Steam, it asks the user to choose a folder where they store their games before installation.</p>
+    <p xml:lang="fr">Par exemple, pour Steam, l'application demande à l'utilisateur de choisir un dossier où stocker ses jeux avant l'installation.</p>
     <p>And you can setup this games path in the settings page for all applications which need it (steam,lutris, heroic games launcher, bottles)</p>
+    <p xml:lang="fr">Vous pouvez configurer ce dossier de jeux dans la page des paramètres pour toutes les applications qui en ont besoin (Steam, Lutris, Heroic Games Launcher, Bottles)</p>
     <p>Bundles are available to install multiple applications in same time</p>
+    <p xml:lang="fr">Des lots (bundles) sont disponibles pour installer plusieurs applications en même temps</p>
     <p>You can install your local .flatpak files stored in Downloads directory (application is not allowed to access your other directories)</p>
+    <p xml:lang="fr">Vous pouvez installer vos fichiers .flatpak locaux stockés dans le dossier Téléchargements (l'application n'est pas autorisée à accéder à vos autres dossiers)</p>
     <p>You can downgrade an application version</p>
+    <p xml:lang="fr">Vous pouvez revenir à une version antérieure d'une application</p>
     <p>You can click on install button directly on grid list to install directly</p>
+    <p xml:lang="fr">Vous pouvez cliquer directement sur le bouton d'installation dans la liste en grille pour installer immédiatement</p>
     <p>You can install many applications in parallel</p>
+    <p xml:lang="fr">Vous pouvez installer plusieurs applications en parallèle</p>
     <p>Available in many languages:</p>
+    <p xml:lang="fr">Disponible dans plusieurs langues :</p>
     <p>- English</p>
+    <p xml:lang="fr">- Anglais</p>
     <p>- Spanish</p>
+    <p xml:lang="fr">- Espagnol</p>
     <p>- French</p>
+    <p xml:lang="fr">- Français</p>
     <p>- Italian</p>
+    <p xml:lang="fr">- Italien</p>
     <p>- Brazilian</p>
+    <p xml:lang="fr">- Brésilien</p>
     <p>- Arabic</p>
+    <p xml:lang="fr">- Arabe</p>
     <p>- Romanian</p>
-        
+    <p xml:lang="fr">- Roumain</p>
+
    </description>
 
   <screenshots>
@@ -115,11 +132,12 @@
 
 
 
-<release date="2026-07-25" version="4.4.0"> 
+<release date="2026-07-31" version="4.4.1"> 
       <description>
         <ul>
           
           <li>Add language management for applications summary and description (if available from author)</li>
+          <li xml:lang="fr">Ajoute une gestion de la langue dans la récupération de la description des applications (si celle-ci est disponible par l'auteur)</li>
           </ul>
       </description>
     </release> 
