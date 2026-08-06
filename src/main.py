@@ -6,6 +6,7 @@ import sys
 
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
+from domain.contract.api_cache_repository_contract import ApiCacheRepositoryContract
 from domain.entity.application_version_entity import ApplicationVersionEntity
 from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flathub_api import FlathubApi
@@ -109,6 +110,11 @@ def main():
         elif not any(l.startswith(UserSettingsEntity.LANGUAGE_EN_CODE) for l in languages):
             should_reset_lastupdate = True
 
+        if not should_reset_lastupdate:
+            api_cache_parameter_entity = ApiCacheRepository().get_by_id(ApiCacheRepositoryContract.ID_PARAMETERS)
+            if(api_cache_parameter_entity.get_api_last_lang()!=lang_code):
+                should_reset_lastupdate=True
+
         application_version_entity = ApplicationVersionEntity()
         application_version_entity.load(system_api)
         if not application_version_entity.is_current_version():
@@ -151,7 +157,7 @@ def main():
             #shutil .copytree(path_conf.get_asset_icons_archive_path(), path_conf.get_icons_path(), dirs_exist_ok=True)
 
         UpdateDatabaseFromApiUc(
-            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()
+            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository(),lang_code
         ).process()
 
     app = AppWindow(init_fn=init_fn)

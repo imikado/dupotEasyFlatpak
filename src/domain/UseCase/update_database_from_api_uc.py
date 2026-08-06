@@ -13,6 +13,7 @@ class UpdateDatabaseFromApiUc:
     _appstream_repository: AppstreamRepositoryContract
     _system_api: SystemApiContract
     _api_cache_repository: ApiCacheRepositoryContract
+    _lang:str
 
     def __init__(
         self,
@@ -20,11 +21,13 @@ class UpdateDatabaseFromApiUc:
         appstream_repository: AppstreamRepositoryContract,
         system_api: SystemApiContract,
         api_cache_repository: ApiCacheRepositoryContract,
+        lang:str
     ):
         self._flathub_api = flathub_api
         self._appstream_repository = appstream_repository
         self._system_api = system_api
         self._api_cache_repository = api_cache_repository
+        self._lang=lang
 
     def process(self):
 
@@ -91,9 +94,10 @@ class UpdateDatabaseFromApiUc:
                     app_id_of_the_week_loop, detail
                 )
 
-        self.update_sync_api()
+        self.update_sync_api(self._lang)
 
     def should_sync(self, last_update) -> bool:
+
         if (
             last_update + self.LAST_SYNC_MAX_DAYS * 60 * 60 * 24
         ) < self._system_api.get_datetime_current_timestamp():
@@ -106,15 +110,19 @@ class UpdateDatabaseFromApiUc:
             ApiCacheRepositoryContract.ID_PARAMETERS
         )
 
+        if(api_cache_parameter_entity.get_api_last_lang()!=self._lang):
+            return True
+
         last_timestamp_update = api_cache_parameter_entity.get_api_last_sync_timestamp()
         return self.should_sync(last_timestamp_update)
 
-    def update_sync_api(self):
+    def update_sync_api(self,lang:str):
         api_cache_parameter_entity = self._api_cache_repository.get_by_id(
             ApiCacheRepositoryContract.ID_PARAMETERS
         )
         api_cache_parameter_entity.update_api_last_sync_timestamp(
-            self._system_api.get_datetime_current_timestamp()
+            self._system_api.get_datetime_current_timestamp(),
+            lang
         )
 
         self._api_cache_repository.update_by_id(

@@ -13,6 +13,6 @@ sync_database_from_api = SyncDatabaseFromApiUc(FlathubApi(), AppstreamRepository
 sync_database_from_api.process()
 
 update_database_from_api = UpdateDatabaseFromApiUc(
-    FlathubApi(), AppstreamRepository(), SystemApi()
+    FlathubApi(), AppstreamRepository(), SystemApi(),'en'
 )
 update_database_from_api.process()

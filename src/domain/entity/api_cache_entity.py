@@ -5,6 +5,7 @@ class ApiCacheEntity:
 
     FIELD_LAST_HOME_API_SYNC_TIMESTAMP = "lastHomeApiSyncTimeStamp"
     FIELD_LAST_API_SYNC_TIMESTAMP = "lastApiSyncTimeStamp"
+    FIELD_LAST_API_LANG="lastApiLang"
 
     def __init__(self, id: str, content: str):
         self.id = id
@@ -33,9 +34,16 @@ class ApiCacheEntity:
             return 0
         return parameters_obj[self.FIELD_LAST_API_SYNC_TIMESTAMP]
 
-    def update_api_last_sync_timestamp(self, timestamp: int) -> object:
+    def get_api_last_lang(self)->str:
+        parameters_obj = self.get_content_as_object()
+        if self.FIELD_LAST_API_LANG not in parameters_obj:
+            return 'no'
+        return parameters_obj[self.FIELD_LAST_API_LANG]
+
+    def update_api_last_sync_timestamp(self, timestamp: int, lang:str) -> object:
         parameters_obj = json.loads(self.content)
         parameters_obj[self.FIELD_LAST_API_SYNC_TIMESTAMP] = timestamp
+        parameters_obj[self.FIELD_LAST_API_LANG]=lang
 
         self.content = json.dumps(parameters_obj)
 

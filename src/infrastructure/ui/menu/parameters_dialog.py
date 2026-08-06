@@ -150,7 +150,7 @@ class ParametersDialog(Adw.PreferencesDialog):
         ApiCacheRepository().reset_api_lastupdate()
 
         UpdateDatabaseFromApiUc(
-            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository()
+            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository(),self._settings.get_language_code()
         ).process()
 
     def _apply_theme(self):
