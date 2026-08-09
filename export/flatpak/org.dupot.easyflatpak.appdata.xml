@@ -132,13 +132,18 @@
 
 
 
-<release date="2026-07-31" version="4.4.1"> 
+<release date="2026-07-31" version="4.4.3"> 
       <description>
         <ul>
           
           <li>Add language management for applications summary and description (if available from author)</li>
           <li xml:lang="fr">Ajoute une gestion de la langue dans la récupération de la description des applications (si celle-ci est disponible par l'auteur)</li>
           </ul>
+          <ul>
+            <li>Add "pin feature" : when you downgrade an applicaiton to a specific version, we store this information and uncheck application in update page</li>
+           <li xml:lang="fr">Ajouter la fonctionnalité épinglé: quand on rétrograde une application, l'information est stoquée, et sur la page de mise à jour, l'application sera automatiquement décochée par défaut</li>
+            </ul>
+
       </description>
     </release> 
 
