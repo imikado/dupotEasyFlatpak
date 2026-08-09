@@ -19,6 +19,7 @@ class PathConf:
     BUNDLES = "bundles.json"
     BUNDLES_IMAGES = "images"
     USERSETTINGS = "user_settings.json"
+    PINNED_APP_LIST="pinned_app_list.json"
 
     def __new__(cls):
         if cls._instance is None:
@@ -90,3 +91,6 @@ class PathConf:
 
     def get_user_settings_path(self) -> str:
         return self.get_path_list_join([self.get_data_path(), self.USERSETTINGS])
+
+    def get_pinned_app_list_path(self) -> str:
+        return self.get_path_list_join([self.get_data_path(), self.PINNED_APP_LIST])

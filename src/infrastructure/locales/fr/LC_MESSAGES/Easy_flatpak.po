@@ -2,16 +2,16 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-11 22:45+0200\n"
+"POT-Creation-Date: 2026-08-09 09:30+0200\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
-#: src/infrastructure/ui/appstream_page.py:148
-#: src/infrastructure/ui/shared/installed_list_shared.py:168
+#: src/infrastructure/ui/appstream_page.py:149
 #: src/infrastructure/ui/shared/installed_list_shared.py:182
+#: src/infrastructure/ui/shared/installed_list_shared.py:196
 msgid "Downgrade"
 msgstr "Rétrograder"
 
@@ -21,12 +21,12 @@ msgstr "Sélectionnez une version pour rétrograder"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
 #: src/infrastructure/ui/appstream/install_dialog.py:101
-#: src/infrastructure/ui/appstream_page.py:426
+#: src/infrastructure/ui/appstream_page.py:443
 #: src/infrastructure/ui/app_window.py:568
 #: src/infrastructure/ui/bundle_detail_page.py:278
-#: src/infrastructure/ui/home/updates_page.py:176
-#: src/infrastructure/ui/home/updates_page.py:224
-#: src/infrastructure/ui/shared/installed_list_shared.py:135
+#: src/infrastructure/ui/home/updates_page.py:183
+#: src/infrastructure/ui/home/updates_page.py:231
+#: src/infrastructure/ui/shared/installed_list_shared.py:149
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -36,7 +36,7 @@ msgstr "Installer .flatpak"
 
 # --- App detail page ---
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:122
-#: src/infrastructure/ui/appstream_page.py:213
+#: src/infrastructure/ui/appstream_page.py:222
 msgid "Details"
 msgstr "Détails"
 
@@ -57,7 +57,7 @@ msgid "File"
 msgstr "Fichier"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:156
-#: src/infrastructure/ui/menu/parameters_dialog.py:30
+#: src/infrastructure/ui/menu/parameters_dialog.py:34
 msgid "Installation"
 msgstr "Installation"
 
@@ -71,7 +71,7 @@ msgstr "Installer uniquement pour l'utilisateur actuel"
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:168
 #: src/infrastructure/ui/appstream/install_dialog.py:30
 #: src/infrastructure/ui/appstream/install_dialog.py:102
-#: src/infrastructure/ui/appstream_page.py:391
+#: src/infrastructure/ui/appstream_page.py:406
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
@@ -79,9 +79,9 @@ msgid "Install"
 msgstr "Installer"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:189
-#: src/infrastructure/ui/appstream_page.py:438
-#: src/infrastructure/ui/appstream_page.py:466
-#: src/infrastructure/ui/shared/installed_list_shared.py:145
+#: src/infrastructure/ui/appstream_page.py:455
+#: src/infrastructure/ui/appstream_page.py:485
+#: src/infrastructure/ui/shared/installed_list_shared.py:159
 msgid "Please wait…"
 msgstr "Veuillez patienter…"
 
@@ -101,85 +101,90 @@ msgstr "Installation…"
 msgid "Close"
 msgstr "Fermer"
 
-#: src/infrastructure/ui/appstream_page.py:143
-#: src/infrastructure/ui/appstream_page.py:588
-#: src/infrastructure/ui/shared/installed_list_shared.py:97
+#: src/infrastructure/ui/appstream_page.py:144
+#: src/infrastructure/ui/appstream_page.py:612
+#: src/infrastructure/ui/shared/installed_list_shared.py:111
 msgid "Recipe overrides"
 msgstr "Substitutions de recette"
 
-#: src/infrastructure/ui/appstream_page.py:153
-#: src/infrastructure/ui/shared/installed_list_shared.py:108
+#: src/infrastructure/ui/appstream_page.py:154
+#: src/infrastructure/ui/shared/installed_list_shared.py:122
 msgid "Run"
 msgstr "Lancer"
 
-#: src/infrastructure/ui/appstream_page.py:217
+#: src/infrastructure/ui/appstream_page.py:163
+#: src/infrastructure/ui/shared/installed_list_shared.py:81
+msgid "Pinned to a specific version"
+msgstr "Épinglé à une version spécifique"
+
+#: src/infrastructure/ui/appstream_page.py:226
 msgid "License"
 msgstr "Licence"
 
-#: src/infrastructure/ui/appstream_page.py:223
+#: src/infrastructure/ui/appstream_page.py:232
 msgid "Download Size"
 msgstr "Taille du téléchargement"
 
-#: src/infrastructure/ui/appstream_page.py:229
+#: src/infrastructure/ui/appstream_page.py:238
 msgid "Installed Size"
 msgstr "Taille installée"
 
-#: src/infrastructure/ui/appstream_page.py:235
+#: src/infrastructure/ui/appstream_page.py:244
 msgid "Architectures"
 msgstr "Architectures"
 
-#: src/infrastructure/ui/appstream_page.py:242
+#: src/infrastructure/ui/appstream_page.py:251
 msgid "Homepage"
 msgstr "Page d'accueil"
 
-#: src/infrastructure/ui/appstream_page.py:256
+#: src/infrastructure/ui/appstream_page.py:265
 msgid "Bug Tracker"
 msgstr "Suivi des bogues"
 
-#: src/infrastructure/ui/appstream_page.py:270
+#: src/infrastructure/ui/appstream_page.py:279
 msgid "Donate"
 msgstr "Faire un don"
 
-#: src/infrastructure/ui/appstream_page.py:285
+#: src/infrastructure/ui/appstream_page.py:294
 msgid "Description"
 msgstr "Description"
 
-#: src/infrastructure/ui/appstream_page.py:381
-#: src/infrastructure/ui/appstream_page.py:424
-#: src/infrastructure/ui/appstream_page.py:427
-#: src/infrastructure/ui/shared/installed_list_shared.py:114
-#: src/infrastructure/ui/shared/installed_list_shared.py:133
-#: src/infrastructure/ui/shared/installed_list_shared.py:136
-#: src/infrastructure/ui/shared/installed_list_shared.py:157
+#: src/infrastructure/ui/appstream_page.py:395
+#: src/infrastructure/ui/appstream_page.py:441
+#: src/infrastructure/ui/appstream_page.py:444
+#: src/infrastructure/ui/shared/installed_list_shared.py:128
+#: src/infrastructure/ui/shared/installed_list_shared.py:147
+#: src/infrastructure/ui/shared/installed_list_shared.py:150
+#: src/infrastructure/ui/shared/installed_list_shared.py:171
 msgid "Uninstall"
 msgstr "Désinstaller"
 
-#: src/infrastructure/ui/appstream_page.py:389
+#: src/infrastructure/ui/appstream_page.py:404
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
 msgid "Install with recipe"
 msgstr "Installer avec une recette"
 
-#: src/infrastructure/ui/appstream_page.py:417
-#: src/infrastructure/ui/shared/installed_list_shared.py:126
+#: src/infrastructure/ui/appstream_page.py:434
+#: src/infrastructure/ui/shared/installed_list_shared.py:140
 msgid "Delete application data"
 msgstr "Supprimer les données de l'application"
 
-#: src/infrastructure/ui/appstream_page.py:589
-#: src/infrastructure/ui/shared/installed_list_shared.py:98
+#: src/infrastructure/ui/appstream_page.py:613
+#: src/infrastructure/ui/shared/installed_list_shared.py:112
 msgid "Apply"
 msgstr "Appliquer"
 
-#: src/infrastructure/ui/appstream_page.py:607
+#: src/infrastructure/ui/appstream_page.py:631
 msgid "Screenshots"
 msgstr "Captures d'écran"
 
-#: src/infrastructure/ui/appstream_page.py:801
+#: src/infrastructure/ui/appstream_page.py:825
 msgid "Release History"
 msgstr "Historique des versions"
 
 #: src/infrastructure/ui/app_window.py:74
-#: src/infrastructure/ui/shared/installed_list_shared.py:172
+#: src/infrastructure/ui/shared/installed_list_shared.py:186
 msgid "Loading…"
 msgstr "Chargement…"
 
@@ -189,7 +194,7 @@ msgid "Easy flatpak"
 msgstr "Easy flatpak"
 
 #: src/infrastructure/ui/app_window.py:120
-#: src/infrastructure/ui/menu/parameters_dialog.py:20
+#: src/infrastructure/ui/menu/parameters_dialog.py:24
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -356,58 +361,58 @@ msgstr "Aucune installation en attente"
 msgid "External process"
 msgstr "Processus externe"
 
-#: src/infrastructure/ui/home/updates_page.py:39
+#: src/infrastructure/ui/home/updates_page.py:41
 msgid "No updates available"
 msgstr "Aucune mise à jour disponible"
 
-#: src/infrastructure/ui/home/updates_page.py:44
+#: src/infrastructure/ui/home/updates_page.py:46
 msgid "Applications"
 msgstr "Applications"
 
-#: src/infrastructure/ui/home/updates_page.py:47
+#: src/infrastructure/ui/home/updates_page.py:49
 msgid "Runtimes"
 msgstr "Environnements d'exécution"
 
-#: src/infrastructure/ui/home/updates_page.py:73
-#: src/infrastructure/ui/home/updates_page.py:166
+#: src/infrastructure/ui/home/updates_page.py:75
+#: src/infrastructure/ui/home/updates_page.py:173
 #: src/infrastructure/ui/menu/import_dialog.py:27
 msgid "Select all"
 msgstr "Tout sélectionner"
 
-#: src/infrastructure/ui/home/updates_page.py:77
-#: src/infrastructure/ui/home/updates_page.py:177
+#: src/infrastructure/ui/home/updates_page.py:79
+#: src/infrastructure/ui/home/updates_page.py:184
 msgid "Update all"
 msgstr "Tout mettre à jour"
 
-#: src/infrastructure/ui/home/updates_page.py:145
-#: src/infrastructure/ui/home/updates_page.py:164
+#: src/infrastructure/ui/home/updates_page.py:152
+#: src/infrastructure/ui/home/updates_page.py:171
 #, python-brace-format
 msgid "Update ({n})"
 msgstr "Mise à jour ({n})"
 
-#: src/infrastructure/ui/home/updates_page.py:146
-#: src/infrastructure/ui/home/updates_page.py:166
+#: src/infrastructure/ui/home/updates_page.py:153
+#: src/infrastructure/ui/home/updates_page.py:173
 msgid "Deselect all"
 msgstr "Tout désélectionner"
 
-#: src/infrastructure/ui/home/updates_page.py:175
+#: src/infrastructure/ui/home/updates_page.py:182
 msgid "Update all applications?"
 msgstr "Mettre à jour toutes les applications ?"
 
-#: src/infrastructure/ui/home/updates_page.py:193
+#: src/infrastructure/ui/home/updates_page.py:200
 msgid "Update all (user)"
 msgstr "Tout mettre à jour (utilisateur)"
 
-#: src/infrastructure/ui/home/updates_page.py:194
+#: src/infrastructure/ui/home/updates_page.py:201
 msgid "Update all (system)"
 msgstr "Tout mettre à jour (système)"
 
-#: src/infrastructure/ui/home/updates_page.py:222
+#: src/infrastructure/ui/home/updates_page.py:229
 #, python-brace-format
 msgid "Update {n} application(s)?"
 msgstr "Mettre à jour {n} application(s) ?"
 
-#: src/infrastructure/ui/home/updates_page.py:225
+#: src/infrastructure/ui/home/updates_page.py:232
 msgid "Update"
 msgstr "Mettre à jour"
 
@@ -415,39 +420,39 @@ msgstr "Mettre à jour"
 msgid "Unselect all"
 msgstr "Tout désélectionner"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:34
+#: src/infrastructure/ui/menu/parameters_dialog.py:38
 msgid "Installation scope"
 msgstr "Portée de l'installation"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:35
+#: src/infrastructure/ui/menu/parameters_dialog.py:39
 msgid "Where Flatpak apps will be installed"
 msgstr "Où les applications Flatpak seront installées"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:44
+#: src/infrastructure/ui/menu/parameters_dialog.py:48
 msgid "Architecture filter"
 msgstr "Filtre d'architecture"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:45
+#: src/infrastructure/ui/menu/parameters_dialog.py:49
 msgid "Filter apps by CPU architecture"
 msgstr "Filtrer les applications par architecture du processeur"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:55
+#: src/infrastructure/ui/menu/parameters_dialog.py:59
 msgid "Game path"
 msgstr "Chemin des jeux"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:70
+#: src/infrastructure/ui/menu/parameters_dialog.py:74
 msgid "Appearance"
 msgstr "Apparence"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:75
+#: src/infrastructure/ui/menu/parameters_dialog.py:79
 msgid "Theme"
 msgstr "Thème"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:87
+#: src/infrastructure/ui/menu/parameters_dialog.py:91
 msgid "Language"
 msgstr "Langue"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:104
+#: src/infrastructure/ui/menu/parameters_dialog.py:108
 msgid "Save"
 msgstr "Enregistrer"
 

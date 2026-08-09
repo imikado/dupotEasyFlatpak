@@ -34,6 +34,7 @@ class IconsShared:
     ICON_CHECKMARK = "easyflatpak-checkmark-symbolic"
     ICON_MENU = "easyflatpak-menu-symbolic"
     ICON_SEARCH = "easyflatpak-search-symbolic"
+    ICON_PIN = "easyflatpak-pin-symbolic"
 
     # Links
     ICON_HOMEPAGE = "easyflatpak-homepage-symbolic"
@@ -70,6 +71,7 @@ class IconsShared:
         "Homepage": ICON_HOMEPAGE,
         "Bugtracker": ICON_BUGTRACKER,
         "Donation": ICON_DONATION,
+        "Pin": ICON_PIN,
     }
 
     _theme_registered: bool = False

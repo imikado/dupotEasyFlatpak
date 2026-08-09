@@ -48,6 +48,12 @@ class UserSettingsEntity:
     language: str = DEFAULT_LANGUAGE
     architecture_filter:str=DEFAULT_ARCHITECTURE_FILTER
 
+    # Resolved by the app at startup from the real system locale (see
+    # main.py, which has access to GLib.get_language_names() — the only
+    # reliable locale source inside a Flatpak sandbox). Used whenever
+    # `language` is LANGUAGE_SYSTEM. Defaults to English until resolved.
+    _system_language_code: str = LANGUAGE_EN_CODE
+
     def __new__(cls, *_args, **_kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -122,7 +128,13 @@ class UserSettingsEntity:
     def should_force_language(self) -> bool:
         return self.language != self.LANGUAGE_SYSTEM
 
+    def set_system_language_code(self, code: str) -> None:
+        self._system_language_code = code
+
     def get_language_code(self) -> str:
+        if self.language == self.LANGUAGE_SYSTEM:
+            return self._system_language_code
+
         language_codes = {
             self.LANGUAGE_AR: "ar",
             self.LANGUAGE_EN: self.LANGUAGE_EN_CODE,

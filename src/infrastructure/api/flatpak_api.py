@@ -5,9 +5,18 @@ from domain.contract.flatpak_api_contract import FlatpakApiContract
 from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
 from domain.entity.installed_version_entity import InstalledVersionEntity
 from domain.entity.update_available_entity import UpdateAvailableEntity
+from infrastructure.repository.pinned_apps_repository import PinnedAppsRepository
 
 
 class FlatpakApi(FlatpakApiContract):
+
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._history_cache_by_id_list = {}
+        return cls._instance
 
     def is_running_flatpak(self) -> bool:
         return bool(os.environ.get("FLATPAK_ID"))
@@ -19,6 +28,24 @@ class FlatpakApi(FlatpakApiContract):
             else []
         )
         return prefix + ["flatpak"] + list(args)
+
+    def _cmd_root(self, *args) -> list:
+        # Same as _cmd but elevates via pkexec. Flatpak refuses to update a
+        # system-wide installation to a specific --commit under a normal
+        # (polkit-authenticated) call — it requires real root, unlike plain
+        # "update to latest" — so system-scope downgrades need this.
+        #
+        # `env -u SHELL` strips the SHELL var forwarded from inside the
+        # sandbox before pkexec sees it: pkexec requires SHELL (if set) to
+        # be a line in /etc/shells, and the sandbox-forwarded value doesn't
+        # match the host's /etc/shells, so pkexec refuses to run at all.
+        # Unset it and pkexec falls back to the target user's own shell.
+        prefix = (
+            ["flatpak-spawn", "--host", "--directory=/"]
+            if self.is_running_flatpak()
+            else []
+        )
+        return prefix + ["env", "-u", "SHELL", "pkexec", "flatpak"] + list(args)
 
     def get_installed_app_id_list(self) -> list[str]:
         seen = set()
@@ -163,7 +190,19 @@ class FlatpakApi(FlatpakApiContract):
         return "user" if app_id in user_ids else "system"
 
     def get_downgrade_call(self, app_id: str, commit: str, *flags) -> list:
-        return self._cmd("update", f"--commit={commit}", *flags, app_id, "-y")
+        # history is newest-first, so history[0] is the latest available
+        # commit — "downgrading" to it just means going back to latest,
+        # so drop the pin instead of pinning to it.
+        history = self.get_history_list_by_id(app_id)
+        if history and history[0].commit == commit:
+            PinnedAppsRepository().delete(app_id)
+        else:
+            PinnedAppsRepository().insert_or_update(app_id, commit)
+
+        args = ["update", f"--commit={commit}", *flags, app_id, "-y"]
+        if "--system" in flags:
+            return self._cmd_root(*args)
+        return self._cmd(*args)
 
     def update_version_by_id_and_commit(
         self, app_id: str, commit: str
@@ -250,6 +289,8 @@ class FlatpakApi(FlatpakApiContract):
         return self._cmd("install", "--bundle", *flags, file_path, "-y")
 
     def get_history_list_by_id(self, app_id: str) -> list[FlatpakHistoryEntity]:
+        if app_id in self._history_cache_by_id_list:
+            return self._history_cache_by_id_list[app_id]
 
         flatpak_history_list = []
 
@@ -275,6 +316,7 @@ class FlatpakApi(FlatpakApiContract):
         if commit and subject and date:
             flatpak_history_list.append(FlatpakHistoryEntity(commit, subject, date))
 
+        self._history_cache_by_id_list[app_id] = flatpak_history_list
         return flatpak_history_list
 
     def get_running_flatpak_processes(self) -> list[dict]:

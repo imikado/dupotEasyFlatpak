@@ -13,6 +13,7 @@ from gi.repository import Adw, GLib, Gtk, Pango
 import domain.conf.app_state as app_state
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 from infrastructure.api.flatpak_api import FlatpakApi
+from infrastructure.repository.pinned_apps_repository import PinnedAppsRepository
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.service.install_queue_service import InstallQueueService
 from infrastructure.ui.appstream.downgrade_dialog import DowngradeDialog
@@ -20,7 +21,12 @@ from infrastructure.ui.appstream.install_dialog import InstallDialog
 
 
 def _make_installed_row(
-    app, on_click, is_user_installed: bool, has_recipe: bool, listbox: Gtk.ListBox
+    app,
+    on_click,
+    is_user_installed: bool,
+    has_recipe: bool,
+    is_pinned: bool,
+    listbox: Gtk.ListBox,
 ) -> Gtk.ListBoxRow:
     row = Gtk.ListBoxRow()
     row.set_activatable(False)
@@ -66,6 +72,14 @@ def _make_installed_row(
     # --- Right: action buttons ---
     btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
     btn_box.set_valign(Gtk.Align.CENTER)
+
+    # Pinned indicator
+    if is_pinned:
+        pin_icon = IconsShared().get_icon_by_name(IconsShared.ICON_PIN)
+        pin_icon.set_pixel_size(20)
+        pin_icon.set_valign(Gtk.Align.CENTER)
+        pin_icon.set_tooltip_text(_("Pinned to a specific version"))
+        btn_box.append(pin_icon)
 
     # Recipe overrides
     if has_recipe:
@@ -235,6 +249,7 @@ class InstalledListShared:
             text=True,
         )
         self._user_ids = {l.strip() for l in result.stdout.splitlines() if l.strip()}
+        self._pinned_ids = set(PinnedAppsRepository().get_app_id_list())
 
         self._listbox = Gtk.ListBox()
         self._listbox.add_css_class("boxed-list")
@@ -254,7 +269,10 @@ class InstalledListShared:
     def append(self, app, on_click, *_on_click_args):
         is_user = app.id in self._user_ids
         has_recipe = self._recipe_uc.has_recipe(app.id)
-        row = _make_installed_row(app, on_click, is_user, has_recipe, self._listbox)
+        is_pinned = app.id in self._pinned_ids
+        row = _make_installed_row(
+            app, on_click, is_user, has_recipe, is_pinned, self._listbox
+        )
         self._listbox.append(row)
 
     def clear(self):

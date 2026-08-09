@@ -8,6 +8,7 @@ from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.recipe_repository import RecipeRepository
+from infrastructure.repository.pinned_apps_repository import PinnedAppsRepository
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
@@ -155,12 +156,19 @@ class AppstreamPage(Adw.NavigationPage):
         run_btn.add_css_class("suggested-action")
         run_btn.connect("clicked", lambda _btn: FlatpakApi().run_by_id(app.id))
 
+        pin_icon = IconsShared().get_icon_by_name(IconsShared.ICON_PIN)
+        pin_icon.set_pixel_size(20)
+        pin_icon.set_valign(Gtk.Align.CENTER)
+        pin_icon.set_visible(False)
+        pin_icon.set_tooltip_text(_("Pinned to a specific version"))
+
         install_btn.connect(
             "clicked",
             self._on_install_clicked,
             recipe_btn,
             downgrade_btn,
             run_btn,
+            pin_icon,
             app.id,
             app.name,
             has_recipe,
@@ -173,10 +181,11 @@ class AppstreamPage(Adw.NavigationPage):
         btn_row.append(install_btn)
         btn_row.append(recipe_btn)
         btn_row.append(downgrade_btn)
+        btn_row.append(pin_icon)
         info_box.append(btn_row)
 
         self._check_install_state(
-            install_btn, recipe_btn, downgrade_btn, run_btn, app.id, has_recipe
+            install_btn, recipe_btn, downgrade_btn, run_btn, pin_icon, app.id, has_recipe
         )
 
         header_row = Adw.PreferencesRow()
@@ -350,6 +359,7 @@ class AppstreamPage(Adw.NavigationPage):
         recipe_btn: Gtk.Button,
         downgrade_btn: Gtk.Button,
         run_btn: Gtk.Button,
+        pin_icon: Gtk.Image,
         app_id: str,
         has_recipe: bool,
     ):
@@ -361,6 +371,8 @@ class AppstreamPage(Adw.NavigationPage):
                 recipe_btn,
                 downgrade_btn,
                 run_btn,
+                pin_icon,
+                app_id,
                 installed,
                 has_recipe,
             )
@@ -373,6 +385,8 @@ class AppstreamPage(Adw.NavigationPage):
         recipe_btn: Gtk.Button,
         downgrade_btn: Gtk.Button,
         run_btn: Gtk.Button,
+        pin_icon: Gtk.Image,
+        app_id: str,
         installed: bool,
         has_recipe: bool,
     ):
@@ -384,6 +398,7 @@ class AppstreamPage(Adw.NavigationPage):
             recipe_btn.set_visible(has_recipe)
             downgrade_btn.set_visible(True)
             run_btn.set_visible(True)
+            pin_icon.set_visible(PinnedAppsRepository().has_id(app_id))
         else:
             if has_recipe:
                 btn_label = _("Install with recipe")
@@ -392,6 +407,7 @@ class AppstreamPage(Adw.NavigationPage):
             btn.set_label(btn_label)
             btn.remove_css_class("destructive-action")
             btn.add_css_class("suggested-action")
+            pin_icon.set_visible(False)
             recipe_btn.set_visible(False)
             downgrade_btn.set_visible(False)
             run_btn.set_visible(False)
@@ -402,6 +418,7 @@ class AppstreamPage(Adw.NavigationPage):
         recipe_btn: Gtk.Button,
         downgrade_btn: Gtk.Button,
         run_btn: Gtk.Button,
+        pin_icon: Gtk.Image,
         app_id: str,
         app_name: str,
         has_recipe: bool,
@@ -450,6 +467,8 @@ class AppstreamPage(Adw.NavigationPage):
                         recipe_btn,
                         downgrade_btn,
                         run_btn,
+                        pin_icon,
+                        app_id,
                         result.returncode == 0,
                         has_recipe,
                     )
@@ -497,6 +516,8 @@ class AppstreamPage(Adw.NavigationPage):
                     recipe_btn,
                     downgrade_btn,
                     run_btn,
+                    pin_icon,
+                    app_id,
                     result.returncode == 0,
                     has_recipe,
                 )
@@ -557,7 +578,10 @@ class AppstreamPage(Adw.NavigationPage):
                     for line in process.stdout:
                         GLib.idle_add(queue_item.append_output, line)
                     process.wait()
-                    final_status = "done" if process.returncode == 0 else "failed"
+                    if process.returncode == 0:
+                        final_status = "done"
+                    else:
+                        final_status="failed"
                     GLib.idle_add(queue_item.set_status, final_status)
 
                 threading.Thread(target=run, daemon=True).start()

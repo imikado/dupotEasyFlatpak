@@ -3,7 +3,9 @@ import subprocess
 import threading
 
 from domain.UseCase.get_update_list_uc import GetUpdateListUc
+from domain.entity.pinned_app_entity import PinnedAppEntity
 import gi
+from infrastructure.repository.pinned_apps_repository import PinnedAppsRepository
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -91,7 +93,11 @@ class UpdatesPage(Gtk.Box):
 
     def _load(self):
         items = self._get_update_list_uc.get_list()
+        self._pinned_app_id_list:list[str]=PinnedAppsRepository().get_app_id_list()
         GLib.idle_add(self._apply, items)
+
+    def is_pinned(self,app_id)->bool:
+        return app_id in self._pinned_app_id_list
 
     def _apply(self, items: list[UpdateAvailableEntity]):
         if not items:
@@ -113,7 +119,8 @@ class UpdatesPage(Gtk.Box):
 
             check = Gtk.CheckButton()
             check.set_valign(Gtk.Align.CENTER)
-            check.set_active(True)
+            if not self.is_pinned(item.app_id):
+                check.set_active(True)
             check.connect("toggled", self._on_check_toggled)
 
             row = Adw.ActionRow()

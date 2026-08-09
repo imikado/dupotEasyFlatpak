@@ -36,6 +36,23 @@ def main():
     # GLib.get_language_names() is the reliable source for locale in GTK/Flatpak apps
     # e.g. ['fr_FR.UTF-8', 'fr_FR', 'fr', 'C'] — gettext handles the variants automatically
     languages = [l for l in GLib.get_language_names() if l != "C"]
+
+    # Resolve the real system locale into a Flathub API locale code, for use
+    # whenever the user's language setting is "System" — env vars like $LANG
+    # aren't reliable inside the Flatpak sandbox, so this must come from
+    # GLib.get_language_names() rather than being derived again downstream.
+    supported_codes = {"ar", "es", "fr", "it", "ro"}  # pt handled separately (-> pt_BR)
+    system_language_code = UserSettingsEntity.LANGUAGE_EN_CODE
+    for language_name in languages:
+        base = language_name.split(".")[0].split("_")[0].lower()
+        if base == "pt":
+            system_language_code = "pt_BR"
+            break
+        if base in supported_codes:
+            system_language_code = base
+            break
+    UserSettingsEntity().set_system_language_code(system_language_code)
+
     en_i18n = gettext.translation(
         appname,
         localedir,
