@@ -84,4 +84,7 @@ msgstr ""
 msgid "romanian"
 msgstr ""
 
+msgid "german"
+msgstr ""
+
 

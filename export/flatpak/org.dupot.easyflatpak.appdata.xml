@@ -39,7 +39,7 @@
     <p>Available in many languages:</p>
     <p xml:lang="fr">Disponible dans plusieurs langues :</p>
     <p>- English</p>
-    <p xml:lang="fr">- Anglais</p>
+    <p xml:lang="fr">- Anglais</p>    
     <p>- Spanish</p>
     <p xml:lang="fr">- Espagnol</p>
     <p>- French</p>
@@ -52,6 +52,9 @@
     <p xml:lang="fr">- Arabe</p>
     <p>- Romanian</p>
     <p xml:lang="fr">- Roumain</p>
+    <p>- German</p>
+    <p xml:lang="fr">- Allemand</p>
+    
 
    </description>
 
@@ -132,7 +135,7 @@
 
 
 
-<release date="2026-08-09" version="4.4.4"> 
+<release date="2026-08-11" version="4.4.5"> 
       <description>
         <ul>
           
@@ -143,6 +146,8 @@
             <li>Add "pin feature" : when you downgrade an applicaiton to a specific version, we store this information and uncheck application in update page</li>
            <li xml:lang="fr">Ajouter la fonctionnalité épinglé: quand on rétrograde une application, l'information est stoquée, et sur la page de mise à jour, l'application sera automatiquement décochée par défaut</li>
             </ul>
+            <li>Add new german language</li>
+            <li xml:lang="fr">Ajout de la langue allemande</li>
 
       </description>
     </release> 

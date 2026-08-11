@@ -17,6 +17,7 @@ class UserSettingsEntity:
     LANGUAGE_IT = "italian"
     LANGUAGE_PT = "portugues"
     LANGUAGE_RO = "romanian"
+    LANGUAGE_DE = "german"
 
     LANGUAGE_EN_CODE="en"
 
@@ -123,6 +124,7 @@ class UserSettingsEntity:
             self.LANGUAGE_IT,
             self.LANGUAGE_PT,
             self.LANGUAGE_RO,
+            self.LANGUAGE_DE
         ]
 
     def should_force_language(self) -> bool:
@@ -143,6 +145,7 @@ class UserSettingsEntity:
             self.LANGUAGE_IT: "it",
             self.LANGUAGE_PT: "pt_BR",
             self.LANGUAGE_RO: "ro",
+            self.LANGUAGE_DE: "de"
         }
         return language_codes.get(self.language, "en")
 

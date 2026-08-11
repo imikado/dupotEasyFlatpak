@@ -41,7 +41,7 @@ def main():
     # whenever the user's language setting is "System" — env vars like $LANG
     # aren't reliable inside the Flatpak sandbox, so this must come from
     # GLib.get_language_names() rather than being derived again downstream.
-    supported_codes = {"ar", "es", "fr", "it", "ro"}  # pt handled separately (-> pt_BR)
+    supported_codes = {"ar", "de", "es", "fr", "it", "ro"}  # pt handled separately (-> pt_BR)
     system_language_code = UserSettingsEntity.LANGUAGE_EN_CODE
     for language_name in languages:
         base = language_name.split(".")[0].split("_")[0].lower()

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-09 09:30+0200\n"
+"POT-Creation-Date: 2026-08-11 13:51+0200\n"
 "Language: it\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -578,6 +578,9 @@ msgstr "portoghese"
 
 msgid "romanian"
 msgstr "rumeno"
+
+msgid "german"
+msgstr "tedesco"
 
 #~ msgid "Import / Export"
 #~ msgstr "Importa / Esporta"
