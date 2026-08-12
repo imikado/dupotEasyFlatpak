@@ -37,16 +37,16 @@
     <p>- Arabic</p>
     <p>- Romanian</p>
     <p>- German</p>
-    
 
-   </description>
+
+  </description>
 
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/f82ef60f6240eb7762ff258354a012179c2e1d9a/export/screenshots/Screenshot_home.png</image>
       <caption>Home page</caption>
     </screenshot>
-     
+
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/f82ef60f6240eb7762ff258354a012179c2e1d9a/export/screenshots/Screenshot_category.png</image>
       <caption>Category page</caption>
@@ -55,7 +55,7 @@
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/f82ef60f6240eb7762ff258354a012179c2e1d9a/export/screenshots/Screenshot_category_grid.png</image>
       <caption>Category page displayed as grid</caption>
     </screenshot>
-     
+
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/f82ef60f6240eb7762ff258354a012179c2e1d9a/export/screenshots/Screenshot_installed_applications.png</image>
       <caption>Installed applications</caption>
@@ -99,7 +99,7 @@
       <caption>Application version downgrade</caption>
     </screenshot>
 
-    
+
 
     <screenshot>
       <image>https://raw.githubusercontent.com/imikado/dupotEasyFlatpak/f82ef60f6240eb7762ff258354a012179c2e1d9a/export/screenshots/Screenshot_import_export.png</image>
@@ -118,71 +118,71 @@
 
 
 
-<release date="2026-08-11" version="4.4.7"> 
+    <release date="2026-08-11" version="4.4.8">
       <description>
         <ul>
-          
           <li>Add language management for applications summary and description (if available from author)</li>
-          </ul>
-          <ul>
-            <li>Add "pin feature" : when you downgrade an applicaiton to a specific version, we store this information and uncheck application in update page</li>
-            </ul>
-            <li>Add new german language</li>
-
+        </ul>
+        <ul>
+          <li>Add "pin feature" : when you downgrade an applicaiton to a specific version, we store this information and uncheck application in update page</li>
+        </ul>
+        <ul>
+          <li>Add new german language</li>
+        </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2026-06-26" version="4.3.5"> 
+    <release date="2026-06-26" version="4.3.5">
       <description>
         <ul>
-          
+
           <li>Fix icons display on some system</li>
           <li>Improve installation process</li>
-          </ul>
+        </ul>
       </description>
-    </release> 
-  
+    </release>
 
-  <release date="2026-06-11" version="4.3.1"> 
+
+    <release date="2026-06-11" version="4.3.1">
       <description>
         <ul>
           <li>Improve application display : add download and installed size + architectures</li>
           <li>Add parameter to filter by architecture</li>
-           </ul>
+        </ul>
       </description>
-    </release> 
-  
-  
-<release date="2026-06-05" version="4.2.9"> 
+    </release>
+
+
+    <release date="2026-06-05" version="4.2.9">
       <description>
         <ul>
           <li>Bug fix</li>
-          </ul>
+        </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2026-06-03" version="4.2.8"> 
+    <release date="2026-06-03" version="4.2.8">
       <description>
         <ul>
           <li>Bug fix</li>
-          </ul>
+        </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2026-05-30" version="4.2.7"> 
+    <release date="2026-05-30" version="4.2.7">
       <description>
         <ul>
           <li>Bug fix</li>
-          </ul>
+        </ul>
       </description>
-    </release> 
+    </release>
 
 
 
-<release date="2026-05-17" version="4.2.6"> 
+    <release date="2026-05-17" version="4.2.6">
       <description>
         <ul>
           <li>Bug fix</li>
@@ -190,26 +190,26 @@
           <li>With 2 features to allow to clean cache and repair permission</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2026-05-08" version="4.2.5"> 
+    <release date="2026-05-08" version="4.2.5">
       <description>
         <ul>
           <li>Bug fix</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2026-05-03" version="4.2.4"> 
+    <release date="2026-05-03" version="4.2.4">
       <description>
         <ul>
           <li>Bug fix</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2026-04-24" version="4.2.3"> 
+    <release date="2026-04-24" version="4.2.3">
       <description>
         <ul>
           <li>Improvments</li>
@@ -219,11 +219,11 @@
           <li>Fix update availables apps (problem with cache) </li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
 
-<release date="2026-04-03" version="4.1.8"> 
+    <release date="2026-04-03" version="4.1.8">
       <description>
         <ul>
           <li>Improvments</li>
@@ -234,9 +234,9 @@
           <li>New icons behavior</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2026-04-03" version="4.0.29"> 
+    <release date="2026-04-03" version="4.0.29">
       <description>
         <ul>
           <li>Improvments</li>
@@ -246,76 +246,76 @@
           <li>Add missing translations</li>
         </ul>
       </description>
-    </release> 
-    
-<release date="2026-04-01" version="4.0.22"> 
+    </release>
+
+    <release date="2026-04-01" version="4.0.22">
       <description>
         <ul>
           <li>Improvments</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2026-03-31" version="4.0.20"> 
+    <release date="2026-03-31" version="4.0.20">
       <description>
         <ul>
           <li>Bug fix</li>
           <li>Improvments</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
 
 
-<release date="2026-03-31" version="4.0.19"> 
+    <release date="2026-03-31" version="4.0.19">
       <description>
         <ul>
           <li>Bugfix: in bundle could not validate recipe without game path filled</li>
           <li>Bugfix: does not display right background color for apps of the week</li>
           <li>Bugfix: miss label in recipe window</li>
-           </ul>
+        </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2026-03-30" version="4.0.18"> 
+    <release date="2026-03-30" version="4.0.18">
       <description>
         <ul>
           <li>Bugfix</li>
           <li>Improve installed apps page</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2026-03-29" version="4.0.17"> 
+    <release date="2026-03-29" version="4.0.17">
       <description>
         <ul>
           <li>New interface</li>
           <li>All recoded application</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2026-02-13" version="3.29.5"> 
+    <release date="2026-02-13" version="3.29.5">
       <description>
         <ul>
           <li>Fix libraries</li>
           <li>Database update</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-  <release date="2025-12-28" version="3.29.4"> 
+    <release date="2025-12-28" version="3.29.4">
       <description>
         <ul>
           <li>Bug keeping user settings</li>
           <li>Database update</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-  <release date="2025-12-17" version="3.29.3"> 
+    <release date="2025-12-17" version="3.29.3">
       <description>
         <ul>
           <li>Api bug fix</li>
@@ -323,36 +323,36 @@
           <li>Add choice to sync api during startup</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-  <release date="2025-12-07" version="3.29.1"> 
+    <release date="2025-12-07" version="3.29.1">
       <description>
         <ul>
           <li>Improve performances</li>
           <li>Update database</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-  <release date="2025-12-06" version="3.28.0"> 
+    <release date="2025-12-06" version="3.28.0">
       <description>
         <ul>
           <li>Improve performances</li>
           <li>Add new feature to downgrade application version</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-11-28" version="3.27.1"> 
+    <release date="2025-11-28" version="3.27.1">
       <description>
         <ul>
           <li>Bug fix when display application</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-11-23" version="3.27.0"> 
+    <release date="2025-11-23" version="3.27.0">
       <description>
         <ul>
           <li>Add home page api cache</li>
@@ -360,19 +360,19 @@
           <li>Add feature to store custom window size</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-11-21" version="3.26.0"> 
+    <release date="2025-11-21" version="3.26.0">
       <description>
         <ul>
           <li>Modify way to store application version</li>
           <li>Modify application theme</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-11-16" version="3.25.2"> 
+    <release date="2025-11-16" version="3.25.2">
       <description>
         <ul>
           <li>Fix color in dark mode</li>
@@ -381,21 +381,21 @@
           <li>Fix update page</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-11-16" version="3.25.1"> 
+    <release date="2025-11-16" version="3.25.1">
       <description>
         <ul>
           <li>Fix color in dark mode</li>
           <li>Now when you click on the drawer menu, it closes the menu</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
 
-<release date="2025-10-30" version="3.25.0"> 
+    <release date="2025-10-30" version="3.25.0">
       <description>
         <ul>
           <li>Create new interface</li>
@@ -403,55 +403,55 @@
           <li>Fix home page api call</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-10-15" version="3.24.1"> 
+    <release date="2025-10-15" version="3.24.1">
       <description>
         <ul>
           <li>Improve home page</li>
           <li>Update application database</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-10-10" version="3.24.0"> 
+    <release date="2025-10-10" version="3.24.0">
       <description>
         <ul>
           <li>Improve home page</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-10-08" version="3.23.4"> 
+    <release date="2025-10-08" version="3.23.4">
       <description>
         <ul>
           <li>Bundle bugfix: if the application in the bundle is already installed it will be disabled in list</li>
           <li>Export bugfix: avoid issue when export application with permission overrided but not with easyflatpak's recipes</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-09-23" version="3.23.2"> 
+    <release date="2025-09-23" version="3.23.2">
       <description>
         <ul>
           <li>Add new language: Romanian</li>
           <li>Update applications database</li>
         </ul>
       </description>
-    </release> 
- 
-<release date="2025-09-11" version="3.23.1"> 
+    </release>
+
+    <release date="2025-09-11" version="3.23.1">
       <description>
         <ul>
           <li>Enable local database search in place of api search by default</li>
           <li>Update applications database</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-08-03" version="3.23.0"> 
+    <release date="2025-08-03" version="3.23.0">
       <description>
         <ul>
           <li>Add feature so search with flathub api</li>
@@ -459,38 +459,38 @@
           <li>Update applications database</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-07-25" version="3.22.2"> 
+    <release date="2025-07-25" version="3.22.2">
       <description>
         <ul>
           <li>Improve search behavior</li>
           <li>Update database</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-07-22" version="3.22.0"> 
+    <release date="2025-07-22" version="3.22.0">
       <description>
         <ul>
           <li>Improve side menu blocking during installation/uninstallation</li>
           <li>Improve screenshot caroussel</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-07-19" version="3.20.4"> 
+    <release date="2025-07-19" version="3.20.4">
       <description>
         <ul>
           <li>Add feature to define default resolution</li>
           <li>Integrate flathub sync</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-<release date="2025-07-16" version="3.20.1"> 
+    <release date="2025-07-16" version="3.20.1">
       <description>
         <ul>
           <li>Modify database update behavior</li>
@@ -498,75 +498,75 @@
           <li>New feature available in "more actions" to force database update</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-07-04" version="3.19.3"> 
+    <release date="2025-07-04" version="3.19.3">
       <description>
         <ul>
           <li>Update window size</li>
           <li>Add parameter to choose between window theme</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-06-22" version="3.18.6"> 
+    <release date="2025-06-22" version="3.18.6">
       <description>
         <ul>
           <li>Update theme settings page</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-  
-   <release date="2025-06-21" version="3.18.4"> 
+
+    <release date="2025-06-21" version="3.18.4">
       <description>
         <ul>
           <li>Try new window manager library libadwaita and new way to adapt dark/light mode from OS</li>
           <li>Update application database</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-   <release date="2025-06-08" version="3.17.1"> 
+    <release date="2025-06-08" version="3.17.1">
       <description>
         <ul>
           <li>Try to identify darkmode from os</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
- <release date="2025-06-02" version="3.16.3"> 
+    <release date="2025-06-02" version="3.16.3">
       <description>
         <ul>
           <li>Re-organize directory used by the application, now store in ~/.var/app/Easyflatpak</li>
-           <li>Update from flathub api</li>
-           <li>Save display used between list,grid and table</li>
+          <li>Update from flathub api</li>
+          <li>Save display used between list,grid and table</li>
         </ul>
       </description>
-    </release> 
-  
-  <release date="2025-05-31" version="3.15.0"> 
+    </release>
+
+    <release date="2025-05-31" version="3.15.0">
       <description>
         <ul>
           <li>Re-organize directory used by the application, now store in .config/Easyflatpak, .cache/Easyflatpak, .log/Easyflatpak</li>
-           <li>Update from flathub api</li>
+          <li>Update from flathub api</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
-  
-  <release date="2025-05-26" version="3.14.1"> 
+
+    <release date="2025-05-26" version="3.14.1">
       <description>
         <ul>
-           <li>Update from flathub api</li>
+          <li>Update from flathub api</li>
         </ul>
       </description>
-    </release> 
+    </release>
 
 
-<release date="2025-05-19" version="3.12.9"> 
+    <release date="2025-05-19" version="3.12.9">
       <description>
         <ul>
           <li>Update bugfix when select application(s) to update</li>
@@ -577,7 +577,7 @@
 
 
 
-  <release date="2025-05-15" version="3.12.8"> 
+    <release date="2025-05-15" version="3.12.8">
       <description>
         <ul>
           <li>Update bugfix when select application(s) to update</li>
@@ -586,14 +586,14 @@
       </description>
     </release>
 
-  <release date="2025-05-15" version="3.12.7"> 
+    <release date="2025-05-15" version="3.12.7">
       <description>
         <ul>
           <li>Update bugfix when select application(s) to update</li>
         </ul>
       </description>
     </release>
-  <release date="2025-05-11" version="3.12.6"> 
+    <release date="2025-05-11" version="3.12.6">
       <description>
         <ul>
           <li>Enable log file</li>
@@ -605,7 +605,7 @@
       </description>
     </release>
 
-    <release date="2025-05-11" version="3.12.5"> 
+    <release date="2025-05-11" version="3.12.5">
       <description>
         <ul>
           <li>Enable log file</li>
@@ -616,7 +616,7 @@
       </description>
     </release>
 
-    <release date="2025-05-09" version="3.12.3"> 
+    <release date="2025-05-09" version="3.12.3">
       <description>
         <ul>
           <li>Bug fix: missing language key</li>
@@ -624,7 +624,7 @@
       </description>
     </release>
 
-     <release date="2025-05-01" version="3.12.0"> 
+    <release date="2025-05-01" version="3.12.0">
       <description>
         <ul>
           <li>Improve home page</li>
@@ -634,7 +634,7 @@
     </release>
 
 
-   <release date="2025-04-25" version="3.11.3"> 
+    <release date="2025-04-25" version="3.11.3">
       <description>
         <ul>
           <li>Add import/export feature</li>
@@ -642,7 +642,7 @@
       </description>
     </release>
 
- <release date="2025-04-15" version="3.10.1"> 
+    <release date="2025-04-15" version="3.10.1">
       <description>
         <ul>
           <li>Add Arabic language</li>
@@ -651,7 +651,7 @@
       </description>
     </release>
 
-    <release date="2025-04-13" version="3.9.0"> 
+    <release date="2025-04-13" version="3.9.0">
       <description>
         <ul>
           <li>Add setting option to allow disable flathub api connection</li>
@@ -659,7 +659,7 @@
       </description>
     </release>
 
-  <release date="2025-04-12" version="3.8.1"> 
+    <release date="2025-04-12" version="3.8.1">
       <description>
         <ul>
           <li>Bugfix when try to connect to some application wihout timestamp in version release</li>
@@ -668,7 +668,7 @@
       </description>
     </release>
 
-<release date="2025-03-03" version="3.7.2"> 
+    <release date="2025-03-03" version="3.7.2">
       <description>
         <ul>
           <li>Bugfix when try to install application with recipe</li>
@@ -678,7 +678,7 @@
       </description>
     </release>
 
-  <release date="2025-03-02" version="3.7.1"> 
+    <release date="2025-03-02" version="3.7.1">
       <description>
         <ul>
           <li>Add loading translation</li>
@@ -686,8 +686,8 @@
         </ul>
       </description>
     </release>
- 
-  <release date="2025-02-22" version="3.6.1">
+
+    <release date="2025-02-22" version="3.6.1">
       <description>
         <ul>
           <li>Allow to choose scope durint installation</li>
@@ -699,7 +699,7 @@
     </release>
 
 
- <release date="2025-02-12" version="3.5.7">
+    <release date="2025-02-12" version="3.5.7">
       <description>
         <ul>
           <li>Improve loading information</li>
@@ -708,7 +708,7 @@
     </release>
 
 
- <release date="2025-02-10" version="3.5.6">
+    <release date="2025-02-10" version="3.5.6">
       <description>
         <ul>
           <li>Update application list from api only every 7 days</li>
@@ -801,7 +801,7 @@
         </ul>
       </description>
     </release>
- 
+
 
   </releases>
 
