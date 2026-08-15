@@ -62,6 +62,9 @@ def main():
         if base in supported_codes:
             system_language_code = base
             break
+
+    print('system_language_code:'+system_language_code)
+
     UserSettingsEntity().set_system_language_code(system_language_code)
 
     en_i18n = gettext.translation(
