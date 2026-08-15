@@ -4,6 +4,7 @@ import os
 import shutil
 import sys
 
+from domain.UseCase.get_home_content_uc import GetHomeContentUC
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
 from domain.contract.api_cache_repository_contract import ApiCacheRepositoryContract
@@ -188,6 +189,15 @@ def main():
                 ApiCacheRepository().reset_api_lastupdate()
 
             #shutil .copytree(path_conf.get_asset_icons_archive_path(), path_conf.get_icons_path(), dirs_exist_ok=True)
+
+        # GetHomeContentUC.load() (constructor) refreshes the cached home
+        # id-lists (trending/popular/apps-of-the-week/...) whenever its own
+        # cache is stale — which it always is on a fresh install, since the
+        # timestamp baked into the shipped DB is from packaging time. Must
+        # run BEFORE UpdateDatabaseFromApiUc so the translation pass below
+        # covers the id list that will actually be shown, not the stale
+        # shipped one it would otherwise replace right after.
+        GetHomeContentUC(ApiCacheRepository(), AppstreamRepository(), FlathubApi(), SystemApi())
 
         UpdateDatabaseFromApiUc(
             FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository(),lang_code
