@@ -63,6 +63,8 @@ def main():
             system_language_code = base
             break
 
+    print(f"GLib languages: {languages}")
+    print(f"env_languages fallback: {env_languages}")
     print('system_language_code:'+system_language_code)
 
     UserSettingsEntity().set_system_language_code(system_language_code)
