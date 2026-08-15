@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p ~/.local/share/org.dupot.easyflatpak/icons)",
+      "Bash(mv ~/.local/share/org.dupot.easyflatpak/*.png ~/.local/share/org.dupot.easyflatpak/icons/)",
+      "Bash(msgattrib --untranslated src/infrastructure/locales/fr/LC_MESSAGES/Easy_flatpak.po)",
+      "Bash(dpkg -l librsvg2-bin)",
+      "Bash(mkdir -p *)",
+      "Bash(pip3 list *)",
+      "Bash(dpkg -l)",
+      "Bash(pip3 install *)",
+      "Bash(nix-shell -p librsvg --run \"which rsvg-convert\")",
+      "Bash(nix run *)",
+      "Bash(apt list *)",
+      "Bash(sudo apt-get install -y librsvg2-bin)",
+      "Bash(dpkg -L librsvg2-common)",
+      "Bash(dpkg -L librsvg2-2)",
+      "Bash(GDK_PIXBUF_MODULE_FILE=/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache python3 -c ' *)",
+      "Bash(GDK_PIXBUF_MODULE_FILE=/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache python3)",
+      "Bash(mv /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/png_tmp/dark/* /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/png/dark/)",
+      "Bash(mv /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/png_tmp/*.png /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/png/light/)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(mkdir -p /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/hicolor/128x128/actions && cp /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/png/light/*.png /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/hicolor/128x128/actions/ && ls /home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/hicolor/128x128/actions/ | wc -l)"
+    ],
+    "additionalDirectories": [
+      "/home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons",
+      "/home/mika/code/github/python/dupotEasyFlatpak/src/assets/ui_icons/png/light"
+    ]
+  }
+}

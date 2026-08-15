@@ -14,7 +14,7 @@ SRC_DIR="src"
 LOCALES_DIR="src/infrastructure/locales"
 POT_FILE="$LOCALES_DIR/$DOMAIN.pot"
 
-LANGUAGES=(ar en es fr it pt_BR ro)
+LANGUAGES=(ar de en es fr it pt_BR ro)
 
 echo "=== Extracting strings from Python sources ==="
 find "$SRC_DIR" -name "*.py" | sort | xgettext \
