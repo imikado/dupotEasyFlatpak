@@ -37,13 +37,24 @@ def main():
     # e.g. ['fr_FR.UTF-8', 'fr_FR', 'fr', 'C'] — gettext handles the variants automatically
     languages = [l for l in GLib.get_language_names() if l != "C"]
 
+    # On some fresh installs the desktop session hasn't exported LANG/LC_ALL
+    # into the sandbox yet at this point, so GLib.get_language_names() comes
+    # back empty/"C" even though the system is set to e.g. French. Fall back
+    # to reading the raw locale env vars directly in that case.
+    env_languages = [
+        v
+        for v in ":".join(
+            os.environ.get(name, "")
+            for name in ("LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG")
+        ).split(":")
+        if v and v != "C"
+    ]
+
     # Resolve the real system locale into a Flathub API locale code, for use
-    # whenever the user's language setting is "System" — env vars like $LANG
-    # aren't reliable inside the Flatpak sandbox, so this must come from
-    # GLib.get_language_names() rather than being derived again downstream.
+    # whenever the user's language setting is "System".
     supported_codes = {"ar", "de", "es", "fr", "it", "ro"}  # pt handled separately (-> pt_BR)
     system_language_code = UserSettingsEntity.LANGUAGE_EN_CODE
-    for language_name in languages:
+    for language_name in languages + env_languages:
         base = language_name.split(".")[0].split("_")[0].lower()
         if base == "pt":
             system_language_code = "pt_BR"

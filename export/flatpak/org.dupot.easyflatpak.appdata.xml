@@ -118,7 +118,7 @@
 
 
 
-    <release date="2026-08-11" version="4.4.8">
+    <release date="2026-08-15" version="4.4.9">
       <description>
         <ul>
           <li>Add language management for applications summary and description (if available from author)</li>

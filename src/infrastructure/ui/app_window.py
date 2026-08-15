@@ -263,12 +263,24 @@ class MainWindow(Adw.ApplicationWindow):
             )
             pending_stack_page.set_badge_number(count)
 
+        def _on_queue_item_status(status):
+            # An install/downgrade/etc. just finished — if it changed
+            # anything about the installed list (e.g. the version pin
+            # icon after a downgrade) and we're looking at that tab
+            # right now, refresh it in place.
+            if (
+                status in ("done", "failed")
+                and view_stack.get_visible_child_name() == "installed"
+            ):
+                installed_page.refresh()
+
         def _on_queue_changed():
             items = queue_service.get_all()
             pending_stack_page.set_visible(bool(items))
             if items:
                 item = items[-1]
                 item.subscribe_status(lambda _s: _update_pending_badge())
+                item.subscribe_status(_on_queue_item_status)
                 toast = Adw.Toast.new(
                     _("{name} is installing — track progress in Pending").format(
                         name=item.app_name

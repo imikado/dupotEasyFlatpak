@@ -242,14 +242,7 @@ class InstalledListShared:
 
     def __init__(self):
         self._recipe_uc = GetRecipeContentUc(RecipeRepository())
-
-        result = subprocess.run(
-            FlatpakApi()._cmd("list", "--user", "--app", "--columns=application"),
-            capture_output=True,
-            text=True,
-        )
-        self._user_ids = {l.strip() for l in result.stdout.splitlines() if l.strip()}
-        self._pinned_ids = set(PinnedAppsRepository().get_app_id_list())
+        self._reload_ids()
 
         self._listbox = Gtk.ListBox()
         self._listbox.add_css_class("boxed-list")
@@ -262,6 +255,15 @@ class InstalledListShared:
         outer.set_margin_end(12)
         outer.append(self._listbox)
         self._widget = outer
+
+    def _reload_ids(self):
+        result = subprocess.run(
+            FlatpakApi()._cmd("list", "--user", "--app", "--columns=application"),
+            capture_output=True,
+            text=True,
+        )
+        self._user_ids = {l.strip() for l in result.stdout.splitlines() if l.strip()}
+        self._pinned_ids = set(PinnedAppsRepository().get_app_id_list())
 
     def get_widget(self) -> Gtk.Widget:
         return self._widget
@@ -276,5 +278,9 @@ class InstalledListShared:
         self._listbox.append(row)
 
     def clear(self):
+        # Re-read installed/pinned state so a refresh actually picks up
+        # changes made since the list was first built (e.g. a pin added
+        # by a downgrade).
+        self._reload_ids()
         while child := self._listbox.get_first_child():
             self._listbox.remove(child)
