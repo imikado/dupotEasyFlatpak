@@ -31,10 +31,22 @@ class UpdateDatabaseFromApiUc:
 
     def process(self):
 
+        print(f"[sync] lang={self._lang!r} should_sync={self.should_sync_api()}")
+
         if not self.should_sync_api():
             return
 
         print("need to sync from api")
+
+        try:
+            self._process()
+        except Exception as e:
+            import traceback
+
+            print(f"[sync] ERROR: {e}")
+            traceback.print_exc()
+
+    def _process(self):
 
         app_id_to_check_in_db_list = []
 
@@ -43,6 +55,7 @@ class UpdateDatabaseFromApiUc:
         )
 
         app_id_of_the_week_list = api_cache_entity.get_app_id_list()
+        print(f"[sync] apps of the week: {app_id_of_the_week_list}")
         for app_id_of_the_week_loop in app_id_of_the_week_list:
             app_id_to_check_in_db_list.append(app_id_of_the_week_loop)
 
@@ -89,12 +102,14 @@ class UpdateDatabaseFromApiUc:
                 )
 
             detail = self._flathub_api.get_appstream_by_id(app_id_of_the_week_loop)
+            print(f"[sync] {app_id_of_the_week_loop} -> {detail.get('name') if detail else 'FETCH FAILED (None)'}")
             if detail:
                 self._appstream_repository.update_from_raw_object_with_id(
                     app_id_of_the_week_loop, detail
                 )
 
         self.update_sync_api(self._lang)
+        print("[sync] done, last_lang updated to " + self._lang)
 
     def should_sync(self, last_update) -> bool:
 
