@@ -172,6 +172,7 @@ class AppstreamPage(Adw.NavigationPage):
             app.id,
             app.name,
             has_recipe,
+            app.get_flatpak_repo_id(),
         )
 
         btn_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -422,6 +423,7 @@ class AppstreamPage(Adw.NavigationPage):
         app_id: str,
         app_name: str,
         has_recipe: bool,
+        flatpak_repo_id:str
     ):
         installed = btn.has_css_class("destructive-action")
 
@@ -501,12 +503,12 @@ class AppstreamPage(Adw.NavigationPage):
             def run_install():
                 flatpak_api = FlatpakApi()
                 flags = ["--user"] if user_scope else ["--system"]
-                _stream(flatpak_api.get_install_call(app_id, *flags))
+                _stream(flatpak_api.get_install_call(app_id, flatpak_repo_id, *flags))
                 for perm, value in active_permission_list:
                     if perm.is_filesystem():
                         _stream(flatpak_api.get_override_filesystem_call(app_id, value))
                     elif perm.is_install_flatpak_yes_no():
-                        _stream(flatpak_api.get_install_call(perm.get_value(), *flags))
+                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", *flags))
                 result = flatpak_api.get_info_by_id(app_id)
                 final_status = "done" if result.returncode == 0 else "failed"
                 GLib.idle_add(queue_item.set_status, final_status)

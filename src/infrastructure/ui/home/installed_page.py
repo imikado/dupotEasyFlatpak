@@ -7,8 +7,13 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Adw, GLib, Gio
 
+from domain.entity.appstream_short_entity import AppstreamShortEntity
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
+from infrastructure.repository.local_apps_repository import LocalAppsRepository
+from infrastructure.ui.appstream.github_flatpak_dialog import (
+    open_github_flatpak_install_flow,
+)
 from infrastructure.ui.shared.installed_list_shared import InstalledListShared
 
 
@@ -93,7 +98,20 @@ class InstalledPage(Gtk.Box):
         flatpak_btn.connect("clicked", self._on_open_flatpak_clicked)
         toolbar.append(flatpak_btn)
 
+        github_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        github_box.append(Gtk.Image.new_from_icon_name("folder-remote-symbolic"))
+        github_box.append(Gtk.Label(label=_("Install GitHub Flatpak")))
+        github_btn = Gtk.Button()
+        github_btn.set_child(github_box)
+        github_btn.set_tooltip_text(_("Install GitHub Flatpak"))
+        github_btn.connect("clicked", self._on_install_github_flatpak_clicked)
+        toolbar.append(github_btn)
+
         return toolbar
+
+    def _on_install_github_flatpak_clicked(self, _btn):
+        if self._on_open_flatpak:
+            open_github_flatpak_install_flow(self, self._on_open_flatpak)
 
     def _on_open_flatpak_clicked(self, _btn):
         file_dialog = Gtk.FileDialog.new()
@@ -129,6 +147,15 @@ class InstalledPage(Gtk.Box):
             return
 
         apps = self._appstream_repository.get_list_by_id_list_ordered(ids)
+
+        # Apps installed from a local .flatpak file or a GitHub release have
+        # no row in the Flathub appstream DB — show them anyway, using what
+        # we tracked in LocalAppsRepository at install time.
+        known_ids = {a.id.lower() for a in apps}
+        missing_ids = [i for i in ids if i.lower() not in known_ids]
+        if missing_ids:
+            apps = apps + self._build_local_only_apps(missing_ids)
+
         if not apps:
             self._stack.set_visible_child_name("empty")
             return
@@ -139,9 +166,39 @@ class InstalledPage(Gtk.Box):
         self._stack.set_visible_child_name("list")
         return GLib.SOURCE_REMOVE
 
+    def _build_local_only_apps(self, missing_ids: list) -> list[AppstreamShortEntity]:
+        local_apps_by_id = {
+            local_app.id.lower(): local_app
+            for local_app in LocalAppsRepository().get_list()
+        }
+        result = []
+        for missing_id in missing_ids:
+            local_app = local_apps_by_id.get(missing_id.lower())
+            if not local_app:
+                continue
+            summary = local_app.url or _("Installed from a local .flatpak file")
+            if local_app.version:
+                summary = f"{summary} · {local_app.version}"
+            entity = AppstreamShortEntity(missing_id, local_app.name, "", summary)
+            entity.is_local_only = True
+            result.append(entity)
+        return result
+
     def _on_app_clicked(self, _button, app_id: str):
         from infrastructure.ui.appstream_page import AppstreamPage
+        from infrastructure.ui.appstream.local_app_detail_page import (
+            LocalAppDetailPage,
+        )
 
         app = self._appstream_repository.get_by_id(app_id)
         if app:
             self._push_fn(AppstreamPage(app))
+            return
+
+        local_app = LocalAppsRepository().get_by_id(app_id)
+        if local_app:
+            self._push_fn(
+                LocalAppDetailPage(
+                    app_id, local_app, self.refresh, self._on_open_flatpak
+                )
+            )

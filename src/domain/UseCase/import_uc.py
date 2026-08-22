@@ -86,9 +86,16 @@ class ImportUc:
 
         for import_loop in import_list:
 
+            appstream_found = self._appstream_repository.get_by_id(import_loop.app_id)
+            repo_id = (
+                appstream_found.get_flatpak_repo_id() if appstream_found else "flathub"
+            )
+
             process_call = ProcessCallEntity(
                 self._flatpak_api.get_install_call(
-                    import_loop.app_id, f"--{import_loop.installation_scope}"
+                    import_loop.app_id,
+                    repo_id,
+                    f"--{import_loop.installation_scope}",
                 )
             )
 

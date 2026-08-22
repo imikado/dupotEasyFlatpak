@@ -37,6 +37,7 @@ class AppstreamLongEntity:
     screenshot_list: str
     last_release_timestamp: int
     arche_list: str
+    flatpak_repo_id: str
 
     _screenshot_obj_list: list[ScreenshotEntity]
     _arche_list: list[str]
@@ -70,6 +71,7 @@ class AppstreamLongEntity:
         "screenshot_list": "screenshotList",
         "last_release_timestamp": "lastReleaseTimestamp",
         "arche_list": "archeList",
+        "flatpak_repo_id": "flatpakRepoId",
     }
 
     def __init__(self, row={}):
@@ -95,6 +97,9 @@ class AppstreamLongEntity:
 
     def getIcon(self) -> str:
         return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
+
+    def get_flatpak_repo_id(self) -> str:
+        return self.flatpak_repo_id or "flathub"
 
     def load_screenshot_list(self):
         raw_list = json.loads(self.screenshot_list)

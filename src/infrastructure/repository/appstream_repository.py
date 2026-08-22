@@ -52,7 +52,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()}",
+            f"SELECT id, name, icon, summary,metadataObj,flatpakRepoId FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()}",
             tuple(ids),
         )
         return [
@@ -62,6 +62,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 row["icon"],
                 row["summary"],
                 row["metadataObj"],
+                row["flatpakRepoId"],
             )
             for row in rows
         ]
@@ -69,7 +70,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
     def get_list_by_id_list_ordered(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary,metadataObj FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()} ORDER BY name ASC",
+            f"SELECT id, name, icon, summary,metadataObj,flatpakRepoId FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()} ORDER BY name ASC",
             tuple(ids),
         )
         return [
@@ -79,16 +80,17 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 row["icon"],
                 row["summary"],
                 row["metadataObj"],
+                row["flatpakRepoId"],
             )
             for row in rows
         ]
 
     def get_list_by_category_id(self, category_id: str) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()}",
+            f"SELECT id, name, icon, summary, flatpakRepoId FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()}",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
             for row in rows
         ]
 
@@ -96,7 +98,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
         self, category_id: str, search: str
     ) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"""SELECT id, name, icon, summary,
+            f"""SELECT id, name, icon, summary, flatpakRepoId,
                 CASE WHEN name LIKE '%{search}%' THEN 1 ELSE 2 END AS priority
                 FROM appstream
                 WHERE categoryIdList LIKE '%{category_id}%'
@@ -105,13 +107,13 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 ORDER BY priority""",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
             for row in rows
         ]
 
     def get_list_by_seach(self, search: str) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"""SELECT id, name, icon, summary,
+            f"""SELECT id, name, icon, summary, flatpakRepoId,
                 CASE WHEN name LIKE '%{search}%' THEN 1 ELSE 2 END AS priority
                 FROM appstream
                 WHERE (name LIKE '%{search}%' OR summary LIKE '%{search}%')
@@ -119,7 +121,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 ORDER BY priority""",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
             for row in rows
         ]
 
@@ -127,28 +129,64 @@ class AppstreamRepository(AppstreamRepositoryContract):
         self, category_id: str
     ) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()} LIMIT 10",
+            f"SELECT id, name, icon, summary, flatpakRepoId FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()} LIMIT 10",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
             for row in rows
         ]
 
-    def insert_missing_app_id(self, app_id: str):
+    def insert_missing_app_id(self, app_id: str, flatpak_repo_id: str = "flathub"):
         self._db.execute(
             """
-                INSERT INTO appstream 
+                INSERT INTO appstream
                 (
                 id,
-                lastUpdate
-                 ) values (?,?) """,
+                lastUpdate,
+                flatpakRepoId
+                 ) values (?,?,?) """,
             (
                 app_id,
                 0,
+                flatpak_repo_id,
             ),
         )
 
-    def insert_from_raw_object(self, raw_obj: object):
+    def insert_missing_remote_app_id(self, app_id: str, name:str, flatpak_repo_id: str = "flathub"):
+            self._db.execute(
+                """
+                    INSERT INTO appstream
+                    (
+                    id,
+                    name,
+                    lastUpdate,
+                    flatpakRepoId,
+                    categoryIdList,
+                    metadataObj,
+                    urlObj,
+                    icon,
+                    releaseObjList,
+                    summary,
+                    description,
+                    urlObj
+                     ) values (?,?,?,?,?,?,?,?,?,?,?,?) """,
+                (
+                    app_id,
+                    name,
+                    0,
+                    flatpak_repo_id,
+                    '[]',
+                    '{}',
+                    '{}',
+                    '',
+                    '[]',
+                    'From '+flatpak_repo_id,
+                    '<p>From '+flatpak_repo_id+'</p>',
+                    json.dumps({"homepage":flatpak_repo_id})
+                ),
+            )
+
+    def insert_from_raw_object(self, raw_obj: object,flatpak_repo_id: str = "flathub"):
 
         id = raw_obj["app_id"]
         name = raw_obj["name"]
@@ -176,7 +214,8 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 lastUpdate,
                 developer_name,
                 screenshotList,
-                lastReleaseTimestamp) values (?,?,?,?,?,?,?,?,?,?,?,?,?) """,
+                lastReleaseTimestamp,
+                flatpakRepoId) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) """,
             (
                 id,
                 name,
@@ -191,6 +230,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 developer_name,
                 "[]",
                 0,
+                flatpak_repo_id
             ),
         )
 

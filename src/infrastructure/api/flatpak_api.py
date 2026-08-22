@@ -4,6 +4,7 @@ import subprocess
 from domain.contract.flatpak_api_contract import FlatpakApiContract
 from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
 from domain.entity.installed_version_entity import InstalledVersionEntity
+from domain.entity.remote_flatpak_app_entity import RemoteFlatpakAppEntity
 from domain.entity.update_available_entity import UpdateAvailableEntity
 from infrastructure.repository.pinned_apps_repository import PinnedAppsRepository
 
@@ -81,7 +82,11 @@ class FlatpakApi(FlatpakApiContract):
 
     def get_available_update_list(self) -> list[UpdateAvailableEntity]:
 
-        subprocess.run(self._cmd("update", "--appstream"))
+        # Best-effort: some third-party remotes (e.g. single-app sideload
+        # repos) don't publish an appstream/appstream2 branch at all, so
+        # this always prints "No such ref" for them — harmless, and not
+        # something the user needs to see at every startup.
+        subprocess.run(self._cmd("update", "--appstream"), capture_output=True)
 
         installed: dict[tuple[str, str], str] = {}
         for scope in ("--user", "--system"):
@@ -146,8 +151,8 @@ class FlatpakApi(FlatpakApiContract):
             cmd.append("--delete-data")
         subprocess.run(cmd, capture_output=True)
 
-    def get_install_call(self, app_id: str, flags) -> list:
-        return self._cmd("install", "flathub", app_id, "-y", flags)
+    def get_install_call(self, app_id: str, repo_id: str = "flathub", *flags) -> list:
+        return self._cmd("install", repo_id, app_id, "-y", *flags)
 
     def get_update_call(self, app_id: str) -> list:
         result = subprocess.run(
@@ -248,6 +253,9 @@ class FlatpakApi(FlatpakApiContract):
             ),
             capture_output=False,
         )
+
+    def get_remote_add_call(self, id: str, url: str, scope: str = "--user") -> list:
+        return self._cmd("remote-add", "--if-not-exists", scope, id, url)
 
     def get_flatpak_bundle_info(self, file_path: str) -> dict:
         info = {}
@@ -394,3 +402,27 @@ class FlatpakApi(FlatpakApiContract):
 
     def get_repair_user_call(self) -> list:
         return self._cmd("repair", "--user")
+
+    def get_remote_app_list(self,flatpakRepoId:str)->list[RemoteFlatpakAppEntity]:
+        result = subprocess.run(
+            self._cmd(
+                "remote-ls",
+                flatpakRepoId,
+                "--columns=application,name,version",
+            ),
+            capture_output=True,
+            text=True,
+        )
+
+        remote_app_list = []
+        for line in result.stdout.splitlines():
+            parts = line.split("\t")
+            if len(parts) < 2:
+                continue
+            app_id = parts[0].strip()
+            if not app_id:
+                continue
+            name = parts[1].strip()
+            remote_app_list.append(RemoteFlatpakAppEntity(app_id, name,""))
+
+        return remote_app_list

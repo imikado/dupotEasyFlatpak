@@ -167,7 +167,7 @@ def _make_list_card(
                     flatpak_api = FlatpakApi()
                     flags = ["--user"] if user_scope else ["--system"]
                     process = subprocess.Popen(
-                        flatpak_api.get_install_call(app.id, *flags),
+                        flatpak_api.get_install_call(app.id, app.get_flatpak_repo_id(), *flags),
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         text=True,

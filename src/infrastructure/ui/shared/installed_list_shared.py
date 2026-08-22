@@ -178,52 +178,54 @@ def _make_installed_row(
     uninstall_btn.connect("clicked", on_uninstall)
     btn_box.append(uninstall_btn)
 
-    # Downgrade
-    downgrade_btn = Gtk.Button(label=_("Downgrade"))
+    # Downgrade — not applicable to apps installed from a local .flatpak
+    # file or a GitHub release: no Flathub remote history to roll back to.
+    if not getattr(app, "is_local_only", False):
+        downgrade_btn = Gtk.Button(label=_("Downgrade"))
 
-    def on_downgrade(_btn):
-        downgrade_btn.set_sensitive(False)
-        downgrade_btn.set_label(_("Loading…"))
+        def on_downgrade(_btn):
+            downgrade_btn.set_sensitive(False)
+            downgrade_btn.set_label(_("Loading…"))
 
-        def fetch():
-            api = FlatpakApi()
-            history = api.get_history_list_by_id(app.id)
-            current_commit = api.get_installed_commit_by_id(app.id)
-            GLib.idle_add(on_history_loaded, history, current_commit)
+            def fetch():
+                api = FlatpakApi()
+                history = api.get_history_list_by_id(app.id)
+                current_commit = api.get_installed_commit_by_id(app.id)
+                GLib.idle_add(on_history_loaded, history, current_commit)
 
-        def on_history_loaded(history, current_commit):
-            downgrade_btn.set_sensitive(True)
-            downgrade_btn.set_label(_("Downgrade"))
-            if not history:
-                return
+            def on_history_loaded(history, current_commit):
+                downgrade_btn.set_sensitive(True)
+                downgrade_btn.set_label(_("Downgrade"))
+                if not history:
+                    return
 
-            def on_confirm(commit):
-                scope = FlatpakApi().get_installation_scope(app.id)
-                queue_item = InstallQueueService().enqueue(app.id, app.getName())
+                def on_confirm(commit):
+                    scope = FlatpakApi().get_installation_scope(app.id)
+                    queue_item = InstallQueueService().enqueue(app.id, app.getName())
 
-                def run():
-                    process = subprocess.Popen(
-                        FlatpakApi().get_downgrade_call(app.id, commit, f"--{scope}"),
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.STDOUT,
-                        text=True,
-                    )
-                    for line in process.stdout:
-                        GLib.idle_add(queue_item.append_output, line)
-                    process.wait()
-                    GLib.idle_add(
-                        queue_item.set_status,
-                        "done" if process.returncode == 0 else "failed",
-                    )
+                    def run():
+                        process = subprocess.Popen(
+                            FlatpakApi().get_downgrade_call(app.id, commit, f"--{scope}"),
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            text=True,
+                        )
+                        for line in process.stdout:
+                            GLib.idle_add(queue_item.append_output, line)
+                        process.wait()
+                        GLib.idle_add(
+                            queue_item.set_status,
+                            "done" if process.returncode == 0 else "failed",
+                        )
 
-                threading.Thread(target=run, daemon=True).start()
+                    threading.Thread(target=run, daemon=True).start()
 
-            DowngradeDialog(history, on_confirm, current_commit).present(row.get_root())
+                DowngradeDialog(history, on_confirm, current_commit).present(row.get_root())
 
-        threading.Thread(target=fetch, daemon=True).start()
+            threading.Thread(target=fetch, daemon=True).start()
 
-    downgrade_btn.connect("clicked", on_downgrade)
-    btn_box.append(downgrade_btn)
+        downgrade_btn.connect("clicked", on_downgrade)
+        btn_box.append(downgrade_btn)
 
     # --- Assemble row ---
     outer = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)

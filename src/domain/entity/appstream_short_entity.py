@@ -14,12 +14,13 @@ class AppstreamShortEntity:
     _branding_light: str = "#888888"
     _branding_dark: str = "#333333"
 
-    def __init__(self, id, name, icon, summary, metadata_obj="{}"):
+    def __init__(self, id, name, icon, summary, metadata_obj="{}", flatpak_repo_id="flathub"):
         self.id = id
         self.name = name
         self.icon = icon
         self.summary = summary
         self.raw_metadata_obj = metadata_obj
+        self.flatpak_repo_id = flatpak_repo_id
 
         pass
 
@@ -31,6 +32,9 @@ class AppstreamShortEntity:
 
     def getIcon(self) -> str:
         return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
+
+    def get_flatpak_repo_id(self) -> str:
+        return self.flatpak_repo_id or "flathub"
 
     def _load_branding(self):
 

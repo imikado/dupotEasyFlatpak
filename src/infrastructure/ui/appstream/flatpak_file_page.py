@@ -12,6 +12,7 @@ from gi.repository import Gtk, Adw, GLib, GdkPixbuf
 
 from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flatpak_api import FlatpakApi
+from infrastructure.repository.local_apps_repository import LocalAppsRepository
 from infrastructure.service.install_queue_service import InstallQueueService
 
 
@@ -212,6 +213,19 @@ class FlatpakFilePage(Adw.NavigationPage):
             _stream(flatpak_api.get_install_bundle_call(self._file_path, *flags))
             result = flatpak_api.get_info_by_id(app_id)
             final_status = "done" if result.returncode == 0 else "failed"
+            if final_status == "done":
+                # Not in the Flathub appstream DB (installed from a local
+                # bundle) — track it so the Installed page can still show
+                # it. If a GitHub-flow entry already registered this app_id
+                # (with its GitHub url), keep that url instead of wiping it.
+                existing_local_app = LocalAppsRepository().get_by_id(app_id)
+                url = existing_local_app.url if existing_local_app else ""
+                version = self._info.get("version", "") or (
+                    existing_local_app.version if existing_local_app else ""
+                )
+                LocalAppsRepository().insert_or_update(
+                    app_id, app_name, url, version
+                )
             GLib.idle_add(queue_item.set_status, final_status)
 
         threading.Thread(target=run_install, daemon=True).start()

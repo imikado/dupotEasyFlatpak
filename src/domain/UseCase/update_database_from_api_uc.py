@@ -2,10 +2,15 @@ from domain.conf.path_conf import PathConf
 from domain.contract.api_cache_repository_contract import ApiCacheRepositoryContract
 from domain.contract.appstream_repository_contract import AppstreamRepositoryContract
 from domain.contract.flathub_api_contract import FlathubApiContract
+from domain.contract.flatpak_api_contract import FlatpakApiContract
+from domain.contract.flatpakrepo_repository_contract import FlatpakRepoRepositoryContract
 from domain.contract.system_api_contract import SystemApiContract
+from domain.entity.flatpakrepo_entity import FlatpakRepoEntity
 
 
 class UpdateDatabaseFromApiUc:
+
+    REPO_FLATHUB="flathub"
 
     LAST_SYNC_MAX_DAYS = 3
 
@@ -13,6 +18,8 @@ class UpdateDatabaseFromApiUc:
     _appstream_repository: AppstreamRepositoryContract
     _system_api: SystemApiContract
     _api_cache_repository: ApiCacheRepositoryContract
+    _flatpakrepo_repository:FlatpakRepoRepositoryContract
+    _flatpak_api:FlatpakApiContract
     _lang:str
 
     def __init__(
@@ -21,12 +28,16 @@ class UpdateDatabaseFromApiUc:
         appstream_repository: AppstreamRepositoryContract,
         system_api: SystemApiContract,
         api_cache_repository: ApiCacheRepositoryContract,
+        flatpakrepo_repository:FlatpakRepoRepositoryContract,
+        flatpak_api:FlatpakApiContract,
         lang:str
     ):
         self._flathub_api = flathub_api
         self._appstream_repository = appstream_repository
         self._system_api = system_api
         self._api_cache_repository = api_cache_repository
+        self._flatpakrepo_repository=flatpakrepo_repository
+        self._flatpak_api=flatpak_api
         self._lang=lang
 
     def process(self):
@@ -59,6 +70,9 @@ class UpdateDatabaseFromApiUc:
         recently_raw_appstream_list = self._flathub_api.get_added_appstreams()
         for recently_raw_appstream_loop in recently_raw_appstream_list:
             app_id_to_check_in_db_list.append(recently_raw_appstream_loop["app_id"])
+
+
+        
 
         app_id_list_already_stored = []
 
@@ -95,7 +109,8 @@ class UpdateDatabaseFromApiUc:
             if app_id_of_the_week_loop.lower() not in app_id_list_already_stored:
 
                 self._appstream_repository.insert_missing_app_id(
-                    app_id_of_the_week_loop
+                    app_id_of_the_week_loop,
+                    self.REPO_FLATHUB
                 )
 
             detail = self._flathub_api.get_appstream_by_id(app_id_of_the_week_loop)
@@ -104,7 +119,43 @@ class UpdateDatabaseFromApiUc:
                     app_id_of_the_week_loop, detail
                 )
 
+        self.process_for_other_repos()
+
         self.update_sync_api(self._lang)
+
+    def process_for_other_repos(self):
+        app_id_list_already_stored = []
+        
+        app_id_to_check_in_db_list = []
+
+        flatpakrepo_list: list[FlatpakRepoEntity] = self._flatpakrepo_repository.get_all_entities()
+        remote_app_list_by_repo_id = {}
+        for flatpak_repo_loop in flatpakrepo_list:
+            repo_id_loop = flatpak_repo_loop.getId()
+            if repo_id_loop == self.REPO_FLATHUB:
+                continue
+
+            remote_app_found_list = self._flatpak_api.get_remote_app_list(repo_id_loop)
+            remote_app_list_by_repo_id[repo_id_loop] = remote_app_found_list
+            for remote_app_loop in remote_app_found_list:
+                app_id_to_check_in_db_list.append(remote_app_loop.getId())
+
+
+        appstream_list_already_stored = self._appstream_repository.get_list_by_id_list(
+            app_id_to_check_in_db_list
+        )
+        for appstream_loop in appstream_list_already_stored:
+            app_id_list_already_stored.append(appstream_loop.id.lower())
+
+
+        for repo_id_loop, remote_app_found_list in remote_app_list_by_repo_id.items():
+            for remote_app_loop in remote_app_found_list:
+                remote_app_id_loop = remote_app_loop.getId()
+                if remote_app_id_loop.lower() not in app_id_list_already_stored:
+                    self._appstream_repository.insert_missing_remote_app_id(
+                        remote_app_id_loop,remote_app_loop.getName(), repo_id_loop
+                    )
+        
 
     def should_sync(self, last_update) -> bool:
 

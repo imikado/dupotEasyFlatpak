@@ -3,6 +3,7 @@ import subprocess
 
 from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
 from domain.entity.installed_version_entity import InstalledVersionEntity
+from domain.entity.remote_flatpak_app_entity import RemoteFlatpakAppEntity
 from domain.entity.update_available_entity import UpdateAvailableEntity
 
 
@@ -37,7 +38,7 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
-    def get_install_call(self, app_id: str, flags) -> list:
+    def get_install_call(self, app_id: str, repo_id: str = "flathub", *flags) -> list:
         pass
 
     @abstractmethod
@@ -58,6 +59,14 @@ class FlatpakApiContract:
 
     @abstractmethod
     def ensure_flathub_remote(self):
+        pass
+
+    @abstractmethod
+    def get_remote_add_call(self, id: str, url: str, scope: str = "--user") -> list:
+        pass
+
+    @abstractmethod
+    def get_remote_app_list(self, flatpakRepoId: str) -> list[RemoteFlatpakAppEntity]:
         pass
 
     @abstractmethod

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-11 13:51+0200\n"
+"POT-Creation-Date: 2026-08-22 19:33+0200\n"
 "Language: ar\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,8 +10,8 @@ msgstr ""
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:15
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:51
 #: src/infrastructure/ui/appstream_page.py:149
-#: src/infrastructure/ui/shared/installed_list_shared.py:182
-#: src/infrastructure/ui/shared/installed_list_shared.py:196
+#: src/infrastructure/ui/shared/installed_list_shared.py:184
+#: src/infrastructure/ui/shared/installed_list_shared.py:198
 msgid "Downgrade"
 msgstr "تخفيض الإصدار"
 
@@ -20,9 +20,12 @@ msgid "Select a version to downgrade to"
 msgstr "اختر إصداراً للرجوع إليه"
 
 #: src/infrastructure/ui/appstream/downgrade_dialog.py:50
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:51
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:128
 #: src/infrastructure/ui/appstream/install_dialog.py:101
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:259
 #: src/infrastructure/ui/appstream_page.py:443
-#: src/infrastructure/ui/app_window.py:568
+#: src/infrastructure/ui/app_window.py:580
 #: src/infrastructure/ui/bundle_detail_page.py:278
 #: src/infrastructure/ui/home/updates_page.py:183
 #: src/infrastructure/ui/home/updates_page.py:231
@@ -30,47 +33,50 @@ msgstr "اختر إصداراً للرجوع إليه"
 msgid "Cancel"
 msgstr "إلغاء"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:22
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:23
 msgid "Install .flatpak"
 msgstr "تثبيت .flatpak"
 
 # --- App detail page ---
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:122
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:123
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:114
 #: src/infrastructure/ui/appstream_page.py:222
 msgid "Details"
 msgstr "التفاصيل"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:127
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:128
 msgid "Runtime"
 msgstr "بيئة التشغيل"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:134
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:135
 msgid "SDK"
 msgstr "SDK"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:141
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:142
 msgid "Origin"
 msgstr "المصدر"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:146
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:147
 msgid "File"
 msgstr "الملف"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:156
-#: src/infrastructure/ui/menu/parameters_dialog.py:34
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:157
+#: src/infrastructure/ui/menu/parameters_dialog.py:35
 msgid "Installation"
 msgstr "التثبيت"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:159
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:160
 #: src/infrastructure/ui/appstream/install_dialog.py:46
 #: src/infrastructure/ui/bundle_detail_page.py:71
 msgid "Install for current user only"
 msgstr "التثبيت للمستخدم الحالي فقط"
 
 # --- General actions ---
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:168
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:169
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:129
 #: src/infrastructure/ui/appstream/install_dialog.py:30
 #: src/infrastructure/ui/appstream/install_dialog.py:102
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:204
 #: src/infrastructure/ui/appstream_page.py:406
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
@@ -78,12 +84,68 @@ msgstr "التثبيت للمستخدم الحالي فقط"
 msgid "Install"
 msgstr "تثبيت"
 
-#: src/infrastructure/ui/appstream/flatpak_file_page.py:189
+#: src/infrastructure/ui/appstream/flatpak_file_page.py:190
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:269
 #: src/infrastructure/ui/appstream_page.py:455
 #: src/infrastructure/ui/appstream_page.py:485
 #: src/infrastructure/ui/shared/installed_list_shared.py:159
 msgid "Please wait…"
 msgstr "يرجى الانتظار…"
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:18
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:85
+msgid "Error"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:19
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:90
+#: src/infrastructure/ui/bundle_detail_page.py:279
+msgid "OK"
+msgstr "موافق"
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:30
+#: src/infrastructure/ui/home/installed_page.py:103
+#: src/infrastructure/ui/home/installed_page.py:106
+msgid "Install GitHub Flatpak"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:32
+msgid ""
+"Enter the URL of a GitHub project that publishes a .flatpak release asset."
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:39
+msgid "GitHub URL"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:52
+msgid "Find latest release"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:69
+msgid "This doesn't look like a valid GitHub project URL."
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:87
+msgid "No release with a .flatpak asset was found for this project."
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:108
+#, python-brace-format
+msgid "Version {version} was found for {owner}/{repo}."
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:115
+msgid "Asset"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:119
+msgid "Version"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:206
+msgid "Failed to download a valid .flatpak file from this release."
+msgstr ""
 
 #: src/infrastructure/ui/appstream/install_dialog.py:61
 #: src/infrastructure/ui/bundle_detail_page.py:220
@@ -100,16 +162,73 @@ msgstr "جاري التثبيت…"
 msgid "Close"
 msgstr "إغلاق"
 
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:117
+msgid "Source"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:125
+msgid "Local .flatpak file"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:138
+msgid "Releases"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:141
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:219
+msgid "Load more releases"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:148
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:160
+#: src/infrastructure/ui/app_window.py:74
+#: src/infrastructure/ui/shared/installed_list_shared.py:188
+msgid "Loading…"
+msgstr "جاري التحميل…"
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:181
+msgid "No release with a .flatpak asset found"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:188
+msgid "No description"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:191
+msgid "No release notes."
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:228
+#: src/infrastructure/ui/appstream_page.py:154
+#: src/infrastructure/ui/shared/installed_list_shared.py:122
+msgid "Run"
+msgstr "تشغيل"
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:234
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:257
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:260
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:282
+#: src/infrastructure/ui/appstream_page.py:395
+#: src/infrastructure/ui/appstream_page.py:441
+#: src/infrastructure/ui/appstream_page.py:444
+#: src/infrastructure/ui/shared/installed_list_shared.py:128
+#: src/infrastructure/ui/shared/installed_list_shared.py:147
+#: src/infrastructure/ui/shared/installed_list_shared.py:150
+#: src/infrastructure/ui/shared/installed_list_shared.py:171
+msgid "Uninstall"
+msgstr "إلغاء التثبيت"
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:250
+#: src/infrastructure/ui/appstream_page.py:434
+#: src/infrastructure/ui/shared/installed_list_shared.py:140
+msgid "Delete application data"
+msgstr "حذف بيانات التطبيق"
+
 #: src/infrastructure/ui/appstream_page.py:144
 #: src/infrastructure/ui/appstream_page.py:612
 #: src/infrastructure/ui/shared/installed_list_shared.py:111
 msgid "Recipe overrides"
 msgstr "تجاوزات الوصفة"
-
-#: src/infrastructure/ui/appstream_page.py:154
-#: src/infrastructure/ui/shared/installed_list_shared.py:122
-msgid "Run"
-msgstr "تشغيل"
 
 #: src/infrastructure/ui/appstream_page.py:163
 #: src/infrastructure/ui/shared/installed_list_shared.py:81
@@ -148,26 +267,11 @@ msgstr "تبرع"
 msgid "Description"
 msgstr "الوصف"
 
-#: src/infrastructure/ui/appstream_page.py:395
-#: src/infrastructure/ui/appstream_page.py:441
-#: src/infrastructure/ui/appstream_page.py:444
-#: src/infrastructure/ui/shared/installed_list_shared.py:128
-#: src/infrastructure/ui/shared/installed_list_shared.py:147
-#: src/infrastructure/ui/shared/installed_list_shared.py:150
-#: src/infrastructure/ui/shared/installed_list_shared.py:171
-msgid "Uninstall"
-msgstr "إلغاء التثبيت"
-
 #: src/infrastructure/ui/appstream_page.py:404
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:149
 #: src/infrastructure/ui/shared/app_list_line_shared.py:149
 msgid "Install with recipe"
 msgstr "التثبيت بالوصفة"
-
-#: src/infrastructure/ui/appstream_page.py:434
-#: src/infrastructure/ui/shared/installed_list_shared.py:140
-msgid "Delete application data"
-msgstr "حذف بيانات التطبيق"
 
 #: src/infrastructure/ui/appstream_page.py:613
 #: src/infrastructure/ui/shared/installed_list_shared.py:112
@@ -182,41 +286,36 @@ msgstr "لقطات الشاشة"
 msgid "Release History"
 msgstr "تاريخ الإصدارات"
 
-#: src/infrastructure/ui/app_window.py:74
-#: src/infrastructure/ui/shared/installed_list_shared.py:186
-msgid "Loading…"
-msgstr "جاري التحميل…"
-
 # --- Navigation / window ---
 #: src/infrastructure/ui/app_window.py:111
 msgid "Easy flatpak"
 msgstr "Easy flatpak"
 
 #: src/infrastructure/ui/app_window.py:120
-#: src/infrastructure/ui/menu/parameters_dialog.py:24
+#: src/infrastructure/ui/menu/parameters_dialog.py:25
 msgid "Parameters"
 msgstr "المعاملات"
 
 #: src/infrastructure/ui/app_window.py:121
-#: src/infrastructure/ui/app_window.py:456
-#: src/infrastructure/ui/home/installed_page.py:69
-#: src/infrastructure/ui/home/installed_page.py:72
+#: src/infrastructure/ui/app_window.py:468
+#: src/infrastructure/ui/home/installed_page.py:74
+#: src/infrastructure/ui/home/installed_page.py:77
 #: src/infrastructure/ui/menu/import_dialog.py:15
 msgid "Import"
 msgstr "استيراد"
 
 #: src/infrastructure/ui/app_window.py:122
-#: src/infrastructure/ui/app_window.py:492
-#: src/infrastructure/ui/home/installed_page.py:79
-#: src/infrastructure/ui/home/installed_page.py:82
+#: src/infrastructure/ui/app_window.py:504
+#: src/infrastructure/ui/home/installed_page.py:84
+#: src/infrastructure/ui/home/installed_page.py:87
 msgid "Export"
 msgstr "تصدير"
 
 #: src/infrastructure/ui/app_window.py:123
-#: src/infrastructure/ui/app_window.py:438
-#: src/infrastructure/ui/home/installed_page.py:89
-#: src/infrastructure/ui/home/installed_page.py:92
-#: src/infrastructure/ui/home/installed_page.py:100
+#: src/infrastructure/ui/app_window.py:450
+#: src/infrastructure/ui/home/installed_page.py:94
+#: src/infrastructure/ui/home/installed_page.py:97
+#: src/infrastructure/ui/home/installed_page.py:118
 msgid "Install local Flatpak"
 msgstr "تثبيت Flatpak محلي"
 
@@ -255,47 +354,47 @@ msgstr "التحديثات"
 msgid "Pending"
 msgstr "قيد الانتظار"
 
-#: src/infrastructure/ui/app_window.py:273
+#: src/infrastructure/ui/app_window.py:285
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr "{name} يُثبَّت — تابع التقدم في قيد الانتظار"
 
-#: src/infrastructure/ui/app_window.py:306
+#: src/infrastructure/ui/app_window.py:318
 msgid "New"
 msgstr "جديد"
 
-#: src/infrastructure/ui/app_window.py:307
+#: src/infrastructure/ui/app_window.py:319
 msgid "Updated"
 msgstr "محدّث"
 
 # --- Home sections ---
-#: src/infrastructure/ui/app_window.py:308
+#: src/infrastructure/ui/app_window.py:320
 msgid "Trending"
 msgstr "الأكثر رواجاً"
 
-#: src/infrastructure/ui/app_window.py:309
+#: src/infrastructure/ui/app_window.py:321
 msgid "Popular"
 msgstr "شائع"
 
-#: src/infrastructure/ui/app_window.py:440
-#: src/infrastructure/ui/home/installed_page.py:102
+#: src/infrastructure/ui/app_window.py:452
+#: src/infrastructure/ui/home/installed_page.py:120
 msgid "Flatpak files"
 msgstr "ملفات Flatpak"
 
-#: src/infrastructure/ui/app_window.py:521
+#: src/infrastructure/ui/app_window.py:533
 msgid "Export saved"
 msgstr "تم حفظ التصدير"
 
-#: src/infrastructure/ui/app_window.py:562
+#: src/infrastructure/ui/app_window.py:574
 msgid "Processes still running"
 msgstr "العمليات لا تزال قيد التشغيل"
 
-#: src/infrastructure/ui/app_window.py:565
+#: src/infrastructure/ui/app_window.py:577
 msgid ""
 "Some installations are still in progress. Are you sure you want to close?"
 msgstr "بعض التثبيتات لا تزال قيد التنفيذ. هل أنت متأكد من إغلاق التطبيق؟"
 
-#: src/infrastructure/ui/app_window.py:569
+#: src/infrastructure/ui/app_window.py:581
 msgid "Close anyway"
 msgstr "أغلق على أي حال"
 
@@ -323,17 +422,17 @@ msgstr "مثبت مسبقاً"
 msgid "Done"
 msgstr "تم"
 
-#: src/infrastructure/ui/bundle_detail_page.py:279
-msgid "OK"
-msgstr "موافق"
-
 #: src/infrastructure/ui/category_list_page.py:46
 msgid "Search…"
 msgstr "بحث…"
 
-#: src/infrastructure/ui/home/installed_page.py:43
+#: src/infrastructure/ui/home/installed_page.py:48
 msgid "No installed applications found"
 msgstr "لم يتم العثور على تطبيقات مثبتة"
+
+#: src/infrastructure/ui/home/installed_page.py:179
+msgid "Installed from a local .flatpak file"
+msgstr ""
 
 #: src/infrastructure/ui/home/pending_list_page.py:84
 #: src/infrastructure/ui/home/pending_list_page.py:125
@@ -412,43 +511,88 @@ msgstr "هل تريد تحديث {n} تطبيق(ات)؟"
 msgid "Update"
 msgstr "تحديث"
 
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:16
+#: src/infrastructure/ui/menu/parameters_dialog.py:75
+msgid "Flatpak repositories"
+msgstr "مستودعات Flatpak"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:26
+msgid "Configured repositories"
+msgstr "المستودعات المُهيّأة"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:30
+msgid "Add a repository"
+msgstr "إضافة مستودع"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:33
+msgid "Repository name"
+msgstr "اسم المستودع"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:41
+msgid "Repository URL"
+msgstr "رابط المستودع"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:49
+msgid "Add"
+msgstr "إضافة"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:75
+msgid "Name and URL are required"
+msgstr "الاسم والرابط مطلوبان"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:79
+msgid "A repository with this name already exists"
+msgstr "يوجد مستودع بهذا الاسم بالفعل"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:86
+msgid "Repository added"
+msgstr "تمت إضافة المستودع"
+
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:88
+msgid "Failed to add repository"
+msgstr "فشلت إضافة المستودع"
+
 #: src/infrastructure/ui/menu/import_dialog.py:31
 msgid "Unselect all"
 msgstr "إلغاء تحديد الكل"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:38
+#: src/infrastructure/ui/menu/parameters_dialog.py:39
 msgid "Installation scope"
 msgstr "نطاق التثبيت"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:39
+#: src/infrastructure/ui/menu/parameters_dialog.py:40
 msgid "Where Flatpak apps will be installed"
 msgstr "مكان تثبيت تطبيقات Flatpak"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:48
+#: src/infrastructure/ui/menu/parameters_dialog.py:49
 msgid "Architecture filter"
 msgstr "تصفية المعمارية"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:49
+#: src/infrastructure/ui/menu/parameters_dialog.py:50
 msgid "Filter apps by CPU architecture"
 msgstr "تصفية التطبيقات حسب معمارية المعالج"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:59
+#: src/infrastructure/ui/menu/parameters_dialog.py:60
 msgid "Game path"
 msgstr "مسار الألعاب"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:74
+#: src/infrastructure/ui/menu/parameters_dialog.py:78
+msgid "Manage repositories"
+msgstr "إدارة المستودعات"
+
+#: src/infrastructure/ui/menu/parameters_dialog.py:85
 msgid "Appearance"
 msgstr "المظهر"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:79
+#: src/infrastructure/ui/menu/parameters_dialog.py:90
 msgid "Theme"
 msgstr "السمة"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:91
+#: src/infrastructure/ui/menu/parameters_dialog.py:102
 msgid "Language"
 msgstr "اللغة"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:108
+#: src/infrastructure/ui/menu/parameters_dialog.py:119
 msgid "Save"
 msgstr "حفظ"
 

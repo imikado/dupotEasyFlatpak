@@ -46,8 +46,13 @@ class AppstreamRepositoryContract(ABC):
         pass
 
     @abstractmethod
-    def insert_missing_app_id(self, app_id: str):
+    def insert_missing_app_id(self, app_id: str, flatpak_repo_id: str = "flathub"):
         pass
+
+    @abstractmethod
+    def insert_missing_remote_app_id(self, app_id: str, name:str, flatpak_repo_id: str = "flathub"):
+        pass
+
 
     @abstractmethod
     def insert_from_raw_object(self, raw_obj: object):

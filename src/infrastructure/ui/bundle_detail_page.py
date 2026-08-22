@@ -334,7 +334,12 @@ class BundleDetailPage(Adw.NavigationPage):
             else:
                 active_permissions = self._app_permissions.get(app_id, [])
 
-            def run_install(item=queue_item, aid=app_id, perms=active_permissions):
+            def run_install(
+                item=queue_item,
+                aid=app_id,
+                perms=active_permissions,
+                repo_id=app.get_flatpak_repo_id(),
+            ):
                 def _stream(cmd):
                     process = subprocess.Popen(
                         cmd,
@@ -348,12 +353,12 @@ class BundleDetailPage(Adw.NavigationPage):
 
                 flatpak_api = FlatpakApi()
 
-                _stream(flatpak_api.get_install_call(aid, *flags))
+                _stream(flatpak_api.get_install_call(aid, repo_id, *flags))
                 for perm, value in perms:
                     if perm.is_filesystem():
                         _stream(flatpak_api.get_override_filesystem_call(aid, value))
                     elif perm.is_install_flatpak_yes_no():
-                        _stream(flatpak_api.get_install_call(perm.get_value(), *flags))
+                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", *flags))
                 result = FlatpakApi().get_info_by_id(aid)
                 GLib.idle_add(
                     item.set_status, "done" if result.returncode == 0 else "failed"

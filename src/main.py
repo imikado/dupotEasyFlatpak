@@ -15,6 +15,7 @@ from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
+from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
 from infrastructure.ui.app_window import AppWindow
 from gi.repository import GLib
 
@@ -100,6 +101,22 @@ def main():
 
         data_path = path_conf.get_data_path()
         print(f"data path is {data_path}")
+
+        # On a fresh install the user data dir has no database yet. Several
+        # repositories below (ApiCacheRepository, ...) open it unconditionally
+        # via DatabaseApi, and sqlite3.connect() silently creates an empty
+        # file if none exists — leaving a DB with no tables at all and every
+        # query failing with "no such table". Make sure the shipped DB is in
+        # place before anything can touch it, independent of the
+        # is_current_version() reinstall logic further below (which only
+        # runs on install/update, not on every launch).
+        if not system_api.file_exists(data_path):
+            system_api.create_dir(data_path)
+        if not system_api.file_exists(path_conf.get_database_path()):
+            system_api.copy_file(
+                path_conf.get_asset_database_path(),
+                path_conf.get_database_path(),
+            )
 
         current_user_settings = UserSettingsEntity()
 
@@ -200,7 +217,13 @@ def main():
         GetHomeContentUC(ApiCacheRepository(), AppstreamRepository(), FlathubApi(), SystemApi())
 
         UpdateDatabaseFromApiUc(
-            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository(),lang_code
+            FlathubApi(), 
+            AppstreamRepository(), 
+            SystemApi(), 
+            ApiCacheRepository(),
+            FlatpakRepoRepository(),
+            FlatpakApi(),
+            lang_code
         ).process()
 
     app = AppWindow(init_fn=init_fn)

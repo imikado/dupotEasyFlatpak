@@ -116,7 +116,14 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
-
+    <release date="2026-08-22" version="4.5.1">
+      <description>
+        <ul>
+          <li>Add way to install github flatpak project (with release management)</li>
+          <li>Add way to setup other flatpak repo</li>
+        </ul>
+      </description>
+    </release>
 
     <release date="2026-08-15" version="4.4.10">
       <description>
