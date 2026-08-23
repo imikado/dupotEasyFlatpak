@@ -2,6 +2,7 @@ from abc import abstractmethod
 import subprocess
 
 from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
+from domain.entity.flatpakrepo_entity import FlatpakRepoEntity
 from domain.entity.installed_version_entity import InstalledVersionEntity
 from domain.entity.remote_flatpak_app_entity import RemoteFlatpakAppEntity
 from domain.entity.update_available_entity import UpdateAvailableEntity
@@ -109,4 +110,12 @@ class FlatpakApiContract:
 
     @abstractmethod
     def clean_cache(self):
+        pass
+
+    @abstractmethod
+    def get_remote_repo_list(self) -> list[FlatpakRepoEntity]:
+        pass
+
+    @abstractmethod
+    def add_remote(self,id:str,url:str,scope:str="--user")-> tuple[bool, str]:
         pass

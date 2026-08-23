@@ -1,5 +1,6 @@
 import threading
 
+from domain.UseCase.add_new_remote_repo_uc import AddNewRemoteRepoUc
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 import gi
 from infrastructure.api.flathub_api import FlathubApi
@@ -53,6 +54,12 @@ class FlatpakRepoDialog(Adw.PreferencesDialog):
         url_row.add_suffix(self._url_entry)
         add_group.add(url_row)
 
+        self._scope_row = Adw.ComboRow()
+        self._scope_row.set_title(_("Installation scope"))
+        self._scope_row.set_model(Gtk.StringList.new(["user", "system"]))
+        self._scope_row.set_selected(0)
+        add_group.add(self._scope_row)
+
         self._add_btn = Gtk.Button(label=_("Add"))
         self._add_btn.add_css_class("suggested-action")
         self._add_btn.add_css_class("pill")
@@ -86,10 +93,12 @@ class FlatpakRepoDialog(Adw.PreferencesDialog):
             self.add_toast(Adw.Toast.new(_("A repository with this name already exists")))
             return
 
+        scope = "--user" if self._scope_row.get_selected() == 0 else "--system"
+
         self._add_btn.set_sensitive(False)
 
         def run():
-            success, error_message = self._system_api.add_new_flatpak_repo(repo_id, url)
+            success, error_message = AddNewRemoteRepoUc(FlatpakApi(),FlatpakRepoRepository()).add(repo_id,url,scope)
             GLib.idle_add(self._on_add_done, success, error_message)
 
         threading.Thread(target=run, daemon=True).start()

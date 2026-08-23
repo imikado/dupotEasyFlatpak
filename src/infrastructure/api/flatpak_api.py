@@ -3,6 +3,7 @@ import subprocess
 
 from domain.contract.flatpak_api_contract import FlatpakApiContract
 from domain.entity.flatpak_history_entity import FlatpakHistoryEntity
+from domain.entity.flatpakrepo_entity import FlatpakRepoEntity
 from domain.entity.installed_version_entity import InstalledVersionEntity
 from domain.entity.remote_flatpak_app_entity import RemoteFlatpakAppEntity
 from domain.entity.update_available_entity import UpdateAvailableEntity
@@ -257,6 +258,20 @@ class FlatpakApi(FlatpakApiContract):
     def get_remote_add_call(self, id: str, url: str, scope: str = "--user") -> list:
         return self._cmd("remote-add", "--if-not-exists", scope, id, url)
 
+    def add_remote(self,id:str,url:str,scope:str="--user")-> tuple[bool, str]:
+        result = subprocess.run(
+            self.get_remote_add_call(id, url,scope),
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            error_message = (result.stderr or result.stdout).strip()
+            print(f"[add_remote] ERROR: {error_message}")
+            return False, error_message
+
+        return True, ""
+
+
     def get_flatpak_bundle_info(self, file_path: str) -> dict:
         info = {}
 
@@ -426,3 +441,24 @@ class FlatpakApi(FlatpakApiContract):
             remote_app_list.append(RemoteFlatpakAppEntity(app_id, name,""))
 
         return remote_app_list
+
+    def get_remote_repo_list(self) -> list[FlatpakRepoEntity]:
+        result = subprocess.run(
+            self._cmd("remotes", "-u","--columns=name,url"),
+            capture_output=True,
+            text=True,
+        )
+        remote_repo_list = []
+        for line in result.stdout.splitlines():
+            parts = line.split("\t")
+            if len(parts) < 2:
+                continue
+            if '/build-repo' in parts[0] or not parts[1].startswith('http'):
+                continue
+            remote_repo_list.append(
+                FlatpakRepoEntity(
+                    {"id": parts[0].strip(), "url": parts[1].strip(), "api": ""}
+                )
+            )
+        return remote_repo_list
+

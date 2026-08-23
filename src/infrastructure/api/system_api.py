@@ -96,19 +96,3 @@ class SystemApi(SystemApiContract):
         files = os.listdir(path)
         return [file.lower() for file in files]
 
-    def add_new_flatpak_repo(self, id: str, url: str, api: str = "") -> tuple[bool, str]:
-        from infrastructure.api.flatpak_api import FlatpakApi
-        from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
-
-        result = subprocess.run(
-            FlatpakApi().get_remote_add_call(id, url),
-            capture_output=True,
-            text=True,
-        )
-        if result.returncode != 0:
-            error_message = (result.stderr or result.stdout).strip()
-            print(f"[add_new_flatpak_repo] ERROR: {error_message}")
-            return False, error_message
-
-        FlatpakRepoRepository().insert_repo_id(id, url, api)
-        return True, ""

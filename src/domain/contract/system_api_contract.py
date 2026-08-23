@@ -63,6 +63,4 @@ class SystemApiContract(ABC):
     def get_file_list(self, path: str) -> list[str]:
         pass
 
-    @abstractmethod
-    def add_new_flatpak_repo(self, id: str, url: str, api: str = "") -> tuple[bool, str]:
-        pass
+

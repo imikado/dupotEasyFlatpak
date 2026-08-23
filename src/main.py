@@ -4,6 +4,7 @@ import os
 import shutil
 import sys
 
+from domain.UseCase.add_new_remote_repo_uc import AddNewRemoteRepoUc
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
@@ -204,6 +205,8 @@ def main():
             if should_reset_lastupdate:
                 AppstreamRepository().reset_updated_for_all()
                 ApiCacheRepository().reset_api_lastupdate()
+
+            AddNewRemoteRepoUc(FlatpakApi(),FlatpakRepoRepository()).sync()
 
             #shutil .copytree(path_conf.get_asset_icons_archive_path(), path_conf.get_icons_path(), dirs_exist_ok=True)
 
