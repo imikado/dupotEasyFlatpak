@@ -14,6 +14,7 @@ from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.github_api import GithubApi
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
 from infrastructure.ui.appstream.github_flatpak_dialog import (
+    _show_error,
     download_and_open_install_page,
 )
 
@@ -122,10 +123,61 @@ class LocalAppDetailPage(Adw.NavigationPage):
             link_btn.set_child(Gtk.Image.new_from_icon_name("adw-external-link-symbolic"))
             source_row.add_suffix(link_btn)
         else:
-            source_row.set_subtitle(_("Local .flatpak file"))
+            # Origin unknown — most likely this app's tracked info was lost
+            # (e.g. local app data was reset) while the flatpak itself
+            # stayed installed. Flatpak keeps no memory of a bundle's
+            # original GitHub project, so offer to re-link it manually.
+            source_row.set_subtitle(_("Unknown — no releases available"))
+            link_btn = Gtk.Button(label=_("Link to GitHub project"))
+            link_btn.set_valign(Gtk.Align.CENTER)
+            link_btn.add_css_class("flat")
+            link_btn.connect("clicked", self._on_link_github_clicked)
+            source_row.add_suffix(link_btn)
         group.add(source_row)
 
         return group
+
+    def _on_link_github_clicked(self, _btn):
+        dialog = Adw.AlertDialog(heading=_("Link to GitHub project"))
+        dialog.set_body(
+            _("Enter the URL of the GitHub project this app was installed from.")
+        )
+
+        entry = Gtk.Entry()
+        entry.set_placeholder_text("https://github.com/owner/repo")
+        entry.set_hexpand(True)
+
+        form_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        form_box.set_margin_top(8)
+        form_box.set_size_request(400, -1)
+        form_box.append(entry)
+        dialog.set_extra_child(form_box)
+
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("link", _("Link"))
+        dialog.set_response_appearance("link", Adw.ResponseAppearance.SUGGESTED)
+        dialog.set_default_response("link")
+        dialog.set_close_response("cancel")
+
+        def on_response(_d, response):
+            if response != "link":
+                return
+            url = entry.get_text().strip()
+            if not GithubApi().parse_owner_repo(url):
+                _show_error(
+                    self,
+                    _("This doesn't look like a valid GitHub project URL."),
+                )
+                return
+
+            LocalAppsRepository().insert_or_update(
+                self._app_id, self._local_app.name, url, self._local_app.version
+            )
+            self._local_app.url = url
+            self.set_child(self._build())
+
+        dialog.connect("response", on_response)
+        dialog.present(self)
 
     def _build_releases_group(self, owner: str, repo: str) -> Gtk.Widget:
         self._releases_owner = owner

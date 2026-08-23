@@ -22,5 +22,9 @@ class FlatpakRepoRepositoryContract:
         pass
 
     @abstractmethod
-    def insert_repo_id(self, id: str,url:str, api:str):
+    def get_scope_flag(self, id: str, fallback: str) -> str:
+        pass
+
+    @abstractmethod
+    def insert_repo_id(self, id: str,url:str, api:str, scope:str):
         pass

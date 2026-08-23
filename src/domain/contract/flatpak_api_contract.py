@@ -19,6 +19,10 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
+    def get_installed_app_list(self) -> list[RemoteFlatpakAppEntity]:
+        pass
+
+    @abstractmethod
     def get_number_of_updates(self) -> int:
         pass
 

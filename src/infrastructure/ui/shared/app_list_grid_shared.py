@@ -4,6 +4,7 @@ import threading
 from domain.UseCase.get_recipe_content_uc import GetRecipeContentUc
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
+from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
 from infrastructure.service.install_queue_service import InstallQueueService
 
 gi.require_version("Gtk", "4.0")
@@ -165,9 +166,12 @@ def _make_list_card(
 
                 def run_install():
                     flatpak_api = FlatpakApi()
-                    flags = ["--user"] if user_scope else ["--system"]
+                    fallback_scope = "--user" if user_scope else "--system"
+                    scope = FlatpakRepoRepository().get_scope_flag(
+                        app.get_flatpak_repo_id(), fallback_scope
+                    )
                     process = subprocess.Popen(
-                        flatpak_api.get_install_call(app.id, app.get_flatpak_repo_id(), *flags),
+                        flatpak_api.get_install_call(app.id, app.get_flatpak_repo_id(), scope),
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         text=True,
@@ -189,7 +193,12 @@ def _make_list_card(
                 threading.Thread(target=run_install, daemon=True).start()
 
             recipe_uc = GetRecipeContentUc(RecipeRepository())
-            dialog = InstallDialog(app.id, has_recipe, recipe_uc, on_confirm)
+            locked_scope = FlatpakRepoRepository().get_scope_flag(
+                app.get_flatpak_repo_id(), None
+            )
+            dialog = InstallDialog(
+                app.id, has_recipe, recipe_uc, on_confirm, locked_scope=locked_scope
+            )
             dialog.present(card.get_root())
 
         install_btn.connect("clicked", on_install)

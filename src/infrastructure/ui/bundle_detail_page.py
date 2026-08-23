@@ -19,6 +19,7 @@ from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.recipe_repository import RecipeRepository
+from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
 
 
 class BundleDetailPage(Adw.NavigationPage):
@@ -314,7 +315,7 @@ class BundleDetailPage(Adw.NavigationPage):
 
         user_scope = self._user_scope_row.get_active()
         scope = "user" if user_scope else "system"
-        flags = ["--user"] if user_scope else ["--system"]
+        fallback_scope_flag = "--user" if user_scope else "--system"
         queue = InstallQueueService()
 
         for app_id in selected_ids:
@@ -353,12 +354,15 @@ class BundleDetailPage(Adw.NavigationPage):
 
                 flatpak_api = FlatpakApi()
 
-                _stream(flatpak_api.get_install_call(aid, repo_id, *flags))
+                repo_scope_flag = FlatpakRepoRepository().get_scope_flag(
+                    repo_id, fallback_scope_flag
+                )
+                _stream(flatpak_api.get_install_call(aid, repo_id, repo_scope_flag))
                 for perm, value in perms:
                     if perm.is_filesystem():
                         _stream(flatpak_api.get_override_filesystem_call(aid, value))
                     elif perm.is_install_flatpak_yes_no():
-                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", *flags))
+                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", fallback_scope_flag))
                 result = FlatpakApi().get_info_by_id(aid)
                 GLib.idle_add(
                     item.set_status, "done" if result.returncode == 0 else "failed"

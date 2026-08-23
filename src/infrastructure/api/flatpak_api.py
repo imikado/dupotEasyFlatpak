@@ -78,6 +78,25 @@ class FlatpakApi(FlatpakApiContract):
                 )
         return installed_list
 
+    def get_installed_app_list(self) -> list[RemoteFlatpakAppEntity]:
+        result = subprocess.run(
+            self._cmd("list", "--app", "--columns=application,name,version"),
+            capture_output=True,
+            text=True,
+        )
+        installed_list = []
+        for line in result.stdout.splitlines():
+            parts = line.split("\t")
+            if len(parts) < 1:
+                continue
+            app_id = parts[0].strip()
+            if not app_id:
+                continue
+            name = parts[1].strip() if len(parts) >= 2 else app_id
+            version = parts[2].strip() if len(parts) >= 3 else ""
+            installed_list.append(RemoteFlatpakAppEntity(app_id, name, version))
+        return installed_list
+
     def get_number_of_updates(self) -> int:
         return len(self.get_available_update_list())
 
@@ -451,14 +470,28 @@ class FlatpakApi(FlatpakApiContract):
         remote_repo_list = []
         for line in result.stdout.splitlines():
             parts = line.split("\t")
-            if len(parts) < 2:
-                continue
-            if '/build-repo' in parts[0] or not parts[1].startswith('http'):
+            if len(parts) < 2 or '/build-repo' in parts[1] or not parts[1].startswith('http'):
                 continue
             remote_repo_list.append(
                 FlatpakRepoEntity(
-                    {"id": parts[0].strip(), "url": parts[1].strip(), "api": ""}
+                    {"id": parts[0].strip(), "url": parts[1].strip(), "api": "","scope":"--user"}
                 )
             )
+
+        resultsystem = subprocess.run(
+            self._cmd("remotes", "-u","--columns=name,url"),
+            capture_output=True,
+            text=True,
+        )
+        for line in resultsystem.stdout.splitlines():
+            parts = line.split("\t")
+            if len(parts) < 2 or '/build-repo' in parts[1] or not parts[1].startswith('http'):
+                continue
+            remote_repo_list.append(
+                FlatpakRepoEntity(
+                    {"id": parts[0].strip(), "url": parts[1].strip(), "api": "","scope":"--system"}
+                )
+            )
+        
         return remote_repo_list
 

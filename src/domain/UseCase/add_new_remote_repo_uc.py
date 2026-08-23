@@ -28,14 +28,14 @@ class AddNewRemoteRepoUc:
             # Already added to flatpak itself (outside this app) — just track it in our DB.
             flatpakrepo_setuped_found:FlatpakRepoEntity=self.get_flatpakrepo_setuped_by(name,url)
             self._flatpakrepo_repository.insert_repo_id(
-                flatpakrepo_setuped_found.getId(), flatpakrepo_setuped_found.getUrl(), ""
+                flatpakrepo_setuped_found.getId(), flatpakrepo_setuped_found.getUrl(), "",scope
             )
             self.load()
             return True, ""
 
         success, error_message = self._flatpak_api.add_remote(name,url,scope)
         if success:
-            self._flatpakrepo_repository.insert_repo_id(name,url,"")
+            self._flatpakrepo_repository.insert_repo_id(name,url,"",scope)
             self.load()
 
         return success, error_message
@@ -44,8 +44,13 @@ class AddNewRemoteRepoUc:
         for flatpakrepo_setuped_loop in self._flatpakrepo_setuped_list:
             if not self.already_in_db(flatpakrepo_setuped_loop.getId(),flatpakrepo_setuped_loop.getUrl()):
                 self._flatpakrepo_repository.insert_repo_id(
-                    flatpakrepo_setuped_loop.getId(),flatpakrepo_setuped_loop.getUrl(),""
+                    flatpakrepo_setuped_loop.getId(),flatpakrepo_setuped_loop.getUrl(),"",flatpakrepo_setuped_loop.getScope()
                 )
+                # Keep the in-memory snapshot in sync so two setup remotes
+                # sharing the same name/url within this same pass (e.g. a
+                # repo registered under different casing) aren't both
+                # inserted as separate rows.
+                self._flatpakrepo_in_db_list.append(flatpakrepo_setuped_loop)
 
     def get_flatpakrepo_setuped_by(self,name:str,url:str)->FlatpakRepoEntity:
         for flatpakrepo_setuped_loop in self._flatpakrepo_setuped_list:

@@ -9,6 +9,7 @@ from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.repository.pinned_apps_repository import PinnedAppsRepository
+from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
@@ -502,13 +503,15 @@ class AppstreamPage(Adw.NavigationPage):
 
             def run_install():
                 flatpak_api = FlatpakApi()
-                flags = ["--user"] if user_scope else ["--system"]
+                fallback_scope = "--user" if user_scope else "--system"
+                scope = FlatpakRepoRepository().get_scope_flag(flatpak_repo_id, fallback_scope)
+                flags = [scope]
                 _stream(flatpak_api.get_install_call(app_id, flatpak_repo_id, *flags))
                 for perm, value in active_permission_list:
                     if perm.is_filesystem():
                         _stream(flatpak_api.get_override_filesystem_call(app_id, value))
                     elif perm.is_install_flatpak_yes_no():
-                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", *flags))
+                        _stream(flatpak_api.get_install_call(perm.get_value(), "flathub", fallback_scope))
                 result = flatpak_api.get_info_by_id(app_id)
                 final_status = "done" if result.returncode == 0 else "failed"
                 GLib.idle_add(queue_item.set_status, final_status)
@@ -526,7 +529,11 @@ class AppstreamPage(Adw.NavigationPage):
 
             threading.Thread(target=run_install, daemon=True).start()
 
-        dialog = InstallDialog(app_id, has_recipe, self._get_recipe_content, on_confirm)
+        locked_scope = FlatpakRepoRepository().get_scope_flag(flatpak_repo_id, None)
+        dialog = InstallDialog(
+            app_id, has_recipe, self._get_recipe_content, on_confirm,
+            locked_scope=locked_scope,
+        )
         dialog.present(self)
 
     def _on_downgrade_clicked(self, btn: Gtk.Button, app_id: str, app_name: str):

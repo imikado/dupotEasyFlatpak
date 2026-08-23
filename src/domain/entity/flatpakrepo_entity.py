@@ -4,6 +4,7 @@ class FlatpakRepoEntity:
         self.id = row["id"]
         self.url = row["url"]
         self.api = row["api"] if row["api"] else ""
+        self.scope = row["scope"]
 
     def getId(self) -> str:
         return self.id
@@ -13,3 +14,6 @@ class FlatpakRepoEntity:
 
     def getApi(self) -> str:
         return self.api
+
+    def getScope(self)->str:
+        return self.scope

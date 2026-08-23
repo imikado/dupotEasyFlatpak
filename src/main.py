@@ -6,6 +6,7 @@ import sys
 
 from domain.UseCase.add_new_remote_repo_uc import AddNewRemoteRepoUc
 from domain.UseCase.get_home_content_uc import GetHomeContentUC
+from domain.UseCase.sync_local_installed_apps_uc import SyncLocalInstalledAppsUc
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 from domain.conf.path_conf import PathConf
 from domain.contract.api_cache_repository_contract import ApiCacheRepositoryContract
@@ -17,6 +18,7 @@ from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
+from infrastructure.repository.local_apps_repository import LocalAppsRepository
 from infrastructure.ui.app_window import AppWindow
 from gi.repository import GLib
 
@@ -168,6 +170,13 @@ def main():
                 should_reset_lastupdate=True
 
         application_version_entity = ApplicationVersionEntity()
+        # Must be read before the install/update block below, since that
+        # block is what creates installed_version_path in the first place —
+        # by the time it's run, the file always exists and this would read
+        # back as False even on a genuinely fresh install.
+        is_first_install = not system_api.file_exists(
+            path_conf.get_installed_version_path()
+        )
         application_version_entity.load(system_api)
         if not application_version_entity.is_current_version():
 
@@ -207,6 +216,12 @@ def main():
                 ApiCacheRepository().reset_api_lastupdate()
 
             AddNewRemoteRepoUc(FlatpakApi(),FlatpakRepoRepository()).sync()
+
+            if is_first_install:
+                print("first install, syncing already-installed flatpak apps")
+                SyncLocalInstalledAppsUc(
+                    FlatpakApi(), AppstreamRepository(), LocalAppsRepository()
+                ).process()
 
             #shutil .copytree(path_conf.get_asset_icons_archive_path(), path_conf.get_icons_path(), dirs_exist_ok=True)
 

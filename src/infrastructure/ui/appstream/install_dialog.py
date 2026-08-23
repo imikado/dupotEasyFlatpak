@@ -25,6 +25,7 @@ class InstallDialog(Adw.AlertDialog):
         confirm_label: str = None,
         show_scope: bool = True,
         filesystem_override_values: list = None,
+        locked_scope: str = None,  # "--user"/"--system" when the app's repo pins it, else None
     ):
         super().__init__()
         self.set_heading(heading or _("Install"))
@@ -45,7 +46,18 @@ class InstallDialog(Adw.AlertDialog):
             self._user_scope_row = Adw.SwitchRow()
             self._user_scope_row.set_title(_("Install for current user only"))
 
-            self._user_scope_row.set_active(user_settings_entity.is_user_scope())
+            if locked_scope:
+                # This app's repo was only registered for one scope
+                # (--user/--system) — installing at the other scope would
+                # fail since the remote isn't visible there, so the choice
+                # isn't left up to the user.
+                self._user_scope_row.set_active(locked_scope == "--user")
+                self._user_scope_row.set_sensitive(False)
+                self._user_scope_row.set_subtitle(
+                    _("This repository only supports this scope")
+                )
+            else:
+                self._user_scope_row.set_active(user_settings_entity.is_user_scope())
 
             scope_group.add(self._user_scope_row)
             form_box.append(scope_group)
