@@ -173,7 +173,13 @@ def download_and_open_install_page(
         # Keep the exact GitHub asset filename (shown in FlatpakFilePage's
         # "File" row and used as the app-id fallback) instead of a random
         # mkstemp hash — put it in its own temp dir to avoid collisions.
-        tmp_dir = tempfile.mkdtemp()
+        # Must live under the cache dir (bind-mounted to the same host path),
+        # not /tmp: when running as a Flatpak, /tmp is a private sandbox
+        # tmpfs invisible to the `flatpak install` command run on the host
+        # via flatpak-spawn --host.
+        downloads_dir = os.path.join(GLib.get_user_cache_dir(), "downloads")
+        os.makedirs(downloads_dir, exist_ok=True)
+        tmp_dir = tempfile.mkdtemp(dir=downloads_dir)
         tmp_path = os.path.join(tmp_dir, release_info["asset_name"])
 
         ok = GithubApi().download_asset(release_info["download_url"], tmp_path)

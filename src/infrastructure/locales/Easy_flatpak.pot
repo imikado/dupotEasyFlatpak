@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy_flatpak\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 00:29+0200\n"
+"POT-Creation-Date: 2026-08-27 13:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr ""
 #: src/infrastructure/ui/appstream/github_flatpak_dialog.py:128
 #: src/infrastructure/ui/appstream/install_dialog.py:113
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:156
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:311
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:329
 #: src/infrastructure/ui/appstream_page.py:446
 #: src/infrastructure/ui/app_window.py:580
 #: src/infrastructure/ui/bundle_detail_page.py:279
@@ -85,7 +85,7 @@ msgstr ""
 #: src/infrastructure/ui/appstream/github_flatpak_dialog.py:129
 #: src/infrastructure/ui/appstream/install_dialog.py:31
 #: src/infrastructure/ui/appstream/install_dialog.py:114
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:256
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:273
 #: src/infrastructure/ui/appstream_page.py:408
 #: src/infrastructure/ui/menu/import_dialog.py:82
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:150
@@ -94,7 +94,7 @@ msgid "Install"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:190
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:321
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:339
 #: src/infrastructure/ui/appstream_page.py:458
 #: src/infrastructure/ui/appstream_page.py:488
 #: src/infrastructure/ui/shared/installed_list_shared.py:159
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Version"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:206
+#: src/infrastructure/ui/appstream/github_flatpak_dialog.py:212
 msgid "Failed to download a valid .flatpak file from this release."
 msgstr ""
 
@@ -202,7 +202,7 @@ msgid "Releases"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:193
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:271
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:289
 msgid "Load more releases"
 msgstr ""
 
@@ -217,24 +217,35 @@ msgstr ""
 msgid "No release with a .flatpak asset found"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:240
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:244
 msgid "No description"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:243
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:251
+#: src/infrastructure/ui/app_window.py:213
+#: src/infrastructure/ui/shared/app_list_grid_shared.py:129
+#: src/infrastructure/ui/shared/app_list_line_shared.py:129
+msgid "Installed"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:259
 msgid "No release notes."
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:280
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:273
+msgid "Reinstall"
+msgstr ""
+
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:298
 #: src/infrastructure/ui/appstream_page.py:155
 #: src/infrastructure/ui/shared/installed_list_shared.py:122
 msgid "Run"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:286
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:309
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:312
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:334
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:304
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:327
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:330
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:352
 #: src/infrastructure/ui/appstream_page.py:397
 #: src/infrastructure/ui/appstream_page.py:444
 #: src/infrastructure/ui/appstream_page.py:447
@@ -245,7 +256,7 @@ msgstr ""
 msgid "Uninstall"
 msgstr ""
 
-#: src/infrastructure/ui/appstream/local_app_detail_page.py:302
+#: src/infrastructure/ui/appstream/local_app_detail_page.py:320
 #: src/infrastructure/ui/appstream_page.py:437
 #: src/infrastructure/ui/shared/installed_list_shared.py:140
 msgid "Delete application data"
@@ -364,12 +375,6 @@ msgstr ""
 
 #: src/infrastructure/ui/app_window.py:199
 msgid "Bundles"
-msgstr ""
-
-#: src/infrastructure/ui/app_window.py:213
-#: src/infrastructure/ui/shared/app_list_grid_shared.py:129
-#: src/infrastructure/ui/shared/app_list_line_shared.py:129
-msgid "Installed"
 msgstr ""
 
 #: src/infrastructure/ui/app_window.py:232

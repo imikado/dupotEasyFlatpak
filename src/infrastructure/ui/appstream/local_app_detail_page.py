@@ -235,9 +235,25 @@ class LocalAppDetailPage(Adw.NavigationPage):
             self._load_more_btn.set_visible(False)
             return GLib.SOURCE_REMOVE
 
+        installed_tag = self._local_app.version
+
         for release_info in releases:
+            is_installed = bool(installed_tag) and release_info["tag_name"] == installed_tag
+
             row = Adw.ExpanderRow(title=release_info["tag_name"])
             row.set_subtitle(release_info["summary"] or _("No description"))
+
+            if is_installed:
+                installed_badge = Gtk.Box(spacing=4, valign=Gtk.Align.CENTER)
+                installed_badge.append(
+                    Gtk.Image.new_from_icon_name("object-select-symbolic")
+                )
+                badge_label = Gtk.Label(label=_("Installed"))
+                badge_label.add_css_class("success")
+                installed_badge.append(badge_label)
+                row.add_prefix(installed_badge)
+                row.add_css_class("success")
+                row.set_expanded(True)
 
             body = release_info.get("body", "").strip()
             body_label = Gtk.Label(label=body or _("No release notes."))
@@ -253,7 +269,9 @@ class LocalAppDetailPage(Adw.NavigationPage):
             row.add_row(body_label)
 
             if self._on_open_flatpak_fn:
-                install_btn = Gtk.Button(label=_("Install"))
+                install_btn = Gtk.Button(
+                    label=_("Reinstall") if is_installed else _("Install")
+                )
                 install_btn.set_valign(Gtk.Align.CENTER)
                 install_btn.add_css_class("flat")
                 install_btn.connect(
