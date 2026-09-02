@@ -68,8 +68,14 @@ class MainWindow(Adw.ApplicationWindow):
         box.set_halign(Gtk.Align.CENTER)
         box.set_valign(Gtk.Align.CENTER)
         box.set_vexpand(True)
-        spinner = Gtk.Spinner()
-        spinner.set_spinning(True)
+        # Adw.Spinner (not Gtk.Spinner): Gtk.Spinner is drawn from the
+        # "process-working-symbolic" icon, which some icon themes lack —
+        # on those it falls back to GTK's broken-image icon instead of
+        # animating. Adw.Spinner is drawn procedurally, no icon theme
+        # involved. This is the long-running loading page shown after the
+        # language-change restart (os.execv in parameters_dialog.py), so
+        # it's the one users actually sit on long enough to notice.
+        spinner = Adw.Spinner()
         spinner.set_size_request(48, 48)
         label = Gtk.Label(label=_("Loading…"))
         label.add_css_class("dim-label")
