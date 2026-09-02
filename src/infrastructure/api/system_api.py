@@ -51,10 +51,21 @@ class SystemApi(SystemApiContract):
         )
 
     def copy_file(self, path_from: str, path_to: str):
-        subprocess.run(['cp', path_from, path_to])
+        self._cp(['cp', path_from, path_to])
 
     def copy_dir(self, path_from: str, path_to: str):
-        subprocess.run(['cp', '-r',path_from, path_to])
+        self._cp(['cp', '-r', path_from, path_to])
+
+    def _cp(self, cmd: list):
+        # check=True: a swallowed cp failure here (bad source path, denied
+        # perm, ...) used to leave the destination missing, and the next
+        # sqlite3 connection to it silently created an empty db — surfacing
+        # much later as a confusing "no such table" instead of the real
+        # cause. Re-raise with stderr attached so the real cause is visible.
+        try:
+            subprocess.run(cmd, check=True, capture_output=True, text=True)
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"{' '.join(cmd)} failed: {e.stderr.strip()}") from e
  
     def get_datetime_current_timestamp(self) -> int:
         return int(time.time())
