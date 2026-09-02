@@ -5,6 +5,8 @@ import gi
 from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
+from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
+from infrastructure.api.flatpak_api import FlatpakApi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -164,7 +166,13 @@ class ParametersDialog(Adw.PreferencesDialog):
         ApiCacheRepository().reset_api_lastupdate()
 
         UpdateDatabaseFromApiUc(
-            FlathubApi(), AppstreamRepository(), SystemApi(), ApiCacheRepository(),self._settings.get_language_code()
+            FlathubApi(),
+            AppstreamRepository(),
+            SystemApi(),
+            ApiCacheRepository(),
+            FlatpakRepoRepository(),
+            FlatpakApi(),
+            self._settings.get_language_code(),
         ).process()
 
     def _apply_theme(self):
