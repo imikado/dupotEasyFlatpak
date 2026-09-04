@@ -18,6 +18,10 @@ class AppstreamRepositoryContract(ABC):
         pass
 
     @abstractmethod
+    def get_bare_app_id_list_by_flatpak_repo_id(self, flatpak_repo_id: str) -> list[str]:
+        pass
+
+    @abstractmethod
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         pass
 

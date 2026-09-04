@@ -386,9 +386,9 @@ class MainWindow(Adw.ApplicationWindow):
             icon_path = app.getIcon()
             if os.path.exists(icon_path):
                 icon_img = Gtk.Image.new_from_file(icon_path)
+                icon_img.set_pixel_size(96)
             else:
-                icon_img = Gtk.Image.new_from_icon_name("application-x-executable")
-            icon_img.set_pixel_size(96)
+                icon_img = IconsShared.get_generic_app_icon(96)
             icon_img.set_valign(Gtk.Align.CENTER)
 
             text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)

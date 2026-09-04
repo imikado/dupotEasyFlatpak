@@ -68,6 +68,12 @@ class DatabaseApi:
             )
             changed = True
 
+        cursor.execute(
+            "INSERT OR IGNORE INTO apicache (id, content) VALUES ('ociMisses', '{}')"
+        )
+        if cursor.rowcount:
+            changed = True
+
         if changed:
             self._connection.commit()
 

@@ -35,9 +35,9 @@ def _make_installed_row(
     icon_path = app.getIcon()
     if os.path.isfile(icon_path):
         icon = Gtk.Image.new_from_file(icon_path)
+        icon.set_pixel_size(48)
     else:
-        icon = Gtk.Image.new_from_icon_name("application-x-executable")
-    icon.set_pixel_size(48)
+        icon = IconsShared.get_generic_app_icon(48)
 
     text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
     text_box.set_valign(Gtk.Align.CENTER)

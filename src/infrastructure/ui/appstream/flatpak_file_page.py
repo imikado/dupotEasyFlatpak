@@ -14,6 +14,7 @@ from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
 from infrastructure.service.install_queue_service import InstallQueueService
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 
 class FlatpakFilePage(Adw.NavigationPage):
@@ -112,9 +113,7 @@ class FlatpakFilePage(Adw.NavigationPage):
             except Exception:
                 pass
 
-        img = Gtk.Image.new_from_icon_name("package-x-generic")
-        img.set_pixel_size(96)
-        return img
+        return IconsShared.get_generic_app_icon(96)
 
     # ------------------------------------------------------------------ details group
 

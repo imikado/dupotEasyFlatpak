@@ -95,6 +95,15 @@ class AppstreamRepository(AppstreamRepositoryContract):
         )
         return rows
 
+    def get_bare_app_id_list_by_flatpak_repo_id(self, flatpak_repo_id: str) -> list[str]:
+        # "Bare" = inserted via insert_missing_remote_app_id and never
+        # enriched since (lastUpdate stays 0) — candidates for a retry.
+        rows = self._db.execute(
+            "SELECT id FROM appstream WHERE lastUpdate = 0 AND flatpakRepoIdList LIKE ?",
+            (f'%"{flatpak_repo_id}"%',),
+        )
+        return [row["id"] for row in rows]
+
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(

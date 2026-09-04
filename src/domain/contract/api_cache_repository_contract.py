@@ -13,6 +13,9 @@ class ApiCacheRepositoryContract(ABC):
 
     ID_PARAMETERS = "parameters"
 
+    # Negative-lookup cache for OCI registry enrichment: {"repo_id/app_id": last_attempt_timestamp}
+    ID_OCI_MISSES = "ociMisses"
+
     @abstractmethod
     def get_by_id(self, id: str) -> ApiCacheEntity | None:
         pass

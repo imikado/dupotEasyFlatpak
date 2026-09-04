@@ -13,6 +13,7 @@ from domain.entity.local_app_entity import LocalAppEntity
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.api.github_api import GithubApi
 from infrastructure.repository.local_apps_repository import LocalAppsRepository
+from infrastructure.ui.shared.icons_shared import IconsShared
 from infrastructure.ui.appstream.github_flatpak_dialog import (
     _show_error,
     download_and_open_install_page,
@@ -81,9 +82,9 @@ class LocalAppDetailPage(Adw.NavigationPage):
         icon_path = f"{PathConf().get_icons_path()}/{self._app_id.lower()}.png"
         if os.path.isfile(icon_path):
             icon = Gtk.Image.new_from_file(icon_path)
+            icon.set_pixel_size(96)
         else:
-            icon = Gtk.Image.new_from_icon_name("package-x-generic")
-        icon.set_pixel_size(96)
+            icon = IconsShared.get_generic_app_icon(96)
         hero.append(icon)
 
         text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)

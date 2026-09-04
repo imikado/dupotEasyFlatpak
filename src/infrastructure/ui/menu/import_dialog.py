@@ -6,6 +6,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Gtk, Adw
 
 from domain.entity.import_entity import ImportEntity
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 
 class ImportDialog(Adw.Dialog):
@@ -63,11 +64,7 @@ class ImportDialog(Adw.Dialog):
                 app_icon.set_pixel_size(32)
                 row.add_prefix(app_icon)
             else:
-                placeholder = Gtk.Image.new_from_icon_name(
-                    "application-x-executable-symbolic"
-                )
-                placeholder.set_pixel_size(32)
-                row.add_prefix(placeholder)
+                row.add_prefix(IconsShared.get_generic_app_icon(32))
 
             check = Gtk.CheckButton()
             check.set_active(True)

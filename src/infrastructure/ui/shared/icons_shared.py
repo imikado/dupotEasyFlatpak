@@ -135,3 +135,11 @@ class IconsShared:
 
     def find_icon_name_available(self, name: str) -> str:
         return self.icon_ref.get(name, name)
+
+    @staticmethod
+    def get_generic_app_icon(pixel_size: int = 48) -> Gtk.Image:
+        """Fallback icon for apps without their own icon file (no system icon)."""
+        png_path = os.path.join(_ASSETS_DIR, "generic-app.png")
+        img = Gtk.Image.new_from_file(png_path)
+        img.set_pixel_size(pixel_size)
+        return img

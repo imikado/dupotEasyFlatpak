@@ -15,6 +15,11 @@ class UpdateDatabaseFromApiUc:
 
     LAST_SYNC_MAX_DAYS = 3
 
+    # A miss (no OCI enrichment found for an app_id) is retried on this
+    # slower cadence instead of every sync — the guessed repo path either
+    # exists or doesn't, it won't start existing between two 3-day syncs.
+    OCI_MISS_RETRY_DAYS = 30
+
     _flathub_api: FlathubApiContract
     _appstream_repository: AppstreamRepositoryContract
     _system_api: SystemApiContract
@@ -171,21 +176,48 @@ class UpdateDatabaseFromApiUc:
                         remote_app_id_loop, repo_id_loop
                     )
 
-    def _try_enrich_from_oci(self, app_id: str, repo_id: str, repo_url: str) -> bool:
+        # Retry apps previously left as a bare "missing" row (lastUpdate=0)
+        # from an earlier failed OCI lookup — gated by the miss cache below,
+        # so this only hits the registry again once the backoff has elapsed.
+        for repo_id_loop, repo_url in repo_url_by_id.items():
+            if not repo_url.startswith("oci+"):
+                continue
+            bare_app_id_list = self._appstream_repository.get_bare_app_id_list_by_flatpak_repo_id(
+                repo_id_loop
+            )
+            for bare_app_id_loop in bare_app_id_list:
+                self._try_enrich_from_oci(bare_app_id_loop, repo_id_loop, repo_url, is_new=False)
+
+    def _try_enrich_from_oci(self, app_id: str, repo_id: str, repo_url: str, is_new: bool = True) -> bool:
         # Only OCI-based repos (registries) embed appstream/icon data this
         # way — a plain ostree repo's apps stay on the bare-row fallback.
         if not repo_url.startswith("oci+"):
             return False
 
+        miss_key = f"{repo_id}/{app_id}"
+        now = self._system_api.get_datetime_current_timestamp()
+
+        misses_entity = self._api_cache_repository.get_by_id(ApiCacheRepositoryContract.ID_OCI_MISSES)
+        misses = misses_entity.get_content_as_object() if misses_entity else {}
+
+        last_attempt = misses.get(miss_key)
+        if last_attempt is not None and now - last_attempt < self.OCI_MISS_RETRY_DAYS * 60 * 60 * 24:
+            return False
+
         enrichment = self._oci_api.get_enrichment_by_app_id(repo_url, app_id)
-        if not enrichment:
-            return False
+        raw_obj = enrichment.get("raw_obj") if enrichment else None
 
-        raw_obj = enrichment.get("raw_obj")
         if not raw_obj or not raw_obj.get("name"):
+            misses[miss_key] = now
+            self._api_cache_repository.update_by_id(ApiCacheRepositoryContract.ID_OCI_MISSES, misses)
             return False
 
-        self._appstream_repository.insert_from_raw_object(raw_obj, repo_id)
+        if miss_key in misses:
+            del misses[miss_key]
+            self._api_cache_repository.update_by_id(ApiCacheRepositoryContract.ID_OCI_MISSES, misses)
+
+        if is_new:
+            self._appstream_repository.insert_from_raw_object(raw_obj, repo_id)
         self._appstream_repository.update_from_raw_object_with_id(app_id, raw_obj)
 
         icon_bytes = enrichment.get("icon_bytes")
