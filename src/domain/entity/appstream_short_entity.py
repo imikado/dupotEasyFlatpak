@@ -14,13 +14,19 @@ class AppstreamShortEntity:
     _branding_light: str = "#888888"
     _branding_dark: str = "#333333"
 
-    def __init__(self, id, name, icon, summary, metadata_obj="{}", flatpak_repo_id="flathub"):
+    def __init__(self, id, name, icon, summary, metadata_obj="{}", flatpak_repo_id_list="[]"):
         self.id = id
         self.name = name
         self.icon = icon
         self.summary = summary
         self.raw_metadata_obj = metadata_obj
-        self.flatpak_repo_id = flatpak_repo_id
+
+        try:
+            parsed = json.loads(flatpak_repo_id_list) if flatpak_repo_id_list else []
+        except (json.JSONDecodeError, TypeError):
+            parsed = []
+        # Tolerate rows not migrated to a JSON array yet (bare repo id string).
+        self._flatpak_repo_id_list = parsed if isinstance(parsed, list) else [parsed]
 
         pass
 
@@ -33,8 +39,15 @@ class AppstreamShortEntity:
     def getIcon(self) -> str:
         return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
 
+    def get_flatpak_repo_id_list(self) -> list:
+        return self._flatpak_repo_id_list
+
     def get_flatpak_repo_id(self) -> str:
-        return self.flatpak_repo_id or "flathub"
+        if "flathub" in self._flatpak_repo_id_list:
+            return "flathub"
+        if self._flatpak_repo_id_list:
+            return self._flatpak_repo_id_list[0]
+        return "flathub"
 
     def _load_branding(self):
 

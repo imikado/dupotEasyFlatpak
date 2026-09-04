@@ -14,6 +14,7 @@ from domain.entity.application_version_entity import ApplicationVersionEntity
 from domain.entity.user_settings_entity import UserSettingsEntity
 from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.flatpak_api import FlatpakApi
+from infrastructure.api.oci_api import OciApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
@@ -235,13 +236,14 @@ def main():
         GetHomeContentUC(ApiCacheRepository(), AppstreamRepository(), FlathubApi(), SystemApi())
 
         UpdateDatabaseFromApiUc(
-            FlathubApi(), 
-            AppstreamRepository(), 
-            SystemApi(), 
+            FlathubApi(),
+            AppstreamRepository(),
+            SystemApi(),
             ApiCacheRepository(),
             FlatpakRepoRepository(),
             FlatpakApi(),
-            lang_code
+            lang_code,
+            OciApi(),
         ).process()
 
     app = AppWindow(init_fn=init_fn)

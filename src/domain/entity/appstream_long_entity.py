@@ -37,10 +37,11 @@ class AppstreamLongEntity:
     screenshot_list: str
     last_release_timestamp: int
     arche_list: str
-    flatpak_repo_id: str
+    flatpak_repo_id_list: str
 
     _screenshot_obj_list: list[ScreenshotEntity]
     _arche_list: list[str]
+    _flatpak_repo_id_list: list[str]
     _flathub_verified: bool
     _flathub_verified_label: str
     _download_size: int
@@ -71,7 +72,7 @@ class AppstreamLongEntity:
         "screenshot_list": "screenshotList",
         "last_release_timestamp": "lastReleaseTimestamp",
         "arche_list": "archeList",
-        "flatpak_repo_id": "flatpakRepoId",
+        "flatpak_repo_id_list": "flatpakRepoIdList",
     }
 
     def __init__(self, row={}):
@@ -85,6 +86,7 @@ class AppstreamLongEntity:
         self.load_release_obj_list()
         self.loadl_url_obj()
         self.load_arche_list()
+        self.load_flatpak_repo_id_list()
 
     def get_select_columns(self) -> str:
         return ", ".join(
@@ -98,11 +100,28 @@ class AppstreamLongEntity:
     def getIcon(self) -> str:
         return PathConf().get_icons_path() + f"/{self.id.lower()}.png"
 
+    def load_flatpak_repo_id_list(self):
+        try:
+            parsed = json.loads(self.flatpak_repo_id_list) if self.flatpak_repo_id_list else []
+        except (json.JSONDecodeError, TypeError):
+            parsed = []
+        # Tolerate rows not migrated to a JSON array yet (bare repo id string).
+        self._flatpak_repo_id_list = parsed if isinstance(parsed, list) else [parsed]
+
+    def get_flatpak_repo_id_list(self) -> list[str]:
+        return self._flatpak_repo_id_list
+
     def get_flatpak_repo_id(self) -> str:
-        return self.flatpak_repo_id or "flathub"
+        if "flathub" in self._flatpak_repo_id_list:
+            return "flathub"
+        if self._flatpak_repo_id_list:
+            return self._flatpak_repo_id_list[0]
+        return "flathub"
 
     def load_screenshot_list(self):
-        raw_list = json.loads(self.screenshot_list)
+        # Rows created by insert_missing_app_id/insert_missing_remote_app_id
+        # leave this NULL until the full appstream details are fetched.
+        raw_list = json.loads(self.screenshot_list) if self.screenshot_list else []
         screenshot_obj_list = []
         for raw_obj in raw_list:
             screenshot_obj_list.append(
@@ -111,7 +130,7 @@ class AppstreamLongEntity:
         self._screenshot_obj_list = screenshot_obj_list
 
     def load_metadata_obj(self):
-        raw_obj = json.loads(self.metadata_obj)
+        raw_obj = json.loads(self.metadata_obj) if self.metadata_obj else {}
         self._flathub_verified = False
         self._flathub_verified_label = ""
         self._download_size = 0
@@ -147,7 +166,7 @@ class AppstreamLongEntity:
             self._url_homepage = raw_obj[self.FIELD_URL_HOMEPAGE]
 
     def load_release_obj_list(self):
-        raw_obj_list = json.loads(self.release_obj_list)
+        raw_obj_list = json.loads(self.release_obj_list) if self.release_obj_list else []
         self._release_obj_list = []
         for raw_obj_loop in raw_obj_list:
             self._release_obj_list.append(

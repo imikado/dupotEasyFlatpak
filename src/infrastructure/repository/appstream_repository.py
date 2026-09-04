@@ -25,6 +25,52 @@ class AppstreamRepository(AppstreamRepositoryContract):
         )
         return [ row['id'] for row in rows]
 
+    def delete_by_flatpak_repo_id(self, flatpak_repo_id: str):
+        # An app can be listed under several repos, so a repo going away
+        # should only drop it from the list — the row itself is only
+        # deleted once no repo is left to serve it from.
+        rows = self._db.execute(
+            "SELECT id, flatpakRepoIdList FROM appstream WHERE flatpakRepoIdList LIKE ?",
+            (f'%"{flatpak_repo_id}"%',),
+        )
+        for row in rows:
+            try:
+                repo_id_list = json.loads(row["flatpakRepoIdList"] or "[]")
+            except (json.JSONDecodeError, TypeError):
+                continue
+            if not isinstance(repo_id_list, list) or flatpak_repo_id not in repo_id_list:
+                continue
+
+            repo_id_list = [r for r in repo_id_list if r != flatpak_repo_id]
+            if repo_id_list:
+                self._db.execute(
+                    "UPDATE appstream SET flatpakRepoIdList = ? WHERE id = ?",
+                    (json.dumps(repo_id_list), row["id"]),
+                )
+            else:
+                self._db.execute("DELETE FROM appstream WHERE id = ?", (row["id"],))
+
+    def add_flatpak_repo_id(self, app_id: str, flatpak_repo_id: str):
+        rows = self._db.execute(
+            "SELECT flatpakRepoIdList FROM appstream WHERE id = ?", (app_id,)
+        )
+        if not rows:
+            return
+        try:
+            repo_id_list = json.loads(rows[0]["flatpakRepoIdList"] or "[]")
+        except (json.JSONDecodeError, TypeError):
+            repo_id_list = []
+        if not isinstance(repo_id_list, list):
+            repo_id_list = [repo_id_list] if repo_id_list else []
+        if flatpak_repo_id in repo_id_list:
+            return
+
+        repo_id_list.append(flatpak_repo_id)
+        self._db.execute(
+            "UPDATE appstream SET flatpakRepoIdList = ? WHERE id = ?",
+            (json.dumps(repo_id_list), app_id),
+        )
+
     def get_by_id(self, id: str) -> AppstreamLongEntity | None:
         rows = self._db.execute(
             f"SELECT {AppstreamLongEntity().get_select_columns()} FROM appstream WHERE id = ?",
@@ -52,7 +98,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
     def get_list_by_id_list(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary,metadataObj,flatpakRepoId FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()}",
+            f"SELECT id, name, icon, summary,metadataObj,flatpakRepoIdList FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()}",
             tuple(ids),
         )
         return [
@@ -62,7 +108,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 row["icon"],
                 row["summary"],
                 row["metadataObj"],
-                row["flatpakRepoId"],
+                row["flatpakRepoIdList"],
             )
             for row in rows
         ]
@@ -70,7 +116,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
     def get_list_by_id_list_ordered(self, ids: list[str]) -> list[AppstreamShortEntity]:
         placeholders = ",".join("?" * len(ids))
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary,metadataObj,flatpakRepoId FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()} ORDER BY name ASC",
+            f"SELECT id, name, icon, summary,metadataObj,flatpakRepoIdList FROM appstream WHERE id IN ({placeholders}){self._get_arch_filter_sql()} ORDER BY name ASC",
             tuple(ids),
         )
         return [
@@ -80,17 +126,17 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 row["icon"],
                 row["summary"],
                 row["metadataObj"],
-                row["flatpakRepoId"],
+                row["flatpakRepoIdList"],
             )
             for row in rows
         ]
 
     def get_list_by_category_id(self, category_id: str) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary, flatpakRepoId FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()}",
+            f"SELECT id, name, icon, summary, flatpakRepoIdList FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()}",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id_list=row["flatpakRepoIdList"])
             for row in rows
         ]
 
@@ -98,7 +144,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
         self, category_id: str, search: str
     ) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"""SELECT id, name, icon, summary, flatpakRepoId,
+            f"""SELECT id, name, icon, summary, flatpakRepoIdList,
                 CASE WHEN name LIKE '%{search}%' THEN 1 ELSE 2 END AS priority
                 FROM appstream
                 WHERE categoryIdList LIKE '%{category_id}%'
@@ -107,13 +153,13 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 ORDER BY priority""",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id_list=row["flatpakRepoIdList"])
             for row in rows
         ]
 
     def get_list_by_seach(self, search: str) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"""SELECT id, name, icon, summary, flatpakRepoId,
+            f"""SELECT id, name, icon, summary, flatpakRepoIdList,
                 CASE WHEN name LIKE '%{search}%' THEN 1 ELSE 2 END AS priority
                 FROM appstream
                 WHERE (name LIKE '%{search}%' OR summary LIKE '%{search}%')
@@ -121,7 +167,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 ORDER BY priority""",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id_list=row["flatpakRepoIdList"])
             for row in rows
         ]
 
@@ -129,10 +175,10 @@ class AppstreamRepository(AppstreamRepositoryContract):
         self, category_id: str
     ) -> list[AppstreamShortEntity]:
         rows = self._db.execute(
-            f"SELECT id, name, icon, summary, flatpakRepoId FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()} LIMIT 10",
+            f"SELECT id, name, icon, summary, flatpakRepoIdList FROM appstream WHERE categoryIdList like '%{category_id}%'{self._get_arch_filter_sql()} LIMIT 10",
         )
         return [
-            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id=row["flatpakRepoId"])
+            AppstreamShortEntity(row["id"], row["name"], row["icon"], row["summary"], flatpak_repo_id_list=row["flatpakRepoIdList"])
             for row in rows
         ]
 
@@ -143,12 +189,12 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 (
                 id,
                 lastUpdate,
-                flatpakRepoId
+                flatpakRepoIdList
                  ) values (?,?,?) """,
             (
                 app_id,
                 0,
-                flatpak_repo_id,
+                json.dumps([flatpak_repo_id]),
             ),
         )
 
@@ -160,7 +206,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                     id,
                     name,
                     lastUpdate,
-                    flatpakRepoId,
+                    flatpakRepoIdList,
                     categoryIdList,
                     metadataObj,
                     urlObj,
@@ -174,7 +220,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                     app_id,
                     name,
                     0,
-                    flatpak_repo_id,
+                    json.dumps([flatpak_repo_id]),
                     '[]',
                     '{}',
                     '{}',
@@ -215,7 +261,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 developer_name,
                 screenshotList,
                 lastReleaseTimestamp,
-                flatpakRepoId) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) """,
+                flatpakRepoIdList) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) """,
             (
                 id,
                 name,
@@ -230,7 +276,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 developer_name,
                 "[]",
                 0,
-                flatpak_repo_id
+                json.dumps([flatpak_repo_id])
             ),
         )
 

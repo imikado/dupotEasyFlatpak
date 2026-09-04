@@ -3,6 +3,7 @@ import sys
 from domain.UseCase.update_database_from_api_uc import UpdateDatabaseFromApiUc
 import gi
 from infrastructure.api.flathub_api import FlathubApi
+from infrastructure.api.oci_api import OciApi
 from infrastructure.repository.api_cache_repository import ApiCacheRepository
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
@@ -173,6 +174,7 @@ class ParametersDialog(Adw.PreferencesDialog):
             FlatpakRepoRepository(),
             FlatpakApi(),
             self._settings.get_language_code(),
+            OciApi(),
         ).process()
 
     def _apply_theme(self):

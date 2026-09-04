@@ -16,6 +16,10 @@ class SystemApiContract(ABC):
         pass
 
     @abstractmethod
+    def write_binary_file(self, path: str, data: bytes):
+        pass
+
+    @abstractmethod
     def get_datetime_current_timestamp(self) -> int:
         pass
 

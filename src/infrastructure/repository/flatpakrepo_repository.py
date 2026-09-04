@@ -67,4 +67,6 @@ class FlatpakRepoRepository(FlatpakRepoRepositoryContract):
                     scope
                 ),
             )
-    
+
+    def delete(self, id: str):
+        self._db.execute("DELETE FROM flatpakRepo WHERE id = ?", (id,))

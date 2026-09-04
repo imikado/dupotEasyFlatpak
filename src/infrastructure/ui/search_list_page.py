@@ -12,6 +12,7 @@ from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
+from infrastructure.ui.shared.repo_filter_bar_shared import RepoFilterBar
 
 
 class SearchListPage(Adw.NavigationPage):
@@ -51,6 +52,8 @@ class SearchListPage(Adw.NavigationPage):
         search_clamp.set_margin_end(12)
         search_clamp.set_child(search_entry)
 
+        self._repo_filter = RepoFilterBar(on_change=self._on_repo_filter_changed)
+
         self._grid = AppListGridShared()
 
         scroll = Gtk.ScrolledWindow()
@@ -60,6 +63,8 @@ class SearchListPage(Adw.NavigationPage):
 
         content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         content_box.append(search_clamp)
+        if self._repo_filter.widget:
+            content_box.append(self._repo_filter.widget)
         content_box.append(scroll)
 
         toolbar_view.set_content(content_box)
@@ -84,7 +89,8 @@ class SearchListPage(Adw.NavigationPage):
 
         local_results = self._uc.get_app_list_by_search(query)
         for app in local_results:
-            self._grid.append(app, self._on_row_activated)
+            if self._repo_filter.matches(app):
+                self._grid.append(app, self._on_row_activated)
 
         if not local_results:
             threading.Thread(
@@ -98,11 +104,15 @@ class SearchListPage(Adw.NavigationPage):
     def _on_api_results(self, query: str, results: list):
         if query == self._current_query:
             for app in results:
-                self._grid.append(app, self._on_row_activated)
+                if self._repo_filter.matches(app):
+                    self._grid.append(app, self._on_row_activated)
         return GLib.SOURCE_REMOVE
 
     def _on_search_changed(self, entry: Gtk.SearchEntry):
         self._reload(entry.get_text())
+
+    def _on_repo_filter_changed(self, _repo_id):
+        self._reload(self._current_query)
 
     def _on_row_activated(self, _row, app_id: str):
         from infrastructure.ui.appstream_page import AppstreamPage

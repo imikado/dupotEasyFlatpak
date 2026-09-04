@@ -161,17 +161,17 @@ def _make_list_card(
         def on_install(_btn):
             from infrastructure.ui.appstream.install_dialog import InstallDialog
 
-            def on_confirm(user_scope, active_permission_list):
+            def on_confirm(user_scope, active_permission_list, selected_repo_id):
                 queue_item = InstallQueueService().enqueue(app.id, app.getName())
 
                 def run_install():
                     flatpak_api = FlatpakApi()
                     fallback_scope = "--user" if user_scope else "--system"
                     scope = FlatpakRepoRepository().get_scope_flag(
-                        app.get_flatpak_repo_id(), fallback_scope
+                        selected_repo_id, fallback_scope
                     )
                     process = subprocess.Popen(
-                        flatpak_api.get_install_call(app.id, app.get_flatpak_repo_id(), scope),
+                        flatpak_api.get_install_call(app.id, selected_repo_id, scope),
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         text=True,
@@ -197,7 +197,8 @@ def _make_list_card(
                 app.get_flatpak_repo_id(), None
             )
             dialog = InstallDialog(
-                app.id, has_recipe, recipe_uc, on_confirm, locked_scope=locked_scope
+                app.id, has_recipe, recipe_uc, on_confirm, locked_scope=locked_scope,
+                repo_id_list=app.get_flatpak_repo_id_list(),
             )
             dialog.present(card.get_root())
 

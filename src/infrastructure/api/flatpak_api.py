@@ -290,6 +290,68 @@ class FlatpakApi(FlatpakApiContract):
 
         return True, ""
 
+    def verify_remote(self, id: str, scope: str = "--user") -> tuple[bool, str]:
+        # Querying the repo's summary is the only way to know it's actually
+        # reachable and valid — remote-add itself never touches the network
+        # for a plain repo URL, it just writes the config.
+        try:
+            result = subprocess.run(
+                self._cmd("remote-ls", scope, id),
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+        except subprocess.TimeoutExpired:
+            return False, _("The repository did not respond in time")
+
+        if result.returncode != 0:
+            error_message = (result.stderr or result.stdout).strip()
+            print(f"[verify_remote] ERROR: {error_message}")
+            return False, error_message
+
+        return True, ""
+
+    def remote_exists(self, id: str, scope: str = "--user") -> bool:
+        result = subprocess.run(
+            self._cmd("remotes", scope, "--columns=name"),
+            capture_output=True,
+            text=True,
+        )
+        names = {line.strip() for line in result.stdout.splitlines()}
+        return id in names
+
+    def get_remote_delete_call(self, id: str, scope: str = "--user") -> list:
+        return self._cmd("remote-delete", scope, "--force", id)
+
+    def remove_remote(self, id: str, scope: str = "--user") -> tuple[bool, str]:
+        result = subprocess.run(
+            self.get_remote_delete_call(id, scope),
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            error_message = (result.stderr or result.stdout).strip()
+            print(f"[remove_remote] ERROR: {error_message}")
+            return False, error_message
+
+        return True, ""
+
+    def get_remote_modify_call(self, id: str, url: str, scope: str = "--user") -> list:
+        return self._cmd("remote-modify", scope, f"--url={url}", id)
+
+    def modify_remote(self, id: str, url: str, scope: str = "--user") -> tuple[bool, str]:
+        result = subprocess.run(
+            self.get_remote_modify_call(id, url, scope),
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            error_message = (result.stderr or result.stdout).strip()
+            print(f"[modify_remote] ERROR: {error_message}")
+            return False, error_message
+
+        return True, ""
+
 
     def get_flatpak_bundle_info(self, file_path: str) -> dict:
         info = {}

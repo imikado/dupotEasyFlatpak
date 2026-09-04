@@ -70,4 +70,10 @@ class AppstreamRepositoryContract(ABC):
     def get_all_app_id_list(self)->list[str]:
         pass
 
-    
+    @abstractmethod
+    def delete_by_flatpak_repo_id(self, flatpak_repo_id: str):
+        pass
+
+    @abstractmethod
+    def add_flatpak_repo_id(self, app_id: str, flatpak_repo_id: str):
+        pass

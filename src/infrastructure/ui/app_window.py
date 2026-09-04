@@ -331,9 +331,10 @@ class MainWindow(Adw.ApplicationWindow):
             scroll = Gtk.ScrolledWindow()
             scroll.set_vexpand(True)
             scroll.set_hexpand(True)
-            scroll.set_child(
-                self._get_application_list_widget(app_list, appstream_repository)
-            )
+            grid = AppListGridShared()
+            for app in app_list:
+                grid.append(app, self._on_app_clicked, appstream_repository)
+            scroll.set_child(grid.get_widget())
             stack.add_titled(scroll, title.lower(), title)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -431,12 +432,6 @@ class MainWindow(Adw.ApplicationWindow):
         wrapper.append(carousel)
         wrapper.append(dots)
         return wrapper
-
-    def _get_application_list_widget(self, application_list, appstream_repository):
-        grid = AppListGridShared()
-        for app in application_list:
-            grid.append(app, self._on_app_clicked, appstream_repository)
-        return grid.get_widget()
 
     def _on_menu_parameters(self, _action, _param):
         ParametersDialog().present(self)

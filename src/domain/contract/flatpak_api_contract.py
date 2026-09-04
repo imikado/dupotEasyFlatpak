@@ -123,3 +123,27 @@ class FlatpakApiContract:
     @abstractmethod
     def add_remote(self,id:str,url:str,scope:str="--user")-> tuple[bool, str]:
         pass
+
+    @abstractmethod
+    def verify_remote(self, id: str, scope: str = "--user") -> tuple[bool, str]:
+        pass
+
+    @abstractmethod
+    def remote_exists(self, id: str, scope: str = "--user") -> bool:
+        pass
+
+    @abstractmethod
+    def get_remote_delete_call(self, id: str, scope: str = "--user") -> list:
+        pass
+
+    @abstractmethod
+    def remove_remote(self, id: str, scope: str = "--user") -> tuple[bool, str]:
+        pass
+
+    @abstractmethod
+    def get_remote_modify_call(self, id: str, url: str, scope: str = "--user") -> list:
+        pass
+
+    @abstractmethod
+    def modify_remote(self, id: str, url: str, scope: str = "--user") -> tuple[bool, str]:
+        pass

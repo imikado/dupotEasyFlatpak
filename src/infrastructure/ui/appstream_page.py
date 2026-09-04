@@ -50,6 +50,8 @@ class AppstreamPage(Adw.NavigationPage):
             ".verified-circle { background-color: @accent_bg_color;"
             " border-radius: 9999px; padding: 3px; }"
             " .verified-circle image { color: @accent_fg_color; }"
+            " .source-badge { border: 1px solid @borders;"
+            " border-radius: 9999px; padding: 1px 6px; min-height: 0; }"
         )
         Gtk.StyleContext.add_provider_for_display(
             Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
@@ -130,6 +132,28 @@ class AppstreamPage(Adw.NavigationPage):
 
             info_box.append(verified_box)
 
+        source_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        source_row.set_halign(Gtk.Align.CENTER)
+        source_row.set_valign(Gtk.Align.CENTER)
+
+        repo_id_list = app.get_flatpak_repo_id_list() or [app.get_flatpak_repo_id()]
+        for repo_id_loop in repo_id_list:
+            source_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+            source_box.add_css_class("source-badge")
+
+            source_icon = Gtk.Image.new_from_icon_name("network-server-symbolic")
+            source_icon.set_pixel_size(10)
+            source_box.append(source_icon)
+
+            source_lbl = Gtk.Label(label=repo_id_loop)
+            source_lbl.add_css_class("caption")
+            source_lbl.add_css_class("dim-label")
+            source_box.append(source_lbl)
+
+            source_row.append(source_box)
+
+        info_box.append(source_row)
+
         if app.summary:
             summary_label = Gtk.Label(label=app.summary)
             summary_label.set_halign(Gtk.Align.CENTER)
@@ -174,6 +198,7 @@ class AppstreamPage(Adw.NavigationPage):
             app.name,
             has_recipe,
             app.get_flatpak_repo_id(),
+            app.get_flatpak_repo_id_list(),
         )
 
         btn_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -424,7 +449,8 @@ class AppstreamPage(Adw.NavigationPage):
         app_id: str,
         app_name: str,
         has_recipe: bool,
-        flatpak_repo_id:str
+        flatpak_repo_id:str,
+        flatpak_repo_id_list:list,
     ):
         installed = btn.has_css_class("destructive-action")
 
@@ -483,7 +509,7 @@ class AppstreamPage(Adw.NavigationPage):
             return
 
         # --- Install: show confirm dialog ---
-        def on_confirm(user_scope, active_permission_list):
+        def on_confirm(user_scope, active_permission_list, selected_repo_id):
             btn.set_sensitive(False)
             btn.set_label(_("Please wait…"))
 
@@ -504,9 +530,9 @@ class AppstreamPage(Adw.NavigationPage):
             def run_install():
                 flatpak_api = FlatpakApi()
                 fallback_scope = "--user" if user_scope else "--system"
-                scope = FlatpakRepoRepository().get_scope_flag(flatpak_repo_id, fallback_scope)
+                scope = FlatpakRepoRepository().get_scope_flag(selected_repo_id, fallback_scope)
                 flags = [scope]
-                _stream(flatpak_api.get_install_call(app_id, flatpak_repo_id, *flags))
+                _stream(flatpak_api.get_install_call(app_id, selected_repo_id, *flags))
                 for perm, value in active_permission_list:
                     if perm.is_filesystem():
                         _stream(flatpak_api.get_override_filesystem_call(app_id, value))
@@ -533,6 +559,7 @@ class AppstreamPage(Adw.NavigationPage):
         dialog = InstallDialog(
             app_id, has_recipe, self._get_recipe_content, on_confirm,
             locked_scope=locked_scope,
+            repo_id_list=flatpak_repo_id_list,
         )
         dialog.present(self)
 
@@ -602,7 +629,7 @@ class AppstreamPage(Adw.NavigationPage):
     def _on_recipe_overrides_clicked(self, _btn: Gtk.Button, app_id: str):
         current_fs = FlatpakApi().get_override_filesystems(app_id)
 
-        def on_confirm(_user_scope, active_permission_list):
+        def on_confirm(_user_scope, active_permission_list, _repo_id):
             def run_overrides():
                 flatpak_api = FlatpakApi()
                 for perm, value in active_permission_list:

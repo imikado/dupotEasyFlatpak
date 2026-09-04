@@ -28,3 +28,7 @@ class FlatpakRepoRepositoryContract:
     @abstractmethod
     def insert_repo_id(self, id: str,url:str, api:str, scope:str):
         pass
+
+    @abstractmethod
+    def delete(self, id: str):
+        pass

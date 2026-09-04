@@ -34,11 +34,19 @@ class AddNewRemoteRepoUc:
             return True, ""
 
         success, error_message = self._flatpak_api.add_remote(name,url,scope)
-        if success:
-            self._flatpakrepo_repository.insert_repo_id(name,url,"",scope)
-            self.load()
+        if not success:
+            return False, error_message
 
-        return success, error_message
+        verified, verify_error_message = self._flatpak_api.verify_remote(name, scope)
+        if not verified:
+            # Roll back: don't leave a broken remote registered in flatpak.
+            self._flatpak_api.remove_remote(name, scope)
+            return False, verify_error_message or "This repository is not reachable or invalid"
+
+        self._flatpakrepo_repository.insert_repo_id(name,url,"",scope)
+        self.load()
+
+        return True, ""
 
     def sync(self):
         for flatpakrepo_setuped_loop in self._flatpakrepo_setuped_list:

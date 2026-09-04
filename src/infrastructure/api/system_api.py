@@ -25,6 +25,10 @@ class SystemApi(SystemApiContract):
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
 
+    def write_binary_file(self, path: str, data: bytes):
+        with open(path, "wb") as f:
+            f.write(data)
+
     def write_file_tmp(self, content: str) -> str:
         with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".nix") as tmp:
             tmp.write(content)

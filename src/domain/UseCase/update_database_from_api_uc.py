@@ -4,6 +4,7 @@ from domain.contract.appstream_repository_contract import AppstreamRepositoryCon
 from domain.contract.flathub_api_contract import FlathubApiContract
 from domain.contract.flatpak_api_contract import FlatpakApiContract
 from domain.contract.flatpakrepo_repository_contract import FlatpakRepoRepositoryContract
+from domain.contract.oci_api_contract import OciApiContract
 from domain.contract.system_api_contract import SystemApiContract
 from domain.entity.flatpakrepo_entity import FlatpakRepoEntity
 
@@ -20,6 +21,7 @@ class UpdateDatabaseFromApiUc:
     _api_cache_repository: ApiCacheRepositoryContract
     _flatpakrepo_repository:FlatpakRepoRepositoryContract
     _flatpak_api:FlatpakApiContract
+    _oci_api:OciApiContract
     _lang:str
 
     def __init__(
@@ -30,7 +32,8 @@ class UpdateDatabaseFromApiUc:
         api_cache_repository: ApiCacheRepositoryContract,
         flatpakrepo_repository:FlatpakRepoRepositoryContract,
         flatpak_api:FlatpakApiContract,
-        lang:str
+        lang:str,
+        oci_api: OciApiContract,
     ):
         self._flathub_api = flathub_api
         self._appstream_repository = appstream_repository
@@ -39,6 +42,7 @@ class UpdateDatabaseFromApiUc:
         self._flatpakrepo_repository=flatpakrepo_repository
         self._flatpak_api=flatpak_api
         self._lang=lang
+        self._oci_api = oci_api
 
     def process(self):
 
@@ -125,16 +129,18 @@ class UpdateDatabaseFromApiUc:
 
     def process_for_other_repos(self):
         app_id_list_already_stored = []
-        
+
         app_id_to_check_in_db_list = []
 
         flatpakrepo_list: list[FlatpakRepoEntity] = self._flatpakrepo_repository.get_all_entities()
         remote_app_list_by_repo_id = {}
+        repo_url_by_id = {}
         for flatpak_repo_loop in flatpakrepo_list:
             repo_id_loop = flatpak_repo_loop.getId()
             if repo_id_loop == self.REPO_FLATHUB:
                 continue
 
+            repo_url_by_id[repo_id_loop] = flatpak_repo_loop.getUrl()
             remote_app_found_list = self._flatpak_api.get_remote_app_list(repo_id_loop)
             remote_app_list_by_repo_id[repo_id_loop] = remote_app_found_list
             for remote_app_loop in remote_app_found_list:
@@ -149,13 +155,46 @@ class UpdateDatabaseFromApiUc:
 
 
         for repo_id_loop, remote_app_found_list in remote_app_list_by_repo_id.items():
+            repo_url = repo_url_by_id.get(repo_id_loop, "")
             for remote_app_loop in remote_app_found_list:
                 remote_app_id_loop = remote_app_loop.getId()
                 if remote_app_id_loop.lower() not in app_id_list_already_stored:
-                    self._appstream_repository.insert_missing_remote_app_id(
-                        remote_app_id_loop,remote_app_loop.getName(), repo_id_loop
+                    if not self._try_enrich_from_oci(remote_app_id_loop, repo_id_loop, repo_url):
+                        self._appstream_repository.insert_missing_remote_app_id(
+                            remote_app_id_loop,remote_app_loop.getName(), repo_id_loop
+                        )
+                    app_id_list_already_stored.append(remote_app_id_loop.lower())
+                else:
+                    # Already tracked (e.g. from Flathub) — record that this
+                    # repo also serves it instead of ignoring the match.
+                    self._appstream_repository.add_flatpak_repo_id(
+                        remote_app_id_loop, repo_id_loop
                     )
-        
+
+    def _try_enrich_from_oci(self, app_id: str, repo_id: str, repo_url: str) -> bool:
+        # Only OCI-based repos (registries) embed appstream/icon data this
+        # way — a plain ostree repo's apps stay on the bare-row fallback.
+        if not repo_url.startswith("oci+"):
+            return False
+
+        enrichment = self._oci_api.get_enrichment_by_app_id(repo_url, app_id)
+        if not enrichment:
+            return False
+
+        raw_obj = enrichment.get("raw_obj")
+        if not raw_obj or not raw_obj.get("name"):
+            return False
+
+        self._appstream_repository.insert_from_raw_object(raw_obj, repo_id)
+        self._appstream_repository.update_from_raw_object_with_id(app_id, raw_obj)
+
+        icon_bytes = enrichment.get("icon_bytes")
+        if icon_bytes:
+            icon_path = f"{PathConf().get_icons_path()}/{app_id.lower()}.png"
+            self._system_api.write_binary_file(icon_path, icon_bytes)
+
+        return True
+
 
     def should_sync(self, last_update) -> bool:
 

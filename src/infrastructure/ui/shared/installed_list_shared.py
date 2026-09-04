@@ -92,7 +92,7 @@ def _make_installed_row(
             recipe_uc = GetRecipeContentUc(RecipeRepository())
             current_fs = FlatpakApi().get_override_filesystems(app.id)
 
-            def on_confirm(_user_scope, active_permission_list):
+            def on_confirm(_user_scope, active_permission_list, _repo_id):
                 def run_overrides():
                     flatpak_api = FlatpakApi()
                     for perm, value in active_permission_list:
