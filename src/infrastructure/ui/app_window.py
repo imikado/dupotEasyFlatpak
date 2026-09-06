@@ -493,12 +493,19 @@ class MainWindow(Adw.ApplicationWindow):
             self._toast_overlay.add_toast(Adw.Toast.new(_("Nothing to import")))
             return
 
-        ImportDialog(
+        dialog = ImportDialog(
             import_list,
             lambda selected_ids: self._on_import_confirm(
                 import_uc, import_list, selected_ids
             ),
-        ).present(self)
+        )
+        dialog.present(self)
+
+        def check_installed():
+            installed_ids = set(FlatpakApi().get_installed_app_id_list())
+            GLib.idle_add(dialog.apply_installed_ids, installed_ids)
+
+        threading.Thread(target=check_installed, daemon=True).start()
 
     def _on_import_confirm(self, import_uc, import_list, selected_ids):
         threading.Thread(

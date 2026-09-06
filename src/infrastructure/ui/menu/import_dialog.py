@@ -20,6 +20,7 @@ class ImportDialog(Adw.Dialog):
         self._import_list = import_list
         self._on_confirm = on_confirm
         self._check_buttons: dict[str, Gtk.CheckButton] = {}
+        self._rows: dict[str, Adw.ActionRow] = {}
 
         toolbar = Adw.ToolbarView()
         header = Adw.HeaderBar()
@@ -72,6 +73,7 @@ class ImportDialog(Adw.Dialog):
             row.set_activatable_widget(check)
 
             self._check_buttons[item.app_id] = check
+            self._rows[item.app_id] = row
             list_box.append(row)
 
         scroll.set_child(list_box)
@@ -91,9 +93,25 @@ class ImportDialog(Adw.Dialog):
         toolbar.set_content(content_box)
         self.set_child(toolbar)
 
+    def apply_installed_ids(self, installed_ids: set):
+        for app_id, check in self._check_buttons.items():
+            if app_id not in installed_ids:
+                continue
+            check.set_active(False)
+            check.set_sensitive(False)
+            check.set_tooltip_text(_("Already installed"))
+
+            row = self._rows.get(app_id)
+            if row is not None:
+                subtitle = row.get_subtitle() or ""
+                row.set_subtitle(
+                    "  ·  ".join(filter(None, [subtitle, _("Already installed")]))
+                )
+
     def _on_select_all(self, _btn):
         for check in self._check_buttons.values():
-            check.set_active(True)
+            if check.get_sensitive():
+                check.set_active(True)
 
     def _on_unselect_all(self, _btn):
         for check in self._check_buttons.values():
