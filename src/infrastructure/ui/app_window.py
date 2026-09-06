@@ -30,6 +30,7 @@ gi.require_version("Adw", "1")
 
 import json
 import os
+import subprocess
 import threading
 
 from gi.repository import Gdk, Gio, Gtk, Adw, GLib
@@ -508,6 +509,7 @@ class MainWindow(Adw.ApplicationWindow):
         threading.Thread(target=check_installed, daemon=True).start()
 
     def _on_import_confirm(self, import_uc, import_list, selected_ids):
+        GLib.idle_add(self._navigate_home)
         threading.Thread(
             target=self._do_import,
             args=(import_uc, import_list, selected_ids),
@@ -516,7 +518,24 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _do_import(self, import_uc, import_list, selected_ids):
         filtered = import_uc.get_filtered_list(import_list, selected_ids)
-        import_uc.process(filtered)
+        process_call_list = import_uc.process(filtered)
+
+        for import_loop, process_call in zip(filtered, process_call_list):
+            app_name = getattr(import_loop, "name", None) or import_loop.app_id
+            queue_item = InstallQueueService().enqueue(import_loop.app_id, app_name)
+
+            process = subprocess.Popen(
+                process_call.get_arg_list(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+            )
+            for line in process.stdout:
+                GLib.idle_add(queue_item.append_output, line)
+            process.wait()
+            GLib.idle_add(
+                queue_item.set_status, "done" if process.returncode == 0 else "failed"
+            )
 
     def _on_menu_export(self, _action, _param):
         file_dialog = Gtk.FileDialog.new()
