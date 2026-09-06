@@ -51,11 +51,16 @@ class AppstreamRepository(AppstreamRepositoryContract):
                 self._db.execute("DELETE FROM appstream WHERE id = ?", (row["id"],))
 
     def add_flatpak_repo_id(self, app_id: str, flatpak_repo_id: str):
+        # Case-insensitive: the caller matches "already known" ids via
+        # .lower() (different repos can report the same app with different
+        # casing), so an exact-case lookup here would silently no-op and
+        # never record the second repo against the already-stored row.
         rows = self._db.execute(
-            "SELECT flatpakRepoIdList FROM appstream WHERE id = ?", (app_id,)
+            "SELECT id, flatpakRepoIdList FROM appstream WHERE id = ? COLLATE NOCASE", (app_id,)
         )
         if not rows:
             return
+        stored_id = rows[0]["id"]
         try:
             repo_id_list = json.loads(rows[0]["flatpakRepoIdList"] or "[]")
         except (json.JSONDecodeError, TypeError):
@@ -68,7 +73,7 @@ class AppstreamRepository(AppstreamRepositoryContract):
         repo_id_list.append(flatpak_repo_id)
         self._db.execute(
             "UPDATE appstream SET flatpakRepoIdList = ? WHERE id = ?",
-            (json.dumps(repo_id_list), app_id),
+            (json.dumps(repo_id_list), stored_id),
         )
 
     def get_by_id(self, id: str) -> AppstreamLongEntity | None:

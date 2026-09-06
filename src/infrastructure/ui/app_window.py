@@ -481,7 +481,18 @@ class MainWindow(Adw.ApplicationWindow):
         import_uc = ImportUc(
             SystemApi(), FlatpakApi(), RecipeRepository(), AppstreamRepository()
         )
-        import_list = import_uc.get_appstream_list(path)
+        try:
+            import_list = import_uc.get_appstream_list(path)
+        except (KeyError, TypeError, ValueError) as e:
+            self._toast_overlay.add_toast(
+                Adw.Toast.new(_("Invalid import file: {error}").format(error=e))
+            )
+            return
+
+        if not import_list:
+            self._toast_overlay.add_toast(Adw.Toast.new(_("Nothing to import")))
+            return
+
         ImportDialog(
             import_list,
             lambda selected_ids: self._on_import_confirm(

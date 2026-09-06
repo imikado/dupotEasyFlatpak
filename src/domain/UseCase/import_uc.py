@@ -14,8 +14,6 @@ class ImportUc:
     _recipe_repository = RecipeRepositoryContract
     _appstream_repository = AppstreamRepositoryContract
 
-    _app_id_list: list[str] = []
-
     def __init__(
         self,
         system_api: SystemApiContract,
@@ -27,6 +25,7 @@ class ImportUc:
         self._flatpak_api = flatpak_api
         self._recipe_repository = recipe_repository
         self._appstream_repository = appstream_repository
+        self._app_id_list: list[str] = []
 
     def get_list(self, path: str) -> list[ImportEntity]:
         raw_import_app_list = self._system_api.read_json_file_obj_list(path)
