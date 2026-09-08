@@ -58,6 +58,8 @@ class ImportDialog(Adw.Dialog):
             if summary:
                 subtitle_parts.append(summary)
             subtitle_parts.append(item.installation_scope)
+            if item.is_from_github():
+                subtitle_parts.append(_("From GitHub"))
             row.set_subtitle("  ·  ".join(subtitle_parts))
 
             if icon_path:
