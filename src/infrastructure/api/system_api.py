@@ -55,21 +55,44 @@ class SystemApi(SystemApiContract):
         )
 
     def copy_file(self, path_from: str, path_to: str):
-        self._cp(['cp', path_from, path_to])
+        # Assets installed by Nix live in the immutable store and therefore
+        # have read-only modes.  Runtime copies belong to the user and must be
+        # writable (the SQLite database and installed_version.json are both
+        # updated after the first launch).
+        if os.path.exists(path_to):
+            os.chmod(path_to, 0o600)
+        shutil.copyfile(path_from, path_to)
+        os.chmod(path_to, 0o600)
 
     def copy_dir(self, path_from: str, path_to: str):
-        self._cp(['cp', '-r', path_from, path_to])
+        destination = (
+            os.path.join(path_to, os.path.basename(os.path.normpath(path_from)))
+            if os.path.isdir(path_to)
+            else path_to
+        )
+        if os.path.exists(destination):
+            self.make_tree_writable(destination)
+        shutil.copytree(
+            path_from,
+            destination,
+            dirs_exist_ok=True,
+            copy_function=shutil.copyfile,
+        )
+        self.make_tree_writable(destination)
 
-    def _cp(self, cmd: list):
-        # check=True: a swallowed cp failure here (bad source path, denied
-        # perm, ...) used to leave the destination missing, and the next
-        # sqlite3 connection to it silently created an empty db — surfacing
-        # much later as a confusing "no such table" instead of the real
-        # cause. Re-raise with stderr attached so the real cause is visible.
-        try:
-            subprocess.run(cmd, check=True, capture_output=True, text=True)
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"{' '.join(cmd)} failed: {e.stderr.strip()}") from e
+    def make_tree_writable(self, path: str):
+        """Repair runtime data copied from a read-only package store."""
+        if not os.path.exists(path):
+            return
+        if os.path.isfile(path):
+            os.chmod(path, 0o600)
+            return
+        os.chmod(path, 0o700)
+        for root, directories, files in os.walk(path):
+            for directory in directories:
+                os.chmod(os.path.join(root, directory), 0o700)
+            for file_name in files:
+                os.chmod(os.path.join(root, file_name), 0o600)
  
     def get_datetime_current_timestamp(self) -> int:
         return int(time.time())
@@ -110,4 +133,3 @@ class SystemApi(SystemApiContract):
     def get_file_list(self, path: str) -> list[str]:
         files = os.listdir(path)
         return [file.lower() for file in files]
-
