@@ -32,6 +32,10 @@ class SystemApiContract(ABC):
         pass
 
     @abstractmethod
+    def make_tree_writable(self, path: str):
+        pass
+
+    @abstractmethod
     def remove_file(self, path: str):
         pass
 
@@ -66,5 +70,4 @@ class SystemApiContract(ABC):
     @abstractmethod
     def get_file_list(self, path: str) -> list[str]:
         pass
-
 

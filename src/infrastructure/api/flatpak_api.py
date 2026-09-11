@@ -489,12 +489,20 @@ class FlatpakApi(FlatpakApiContract):
 
     def clean_cache(self):
         subprocess.run(
-            self._cmd("run", "--command=fc-cache", "org.dupot.easyflatpak", "-f", "-v"),
+            self.get_clean_cache_call(),
             capture_output=False,
         )
 
     def get_clean_cache_call(self) -> list:
-        return self._cmd("run", "--command=fc-cache", "org.dupot.easyflatpak", "-f", "-v")
+        if self.is_running_flatpak():
+            return self._cmd(
+                "run",
+                "--command=fc-cache",
+                "org.dupot.easyflatpak",
+                "-f",
+                "-v",
+            )
+        return ["fc-cache", "-f", "-v"]
 
     def get_repair_user_call(self) -> list:
         return self._cmd("repair", "--user")
@@ -556,4 +564,3 @@ class FlatpakApi(FlatpakApiContract):
             )
         
         return remote_repo_list
-
