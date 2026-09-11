@@ -19,6 +19,7 @@ from infrastructure.api.system_api import SystemApi
 from infrastructure.api.user_settings_api import UserSettingsApi
 from infrastructure.ui.menu.flatpak_repo_dialog import FlatpakRepoDialog
 from infrastructure.ui.shared.icons_shared import IconsShared
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 
 class ParametersDialog(Adw.PreferencesDialog):
@@ -81,7 +82,7 @@ class ParametersDialog(Adw.PreferencesDialog):
         repo_row = Adw.ActionRow(title=_("Manage repositories"))
         repo_row.set_activatable(True)
         repo_row.connect("activated", self._on_manage_repos)
-        repo_row.add_suffix(Gtk.Image.new_from_icon_name("go-next-symbolic"))
+        repo_row.add_suffix(IconsShared().get_icon_by_name(IconsShared.ICON_CHEVRON_RIGHT))
         repo_group.add(repo_row)
 
         appearance_group = Adw.PreferencesGroup()

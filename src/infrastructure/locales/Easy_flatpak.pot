@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy_flatpak\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-06 09:34+0200\n"
+"POT-Creation-Date: 2026-09-11 16:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:157
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:330
 #: src/infrastructure/ui/appstream_page.py:472
-#: src/infrastructure/ui/app_window.py:592
+#: src/infrastructure/ui/app_window.py:695
 #: src/infrastructure/ui/bundle_detail_page.py:279
 #: src/infrastructure/ui/home/updates_page.py:183
 #: src/infrastructure/ui/home/updates_page.py:231
@@ -93,7 +93,7 @@ msgstr ""
 #: src/infrastructure/ui/appstream/install_dialog.py:133
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:274
 #: src/infrastructure/ui/appstream_page.py:433
-#: src/infrastructure/ui/menu/import_dialog.py:79
+#: src/infrastructure/ui/menu/import_dialog.py:94
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:150
 #: src/infrastructure/ui/shared/app_list_line_shared.py:150
 msgid "Install"
@@ -226,7 +226,7 @@ msgstr ""
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:201
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:213
-#: src/infrastructure/ui/app_window.py:80
+#: src/infrastructure/ui/app_window.py:84
 #: src/infrastructure/ui/shared/installed_list_shared.py:188
 msgid "Loading…"
 msgstr ""
@@ -240,7 +240,7 @@ msgid "No description"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:252
-#: src/infrastructure/ui/app_window.py:219
+#: src/infrastructure/ui/app_window.py:223
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:129
 #: src/infrastructure/ui/shared/app_list_line_shared.py:129
 msgid "Installed"
@@ -342,116 +342,116 @@ msgstr ""
 msgid "Release History"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:117
+#: src/infrastructure/ui/app_window.py:121
 msgid "Easy flatpak"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:126
+#: src/infrastructure/ui/app_window.py:130
 #: src/infrastructure/ui/menu/parameters_dialog.py:28
 msgid "Parameters"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:127
-#: src/infrastructure/ui/app_window.py:469
+#: src/infrastructure/ui/app_window.py:131
+#: src/infrastructure/ui/app_window.py:473
 #: src/infrastructure/ui/home/installed_page.py:74
 #: src/infrastructure/ui/home/installed_page.py:77
 #: src/infrastructure/ui/menu/import_dialog.py:16
 msgid "Import"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:128
-#: src/infrastructure/ui/app_window.py:516
+#: src/infrastructure/ui/app_window.py:132
+#: src/infrastructure/ui/app_window.py:619
 #: src/infrastructure/ui/home/installed_page.py:84
 #: src/infrastructure/ui/home/installed_page.py:87
 msgid "Export"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:129
-#: src/infrastructure/ui/app_window.py:451
+#: src/infrastructure/ui/app_window.py:133
+#: src/infrastructure/ui/app_window.py:455
 #: src/infrastructure/ui/home/installed_page.py:94
 #: src/infrastructure/ui/home/installed_page.py:97
 #: src/infrastructure/ui/home/installed_page.py:118
 msgid "Install local Flatpak"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:130
+#: src/infrastructure/ui/app_window.py:134
 #: src/infrastructure/ui/menu/tools_dialog.py:18
 msgid "Tools"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:132
+#: src/infrastructure/ui/app_window.py:136
 msgid "About"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:190
+#: src/infrastructure/ui/app_window.py:194
 msgid "Home"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:198
+#: src/infrastructure/ui/app_window.py:202
 msgid "Categories"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:205
+#: src/infrastructure/ui/app_window.py:209
 msgid "Bundles"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:238
+#: src/infrastructure/ui/app_window.py:242
 msgid "Updates"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:261
+#: src/infrastructure/ui/app_window.py:265
 msgid "Pending"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:291
+#: src/infrastructure/ui/app_window.py:295
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:324
+#: src/infrastructure/ui/app_window.py:328
 msgid "New"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:325
+#: src/infrastructure/ui/app_window.py:329
 msgid "Updated"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:326
+#: src/infrastructure/ui/app_window.py:330
 msgid "Trending"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:327
+#: src/infrastructure/ui/app_window.py:331
 msgid "Popular"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:453
+#: src/infrastructure/ui/app_window.py:457
 #: src/infrastructure/ui/home/installed_page.py:120
 msgid "Flatpak files"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:488
+#: src/infrastructure/ui/app_window.py:492
 #, python-brace-format
 msgid "Invalid import file: {error}"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:493
+#: src/infrastructure/ui/app_window.py:497
 msgid "Nothing to import"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:545
+#: src/infrastructure/ui/app_window.py:648
 msgid "Export saved"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:586
+#: src/infrastructure/ui/app_window.py:689
 msgid "Processes still running"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:589
+#: src/infrastructure/ui/app_window.py:692
 msgid ""
 "Some installations are still in progress. Are you sure you want to close?"
 msgstr ""
 
-#: src/infrastructure/ui/app_window.py:593
+#: src/infrastructure/ui/app_window.py:696
 msgid "Close anyway"
 msgstr ""
 
@@ -470,6 +470,8 @@ msgstr ""
 
 #: src/infrastructure/ui/bundle_detail_page.py:181
 #: src/infrastructure/ui/bundle_detail_page.py:259
+#: src/infrastructure/ui/menu/import_dialog.py:115
+#: src/infrastructure/ui/menu/import_dialog.py:121
 msgid "Already installed"
 msgstr ""
 
@@ -527,7 +529,7 @@ msgstr ""
 
 #: src/infrastructure/ui/home/updates_page.py:75
 #: src/infrastructure/ui/home/updates_page.py:173
-#: src/infrastructure/ui/menu/import_dialog.py:28
+#: src/infrastructure/ui/menu/import_dialog.py:29
 msgid "Select all"
 msgstr ""
 
@@ -697,8 +699,18 @@ msgstr ""
 msgid "Couldn't add repository"
 msgstr ""
 
-#: src/infrastructure/ui/menu/import_dialog.py:32
+#: src/infrastructure/ui/menu/import_dialog.py:33
 msgid "Unselect all"
+msgstr ""
+
+#: src/infrastructure/ui/menu/import_dialog.py:62
+msgid "From GitHub"
+msgstr ""
+
+#: src/infrastructure/ui/menu/import_dialog.py:64
+#: src/infrastructure/ui/menu/import_dialog.py:76
+#: src/infrastructure/ui/menu/import_dialog.py:84
+msgid "Can't import without a URL"
 msgstr ""
 
 #: src/infrastructure/ui/menu/parameters_dialog.py:43

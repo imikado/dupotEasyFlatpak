@@ -106,9 +106,6 @@ def main():
         data_path = path_conf.get_data_path()
         print(f"data path is {data_path}")
 
-        # Older Nix packages copied these files from /nix/store with their
-        # 0444 mode. Repair them before the first SQLite/version write. Icon
-        # trees are repaired lazily by copy_dir() when an upgrade copies them.
         system_api.make_tree_writable(path_conf.get_database_path())
         system_api.make_tree_writable(path_conf.get_installed_version_path())
 

@@ -60,6 +60,8 @@ class ImportDialog(Adw.Dialog):
             subtitle_parts.append(item.installation_scope)
             if item.is_from_github():
                 subtitle_parts.append(_("From GitHub"))
+            elif not item.is_importable():
+                subtitle_parts.append(_("Can't import without a URL"))
             row.set_subtitle("  ·  ".join(subtitle_parts))
 
             if icon_path:
@@ -69,8 +71,16 @@ class ImportDialog(Adw.Dialog):
             else:
                 row.add_prefix(IconsShared.get_generic_app_icon(32))
 
+            if not item.is_importable():
+                warning_icon = IconsShared.get_warning_icon(16)
+                warning_icon.set_tooltip_text(_("Can't import without a URL"))
+                row.add_suffix(warning_icon)
+
             check = Gtk.CheckButton()
-            check.set_active(True)
+            check.set_active(item.is_importable())
+            check.set_sensitive(item.is_importable())
+            if not item.is_importable():
+                check.set_tooltip_text(_("Can't import without a URL"))
             row.add_suffix(check)
             row.set_activatable_widget(check)
 

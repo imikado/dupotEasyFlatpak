@@ -18,6 +18,7 @@ from gi.repository import Gtk, Adw, GLib
 
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.flatpakrepo_repository import FlatpakRepoRepository
+from infrastructure.ui.shared.icons_shared import IconsShared
 
 
 class FlatpakRepoDialog(Adw.PreferencesDialog):
@@ -184,7 +185,7 @@ class FlatpakRepoDialog(Adw.PreferencesDialog):
             row = Adw.ActionRow(title=repo.getId(), subtitle=repo.getUrl())
 
             edit_btn = Gtk.Button()
-            edit_btn.set_icon_name("document-edit-symbolic")
+            edit_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_EDIT))
             edit_btn.set_valign(Gtk.Align.CENTER)
             edit_btn.add_css_class("flat")
             edit_btn.set_tooltip_text(_("Edit"))
@@ -193,7 +194,7 @@ class FlatpakRepoDialog(Adw.PreferencesDialog):
 
             if repo.getId() != "flathub":
                 delete_btn = Gtk.Button()
-                delete_btn.set_icon_name("user-trash-symbolic")
+                delete_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_TRASH))
                 delete_btn.set_valign(Gtk.Align.CENTER)
                 delete_btn.add_css_class("flat")
                 delete_btn.add_css_class("error")

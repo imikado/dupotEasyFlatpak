@@ -84,8 +84,8 @@ def _make_installed_row(
     # Recipe overrides
     if has_recipe:
         recipe_btn = Gtk.Button()
-        recipe_btn.set_icon_name(
-            IconsShared().find_icon_name_available(IconsShared.ICON_EDITRECIPE)
+        recipe_btn.set_child(
+            IconsShared().get_icon_by_name(IconsShared.ICON_EDITRECIPE)
         )
 
         def on_recipe(_btn):

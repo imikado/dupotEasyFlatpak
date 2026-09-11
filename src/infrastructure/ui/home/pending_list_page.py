@@ -288,7 +288,9 @@ class PendingPage(Gtk.Box):
 
             row = Adw.ActionRow()
             row.set_title(item.app_name)
-            row.set_icon_name(IconsShared.ICON_PENDING)
+            pending_icon = IconsShared().get_icon_by_name(IconsShared.ICON_PENDING)
+            pending_icon.set_valign(Gtk.Align.CENTER)
+            row.add_prefix(pending_icon)
 
             if item.status == "installing":
                 spinner = Gtk.Spinner()
@@ -302,7 +304,7 @@ class PendingPage(Gtk.Box):
                 row.add_suffix(icon)
                 row.set_subtitle(_("Done"))
             elif item.status == "failed":
-                icon = Gtk.Image.new_from_icon_name("dialog-error-symbolic")
+                icon = IconsShared().get_icon_by_name(IconsShared.ICON_ERROR)
                 icon.set_valign(Gtk.Align.CENTER)
                 row.add_suffix(icon)
                 row.set_subtitle(_("Failed"))

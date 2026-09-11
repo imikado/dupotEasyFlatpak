@@ -14,6 +14,7 @@ from infrastructure.repository.local_apps_repository import LocalAppsRepository
 from infrastructure.ui.appstream.github_flatpak_dialog import (
     open_github_flatpak_install_flow,
 )
+from infrastructure.ui.shared.icons_shared import IconsShared
 from infrastructure.ui.shared.installed_list_shared import InstalledListShared
 
 
@@ -70,7 +71,7 @@ class InstalledPage(Gtk.Box):
         toolbar.set_halign(Gtk.Align.END)
 
         import_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        import_box.append(Gtk.Image.new_from_icon_name("document-open-symbolic"))
+        import_box.append(IconsShared().get_icon_by_name(IconsShared.ICON_IMPORT))
         import_box.append(Gtk.Label(label=_("Import")))
         import_btn = Gtk.Button()
         import_btn.set_child(import_box)
@@ -80,7 +81,7 @@ class InstalledPage(Gtk.Box):
         toolbar.append(import_btn)
 
         export_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        export_box.append(Gtk.Image.new_from_icon_name("document-save-symbolic"))
+        export_box.append(IconsShared().get_icon_by_name(IconsShared.ICON_EXPORT))
         export_box.append(Gtk.Label(label=_("Export")))
         export_btn = Gtk.Button()
         export_btn.set_child(export_box)
@@ -90,7 +91,7 @@ class InstalledPage(Gtk.Box):
         toolbar.append(export_btn)
 
         flatpak_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        flatpak_box.append(Gtk.Image.new_from_icon_name("package-x-generic-symbolic"))
+        flatpak_box.append(IconsShared().get_icon_by_name(IconsShared.ICON_PACKAGE))
         flatpak_box.append(Gtk.Label(label=_("Install local Flatpak")))
         flatpak_btn = Gtk.Button()
         flatpak_btn.set_child(flatpak_box)
@@ -99,7 +100,7 @@ class InstalledPage(Gtk.Box):
         toolbar.append(flatpak_btn)
 
         github_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        github_box.append(Gtk.Image.new_from_icon_name("folder-remote-symbolic"))
+        github_box.append(IconsShared().get_icon_by_name(IconsShared.ICON_GITHUB))
         github_box.append(Gtk.Label(label=_("Install GitHub Flatpak")))
         github_btn = Gtk.Button()
         github_btn.set_child(github_box)

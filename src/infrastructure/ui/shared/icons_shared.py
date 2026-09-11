@@ -35,6 +35,15 @@ class IconsShared:
     ICON_MENU = "easyflatpak-menu-symbolic"
     ICON_SEARCH = "easyflatpak-search-symbolic"
     ICON_PIN = "easyflatpak-pin-symbolic"
+    ICON_NETWORK = "easyflatpak-network-symbolic"
+    ICON_CHEVRON_RIGHT = "easyflatpak-chevron-right-symbolic"
+    ICON_CHEVRON_LEFT = "easyflatpak-chevron-left-symbolic"
+    ICON_IMPORT = "easyflatpak-import-symbolic"
+    ICON_EXPORT = "easyflatpak-export-symbolic"
+    ICON_PACKAGE = "easyflatpak-package-symbolic"
+    ICON_GITHUB = "easyflatpak-github-symbolic"
+    ICON_ERROR = "easyflatpak-error-symbolic"
+    ICON_TRASH = "easyflatpak-trash-symbolic"
 
     # Links
     ICON_HOMEPAGE = "easyflatpak-homepage-symbolic"
@@ -140,6 +149,14 @@ class IconsShared:
     def get_generic_app_icon(pixel_size: int = 48) -> Gtk.Image:
         """Fallback icon for apps without their own icon file (no system icon)."""
         png_path = os.path.join(_ASSETS_DIR, "generic-app.png")
+        img = Gtk.Image.new_from_file(png_path)
+        img.set_pixel_size(pixel_size)
+        return img
+
+    @staticmethod
+    def get_warning_icon(pixel_size: int = 16) -> Gtk.Image:
+        """Warning badge (no system icon)."""
+        png_path = os.path.join(_ASSETS_DIR, "warning.png")
         img = Gtk.Image.new_from_file(png_path)
         img.set_pixel_size(pixel_size)
         return img

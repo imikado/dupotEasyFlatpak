@@ -117,12 +117,13 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
-    <release date="2026-09-08" version="4.6.6">
+    <release date="2026-09-11" version="4.6.7">
       <description>
         <ul>
           <li>Improve multi repo management</li>
           <li>Bugfixes</li>
           <li>Manage import flatpak with github repo</li>
+          <li>Improve import/export local flatpak with github repo</li>
         </ul>
       </description>
     </release>

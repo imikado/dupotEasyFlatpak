@@ -121,7 +121,7 @@ class LocalAppDetailPage(Adw.NavigationPage):
             source_row.set_subtitle(self._local_app.url)
             link_btn = Gtk.LinkButton(uri=self._local_app.url)
             link_btn.set_valign(Gtk.Align.CENTER)
-            link_btn.set_child(Gtk.Image.new_from_icon_name("adw-external-link-symbolic"))
+            link_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_HOMEPAGE))
             source_row.add_suffix(link_btn)
         else:
             # Origin unknown — most likely this app's tracked info was lost
@@ -247,7 +247,7 @@ class LocalAppDetailPage(Adw.NavigationPage):
             if is_installed:
                 installed_badge = Gtk.Box(spacing=4, valign=Gtk.Align.CENTER)
                 installed_badge.append(
-                    Gtk.Image.new_from_icon_name("object-select-symbolic")
+                    IconsShared().get_icon_by_name(IconsShared.ICON_CHECKMARK)
                 )
                 badge_label = Gtk.Label(label=_("Installed"))
                 badge_label.add_css_class("success")

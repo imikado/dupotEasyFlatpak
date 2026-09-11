@@ -12,6 +12,7 @@ from infrastructure.api.flathub_api import FlathubApi
 from infrastructure.api.system_api import SystemApi
 from infrastructure.repository.appstream_repository import AppstreamRepository
 from infrastructure.ui.shared.app_list_grid_shared import AppListGridShared
+from infrastructure.ui.shared.icons_shared import IconsShared
 from infrastructure.ui.shared.repo_filter_bar_shared import RepoFilterBar
 
 
@@ -32,7 +33,7 @@ class SearchListPage(Adw.NavigationPage):
         header_bar = Adw.HeaderBar()
         title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         title_box.set_halign(Gtk.Align.CENTER)
-        title_icon = Gtk.Image.new_from_icon_name("system-search-symbolic")
+        title_icon = IconsShared().get_icon_by_name(IconsShared.ICON_SEARCH)
         title_label = Gtk.Label(label=_("Search"))
         title_label.add_css_class("heading")
         title_box.append(title_icon)

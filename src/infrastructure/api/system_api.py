@@ -55,10 +55,6 @@ class SystemApi(SystemApiContract):
         )
 
     def copy_file(self, path_from: str, path_to: str):
-        # Assets installed by Nix live in the immutable store and therefore
-        # have read-only modes.  Runtime copies belong to the user and must be
-        # writable (the SQLite database and installed_version.json are both
-        # updated after the first launch).
         if os.path.exists(path_to):
             os.chmod(path_to, 0o600)
         shutil.copyfile(path_from, path_to)

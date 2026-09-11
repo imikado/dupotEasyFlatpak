@@ -53,6 +53,7 @@ class ImportUc:
                 import_loop.name = appstream_found.name
                 import_loop.summary = appstream_found.summary
                 import_loop.icon = appstream_found.getIcon()
+                import_loop.found_in_catalog = True
 
         return import_list
 
