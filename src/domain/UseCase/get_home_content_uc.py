@@ -21,13 +21,19 @@ class GetHomeContentUC:
         appstream_repository: AppstreamRepositoryContract,
         flathub_api: FlathubApiContract,
         system_api: SystemApiContract,
+        auto_sync: bool = True,
     ):
         self._api_cache_repository = api_cache_repository
         self._appstream_repository = appstream_repository
         self._flathub_api = flathub_api
         self._system_api = system_api
 
-        self.load()
+        # auto_sync=False: just read whatever's already cached, no network —
+        # for callers building UI on the main thread (e.g. the home page),
+        # who must not block on Flathub. Whoever does want the sync (the
+        # background sync pass) still calls load() with the default.
+        if auto_sync:
+            self.load()
 
     def load(self):
         if self.should_sync_from_api():

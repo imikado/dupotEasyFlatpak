@@ -101,6 +101,11 @@ class UpdateDatabaseFromApiUc:
                 self._appstream_repository.insert_from_raw_object(
                     recently_raw_appstream_loop
                 )
+                # Recorded right away — the API feed can list the same
+                # app_id more than once (or overlap with apps-of-the-week
+                # below), and a second insert on it would hit the DB's
+                # unique constraint.
+                app_id_list_already_stored.append(id_loop.lower())
             else:
                 self._appstream_repository.update_name_summary_by_id(
                     id_loop,
@@ -121,6 +126,7 @@ class UpdateDatabaseFromApiUc:
                     app_id_of_the_week_loop,
                     self.REPO_FLATHUB
                 )
+                app_id_list_already_stored.append(app_id_of_the_week_loop.lower())
 
             detail = self._flathub_api.get_appstream_by_id(app_id_of_the_week_loop)
             if detail:

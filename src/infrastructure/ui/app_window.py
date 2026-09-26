@@ -41,15 +41,23 @@ from gi.repository import Gdk, Gio, Gtk, Adw, GLib
 
 class MainWindow(Adw.ApplicationWindow):
 
-    def __init__(self, *args, init_fn=None, **kwargs):
+    def __init__(self, *args, init_fn=None, background_sync_fn=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.set_title("Easy flatpak")
         self.set_default_size(1100, 800)
         self._pending_flatpak = None
+        self._background_sync_fn = background_sync_fn
 
         self._toast_overlay = Adw.ToastOverlay()
         self.set_content(self._toast_overlay)
+
+        # Shown while background_sync_fn is running (after the home page is
+        # already up but before icons/catalog have finished syncing) — so
+        # it doesn't just look broken/incomplete with no feedback. A toast
+        # persists across page navigation (ToastOverlay wraps everything)
+        # and is far less intrusive than a full-width banner.
+        self._sync_toast = None
 
         self.navigation_view = Adw.NavigationView()
         self._toast_overlay.set_child(self.navigation_view)
@@ -111,6 +119,44 @@ class MainWindow(Adw.ApplicationWindow):
         if self._pending_flatpak:
             self.open_flatpak_file(self._pending_flatpak)
             self._pending_flatpak = None
+
+        # The home page is now visible with whatever is already in the
+        # local DB (shipped snapshot or last sync) — the network-bound
+        # refresh (Flathub home lists, custom/OCI repo sync) runs from here
+        # on in its own thread instead of blocking the loading screen.
+        if self._background_sync_fn:
+            self._sync_toast = Adw.Toast.new(
+                _("Finishing setup — syncing catalog and icons…")
+            )
+            self._sync_toast.set_timeout(0)
+            self._toast_overlay.add_toast(self._sync_toast)
+            threading.Thread(
+                target=self._run_background_sync, daemon=True
+            ).start()
+
+        return GLib.SOURCE_REMOVE
+
+    def _run_background_sync(self):
+        try:
+            self._background_sync_fn()
+        except Exception as e:
+            import traceback
+
+            print(f"[background sync] ERROR: {e}")
+            traceback.print_exc()
+        GLib.idle_add(self._on_background_sync_done)
+
+    def _on_background_sync_done(self):
+        if self._sync_toast:
+            self._sync_toast.dismiss()
+            self._sync_toast = None
+
+        # Refresh the home page in place so freshly-synced trending/popular/
+        # apps-of-the-week lists show up — but only if the user is still
+        # sitting on it; don't yank them back from wherever they navigated.
+        stack = self.navigation_view.get_navigation_stack()
+        if stack.get_n_items() == 1:
+            self.navigation_view.replace([self._create_home_page()])
         return GLib.SOURCE_REMOVE
 
     def _build_home(self):
@@ -311,8 +357,14 @@ class MainWindow(Adw.ApplicationWindow):
         return toolbar_view
 
     def _build_home_page(self, appstream_repository: AppstreamRepository) -> Gtk.Widget:
+        # auto_sync=False: this runs on the main thread while building the
+        # UI — the network-bound sync happens once, in background_sync_fn.
         get_home_content_uc = GetHomeContentUC(
-            ApiCacheRepository(), appstream_repository, FlathubApi(), SystemApi()
+            ApiCacheRepository(),
+            appstream_repository,
+            FlathubApi(),
+            SystemApi(),
+            auto_sync=False,
         )
 
         stack = Gtk.Stack()
@@ -707,16 +759,21 @@ class MainWindow(Adw.ApplicationWindow):
 
 
 class AppWindow(Adw.Application):
-    def __init__(self, init_fn=None):
+    def __init__(self, init_fn=None, background_sync_fn=None):
         super().__init__(
             application_id="org.dupot.easyflatpak",
             flags=Gio.ApplicationFlags.HANDLES_OPEN,
         )
         self._init_fn = init_fn
+        self._background_sync_fn = background_sync_fn
 
     def do_activate(self):
         self._register_bundled_icons()
-        win = MainWindow(application=self, init_fn=self._init_fn)
+        win = MainWindow(
+            application=self,
+            init_fn=self._init_fn,
+            background_sync_fn=self._background_sync_fn,
+        )
         win.present()
 
     def _register_bundled_icons(self):

@@ -86,6 +86,18 @@ def main():
     en_i18n.install()
 
 
+    # Shared with background_sync_fn below — set by init_fn, since lang_code
+    # is only known once user settings have been loaded.
+    lang_code_holder = {"value": UserSettingsEntity.LANGUAGE_EN_CODE}
+    # Same idea for the slow, non-essential install/update chores below
+    # (font cache rebuild, scanning already-installed flatpaks) — deferred
+    # to background_sync_fn so they don't hold up the loading screen.
+    deferred_holder = {
+        "needs_font_cache_refresh": False,
+        "is_first_install": False,
+        "needs_icon_copy": False,
+    }
+
     def init_fn():
         system_api = SystemApi()
         should_reset_lastupdate=False
@@ -153,6 +165,7 @@ def main():
             )
 
         lang_code = current_user_settings.get_language_code()
+        lang_code_holder["value"] = lang_code
 
         if current_user_settings.should_force_language():
             forced_i18n = gettext.translation(
@@ -189,7 +202,9 @@ def main():
             flatpak_api = FlatpakApi()
 
             flatpak_api.ensure_flathub_remote()
-            flatpak_api.clean_cache()
+            # fc-cache -f -v is a full, slow font-cache rebuild — not needed
+            # for the app itself to work, so it's deferred to background_sync_fn.
+            deferred_holder["needs_font_cache_refresh"] = True
 
             if not system_api.file_exists(data_path):
                 system_api.create_dir(data_path)
@@ -208,7 +223,10 @@ def main():
                 
             ]
 
-            system_api.copy_dir(path_conf.get_asset_icons_path(),data_path)
+            # ~3300 app icon PNGs — the single slowest step here. Apps
+            # without their icon yet just show the generic fallback
+            # (IconsShared.get_generic_app_icon) until this lands.
+            deferred_holder["needs_icon_copy"] = True
 
             for path_to_copy_loop in file_path_to_copy_list:
                 system_api.copy_file(
@@ -221,21 +239,40 @@ def main():
 
             AddNewRemoteRepoUc(FlatpakApi(),FlatpakRepoRepository()).sync()
 
-            if is_first_install:
-                print("first install, syncing already-installed flatpak apps")
-                SyncLocalInstalledAppsUc(
-                    FlatpakApi(), AppstreamRepository(), LocalAppsRepository()
-                ).process()
+            # Scans every installed flatpak against the DB — deferred to
+            # background_sync_fn, same reasoning as the font cache above.
+            deferred_holder["is_first_install"] = is_first_install
 
             #shutil .copytree(path_conf.get_asset_icons_archive_path(), path_conf.get_icons_path(), dirs_exist_ok=True)
 
+    def background_sync_fn():
+        # Network-bound: Flathub home lists (trending/popular/apps-of-the-
+        # week) + syncing every configured repo (Flathub, custom, OCI).
+        # Runs after the window is already showing the home page (with
+        # whatever the local DB already has — shipped snapshot or last
+        # sync), instead of blocking the loading screen on it — this is
+        # what used to make first launches (and post-3-day-gap launches)
+        # feel stuck on the spinner.
+        lang_code = lang_code_holder["value"]
+
+        if deferred_holder["needs_icon_copy"]:
+            print("copying app icons")
+            SystemApi().copy_dir(PathConf().get_asset_icons_path(), PathConf().get_data_path())
+
+        if deferred_holder["needs_font_cache_refresh"]:
+            FlatpakApi().clean_cache()
+
+        if deferred_holder["is_first_install"]:
+            print("first install, syncing already-installed flatpak apps")
+            SyncLocalInstalledAppsUc(
+                FlatpakApi(), AppstreamRepository(), LocalAppsRepository()
+            ).process()
+
         # GetHomeContentUC.load() (constructor) refreshes the cached home
-        # id-lists (trending/popular/apps-of-the-week/...) whenever its own
-        # cache is stale — which it always is on a fresh install, since the
-        # timestamp baked into the shipped DB is from packaging time. Must
-        # run BEFORE UpdateDatabaseFromApiUc so the translation pass below
-        # covers the id list that will actually be shown, not the stale
-        # shipped one it would otherwise replace right after.
+        # id-lists whenever its own cache is stale. Must run BEFORE
+        # UpdateDatabaseFromApiUc so the translation pass there covers the
+        # id list that will actually be shown, not the stale one it would
+        # otherwise replace right after.
         GetHomeContentUC(ApiCacheRepository(), AppstreamRepository(), FlathubApi(), SystemApi())
 
         UpdateDatabaseFromApiUc(
@@ -249,7 +286,7 @@ def main():
             OciApi(),
         ).process()
 
-    app = AppWindow(init_fn=init_fn)
+    app = AppWindow(init_fn=init_fn, background_sync_fn=background_sync_fn)
     app.run(sys.argv)
 
 

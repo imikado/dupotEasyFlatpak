@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 16:39+0200\n"
+"POT-Creation-Date: 2026-09-26 10:37+0200\n"
 "Language: ro\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,12 +30,12 @@ msgstr "Selectați o versiune la care să reveniți"
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:157
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:330
 #: src/infrastructure/ui/appstream_page.py:472
-#: src/infrastructure/ui/app_window.py:695
+#: src/infrastructure/ui/app_window.py:747
 #: src/infrastructure/ui/bundle_detail_page.py:279
 #: src/infrastructure/ui/home/updates_page.py:183
 #: src/infrastructure/ui/home/updates_page.py:231
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:212
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:253
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:213
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:254
 #: src/infrastructure/ui/shared/installed_list_shared.py:149
 msgid "Cancel"
 msgstr "Anulează"
@@ -68,7 +68,7 @@ msgid "File"
 msgstr "Fișier"
 
 #: src/infrastructure/ui/appstream/flatpak_file_page.py:156
-#: src/infrastructure/ui/menu/parameters_dialog.py:38
+#: src/infrastructure/ui/menu/parameters_dialog.py:39
 msgid "Installation"
 msgstr "Instalare"
 
@@ -85,7 +85,7 @@ msgstr "Instalează doar pentru utilizatorul curent"
 #: src/infrastructure/ui/appstream/install_dialog.py:133
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:274
 #: src/infrastructure/ui/appstream_page.py:433
-#: src/infrastructure/ui/menu/import_dialog.py:94
+#: src/infrastructure/ui/menu/import_dialog.py:93
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:150
 #: src/infrastructure/ui/shared/app_list_line_shared.py:150
 msgid "Install"
@@ -95,9 +95,9 @@ msgstr "Instalează"
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:340
 #: src/infrastructure/ui/appstream_page.py:484
 #: src/infrastructure/ui/appstream_page.py:514
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:88
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:224
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:272
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:89
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:225
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:273
 #: src/infrastructure/ui/shared/installed_list_shared.py:159
 msgid "Please wait…"
 msgstr "Vă rugăm așteptați…"
@@ -110,13 +110,13 @@ msgstr ""
 #: src/infrastructure/ui/appstream/github_flatpak_dialog.py:19
 #: src/infrastructure/ui/appstream/github_flatpak_dialog.py:90
 #: src/infrastructure/ui/bundle_detail_page.py:280
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:125
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:126
 msgid "OK"
 msgstr "OK"
 
 #: src/infrastructure/ui/appstream/github_flatpak_dialog.py:30
-#: src/infrastructure/ui/home/installed_page.py:103
-#: src/infrastructure/ui/home/installed_page.py:106
+#: src/infrastructure/ui/home/installed_page.py:104
+#: src/infrastructure/ui/home/installed_page.py:107
 msgid "Install GitHub Flatpak"
 msgstr ""
 
@@ -178,7 +178,7 @@ msgstr "Acest depozit acceptă doar acest domeniu"
 
 #: src/infrastructure/ui/appstream/install_progress_dialog.py:13
 #: src/infrastructure/ui/home/pending_list_page.py:69
-#: src/infrastructure/ui/home/pending_list_page.py:298
+#: src/infrastructure/ui/home/pending_list_page.py:300
 msgid "Installing…"
 msgstr "Se instalează…"
 
@@ -220,7 +220,7 @@ msgstr ""
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:201
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:213
-#: src/infrastructure/ui/app_window.py:84
+#: src/infrastructure/ui/app_window.py:98
 #: src/infrastructure/ui/shared/installed_list_shared.py:188
 msgid "Loading…"
 msgstr "Se încarcă…"
@@ -234,7 +234,7 @@ msgid "No description"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:252
-#: src/infrastructure/ui/app_window.py:223
+#: src/infrastructure/ui/app_window.py:269
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:129
 #: src/infrastructure/ui/shared/app_list_line_shared.py:129
 msgid "Installed"
@@ -332,122 +332,126 @@ msgstr "Aplică"
 msgid "Screenshots"
 msgstr "Capturi de ecran"
 
-#: src/infrastructure/ui/appstream_page.py:861
+#: src/infrastructure/ui/appstream_page.py:863
 msgid "Release History"
 msgstr "Istoricul versiunilor"
 
+#: src/infrastructure/ui/app_window.py:59
+msgid "Finishing setup — syncing catalog and icons…"
+msgstr "Se finalizează configurarea — se sincronizează catalogul și pictogramele…"
+
 # --- Navigation / window ---
-#: src/infrastructure/ui/app_window.py:121
+#: src/infrastructure/ui/app_window.py:167
 msgid "Easy flatpak"
 msgstr "Easy flatpak"
 
-#: src/infrastructure/ui/app_window.py:130
-#: src/infrastructure/ui/menu/parameters_dialog.py:28
+#: src/infrastructure/ui/app_window.py:176
+#: src/infrastructure/ui/menu/parameters_dialog.py:29
 msgid "Parameters"
 msgstr "Parametri"
 
-#: src/infrastructure/ui/app_window.py:131
-#: src/infrastructure/ui/app_window.py:473
-#: src/infrastructure/ui/home/installed_page.py:74
-#: src/infrastructure/ui/home/installed_page.py:77
+#: src/infrastructure/ui/app_window.py:177
+#: src/infrastructure/ui/app_window.py:525
+#: src/infrastructure/ui/home/installed_page.py:75
+#: src/infrastructure/ui/home/installed_page.py:78
 #: src/infrastructure/ui/menu/import_dialog.py:16
 msgid "Import"
 msgstr "Import"
 
-#: src/infrastructure/ui/app_window.py:132
-#: src/infrastructure/ui/app_window.py:619
-#: src/infrastructure/ui/home/installed_page.py:84
-#: src/infrastructure/ui/home/installed_page.py:87
+#: src/infrastructure/ui/app_window.py:178
+#: src/infrastructure/ui/app_window.py:671
+#: src/infrastructure/ui/home/installed_page.py:85
+#: src/infrastructure/ui/home/installed_page.py:88
 msgid "Export"
 msgstr "Export"
 
-#: src/infrastructure/ui/app_window.py:133
-#: src/infrastructure/ui/app_window.py:455
-#: src/infrastructure/ui/home/installed_page.py:94
-#: src/infrastructure/ui/home/installed_page.py:97
-#: src/infrastructure/ui/home/installed_page.py:118
+#: src/infrastructure/ui/app_window.py:179
+#: src/infrastructure/ui/app_window.py:507
+#: src/infrastructure/ui/home/installed_page.py:95
+#: src/infrastructure/ui/home/installed_page.py:98
+#: src/infrastructure/ui/home/installed_page.py:119
 msgid "Install local Flatpak"
 msgstr "Instalează Flatpak local"
 
-#: src/infrastructure/ui/app_window.py:134
+#: src/infrastructure/ui/app_window.py:180
 #: src/infrastructure/ui/menu/tools_dialog.py:18
 msgid "Tools"
 msgstr "Instrumente"
 
-#: src/infrastructure/ui/app_window.py:136
+#: src/infrastructure/ui/app_window.py:182
 msgid "About"
 msgstr "Despre"
 
-#: src/infrastructure/ui/app_window.py:194
+#: src/infrastructure/ui/app_window.py:240
 msgid "Home"
 msgstr "Acasă"
 
-#: src/infrastructure/ui/app_window.py:202
+#: src/infrastructure/ui/app_window.py:248
 msgid "Categories"
 msgstr "Categorii"
 
-#: src/infrastructure/ui/app_window.py:209
+#: src/infrastructure/ui/app_window.py:255
 msgid "Bundles"
 msgstr "Pachete"
 
-#: src/infrastructure/ui/app_window.py:242
+#: src/infrastructure/ui/app_window.py:288
 msgid "Updates"
 msgstr "Actualizări"
 
-#: src/infrastructure/ui/app_window.py:265
+#: src/infrastructure/ui/app_window.py:311
 msgid "Pending"
 msgstr "În așteptare"
 
-#: src/infrastructure/ui/app_window.py:295
+#: src/infrastructure/ui/app_window.py:341
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr "{name} se instalează — urmăriți progresul în În așteptare"
 
-#: src/infrastructure/ui/app_window.py:328
+#: src/infrastructure/ui/app_window.py:380
 msgid "New"
 msgstr "Nou"
 
-#: src/infrastructure/ui/app_window.py:329
+#: src/infrastructure/ui/app_window.py:381
 msgid "Updated"
 msgstr "Actualizat"
 
 # --- Home sections ---
-#: src/infrastructure/ui/app_window.py:330
+#: src/infrastructure/ui/app_window.py:382
 msgid "Trending"
 msgstr "Tendințe"
 
-#: src/infrastructure/ui/app_window.py:331
+#: src/infrastructure/ui/app_window.py:383
 msgid "Popular"
 msgstr "Popular"
 
-#: src/infrastructure/ui/app_window.py:457
-#: src/infrastructure/ui/home/installed_page.py:120
+#: src/infrastructure/ui/app_window.py:509
+#: src/infrastructure/ui/home/installed_page.py:121
 msgid "Flatpak files"
 msgstr "Fișiere Flatpak"
 
-#: src/infrastructure/ui/app_window.py:492
+#: src/infrastructure/ui/app_window.py:544
 #, python-brace-format
 msgid "Invalid import file: {error}"
 msgstr "Fișier de import nevalid: {error}"
 
-#: src/infrastructure/ui/app_window.py:497
+#: src/infrastructure/ui/app_window.py:549
 msgid "Nothing to import"
 msgstr "Nimic de importat"
 
-#: src/infrastructure/ui/app_window.py:648
+#: src/infrastructure/ui/app_window.py:700
 msgid "Export saved"
 msgstr "Export salvat"
 
-#: src/infrastructure/ui/app_window.py:689
+#: src/infrastructure/ui/app_window.py:741
 msgid "Processes still running"
 msgstr "Procese în curs"
 
-#: src/infrastructure/ui/app_window.py:692
+#: src/infrastructure/ui/app_window.py:744
 msgid ""
 "Some installations are still in progress. Are you sure you want to close?"
 msgstr "Unele instalări sunt încă în curs. Sigur doriți să închideți?"
 
-#: src/infrastructure/ui/app_window.py:696
+#: src/infrastructure/ui/app_window.py:748
 msgid "Close anyway"
 msgstr "Închide oricum"
 
@@ -466,14 +470,14 @@ msgstr "Editează permisiunile"
 
 #: src/infrastructure/ui/bundle_detail_page.py:181
 #: src/infrastructure/ui/bundle_detail_page.py:259
-#: src/infrastructure/ui/menu/import_dialog.py:115
-#: src/infrastructure/ui/menu/import_dialog.py:121
+#: src/infrastructure/ui/menu/import_dialog.py:114
+#: src/infrastructure/ui/menu/import_dialog.py:120
 msgid "Already installed"
 msgstr "Deja instalat"
 
 #: src/infrastructure/ui/bundle_detail_page.py:191
 #: src/infrastructure/ui/home/pending_list_page.py:195
-#: src/infrastructure/ui/home/pending_list_page.py:303
+#: src/infrastructure/ui/home/pending_list_page.py:305
 msgid "Done"
 msgstr "Gata"
 
@@ -481,11 +485,11 @@ msgstr "Gata"
 msgid "Search…"
 msgstr "Căutare…"
 
-#: src/infrastructure/ui/home/installed_page.py:48
+#: src/infrastructure/ui/home/installed_page.py:49
 msgid "No installed applications found"
 msgstr "Nu s-au găsit aplicații instalate"
 
-#: src/infrastructure/ui/home/installed_page.py:179
+#: src/infrastructure/ui/home/installed_page.py:180
 msgid "Installed from a local .flatpak file"
 msgstr ""
 
@@ -499,7 +503,7 @@ msgid "Hide output"
 msgstr "Ascunde ieșirea"
 
 #: src/infrastructure/ui/home/pending_list_page.py:199
-#: src/infrastructure/ui/home/pending_list_page.py:308
+#: src/infrastructure/ui/home/pending_list_page.py:310
 msgid "Failed"
 msgstr "Eșuat"
 
@@ -566,49 +570,49 @@ msgstr "Actualizați {n} aplicație/aplicații?"
 msgid "Update"
 msgstr "Actualizează"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:27
-#: src/infrastructure/ui/menu/parameters_dialog.py:78
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:28
+#: src/infrastructure/ui/menu/parameters_dialog.py:79
 msgid "Flatpak repositories"
 msgstr "Depozite Flatpak"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:37
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:38
 msgid "Configured repositories"
 msgstr "Depozite configurate"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:41
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:42
 msgid "Add a repository"
 msgstr "Adaugă un depozit"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:44
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:45
 msgid "Repository name"
 msgstr "Numele depozitului"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:52
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:53
 msgid "Repository URL"
 msgstr "Adresa URL a depozitului"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:54
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:55
 msgid ""
 "For an OCI registry (e.g. Fedora), include the oci+ prefix: oci+https://"
 "registry.fedoraproject.org"
 msgstr ""
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:64
-#: src/infrastructure/ui/menu/parameters_dialog.py:42
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:65
+#: src/infrastructure/ui/menu/parameters_dialog.py:43
 msgid "Installation scope"
 msgstr "Domeniu de instalare"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:69
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:92
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:70
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:93
 msgid "Add"
 msgstr "Adaugă"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:130
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:131
 #, python-brace-format
 msgid "Use {url}"
 msgstr "Folosește {url}"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:151
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:152
 msgid ""
 "This usually means the repository URL is wrong or incomplete. For an OCI "
 "registry (e.g. Fedora), it must start with oci+https://, for example "
@@ -620,27 +624,27 @@ msgstr ""
 "oci+https://, de exemplu oci+https://registry.fedoraproject.org. Editează "
 "depozitul, corectează URL-ul și încearcă din nou."
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:158
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:159
 msgid ""
 "The URL could not be found (404). Double-check it points to a valid "
 "repository."
 msgstr ""
 "URL-ul nu a putut fi găsit (404). Verifică dacă indică spre un depozit valid."
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:190
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:191
 msgid "Edit"
 msgstr "Editare"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:200
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:213
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:201
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:214
 msgid "Delete"
 msgstr "Șterge"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:209
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:210
 msgid "Delete repository"
 msgstr "Șterge depozitul"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:210
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:211
 #, python-brace-format
 msgid ""
 "Remove “{name}”? Apps installed from it will keep working, but you won't be "
@@ -649,56 +653,56 @@ msgstr ""
 "Elimini “{name}”? Aplicațiile instalate de aici vor continua să funcționeze, "
 "dar nu vei mai putea instala sau actualiza din acest depozit."
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:237
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:238
 msgid "Repository deleted"
 msgstr "Depozit șters"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:240
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:241
 msgid "Couldn't delete repository"
 msgstr "Nu s-a putut șterge depozitul"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:240
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:241
 msgid "Failed to delete repository"
 msgstr "Ștergerea depozitului a eșuat"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:246
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:247
 msgid "Edit repository"
 msgstr "Editare depozit"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:254
-#: src/infrastructure/ui/menu/parameters_dialog.py:122
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:255
+#: src/infrastructure/ui/menu/parameters_dialog.py:123
 msgid "Save"
 msgstr "Salvează"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:285
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:286
 msgid "Repository updated"
 msgstr "Depozit actualizat"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:287
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:288
 msgid "Failed to update repository"
 msgstr "Actualizarea depozitului a eșuat"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:290
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:291
 msgid "Couldn't update repository"
 msgstr "Nu s-a putut actualiza depozitul"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:304
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:305
 msgid "Name and URL are required"
 msgstr "Numele și adresa URL sunt obligatorii"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:308
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:309
 msgid "A repository with this name already exists"
 msgstr "Există deja un depozit cu acest nume"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:328
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:329
 msgid "Repository added"
 msgstr "Depozit adăugat"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:347
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:348
 msgid "Failed to add repository"
 msgstr "Adăugarea depozitului a eșuat"
 
-#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:351
+#: src/infrastructure/ui/menu/flatpak_repo_dialog.py:352
 msgid "Couldn't add repository"
 msgstr "Nu s-a putut adăuga depozitul"
 
@@ -712,39 +716,39 @@ msgstr ""
 
 #: src/infrastructure/ui/menu/import_dialog.py:64
 #: src/infrastructure/ui/menu/import_dialog.py:76
-#: src/infrastructure/ui/menu/import_dialog.py:84
+#: src/infrastructure/ui/menu/import_dialog.py:83
 msgid "Can't import without a URL"
 msgstr "Nu se poate importa fără un URL"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:43
+#: src/infrastructure/ui/menu/parameters_dialog.py:44
 msgid "Where Flatpak apps will be installed"
 msgstr "Unde vor fi instalate aplicațiile Flatpak"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:52
+#: src/infrastructure/ui/menu/parameters_dialog.py:53
 msgid "Architecture filter"
 msgstr "Filtru de arhitectură"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:53
+#: src/infrastructure/ui/menu/parameters_dialog.py:54
 msgid "Filter apps by CPU architecture"
 msgstr "Filtrează aplicațiile după arhitectura procesorului"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:63
+#: src/infrastructure/ui/menu/parameters_dialog.py:64
 msgid "Game path"
 msgstr "Calea jocurilor"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:81
+#: src/infrastructure/ui/menu/parameters_dialog.py:82
 msgid "Manage repositories"
 msgstr "Gestionează depozitele"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:88
+#: src/infrastructure/ui/menu/parameters_dialog.py:89
 msgid "Appearance"
 msgstr "Aspect"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:93
+#: src/infrastructure/ui/menu/parameters_dialog.py:94
 msgid "Theme"
 msgstr "Temă"
 
-#: src/infrastructure/ui/menu/parameters_dialog.py:105
+#: src/infrastructure/ui/menu/parameters_dialog.py:106
 msgid "Language"
 msgstr "Limbă"
 
@@ -788,8 +792,8 @@ msgstr "Curățare cache"
 msgid "Flatpak repair"
 msgstr "Reparare Flatpak"
 
-#: src/infrastructure/ui/search_list_page.py:22
-#: src/infrastructure/ui/search_list_page.py:36
+#: src/infrastructure/ui/search_list_page.py:23
+#: src/infrastructure/ui/search_list_page.py:37
 msgid "Search"
 msgstr "Căutare"
 
