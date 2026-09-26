@@ -89,15 +89,20 @@ class MainWindow(Adw.ApplicationWindow):
         # it's the one users actually sit on long enough to notice.
         spinner = Adw.Spinner()
         spinner.set_size_request(48, 48)
-        label = Gtk.Label(label=_("Loading…"))
-        label.add_css_class("dim-label")
+        self._loading_label = Gtk.Label(label=_("Loading…"))
+        self._loading_label.add_css_class("dim-label")
         box.append(spinner)
-        box.append(label)
+        box.append(self._loading_label)
         loading_page = Adw.NavigationPage.new(box, "Easy flatpak")
         self.navigation_view.push(loading_page)
 
+    def _set_loading_status(self, text: str):
+        # Called from init_fn's background thread — marshal onto the main
+        # thread before touching the label.
+        GLib.idle_add(self._loading_label.set_label, text)
+
     def _run_init(self, init_fn):
-        init_fn()
+        init_fn(self._set_loading_status)
         GLib.idle_add(self._on_init_done)
 
     def _on_init_done(self):

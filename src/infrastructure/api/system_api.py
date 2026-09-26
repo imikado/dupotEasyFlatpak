@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from genericpath import exists
 import json
@@ -68,13 +69,37 @@ class SystemApi(SystemApiContract):
         )
         if os.path.exists(destination):
             self.make_tree_writable(destination)
-        shutil.copytree(
-            path_from,
-            destination,
-            dirs_exist_ok=True,
-            copy_function=shutil.copyfile,
-        )
+
+        # Thousands of small files (e.g. app icons) is slow to copy one at
+        # a time. Skip files that are already there and the same size (the
+        # common case on every launch after the first — most icons never
+        # change between versions) and run the actual copies concurrently
+        # — I/O-bound, so threads genuinely parallelize this despite the GIL.
+        copy_tasks = []
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            for root, _dirs, files in os.walk(path_from):
+                rel_dir = os.path.relpath(root, path_from)
+                dst_dir = destination if rel_dir == "." else os.path.join(destination, rel_dir)
+                os.makedirs(dst_dir, exist_ok=True)
+                for file_name in files:
+                    src_path = os.path.join(root, file_name)
+                    dst_path = os.path.join(dst_dir, file_name)
+                    copy_tasks.append(
+                        executor.submit(self._copy_file_if_changed, src_path, dst_path)
+                    )
+            for task in copy_tasks:
+                task.result()
+
         self.make_tree_writable(destination)
+
+    @staticmethod
+    def _copy_file_if_changed(src_path: str, dst_path: str):
+        try:
+            if os.path.getsize(dst_path) == os.path.getsize(src_path):
+                return
+        except OSError:
+            pass  # dst doesn't exist (or is unreadable) — copy it
+        shutil.copyfile(src_path, dst_path)
 
     def make_tree_writable(self, path: str):
         """Repair runtime data copied from a read-only package store."""

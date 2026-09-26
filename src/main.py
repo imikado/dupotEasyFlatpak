@@ -95,10 +95,9 @@ def main():
     deferred_holder = {
         "needs_font_cache_refresh": False,
         "is_first_install": False,
-        "needs_icon_copy": False,
     }
 
-    def init_fn():
+    def init_fn(set_status):
         system_api = SystemApi()
         should_reset_lastupdate=False
 
@@ -198,6 +197,7 @@ def main():
         if not application_version_entity.is_current_version():
 
             print("not current version, will install")
+            set_status(_("Setting up…"))
 
             flatpak_api = FlatpakApi()
 
@@ -223,10 +223,12 @@ def main():
                 
             ]
 
-            # ~3300 app icon PNGs — the single slowest step here. Apps
-            # without their icon yet just show the generic fallback
-            # (IconsShared.get_generic_app_icon) until this lands.
-            deferred_holder["needs_icon_copy"] = True
+            # ~3300 app icon PNGs. Kept blocking (unlike the font cache /
+            # local-apps sync below) — deferring it looked worse than it
+            # helped: the home page would show with generic icons
+            # everywhere until this caught up in the background.
+            set_status(_("Copying app icons…"))
+            system_api.copy_dir(path_conf.get_asset_icons_path(), data_path)
 
             for path_to_copy_loop in file_path_to_copy_list:
                 system_api.copy_file(
@@ -237,6 +239,7 @@ def main():
                 AppstreamRepository().reset_updated_for_all()
                 ApiCacheRepository().reset_api_lastupdate()
 
+            set_status(_("Checking flatpak repositories…"))
             AddNewRemoteRepoUc(FlatpakApi(),FlatpakRepoRepository()).sync()
 
             # Scans every installed flatpak against the DB — deferred to
@@ -254,10 +257,6 @@ def main():
         # what used to make first launches (and post-3-day-gap launches)
         # feel stuck on the spinner.
         lang_code = lang_code_holder["value"]
-
-        if deferred_holder["needs_icon_copy"]:
-            print("copying app icons")
-            SystemApi().copy_dir(PathConf().get_asset_icons_path(), PathConf().get_data_path())
 
         if deferred_holder["needs_font_cache_refresh"]:
             FlatpakApi().clean_cache()

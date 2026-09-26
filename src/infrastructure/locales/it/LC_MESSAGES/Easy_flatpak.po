@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 10:37+0200\n"
+"POT-Creation-Date: 2026-09-26 11:00+0200\n"
 "Language: it\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +30,7 @@ msgstr "Seleziona una versione a cui tornare"
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:157
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:330
 #: src/infrastructure/ui/appstream_page.py:472
-#: src/infrastructure/ui/app_window.py:747
+#: src/infrastructure/ui/app_window.py:752
 #: src/infrastructure/ui/bundle_detail_page.py:279
 #: src/infrastructure/ui/home/updates_page.py:183
 #: src/infrastructure/ui/home/updates_page.py:231
@@ -220,7 +220,7 @@ msgstr ""
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:201
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:213
-#: src/infrastructure/ui/app_window.py:98
+#: src/infrastructure/ui/app_window.py:92
 #: src/infrastructure/ui/shared/installed_list_shared.py:188
 msgid "Loading…"
 msgstr "Caricamento…"
@@ -234,7 +234,7 @@ msgid "No description"
 msgstr ""
 
 #: src/infrastructure/ui/appstream/local_app_detail_page.py:252
-#: src/infrastructure/ui/app_window.py:269
+#: src/infrastructure/ui/app_window.py:274
 #: src/infrastructure/ui/shared/app_list_grid_shared.py:129
 #: src/infrastructure/ui/shared/app_list_line_shared.py:129
 msgid "Installed"
@@ -336,123 +336,124 @@ msgstr "Schermate"
 msgid "Release History"
 msgstr "Cronologia versioni"
 
-#: src/infrastructure/ui/app_window.py:59
+#: src/infrastructure/ui/app_window.py:134
 msgid "Finishing setup — syncing catalog and icons…"
-msgstr "Completamento della configurazione — sincronizzazione catalogo e icone…"
+msgstr ""
+"Completamento della configurazione — sincronizzazione catalogo e icone…"
 
 # --- Navigation / window ---
-#: src/infrastructure/ui/app_window.py:167
+#: src/infrastructure/ui/app_window.py:172
 msgid "Easy flatpak"
 msgstr "Easy flatpak"
 
-#: src/infrastructure/ui/app_window.py:176
+#: src/infrastructure/ui/app_window.py:181
 #: src/infrastructure/ui/menu/parameters_dialog.py:29
 msgid "Parameters"
 msgstr "Parametri"
 
-#: src/infrastructure/ui/app_window.py:177
-#: src/infrastructure/ui/app_window.py:525
+#: src/infrastructure/ui/app_window.py:182
+#: src/infrastructure/ui/app_window.py:530
 #: src/infrastructure/ui/home/installed_page.py:75
 #: src/infrastructure/ui/home/installed_page.py:78
 #: src/infrastructure/ui/menu/import_dialog.py:16
 msgid "Import"
 msgstr "Importa"
 
-#: src/infrastructure/ui/app_window.py:178
-#: src/infrastructure/ui/app_window.py:671
+#: src/infrastructure/ui/app_window.py:183
+#: src/infrastructure/ui/app_window.py:676
 #: src/infrastructure/ui/home/installed_page.py:85
 #: src/infrastructure/ui/home/installed_page.py:88
 msgid "Export"
 msgstr "Esporta"
 
-#: src/infrastructure/ui/app_window.py:179
-#: src/infrastructure/ui/app_window.py:507
+#: src/infrastructure/ui/app_window.py:184
+#: src/infrastructure/ui/app_window.py:512
 #: src/infrastructure/ui/home/installed_page.py:95
 #: src/infrastructure/ui/home/installed_page.py:98
 #: src/infrastructure/ui/home/installed_page.py:119
 msgid "Install local Flatpak"
 msgstr "Installa Flatpak locale"
 
-#: src/infrastructure/ui/app_window.py:180
+#: src/infrastructure/ui/app_window.py:185
 #: src/infrastructure/ui/menu/tools_dialog.py:18
 msgid "Tools"
 msgstr "Strumenti"
 
-#: src/infrastructure/ui/app_window.py:182
+#: src/infrastructure/ui/app_window.py:187
 msgid "About"
 msgstr "Informazioni"
 
-#: src/infrastructure/ui/app_window.py:240
+#: src/infrastructure/ui/app_window.py:245
 msgid "Home"
 msgstr "Home"
 
-#: src/infrastructure/ui/app_window.py:248
+#: src/infrastructure/ui/app_window.py:253
 msgid "Categories"
 msgstr "Categorie"
 
-#: src/infrastructure/ui/app_window.py:255
+#: src/infrastructure/ui/app_window.py:260
 msgid "Bundles"
 msgstr "Pacchetti"
 
-#: src/infrastructure/ui/app_window.py:288
+#: src/infrastructure/ui/app_window.py:293
 msgid "Updates"
 msgstr "Aggiornamenti"
 
-#: src/infrastructure/ui/app_window.py:311
+#: src/infrastructure/ui/app_window.py:316
 msgid "Pending"
 msgstr "In attesa"
 
-#: src/infrastructure/ui/app_window.py:341
+#: src/infrastructure/ui/app_window.py:346
 #, python-brace-format
 msgid "{name} is installing — track progress in Pending"
 msgstr "{name} è in fase di installazione — segui il progresso in In attesa"
 
-#: src/infrastructure/ui/app_window.py:380
+#: src/infrastructure/ui/app_window.py:385
 msgid "New"
 msgstr "Novità"
 
-#: src/infrastructure/ui/app_window.py:381
+#: src/infrastructure/ui/app_window.py:386
 msgid "Updated"
 msgstr "Aggiornato"
 
 # --- Home sections ---
-#: src/infrastructure/ui/app_window.py:382
+#: src/infrastructure/ui/app_window.py:387
 msgid "Trending"
 msgstr "Tendenze"
 
-#: src/infrastructure/ui/app_window.py:383
+#: src/infrastructure/ui/app_window.py:388
 msgid "Popular"
 msgstr "Popolare"
 
-#: src/infrastructure/ui/app_window.py:509
+#: src/infrastructure/ui/app_window.py:514
 #: src/infrastructure/ui/home/installed_page.py:121
 msgid "Flatpak files"
 msgstr "File Flatpak"
 
-#: src/infrastructure/ui/app_window.py:544
+#: src/infrastructure/ui/app_window.py:549
 #, python-brace-format
 msgid "Invalid import file: {error}"
 msgstr "File di importazione non valido: {error}"
 
-#: src/infrastructure/ui/app_window.py:549
+#: src/infrastructure/ui/app_window.py:554
 msgid "Nothing to import"
 msgstr "Niente da importare"
 
-#: src/infrastructure/ui/app_window.py:700
+#: src/infrastructure/ui/app_window.py:705
 msgid "Export saved"
 msgstr "Esportazione salvata"
 
-#: src/infrastructure/ui/app_window.py:741
+#: src/infrastructure/ui/app_window.py:746
 msgid "Processes still running"
 msgstr "Processi in corso"
 
-#: src/infrastructure/ui/app_window.py:744
+#: src/infrastructure/ui/app_window.py:749
 msgid ""
 "Some installations are still in progress. Are you sure you want to close?"
 msgstr ""
 "Alcune installazioni sono ancora in corso. Sei sicuro di voler chiudere?"
 
-#: src/infrastructure/ui/app_window.py:748
+#: src/infrastructure/ui/app_window.py:753
 msgid "Close anyway"
 msgstr "Chiudi comunque"
 
@@ -801,6 +802,18 @@ msgstr "Cerca"
 #: src/infrastructure/ui/shared/repo_filter_bar_shared.py:51
 msgid "All"
 msgstr ""
+
+#: src/main.py:200
+msgid "Setting up…"
+msgstr "Configurazione in corso…"
+
+#: src/main.py:230
+msgid "Copying app icons…"
+msgstr "Copia delle icone delle app…"
+
+#: src/main.py:242
+msgid "Checking flatpak repositories…"
+msgstr "Verifica dei repository flatpak…"
 
 msgid "AudioVideo"
 msgstr "Audio e video"
