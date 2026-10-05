@@ -7,6 +7,7 @@
 **A friendly, modern GUI for installing and managing Flatpak applications on Linux.**
 
 [![Get it on Flathub](https://flathub.org/api/badge?svg&locale=en)](https://flathub.org/en/apps/org.dupot.easyflatpak)
+
 [![License: LGPL v2.1](https://img.shields.io/badge/License-LGPL%20v2.1-blue.svg)](LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/imikado/dupotEasyFlatpak)](https://github.com/imikado/dupotEasyFlatpak/releases)
 
@@ -20,14 +21,7 @@ Easy Flatpak wraps the `flatpak` command line in a clean [GTK4 + libadwaita](htt
 
 ## 📦 Install
 
-<div align="center">
-
-<a href="https://flathub.org/en/apps/org.dupot.easyflatpak">
-  <img width="240" alt="Download on Flathub" src="https://flathub.org/api/badge?svg&locale=en">
-</a>
-
-</div>
-
+ 
 ```bash
 flatpak install flathub org.dupot.easyflatpak
 ```
@@ -107,15 +101,31 @@ English · Français · Español · Italiano · Português (BR) · العربي�
 
 ## 🛠️ Building from source
 
-Requires Python 3, GTK4 and libadwaita (and their GObject introspection bindings).
-
 ```bash
 git clone https://github.com/imikado/dupotEasyFlatpak.git
 cd dupotEasyFlatpak
+```
+
+### Option 1 — Make
+
+Requires Python 3, GTK4 and libadwaita (and their GObject introspection bindings) already installed on your system.
+
+```bash
 make run              # launch straight from source
 # or
 make install          # install system-wide (PREFIX=/usr/local by default)
 ```
+
+### Option 2 — Nix
+
+The provided `flake.nix` sets up a complete dev shell (Python, GTK4, libadwaita and all the required bindings) — nothing to install manually.
+
+```bash
+nix develop
+make run
+```
+
+### Translations
 
 After adding or changing translatable strings, regenerate the `.po`/`.mo` files:
 
