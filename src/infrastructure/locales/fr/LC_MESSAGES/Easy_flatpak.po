@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 11:00+0200\n"
+"POT-Creation-Date: 2026-10-12 09:12+0200\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -179,7 +179,7 @@ msgstr "Ce dépôt ne prend en charge que cette portée"
 # --- Status ---
 #: src/infrastructure/ui/appstream/install_progress_dialog.py:13
 #: src/infrastructure/ui/home/pending_list_page.py:69
-#: src/infrastructure/ui/home/pending_list_page.py:300
+#: src/infrastructure/ui/home/pending_list_page.py:307
 msgid "Installing…"
 msgstr "Installation…"
 
@@ -333,7 +333,7 @@ msgstr "Appliquer"
 msgid "Screenshots"
 msgstr "Captures d'écran"
 
-#: src/infrastructure/ui/appstream_page.py:863
+#: src/infrastructure/ui/appstream_page.py:867
 msgid "Release History"
 msgstr "Historique des versions"
 
@@ -483,7 +483,7 @@ msgstr "Déjà installé"
 
 #: src/infrastructure/ui/bundle_detail_page.py:191
 #: src/infrastructure/ui/home/pending_list_page.py:195
-#: src/infrastructure/ui/home/pending_list_page.py:305
+#: src/infrastructure/ui/home/pending_list_page.py:312
 msgid "Done"
 msgstr "Terminé"
 
@@ -509,7 +509,7 @@ msgid "Hide output"
 msgstr "Masquer la sortie"
 
 #: src/infrastructure/ui/home/pending_list_page.py:199
-#: src/infrastructure/ui/home/pending_list_page.py:310
+#: src/infrastructure/ui/home/pending_list_page.py:317
 msgid "Failed"
 msgstr "Échec"
 
@@ -517,7 +517,15 @@ msgstr "Échec"
 msgid "No pending installations"
 msgstr "Aucune installation en attente"
 
-#: src/infrastructure/ui/home/pending_list_page.py:257
+#: src/infrastructure/ui/home/pending_list_page.py:260
+msgid "External process (update)"
+msgstr "Processus externe (mise à jour)"
+
+#: src/infrastructure/ui/home/pending_list_page.py:262
+msgid "External process (install)"
+msgstr "Processus externe (installation)"
+
+#: src/infrastructure/ui/home/pending_list_page.py:264
 msgid "External process"
 msgstr "Processus externe"
 

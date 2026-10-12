@@ -254,7 +254,14 @@ class PendingPage(Gtk.Box):
         for proc in api.get_running_flatpak_processes():
             pid = proc["pid"]
             app_id = proc["app_id"]
-            app_name = app_id.split(".")[-1] if app_id else _("External process")
+            if app_id:
+                app_name = app_id.split(".")[-1]
+            elif proc["action"] == "update":
+                app_name = _("External process (update)")
+            elif proc["action"] == "install":
+                app_name = _("External process (install)")
+            else:
+                app_name = _("External process")
             item = self._queue_service.enqueue_external(pid, app_id, app_name, proc["action"])
             if item is not None:
                 threading.Thread(

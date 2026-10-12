@@ -93,7 +93,7 @@ class FlatpakApiContract:
         pass
 
     @abstractmethod
-    def get_update_call(self, app_id: str) -> list:
+    def get_update_call(self, app_id: str, scope: str = "", branch: str = "") -> list:
         pass
 
     @abstractmethod

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 11:00+0200\n"
+"POT-Creation-Date: 2026-10-12 09:12+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -185,7 +185,7 @@ msgstr "Dieses Repository unterstützt nur diesen Bereich"
 # --- Status ---
 #: src/infrastructure/ui/appstream/install_progress_dialog.py:13
 #: src/infrastructure/ui/home/pending_list_page.py:69
-#: src/infrastructure/ui/home/pending_list_page.py:300
+#: src/infrastructure/ui/home/pending_list_page.py:307
 msgid "Installing…"
 msgstr "Installieren…"
 
@@ -339,7 +339,7 @@ msgstr "Anwenden"
 msgid "Screenshots"
 msgstr "Bildschirmfotos"
 
-#: src/infrastructure/ui/appstream_page.py:863
+#: src/infrastructure/ui/appstream_page.py:867
 msgid "Release History"
 msgstr "Versionsgeschichte"
 
@@ -487,7 +487,7 @@ msgstr "Bereits installiert"
 
 #: src/infrastructure/ui/bundle_detail_page.py:191
 #: src/infrastructure/ui/home/pending_list_page.py:195
-#: src/infrastructure/ui/home/pending_list_page.py:305
+#: src/infrastructure/ui/home/pending_list_page.py:312
 msgid "Done"
 msgstr "Fertig"
 
@@ -513,7 +513,7 @@ msgid "Hide output"
 msgstr "Ausgabe ausblenden"
 
 #: src/infrastructure/ui/home/pending_list_page.py:199
-#: src/infrastructure/ui/home/pending_list_page.py:310
+#: src/infrastructure/ui/home/pending_list_page.py:317
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
@@ -521,7 +521,15 @@ msgstr "Fehlgeschlagen"
 msgid "No pending installations"
 msgstr "Keine anstehenden Installationen"
 
-#: src/infrastructure/ui/home/pending_list_page.py:257
+#: src/infrastructure/ui/home/pending_list_page.py:260
+msgid "External process (update)"
+msgstr "Externer Prozess (Aktualisierung)"
+
+#: src/infrastructure/ui/home/pending_list_page.py:262
+msgid "External process (install)"
+msgstr "Externer Prozess (Installation)"
+
+#: src/infrastructure/ui/home/pending_list_page.py:264
 msgid "External process"
 msgstr "Externer Prozess"
 

@@ -779,7 +779,9 @@ class AppstreamPage(Adw.NavigationPage):
         spinner.set_valign(Gtk.Align.CENTER)
 
         prev_btn = Gtk.Button()
-        prev_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_CHEVRON_LEFT))
+        prev_icon = IconsShared().get_osd_icon_by_name(IconsShared.ICON_CHEVRON_LEFT)
+        prev_icon.set_pixel_size(24)
+        prev_btn.set_child(prev_icon)
         prev_btn.add_css_class("circular")
         prev_btn.add_css_class("osd")
         prev_btn.set_valign(Gtk.Align.CENTER)
@@ -788,7 +790,9 @@ class AppstreamPage(Adw.NavigationPage):
         prev_btn.set_visible(len(urls) > 1)
 
         next_btn = Gtk.Button()
-        next_btn.set_child(IconsShared().get_icon_by_name(IconsShared.ICON_CHEVRON_RIGHT))
+        next_icon = IconsShared().get_osd_icon_by_name(IconsShared.ICON_CHEVRON_RIGHT)
+        next_icon.set_pixel_size(24)
+        next_btn.set_child(next_icon)
         next_btn.add_css_class("circular")
         next_btn.add_css_class("osd")
         next_btn.set_valign(Gtk.Align.CENTER)

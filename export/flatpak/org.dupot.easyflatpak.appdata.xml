@@ -117,6 +117,19 @@
   <content_rating type="oars-1.1"/>
   <releases>
 
+
+    <release date="2026-10-12" version="4.7.2">
+      <description>
+        <ul>
+          <li>Update screnshots arrows</li>
+          <li>Update pending api sync label</li>
+          <li>Fix update behavior</li>
+          <li>Database update</li>
+        </ul>
+      </description>
+    </release>
+
+
     <release date="2026-09-26" version="4.7.1">
       <description>
         <ul>

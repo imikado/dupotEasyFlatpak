@@ -4,12 +4,18 @@ class UpdateAvailableEntity:
     name: str
     version: str
     current_version: str
+    scope: str
+    branch: str
 
-    def __init__(self, app_id: str, name: str, version: str):
+    def __init__(
+        self, app_id: str, name: str, version: str, scope: str = "", branch: str = ""
+    ):
         self.app_id = app_id
         self.name = name
         self.version = version
         self.current_version = ""
+        self.scope = scope
+        self.branch = branch
 
     def set_current_version(self, version: str):
         self.current_version = version

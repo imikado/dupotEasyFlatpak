@@ -108,20 +108,10 @@ class FlatpakApi(FlatpakApiContract):
         # something the user needs to see at every startup.
         subprocess.run(self._cmd("update", "--appstream"), capture_output=True)
 
-        installed: dict[tuple[str, str], str] = {}
-        for scope in ("--user", "--system"):
-            result = subprocess.run(
-                self._cmd("list", scope, "--columns=application,version,branch"),
-                capture_output=True,
-                text=True,
-            )
-            for line in result.stdout.splitlines():
-                parts = line.split("\t")
-                if len(parts) >= 3:
-                    installed[(parts[0].strip(), parts[2].strip())] = parts[1].strip()
-
         available_update_list = []
-        seen_ids: set[str] = set()
+        # remote-ls --updates compares commits, so same-version rebuilds are real
+        # updates. Keep scope+branch so the update targets the exact ref.
+        seen_refs: set[tuple[str, str, str]] = set()
 
         for scope in ("--user", "--system"):
             result = subprocess.run(
@@ -139,19 +129,20 @@ class FlatpakApi(FlatpakApiContract):
                 if len(parts) < 1:
                     continue
                 app_id = parts[0].strip()
-                if not app_id or app_id in seen_ids:
+                if not app_id:
                     continue
                 name = parts[1].strip() if len(parts) >= 2 else app_id
                 version = parts[2].strip() if len(parts) >= 3 else ""
                 branch = parts[3].strip() if len(parts) >= 4 else ""
 
-                installed_version = installed.get((app_id, branch))
-                if installed_version is not None and installed_version == version:
+                ref_key = (scope, app_id, branch)
+                if ref_key in seen_refs:
                     continue
-
-                seen_ids.add(app_id)
+                seen_refs.add(ref_key)
                 available_update_list.append(
-                    UpdateAvailableEntity(app_id, name, version)
+                    UpdateAvailableEntity(
+                        app_id, name, version, scope.lstrip("-"), branch
+                    )
                 )
 
         return available_update_list
@@ -174,15 +165,18 @@ class FlatpakApi(FlatpakApiContract):
     def get_install_call(self, app_id: str, repo_id: str = "flathub", *flags) -> list:
         return self._cmd("install", repo_id, app_id, "-y", *flags)
 
-    def get_update_call(self, app_id: str) -> list:
+    def get_update_call(self, app_id: str, scope: str = "", branch: str = "") -> list:
+        ref = f"{app_id}//{branch}" if branch else app_id
+        if scope:
+            return self._cmd("update", f"--{scope}", ref, "-y")
         result = subprocess.run(
             self._cmd("list", "--user", "--columns=application"),
             capture_output=True,
             text=True,
         )
         user_ids = {l.strip() for l in result.stdout.splitlines() if l.strip()}
-        scope = "--user" if app_id in user_ids else "--system"
-        return self._cmd("update", scope, app_id, "-y")
+        scope_flag = "--user" if app_id in user_ids else "--system"
+        return self._cmd("update", scope_flag, ref, "-y")
 
     def get_update_all_user_scope_call(self) -> list:
         return self._cmd("update", "--user", "-y")
@@ -512,7 +506,7 @@ class FlatpakApi(FlatpakApiContract):
             self._cmd(
                 "remote-ls",
                 flatpakRepoId,
-                "--columns=application,name,version",
+                "--columns=application,name,version,branch",
             ),
             capture_output=True,
             text=True,

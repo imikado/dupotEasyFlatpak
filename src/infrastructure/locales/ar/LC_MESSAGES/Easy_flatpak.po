@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 11:00+0200\n"
+"POT-Creation-Date: 2026-10-12 09:12+0200\n"
 "Language: ar\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -178,7 +178,7 @@ msgstr "هذا المستودع يدعم هذا النطاق فقط"
 
 #: src/infrastructure/ui/appstream/install_progress_dialog.py:13
 #: src/infrastructure/ui/home/pending_list_page.py:69
-#: src/infrastructure/ui/home/pending_list_page.py:300
+#: src/infrastructure/ui/home/pending_list_page.py:307
 msgid "Installing…"
 msgstr "جاري التثبيت…"
 
@@ -330,7 +330,7 @@ msgstr "تطبيق"
 msgid "Screenshots"
 msgstr "لقطات الشاشة"
 
-#: src/infrastructure/ui/appstream_page.py:863
+#: src/infrastructure/ui/appstream_page.py:867
 msgid "Release History"
 msgstr "تاريخ الإصدارات"
 
@@ -475,7 +475,7 @@ msgstr "مثبت مسبقاً"
 
 #: src/infrastructure/ui/bundle_detail_page.py:191
 #: src/infrastructure/ui/home/pending_list_page.py:195
-#: src/infrastructure/ui/home/pending_list_page.py:305
+#: src/infrastructure/ui/home/pending_list_page.py:312
 msgid "Done"
 msgstr "تم"
 
@@ -501,7 +501,7 @@ msgid "Hide output"
 msgstr "إخفاء الإخراج"
 
 #: src/infrastructure/ui/home/pending_list_page.py:199
-#: src/infrastructure/ui/home/pending_list_page.py:310
+#: src/infrastructure/ui/home/pending_list_page.py:317
 msgid "Failed"
 msgstr "فشل"
 
@@ -509,7 +509,15 @@ msgstr "فشل"
 msgid "No pending installations"
 msgstr "لا توجد تثبيتات معلقة"
 
-#: src/infrastructure/ui/home/pending_list_page.py:257
+#: src/infrastructure/ui/home/pending_list_page.py:260
+msgid "External process (update)"
+msgstr "عملية خارجية (تحديث)"
+
+#: src/infrastructure/ui/home/pending_list_page.py:262
+msgid "External process (install)"
+msgstr "عملية خارجية (تثبيت)"
+
+#: src/infrastructure/ui/home/pending_list_page.py:264
 msgid "External process"
 msgstr "عملية خارجية"
 

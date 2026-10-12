@@ -145,6 +145,20 @@ class IconsShared:
     def find_icon_name_available(self, name: str) -> str:
         return self.icon_ref.get(name, name)
 
+    def get_osd_icon_by_name(self, name: str) -> Gtk.Image:
+        """Icon for an `.osd` button (e.g. the screenshot carousel's
+        prev/next arrows) — those always sit on a dark, semi-transparent
+        pill regardless of the app's light/dark theme, so the icon must
+        always be the white (dark-theme) variant. Not theme-tracked: it
+        must NOT flip to black when the app switches to light theme.
+        """
+        icon_name = self.find_icon_name_available(name)
+        png_path = os.path.join(_PNG_DARK_DIR, icon_name + ".png")
+        if os.path.isfile(png_path):
+            return Gtk.Image.new_from_file(png_path)
+        self._ensure_theme_registered()
+        return Gtk.Image.new_from_icon_name(icon_name)
+
     @staticmethod
     def get_generic_app_icon(pixel_size: int = 48) -> Gtk.Image:
         """Fallback icon for apps without their own icon file (no system icon)."""

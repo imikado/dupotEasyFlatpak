@@ -300,9 +300,9 @@ class UpdatesPage(Gtk.Box):
         for item in selected:
             queue_item = queue_service.enqueue(item.app_id, item.name)
 
-            def _run(qi=queue_item, app_id=item.app_id):
+            def _run(qi=queue_item, it=item):
                 process = subprocess.Popen(
-                    flatpak_api.get_update_call(app_id),
+                    flatpak_api.get_update_call(it.app_id, it.scope, it.branch),
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     text=True,
