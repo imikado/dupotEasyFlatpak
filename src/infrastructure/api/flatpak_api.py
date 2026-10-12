@@ -392,8 +392,21 @@ class FlatpakApi(FlatpakApiContract):
 
         flatpak_history_list = []
 
+        # `update --commit` pulls from the app's own origin, so the history
+        # must come from that same remote/scope — not blindly from flathub.
+        scope, origin = "--user", "flathub"
+        for candidate in ("--user", "--system"):
+            info = subprocess.run(
+                self._cmd("info", candidate, "--show-origin", app_id),
+                capture_output=True,
+                text=True,
+            )
+            if info.returncode == 0 and info.stdout.strip():
+                scope, origin = candidate, info.stdout.strip()
+                break
+
         result = subprocess.run(
-            self._cmd("remote-info", "--user", "--log", "flathub", app_id),
+            self._cmd("remote-info", scope, "--log", origin, app_id),
             capture_output=True,
             text=True,
         )

@@ -118,13 +118,14 @@
   <releases>
 
 
-    <release date="2026-10-12" version="4.7.2">
+    <release date="2026-10-12" version="4.7.3">
       <description>
         <ul>
           <li>Update screnshots arrows</li>
           <li>Update pending api sync label</li>
           <li>Fix update behavior</li>
           <li>Database update</li>
+          <li>Fix downgrade feature</li>
         </ul>
       </description>
     </release>

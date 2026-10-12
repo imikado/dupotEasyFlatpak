@@ -306,6 +306,10 @@ class MainWindow(Adw.ApplicationWindow):
         view_stack.connect("notify::visible-child", _on_updates_tab_shown)
 
         queue_service = InstallQueueService()
+        # The home content is rebuilt (e.g. after a DB sync) — drop the
+        # previous build's queue listeners or each enqueue fires N toasts.
+        for cb in getattr(self, "_queue_change_cbs", []):
+            queue_service.unsubscribe_changes(cb)
         pending_page = PendingPage(
             queue_service,
             lambda p: self.navigation_view.push(p),
@@ -352,6 +356,7 @@ class MainWindow(Adw.ApplicationWindow):
             _update_pending_badge()
 
         queue_service.subscribe_changes(_on_queue_changed)
+        self._queue_change_cbs = [_on_queue_changed, pending_page._rebuild]
 
         search_button.connect(
             "clicked", self._on_search_button_clicked, appstream_repository
