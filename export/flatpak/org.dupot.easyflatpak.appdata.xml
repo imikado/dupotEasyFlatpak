@@ -118,7 +118,7 @@
   <releases>
 
 
-    <release date="2026-10-12" version="4.7.3">
+    <release date="2026-10-15" version="4.7.4">
       <description>
         <ul>
           <li>Update screnshots arrows</li>
@@ -126,6 +126,7 @@
           <li>Fix update behavior</li>
           <li>Database update</li>
           <li>Fix downgrade feature</li>
+          <li>Fix bundles display</li>
         </ul>
       </description>
     </release>

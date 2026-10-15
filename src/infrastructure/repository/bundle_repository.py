@@ -6,10 +6,9 @@ from infrastructure.api.system_api import SystemApi
 
 class BundleRepository(BundleRepositoryContract):
 
-    _bundle_list: list[BundleEntity] = []
-
     def __init__(self):
         super().__init__()
+        self._bundle_list: list[BundleEntity] = []
 
         system_api = SystemApi()
         raw_list = system_api.read_json_file_obj_list(
