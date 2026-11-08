@@ -411,3 +411,21 @@ class AppstreamRepository(AppstreamRepositoryContract):
             """UPDATE appstream SET
                 lastUpdate = 0
             """)
+
+    def get_all_icon_list(self) -> list[object]:
+        return self._db.execute("SELECT id, icon FROM appstream")
+
+    def get_id_and_repo_list(self) -> list[dict]:
+        rows = self._db.execute("SELECT id, flatpakRepoIdList FROM appstream")
+        result = []
+        for row in rows:
+            try:
+                repos = json.loads(row["flatpakRepoIdList"] or "[]")
+            except ValueError:
+                repos = []
+            result.append({"id": row["id"], "repos": repos})
+        return result
+
+    def delete_by_id(self, app_id: str):
+        self._db.execute("DELETE FROM appstream WHERE id = ?", (app_id,))
+        self._db.execute("DELETE FROM category_appstream WHERE appstream_id = ?", (app_id,))
