@@ -13,6 +13,7 @@ from infrastructure.ui.home.bundle_page import BundlePage
 from infrastructure.ui.home.category_page import CategoryPage
 from infrastructure.service.forge_install_service import install_latest_forge_flatpak
 from infrastructure.service.install_queue_service import InstallQueueService
+from infrastructure.service.screenshot_service import ScreenshotService, is_screenshot_mode
 from infrastructure.ui.home.installed_page import InstalledPage
 from infrastructure.ui.home.pending_list_page import PendingPage
 from infrastructure.ui.home.updates_page import UpdatesPage
@@ -20,6 +21,7 @@ from infrastructure.ui.search_list_page import SearchListPage
 from infrastructure.ui.menu.import_dialog import ImportDialog
 from infrastructure.ui.menu.parameters_dialog import ParametersDialog
 from infrastructure.ui.menu.tools_dialog import ToolsDialog
+from infrastructure.ui.menu.features_dialog import FeaturesDialog
 from infrastructure.api.flatpak_api import FlatpakApi
 from infrastructure.repository.recipe_repository import RecipeRepository
 from infrastructure.ui.appstream.flatpak_file_page import FlatpakFilePage
@@ -43,7 +45,7 @@ class MainWindow(Adw.ApplicationWindow):
         super().__init__(*args, **kwargs)
 
         self.set_title("Easy flatpak")
-        self.set_default_size(1100, 800)
+        self.set_default_size(*((1000, 800) if is_screenshot_mode() else (1100, 800)))
         self._pending_flatpak = None
         self._background_sync_fn = background_sync_fn
 
@@ -122,6 +124,11 @@ class MainWindow(Adw.ApplicationWindow):
         if self._pending_flatpak:
             self.open_flatpak_file(self._pending_flatpak)
             self._pending_flatpak = None
+        elif is_screenshot_mode():
+            ScreenshotService(self).start()
+            return
+        elif settings.show_features_at_startup:
+            FeaturesDialog(self._go_to_feature).present(self)
 
         # The home page is now visible with whatever is already in the
         # local DB (shipped snapshot or last sync) — the network-bound
@@ -182,6 +189,7 @@ class MainWindow(Adw.ApplicationWindow):
         menu.append(_("Install local Flatpak"), "win.open_flatpak")
         menu.append(_("Tools"), "win.tools")
 
+        menu.append(_("Features"), "win.features")
         menu.append(_("About"), "win.about")
 
         menu_button = Gtk.MenuButton()
@@ -199,6 +207,7 @@ class MainWindow(Adw.ApplicationWindow):
             ("export", self._on_menu_export),
             ("open_flatpak", self._on_menu_open_flatpak),
             ("tools", self._on_menu_tools),
+            ("features", self._on_menu_features),
             ("about", self._on_menu_about),
         ]:
             action = Gio.SimpleAction.new(name, None)
@@ -507,6 +516,19 @@ class MainWindow(Adw.ApplicationWindow):
         if hasattr(self, "_view_stack"):
             self._view_stack.set_visible_child_name("pending")
 
+    def _on_menu_features(self, _action, _param):
+        FeaturesDialog(self._go_to_feature).present(self)
+
+    def _go_to_feature(self, target: str):
+        if target.startswith("win."):
+            self.activate_action(target, None)
+            return
+        stack = self.navigation_view.get_navigation_stack()
+        if stack.get_n_items() > 1:
+            self.navigation_view.pop_to_page(stack.get_item(0))
+        if hasattr(self, "_view_stack"):
+            self._view_stack.set_visible_child_name(target)
+
     def _on_menu_tools(self, _action, _param):
         ToolsDialog(self._navigate_to_pending).present(self)
 
@@ -721,7 +743,8 @@ class AppWindow(Adw.Application):
     def __init__(self, init_fn=None, background_sync_fn=None):
         super().__init__(
             application_id="org.dupot.easyflatpak",
-            flags=Gio.ApplicationFlags.HANDLES_OPEN,
+            flags=Gio.ApplicationFlags.HANDLES_OPEN
+            | (Gio.ApplicationFlags.NON_UNIQUE if is_screenshot_mode() else 0),
         )
         self._init_fn = init_fn
         self._background_sync_fn = background_sync_fn

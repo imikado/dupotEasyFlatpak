@@ -31,6 +31,7 @@ class UserSettingsEntity:
     FIELD_THEME = "theme"
     FIELD_LANGUAGE = "language"
     FIELD_ARCHITECTURE_FILTER="architecture_filter"
+    FIELD_SHOW_FEATURES_AT_STARTUP = "show_features_at_startup"
 
     _instance: "UserSettingsEntity | None" = None
 
@@ -40,6 +41,7 @@ class UserSettingsEntity:
     DEFAULT_THEME = THEME_SYSTEM
     DEFAULT_LANGUAGE = LANGUAGE_SYSTEM
     DEFAULT_ARCHITECTURE_FILTER= ARCHITECTURE_FILTER_NONE
+    DEFAULT_SHOW_FEATURES_AT_STARTUP = True
 
     version: int = DEFAULT_VERSION
     installation_scope: str = DEFAULT_INSTALLATION_SCOPE
@@ -48,6 +50,7 @@ class UserSettingsEntity:
     theme: str = DEFAULT_THEME
     language: str = DEFAULT_LANGUAGE
     architecture_filter:str=DEFAULT_ARCHITECTURE_FILTER
+    show_features_at_startup: bool = DEFAULT_SHOW_FEATURES_AT_STARTUP
 
     # Resolved by the app at startup from the real system locale (see
     # main.py, which has access to GLib.get_language_names() — the only
@@ -67,6 +70,7 @@ class UserSettingsEntity:
         self.theme = self.DEFAULT_THEME
         self.language = self.DEFAULT_LANGUAGE
         self.architecture_filter= self.DEFAULT_ARCHITECTURE_FILTER
+        self.show_features_at_startup = self.DEFAULT_SHOW_FEATURES_AT_STARTUP
 
     def load(self, raw_obj: object):
         self.version = raw_obj[self.FIELD_VERSION]
@@ -81,6 +85,9 @@ class UserSettingsEntity:
 
         if self.FIELD_ARCHITECTURE_FILTER in raw_obj:
             self.architecture_filter = raw_obj[self.FIELD_ARCHITECTURE_FILTER]
+
+        if self.FIELD_SHOW_FEATURES_AT_STARTUP in raw_obj:
+            self.show_features_at_startup = bool(raw_obj[self.FIELD_SHOW_FEATURES_AT_STARTUP])
 
     def is_user_scope(self) -> bool:
         if self.installation_scope == self.INSTALLATION_USER_SCOPE:
@@ -98,7 +105,8 @@ class UserSettingsEntity:
                 self.FIELD_INSTALLATION_GAME_PATH: self.installation_game_path,
                 self.FIELD_THEME: self.theme,
                 self.FIELD_LANGUAGE: self.language,
-                self.FIELD_ARCHITECTURE_FILTER:self.architecture_filter
+                self.FIELD_ARCHITECTURE_FILTER:self.architecture_filter,
+                self.FIELD_SHOW_FEATURES_AT_STARTUP: self.show_features_at_startup,
             }
         )
 

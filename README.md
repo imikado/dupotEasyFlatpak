@@ -97,6 +97,14 @@ English · Français · Español · Italiano · Português (BR) · العربي�
 <img src="export/screenshots/Screenshot_settings.png" alt="Settings"><br><sub>Settings</sub>
 </td>
 </tr>
+<tr>
+<td align="center" width="50%">
+<img src="export/screenshots/Screenshot_category_grid.png" alt="Category apps"><br><sub>Category apps</sub>
+</td>
+<td align="center" width="50%">
+<img src="export/screenshots/Screenshot_features.png" alt="Features overview"><br><sub>Features overview</sub>
+</td>
+</tr>
 </table>
 
 ## 🛠️ Building from source
