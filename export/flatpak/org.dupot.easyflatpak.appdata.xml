@@ -118,6 +118,16 @@
   <releases>
 
 
+    <release date="2026-11-15" version="4.10.1">
+      <description>
+        <ul>
+          <li>Bug fixes</li>
+          <li>Update applications database</li>
+        </ul>
+      </description>
+    </release>
+
+
     <release date="2026-11-08" version="4.10.0">
       <description>
         <ul>

@@ -409,7 +409,7 @@ msgstr "Instrumente"
 #: src/infrastructure/ui/app_window.py:188
 #: src/infrastructure/ui/menu/features_dialog.py:23
 msgid "Features"
-msgstr ""
+msgstr "Funcționalități"
 
 #: src/infrastructure/ui/app_window.py:189
 msgid "About"
@@ -628,55 +628,55 @@ msgstr "Actualizează"
 
 #: src/infrastructure/ui/menu/features_dialog.py:31
 msgid "Browse & search Flathub"
-msgstr ""
+msgstr "Răsfoiește și caută pe Flathub"
 
 #: src/infrastructure/ui/menu/features_dialog.py:32
 msgid ""
 "Discover trending, popular and new applications on the Home tab, or search "
 "the whole Flathub catalog with the magnifier button at the top left."
-msgstr ""
+msgstr "Descoperă aplicații în tendințe, populare și noi în fila Acasă sau caută în tot catalogul Flathub cu lupa din stânga sus."
 
 #: src/infrastructure/ui/menu/features_dialog.py:33
 msgid "Home tab · Search button"
-msgstr ""
+msgstr "Fila Acasă · Butonul Căutare"
 
 #: src/infrastructure/ui/menu/features_dialog.py:39
 msgid ""
 "Explore applications grouped by category: games, graphics, development, "
 "office…"
-msgstr ""
+msgstr "Explorează aplicațiile grupate pe categorii: jocuri, grafică, dezvoltare, birou…"
 
 #: src/infrastructure/ui/menu/features_dialog.py:40
 msgid "Categories tab"
-msgstr ""
+msgstr "Fila Categorii"
 
 #: src/infrastructure/ui/menu/features_dialog.py:46
 msgid ""
 "Install a curated group of applications in one go, for example everything "
 "needed for gaming or content creation."
-msgstr ""
+msgstr "Instalează dintr-o dată un grup selectat de aplicații, de exemplu tot ce trebuie pentru jocuri sau creare de conținut."
 
 #: src/infrastructure/ui/menu/features_dialog.py:47
 msgid "Bundles tab"
-msgstr ""
+msgstr "Fila Pachete"
 
 #: src/infrastructure/ui/menu/features_dialog.py:52
 msgid "Quick install"
-msgstr ""
+msgstr "Instalare rapidă"
 
 #: src/infrastructure/ui/menu/features_dialog.py:53
 msgid ""
 "Hover an application card and click its Install button to install it without "
 "opening its page. Several installs can run at the same time."
-msgstr ""
+msgstr "Treci cu mouse-ul peste cardul unei aplicații și apasă butonul Instalează pentru a o instala fără a-i deschide pagina. Mai multe instalări pot rula în același timp."
 
 #: src/infrastructure/ui/menu/features_dialog.py:54
 msgid "Any application card"
-msgstr ""
+msgstr "Orice card de aplicație"
 
 #: src/infrastructure/ui/menu/features_dialog.py:59
 msgid "Recipes"
-msgstr ""
+msgstr "Rețete"
 
 #: src/infrastructure/ui/menu/features_dialog.py:60
 msgid ""
@@ -684,63 +684,63 @@ msgid ""
 "\"Install with recipe\" configures them automatically, e.g. asking once for "
 "your games folder. Use \"Recipe overrides\" on the application page to "
 "adjust them later."
-msgstr ""
+msgstr "Unele aplicații (Steam, Lutris, Heroic, Bottles…) au nevoie de configurare suplimentară. „Instalează cu rețetă” le configurează automat, de exemplu cerând o singură dată folderul de jocuri. Folosește „Substituiri rețetă” pe pagina aplicației pentru a le ajusta ulterior."
 
 #: src/infrastructure/ui/menu/features_dialog.py:61
 msgid "Application page · Parameters › Game path"
-msgstr ""
+msgstr "Pagina aplicației · Parametri › Calea jocurilor"
 
 #: src/infrastructure/ui/menu/features_dialog.py:66
 msgid "Downgrade & pin"
-msgstr ""
+msgstr "Retrogradare și fixare"
 
 #: src/infrastructure/ui/menu/features_dialog.py:67
 msgid ""
 "An update broke an application? Roll back to a previous version with "
 "\"Downgrade\": the version is pinned and skipped by future updates."
-msgstr ""
+msgstr "O actualizare a stricat o aplicație? Revino la o versiune anterioară cu „Retrogradează”: versiunea este fixată și ignorată de actualizările viitoare."
 
 #: src/infrastructure/ui/menu/features_dialog.py:68
 msgid "Application page › Downgrade"
-msgstr ""
+msgstr "Pagina aplicației › Retrogradează"
 
 #: src/infrastructure/ui/menu/features_dialog.py:74
 msgid ""
 "See available updates for applications and runtimes, select the ones you "
 "want or update everything at once."
-msgstr ""
+msgstr "Vezi actualizările disponibile pentru aplicații și runtime-uri, selectează-le pe cele dorite sau actualizează totul dintr-o dată."
 
 #: src/infrastructure/ui/menu/features_dialog.py:75
 msgid "Updates tab (visible when updates are available)"
-msgstr ""
+msgstr "Fila Actualizări (vizibilă când există actualizări disponibile)"
 
 #: src/infrastructure/ui/menu/features_dialog.py:80
 msgid "Pending queue"
-msgstr ""
+msgstr "Coada de sarcini"
 
 #: src/infrastructure/ui/menu/features_dialog.py:81
 msgid ""
 "Follow every running install, update or maintenance task and display its "
 "full output log."
-msgstr ""
+msgstr "Urmărește fiecare instalare, actualizare sau sarcină de întreținere în curs și afișează jurnalul complet de ieșire."
 
 #: src/infrastructure/ui/menu/features_dialog.py:82
 msgid "Pending tab (visible while tasks are running)"
-msgstr ""
+msgstr "Fila În așteptare (vizibilă cât timp rulează sarcini)"
 
 #: src/infrastructure/ui/menu/features_dialog.py:87
 msgid "Install from anywhere"
-msgstr ""
+msgstr "Instalează de oriunde"
 
 #: src/infrastructure/ui/menu/features_dialog.py:88
 msgid ""
 "Install a local .flatpak file, or the latest Flatpak published in a GitHub, "
 "GitLab or Codeberg release."
-msgstr ""
+msgstr "Instalează un fișier .flatpak local sau cel mai recent Flatpak publicat într-un release GitHub, GitLab sau Codeberg."
 
 #: src/infrastructure/ui/menu/features_dialog.py:89
 msgid "Installed tab · Menu › Install local Flatpak"
-msgstr ""
+msgstr "Fila Instalat · Meniu › Instalează Flatpak local"
 
 #: src/infrastructure/ui/menu/features_dialog.py:94
 msgid "Import / Export"
@@ -750,56 +750,56 @@ msgstr "Import / Export"
 msgid ""
 "Back up the list of your installed applications (with scope and permission "
 "overrides) to a file, and restore it on another computer."
-msgstr ""
+msgstr "Salvează lista aplicațiilor instalate (cu domeniul și suprascrierile de permisiuni) într-un fișier și restaureaz-o pe alt computer."
 
 #: src/infrastructure/ui/menu/features_dialog.py:96
 msgid "Installed tab · Menu › Import / Export"
-msgstr ""
+msgstr "Fila Instalat · Meniu › Import / Export"
 
 #: src/infrastructure/ui/menu/features_dialog.py:101
 msgid "Repositories & parameters"
-msgstr ""
+msgstr "Depozite și parametri"
 
 #: src/infrastructure/ui/menu/features_dialog.py:102
 msgid ""
 "Choose user or system installation, filter by CPU architecture, add custom "
 "Flatpak repositories, change the theme and the language."
-msgstr ""
+msgstr "Alege instalarea pentru utilizator sau sistem, filtrează după arhitectura CPU, adaugă depozite Flatpak personalizate, schimbă tema și limba."
 
 #: src/infrastructure/ui/menu/features_dialog.py:103
 msgid "Menu › Parameters"
-msgstr ""
+msgstr "Meniu › Parametri"
 
 #: src/infrastructure/ui/menu/features_dialog.py:108
 msgid "Maintenance tools"
-msgstr ""
+msgstr "Instrumente de întreținere"
 
 #: src/infrastructure/ui/menu/features_dialog.py:109
 msgid ""
 "Clean the cache if text is displayed incorrectly, or repair your Flatpak "
 "installation after icon/permission errors."
-msgstr ""
+msgstr "Golește memoria cache dacă textul este afișat greșit sau repară instalarea Flatpak după erori de pictograme sau permisiuni."
 
 #: src/infrastructure/ui/menu/features_dialog.py:110
 msgid "Menu › Tools"
-msgstr ""
+msgstr "Meniu › Instrumente"
 
 #: src/infrastructure/ui/menu/features_dialog.py:128
 msgid "Previous"
-msgstr ""
+msgstr "Înapoi"
 
 #: src/infrastructure/ui/menu/features_dialog.py:132
 #: src/infrastructure/ui/menu/features_dialog.py:216
 msgid "Next"
-msgstr ""
+msgstr "Înainte"
 
 #: src/infrastructure/ui/menu/features_dialog.py:145
 msgid "Show this page at startup"
-msgstr ""
+msgstr "Afișează această pagină la pornire"
 
 #: src/infrastructure/ui/menu/features_dialog.py:192
 msgid "Open"
-msgstr ""
+msgstr "Deschide"
 
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:28
 #: src/infrastructure/ui/menu/parameters_dialog.py:79

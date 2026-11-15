@@ -412,7 +412,7 @@ msgstr "Outils"
 #: src/infrastructure/ui/app_window.py:188
 #: src/infrastructure/ui/menu/features_dialog.py:23
 msgid "Features"
-msgstr ""
+msgstr "Fonctionnalités"
 
 #: src/infrastructure/ui/app_window.py:189
 msgid "About"
@@ -634,55 +634,55 @@ msgstr "Mettre à jour"
 
 #: src/infrastructure/ui/menu/features_dialog.py:31
 msgid "Browse & search Flathub"
-msgstr ""
+msgstr "Parcourir et rechercher sur Flathub"
 
 #: src/infrastructure/ui/menu/features_dialog.py:32
 msgid ""
 "Discover trending, popular and new applications on the Home tab, or search "
 "the whole Flathub catalog with the magnifier button at the top left."
-msgstr ""
+msgstr "Découvrez les applications tendances, populaires et nouvelles dans l'onglet Accueil, ou recherchez dans tout le catalogue Flathub avec la loupe en haut à gauche."
 
 #: src/infrastructure/ui/menu/features_dialog.py:33
 msgid "Home tab · Search button"
-msgstr ""
+msgstr "Onglet Accueil · Bouton Rechercher"
 
 #: src/infrastructure/ui/menu/features_dialog.py:39
 msgid ""
 "Explore applications grouped by category: games, graphics, development, "
 "office…"
-msgstr ""
+msgstr "Explorez les applications regroupées par catégorie : jeux, graphisme, développement, bureautique…"
 
 #: src/infrastructure/ui/menu/features_dialog.py:40
 msgid "Categories tab"
-msgstr ""
+msgstr "Onglet Catégories"
 
 #: src/infrastructure/ui/menu/features_dialog.py:46
 msgid ""
 "Install a curated group of applications in one go, for example everything "
 "needed for gaming or content creation."
-msgstr ""
+msgstr "Installez en une fois un groupe d'applications sélectionnées, par exemple tout ce qu'il faut pour le jeu ou la création de contenu."
 
 #: src/infrastructure/ui/menu/features_dialog.py:47
 msgid "Bundles tab"
-msgstr ""
+msgstr "Onglet Packs"
 
 #: src/infrastructure/ui/menu/features_dialog.py:52
 msgid "Quick install"
-msgstr ""
+msgstr "Installation rapide"
 
 #: src/infrastructure/ui/menu/features_dialog.py:53
 msgid ""
 "Hover an application card and click its Install button to install it without "
 "opening its page. Several installs can run at the same time."
-msgstr ""
+msgstr "Survolez la carte d'une application et cliquez sur son bouton Installer pour l'installer sans ouvrir sa page. Plusieurs installations peuvent se dérouler en même temps."
 
 #: src/infrastructure/ui/menu/features_dialog.py:54
 msgid "Any application card"
-msgstr ""
+msgstr "N'importe quelle carte d'application"
 
 #: src/infrastructure/ui/menu/features_dialog.py:59
 msgid "Recipes"
-msgstr ""
+msgstr "Recettes"
 
 #: src/infrastructure/ui/menu/features_dialog.py:60
 msgid ""
@@ -690,122 +690,122 @@ msgid ""
 "\"Install with recipe\" configures them automatically, e.g. asking once for "
 "your games folder. Use \"Recipe overrides\" on the application page to "
 "adjust them later."
-msgstr ""
+msgstr "Certaines applications (Steam, Lutris, Heroic, Bottles…) nécessitent une configuration supplémentaire. « Installer avec une recette » les configure automatiquement, par exemple en demandant une seule fois votre dossier de jeux. Utilisez « Substitutions de recette » sur la page de l'application pour les ajuster plus tard."
 
 #: src/infrastructure/ui/menu/features_dialog.py:61
 msgid "Application page · Parameters › Game path"
-msgstr ""
+msgstr "Page de l'application · Paramètres › Chemin des jeux"
 
 #: src/infrastructure/ui/menu/features_dialog.py:66
 msgid "Downgrade & pin"
-msgstr ""
+msgstr "Rétrograder et épingler"
 
 #: src/infrastructure/ui/menu/features_dialog.py:67
 msgid ""
 "An update broke an application? Roll back to a previous version with "
 "\"Downgrade\": the version is pinned and skipped by future updates."
-msgstr ""
+msgstr "Une mise à jour a cassé une application ? Revenez à une version précédente avec « Rétrograder » : la version est épinglée et ignorée par les mises à jour suivantes."
 
 #: src/infrastructure/ui/menu/features_dialog.py:68
 msgid "Application page › Downgrade"
-msgstr ""
+msgstr "Page de l'application › Rétrograder"
 
 #: src/infrastructure/ui/menu/features_dialog.py:74
 msgid ""
 "See available updates for applications and runtimes, select the ones you "
 "want or update everything at once."
-msgstr ""
+msgstr "Consultez les mises à jour disponibles pour les applications et les runtimes, sélectionnez celles que vous voulez ou mettez tout à jour d'un coup."
 
 #: src/infrastructure/ui/menu/features_dialog.py:75
 msgid "Updates tab (visible when updates are available)"
-msgstr ""
+msgstr "Onglet Mises à jour (visible quand des mises à jour sont disponibles)"
 
 #: src/infrastructure/ui/menu/features_dialog.py:80
 msgid "Pending queue"
-msgstr ""
+msgstr "File d'attente"
 
 #: src/infrastructure/ui/menu/features_dialog.py:81
 msgid ""
 "Follow every running install, update or maintenance task and display its "
 "full output log."
-msgstr ""
+msgstr "Suivez chaque installation, mise à jour ou tâche de maintenance en cours et affichez son journal de sortie complet."
 
 #: src/infrastructure/ui/menu/features_dialog.py:82
 msgid "Pending tab (visible while tasks are running)"
-msgstr ""
+msgstr "Onglet En cours (visible pendant l'exécution des tâches)"
 
 #: src/infrastructure/ui/menu/features_dialog.py:87
 msgid "Install from anywhere"
-msgstr ""
+msgstr "Installer depuis n'importe où"
 
 #: src/infrastructure/ui/menu/features_dialog.py:88
 msgid ""
 "Install a local .flatpak file, or the latest Flatpak published in a GitHub, "
 "GitLab or Codeberg release."
-msgstr ""
+msgstr "Installez un fichier .flatpak local, ou le dernier Flatpak publié dans une release GitHub, GitLab ou Codeberg."
 
 #: src/infrastructure/ui/menu/features_dialog.py:89
 msgid "Installed tab · Menu › Install local Flatpak"
-msgstr ""
+msgstr "Onglet Installés · Menu › Installer un Flatpak local"
 
 #: src/infrastructure/ui/menu/features_dialog.py:94
 msgid "Import / Export"
-msgstr ""
+msgstr "Importer / Exporter"
 
 #: src/infrastructure/ui/menu/features_dialog.py:95
 msgid ""
 "Back up the list of your installed applications (with scope and permission "
 "overrides) to a file, and restore it on another computer."
-msgstr ""
+msgstr "Sauvegardez la liste de vos applications installées (avec leur portée et leurs surcharges de permissions) dans un fichier, et restaurez-la sur un autre ordinateur."
 
 #: src/infrastructure/ui/menu/features_dialog.py:96
 msgid "Installed tab · Menu › Import / Export"
-msgstr ""
+msgstr "Onglet Installés · Menu › Importer / Exporter"
 
 #: src/infrastructure/ui/menu/features_dialog.py:101
 msgid "Repositories & parameters"
-msgstr ""
+msgstr "Dépôts et paramètres"
 
 #: src/infrastructure/ui/menu/features_dialog.py:102
 msgid ""
 "Choose user or system installation, filter by CPU architecture, add custom "
 "Flatpak repositories, change the theme and the language."
-msgstr ""
+msgstr "Choisissez l'installation utilisateur ou système, filtrez par architecture CPU, ajoutez des dépôts Flatpak personnalisés, changez le thème et la langue."
 
 #: src/infrastructure/ui/menu/features_dialog.py:103
 msgid "Menu › Parameters"
-msgstr ""
+msgstr "Menu › Paramètres"
 
 #: src/infrastructure/ui/menu/features_dialog.py:108
 msgid "Maintenance tools"
-msgstr ""
+msgstr "Outils de maintenance"
 
 #: src/infrastructure/ui/menu/features_dialog.py:109
 msgid ""
 "Clean the cache if text is displayed incorrectly, or repair your Flatpak "
 "installation after icon/permission errors."
-msgstr ""
+msgstr "Nettoyez le cache si du texte s'affiche mal, ou réparez votre installation Flatpak après des erreurs d'icônes ou de permissions."
 
 #: src/infrastructure/ui/menu/features_dialog.py:110
 msgid "Menu › Tools"
-msgstr ""
+msgstr "Menu › Outils"
 
 #: src/infrastructure/ui/menu/features_dialog.py:128
 msgid "Previous"
-msgstr ""
+msgstr "Précédent"
 
 #: src/infrastructure/ui/menu/features_dialog.py:132
 #: src/infrastructure/ui/menu/features_dialog.py:216
 msgid "Next"
-msgstr ""
+msgstr "Suivant"
 
 #: src/infrastructure/ui/menu/features_dialog.py:145
 msgid "Show this page at startup"
-msgstr ""
+msgstr "Afficher cette page au démarrage"
 
 #: src/infrastructure/ui/menu/features_dialog.py:192
 msgid "Open"
-msgstr ""
+msgstr "Ouvrir"
 
 #: src/infrastructure/ui/menu/flatpak_repo_dialog.py:28
 #: src/infrastructure/ui/menu/parameters_dialog.py:79
